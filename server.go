@@ -48,11 +48,7 @@ func loadEnvVars() helpers.EnvVars {
 }
 
 func replaceEnvVar(envVars *helpers.EnvVars, envVar string, value interface{}) {
-	if stringValue, ok := value.(string); ok {
-		// only replace if non empty.
-		if len(stringValue) < 1 {
-			return
-		}
+	if stringValue, _ := value.(string); stringValue != "" {
 		switch envVar {
 		case helpers.ClientIDEnvVar:
 			envVars.ClientID = stringValue
