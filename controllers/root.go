@@ -149,6 +149,8 @@ func (c *Context) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 		// TODO: Handle. Return 500.
 	}
 
+	// Drop refresh token because we can't it in session. TODO Fix!!!
+	token.RefreshToken = ""
 	session.Values["token"] = *token
 	delete(session.Values, "state")
 

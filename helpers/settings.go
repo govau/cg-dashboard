@@ -1,10 +1,12 @@
 package helpers
 
 import (
+	"crypto/rand"
 	"crypto/tls"
 	"encoding/gob"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -158,6 +160,28 @@ func (s *Settings) InitSettings(envVars EnvVars, env *cfenv.App) error {
 
 	// Initialize Sessions.
 	switch envVars.SessionBackend {
+	case "securecookie":
+		// TODO, accept these as input
+		authKey := make([]byte, 64)
+		encryptionKey := make([]byte, 32)
+
+		_, err := io.ReadFull(rand.Reader, authKey)
+		if err != nil {
+			return err
+		}
+		_, err = io.ReadFull(rand.Reader, encryptionKey)
+		if err != nil {
+			return err
+		}
+
+		store := sessions.NewCookieStore(authKey, encryptionKey)
+		store.Options.HttpOnly = true
+		store.Options.Secure = s.SecureCookies
+
+		s.Sessions = store
+		s.SessionBackend = "securecookie"
+		s.SessionBackendHealthCheck = func() bool { return true }
+
 	case "redis":
 		address, password, err := getRedisSettings(env)
 		if err != nil {
