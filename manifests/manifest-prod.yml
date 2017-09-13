@@ -11,3 +11,5 @@ applications:
     CONSOLE_API_URL: https://api.system.g.cld.gov.au/
     CONSOLE_LOG_URL: https://logs.system.g.cld.gov.au/
     CF_SKIN: govau
+    SESSION_BACKEND: securecookie
+    SESSION_KEY: "I am ignored right now"
