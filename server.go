@@ -1,17 +1,20 @@
 package main
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
-	"net/http"
+	"log"
 	"os"
 
-	"github.com/cloudfoundry-community/go-cfenv"
-	"github.com/gorilla/context"
-	"github.com/gorilla/csrf"
-	"github.com/yvasiyarov/gorelic"
-
 	"github.com/18F/cg-dashboard/controllers"
-	"github.com/18F/cg-dashboard/controllers/pprof"
+	"github.com/18F/cg-dashboard/mailer"
+
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
+
+	cfenv "github.com/cloudfoundry-community/go-cfenv"
+
 	"github.com/18F/cg-dashboard/helpers"
 )
 
@@ -20,170 +23,157 @@ const (
 	cfUserProvidedService = "dashboard-ups"
 )
 
-func loadEnvVars() helpers.EnvVars {
-	envVars := helpers.EnvVars{}
+type envLookup func(name string) (string, bool)
 
-	envVars.ClientID = os.Getenv(helpers.ClientIDEnvVar)
-	envVars.ClientSecret = os.Getenv(helpers.ClientSecretEnvVar)
-	envVars.Hostname = os.Getenv(helpers.HostnameEnvVar)
-	envVars.LoginURL = os.Getenv(helpers.LoginURLEnvVar)
-	envVars.UAAURL = os.Getenv(helpers.UAAURLEnvVar)
-	envVars.APIURL = os.Getenv(helpers.APIURLEnvVar)
-	envVars.LogURL = os.Getenv(helpers.LogURLEnvVar)
-	envVars.PProfEnabled = os.Getenv(helpers.PProfEnabledEnvVar)
-	envVars.BuildInfo = os.Getenv(helpers.BuildInfoEnvVar)
-	envVars.NewRelicLicense = os.Getenv(helpers.NewRelicLicenseEnvVar)
-	envVars.SecureCookies = os.Getenv(helpers.SecureCookiesEnvVar)
-	envVars.LocalCF = os.Getenv(helpers.LocalCFEnvVar)
-	envVars.SessionBackend = os.Getenv(helpers.SessionBackendEnvVar)
-	envVars.SessionKey = os.Getenv(helpers.SessionKeyEnvVar)
-	envVars.BasePath = os.Getenv(helpers.BasePathEnvVar)
-	envVars.SMTPHost = os.Getenv(helpers.SMTPHostEnvVar)
-	envVars.SMTPPort = os.Getenv(helpers.SMTPPortEnvVar)
-	envVars.SMTPUser = os.Getenv(helpers.SMTPUserEnvVar)
-	envVars.SMTPPass = os.Getenv(helpers.SMTPPassEnvVar)
-	envVars.SMTPFrom = os.Getenv(helpers.SMTPFromEnvVar)
-	envVars.TICSecret = os.Getenv(helpers.TICSecretEnvVar)
-	return envVars
+var (
+	noopLookup = func(string) (string, bool) {
+		return "", false
+	}
+	stdRandStateGenerator = func() (string, error) {
+		b := make([]byte, 32)
+		_, err := rand.Read(b)
+		if err != nil {
+			return "", err
+		}
+		return base64.URLEncoding.EncodeToString(b), err
+	}
+)
+
+// mustGet will print a message with the name in it and call os.Exit(1) if value is not set.
+// else it will return value.
+func mustGet(loader envLoader, name string) string {
+	rv := loader(name, "")
+	if rv == "" {
+		fmt.Printf("Unable to find '%s' in environment. Exiting.\n", name)
+		os.Exit(1)
+	}
+	return rv
 }
 
-func replaceEnvVar(envVars *helpers.EnvVars, envVar string, value interface{}) {
-	if stringValue, _ := value.(string); stringValue != "" {
-		switch envVar {
-		case helpers.ClientIDEnvVar:
-			envVars.ClientID = stringValue
-		case helpers.ClientSecretEnvVar:
-			envVars.ClientSecret = stringValue
-		case helpers.NewRelicLicenseEnvVar:
-			envVars.NewRelicLicense = stringValue
-		case helpers.SessionKeyEnvVar:
-			envVars.SessionKey = stringValue
-		case helpers.SMTPHostEnvVar:
-			envVars.SMTPHost = stringValue
-		case helpers.SMTPPortEnvVar:
-			envVars.SMTPPort = stringValue
-		case helpers.SMTPUserEnvVar:
-			envVars.SMTPUser = stringValue
-		case helpers.SMTPPassEnvVar:
-			envVars.SMTPPass = stringValue
-		case helpers.SMTPFromEnvVar:
-			envVars.SMTPFrom = stringValue
-		case helpers.TICSecretEnvVar:
-			envVars.TICSecret = stringValue
+// boolGet returns true iff the loader is set to the strings "true" or "1"
+func boolGet(loader envLoader, name string) bool {
+	val := loader(name, "false")
+	return val == "true" || val == "1"
+}
+
+// createEnvFromNamedService looks for a CloudFoundry bound service
+// with the passed name, and will allow sourcing of environment variables
+// from there
+func createEnvFromCFNamedService(cfApp *cfenv.App, namedService string) envLookup {
+	service, err := cfApp.Services.WithName(namedService)
+	if err != nil {
+		fmt.Printf("Warning: No bound service found with name: %s, will not be used for sourcing env variables\n", namedService)
+		return noopLookup
+	}
+
+	return func(name string) (string, bool) {
+		serviceVar, found := service.Credentials[name]
+		if !found {
+			return "", false
 		}
+		serviceVarAsString, ok := serviceVar.(string)
+		if !ok {
+			fmt.Printf("Warning: variable found in service for %s, but unable to cast as string, so ignoring\n", name)
+			return "", false
+		}
+		return serviceVarAsString, true
 	}
 }
 
-func loadUPSVars(envVars *helpers.EnvVars, cfEnv *cfenv.App) {
-	if cfEnv == nil {
-		return
-	}
+type envLoader func(name, defaulVal string) string
 
-	if cfUPS, err := cfEnv.Services.WithName(cfUserProvidedService); err == nil {
-		fmt.Println("User Provided Service found")
-		if clientID, found := cfUPS.Credentials[helpers.ClientIDEnvVar]; found {
-			fmt.Println("Replacing " + helpers.ClientIDEnvVar)
-			replaceEnvVar(envVars, helpers.ClientIDEnvVar, clientID)
+func createEnvVarLoader(path []envLookup) envLoader {
+	return func(name, defaulVal string) string {
+		for _, env := range path {
+			rv, found := env(name)
+			if found {
+				return rv
+			}
 		}
-		if clientSecret, found := cfUPS.Credentials[helpers.ClientSecretEnvVar]; found {
-			fmt.Println("Replacing " + helpers.ClientSecretEnvVar)
-			replaceEnvVar(envVars, helpers.ClientSecretEnvVar, clientSecret)
-		}
-		if newRelic, found := cfUPS.Credentials[helpers.NewRelicLicenseEnvVar]; found {
-			fmt.Println("Replacing " + helpers.NewRelicLicenseEnvVar)
-			replaceEnvVar(envVars, helpers.NewRelicLicenseEnvVar, newRelic)
-		}
-		if sessionKey, found := cfUPS.Credentials[helpers.SessionKeyEnvVar]; found {
-			fmt.Println("Replacing " + helpers.SessionKeyEnvVar)
-			replaceEnvVar(envVars, helpers.SessionKeyEnvVar, sessionKey)
-		}
-		if smtpFrom, found := cfUPS.Credentials[helpers.SMTPFromEnvVar]; found {
-			fmt.Println("Replacing " + helpers.SMTPFromEnvVar)
-			replaceEnvVar(envVars, helpers.SMTPFromEnvVar, smtpFrom)
-		}
-		if smtpHost, found := cfUPS.Credentials[helpers.SMTPHostEnvVar]; found {
-			fmt.Println("Replacing " + helpers.SMTPHostEnvVar)
-			replaceEnvVar(envVars, helpers.SMTPHostEnvVar, smtpHost)
-		}
-		if smtpPass, found := cfUPS.Credentials[helpers.SMTPPassEnvVar]; found {
-			fmt.Println("Replacing " + helpers.SMTPPassEnvVar)
-			replaceEnvVar(envVars, helpers.SMTPPassEnvVar, smtpPass)
-		}
-		if smtpPort, found := cfUPS.Credentials[helpers.SMTPPortEnvVar]; found {
-			fmt.Println("Replacing " + helpers.SMTPPortEnvVar)
-			replaceEnvVar(envVars, helpers.SMTPPortEnvVar, smtpPort)
-		}
-		if smtpUser, found := cfUPS.Credentials[helpers.SMTPUserEnvVar]; found {
-			fmt.Println("Replacing " + helpers.SMTPUserEnvVar)
-			replaceEnvVar(envVars, helpers.SMTPUserEnvVar, smtpUser)
-		}
-		if ticSecret, found := cfUPS.Credentials[helpers.TICSecretEnvVar]; found {
-			fmt.Println("Replacing " + helpers.TICSecretEnvVar)
-			replaceEnvVar(envVars, helpers.TICSecretEnvVar, ticSecret)
-		}
-
-	} else {
-		fmt.Println("CF Env error: " + err.Error())
+		return defaulVal
 	}
 }
 
 func main() {
-	// Start the server up.
-	var port string
-	if port = os.Getenv("PORT"); len(port) == 0 {
-		port = defaultPort
-	}
-	fmt.Println("using port: " + port)
-
-	// Try to load the user-provided-service
-	// for backup of certain environment variables.
-	cfEnv, err := cfenv.Current()
-	if err != nil || cfEnv == nil {
-		fmt.Println("Warning: No Cloud Foundry Environment found")
-	}
-
-	startApp(port, cfEnv)
-}
-
-func startMonitoring(license string) {
-	agent := gorelic.NewAgent()
-	agent.Verbose = true
-	agent.CollectHTTPStat = true
-	agent.NewrelicLicense = license
-	agent.NewrelicName = "Cloudgov Deck"
-	if err := agent.Run(); err != nil {
-		fmt.Println(err.Error())
-	}
-}
-
-func startApp(port string, env *cfenv.App) {
-	// Load environment variables
-	envVars := loadEnvVars()
-	// Override with Cloud Foundry user-provided service credentials if specified.
-	loadUPSVars(&envVars, env)
-
-	app, settings, err := controllers.InitApp(envVars, env)
+	// Load the cf app data
+	cfApp, err := cfenv.Current()
 	if err != nil {
-		// Print the error.
-		fmt.Println(err.Error())
-		// Terminate the program with a non-zero value number.
-		// Need this for testing purposes.
-		os.Exit(1)
-	}
-	if settings.PProfEnabled {
-		pprof.InitPProfRouter(app)
+		fmt.Println("Warning: No Cloud Foundry Environment found, will not be used for sourcing env variables")
 	}
 
-	if envVars.NewRelicLicense != "" {
-		fmt.Println("starting monitoring...")
-		startMonitoring(envVars.NewRelicLicense)
+	// This defines the path by which we look for environment variables
+	envGet := createEnvVarLoader([]envLookup{
+		os.LookupEnv, // check environment first
+		createEnvFromCFNamedService(cfApp, cfUserProvidedService), // fallback to CUPS
+	})
+
+	// Configure the application
+	app := &controllers.Settings{
+		OAuthConfig: &oauth2.Config{
+			ClientID:     mustGet(envGet, helpers.ClientIDEnvVar),
+			ClientSecret: mustGet(envGet, helpers.ClientSecretEnvVar),
+			RedirectURL:  mustGet(envGet, helpers.HostnameEnvVar) + "/oauth2callback",
+			Scopes:       []string{"cloud_controller.read", "cloud_controller.write", "cloud_controller.admin", "scim.read", "openid"},
+			Endpoint: oauth2.Endpoint{
+				AuthURL:  mustGet(envGet, helpers.LoginURLEnvVar) + "/oauth/authorize",
+				TokenURL: mustGet(envGet, helpers.UAAURLEnvVar) + "/oauth/token",
+			},
+		},
+		ConsoleAPI: mustGet(envGet, helpers.APIURLEnvVar),
+		LoginURL:   mustGet(envGet, helpers.LoginURLEnvVar),
+		Sessions: func() controllers.SessionHandler {
+			switch envGet(helpers.SessionBackendEnvVar, "file") {
+			case "securecookie":
+				return controllers.NewSecureCookieStore(boolGet(envGet, helpers.SecureCookiesEnvVar))
+			case "redis":
+				address, password := helpers.MustGetRedisSettings(cfApp)
+				return controllers.NewRedisCookieStore(
+					address, password,
+					[]byte(mustGet(envGet, helpers.SessionKeyEnvVar)),
+					boolGet(envGet, helpers.SecureCookiesEnvVar),
+				)
+			case "file":
+				return controllers.NewFilesystemCookieStore(
+					[]byte(mustGet(envGet, helpers.SessionKeyEnvVar)),
+					boolGet(envGet, helpers.SecureCookiesEnvVar),
+				)
+			default:
+				log.Fatal("unknown session backend")
+				return nil // will never reach
+			}
+		}(),
+		StateGenerator: stdRandStateGenerator,
+		UaaURL:         mustGet(envGet, helpers.UAAURLEnvVar),
+		LogURL:         mustGet(envGet, helpers.LogURLEnvVar),
+		BasePath:       envGet(helpers.BasePathEnvVar, ""),
+		HighPrivilegedOauthConfig: &clientcredentials.Config{
+			ClientID:     mustGet(envGet, helpers.ClientIDEnvVar),
+			ClientSecret: mustGet(envGet, helpers.ClientSecretEnvVar),
+			Scopes:       []string{"scim.invite", "cloud_controller.admin", "scim.read"},
+			TokenURL:     mustGet(envGet, helpers.UAAURLEnvVar) + "/oauth/token",
+		},
+		PProfEnabled:  boolGet(envGet, helpers.PProfEnabledEnvVar),
+		BuildInfo:     envGet(helpers.BuildInfoEnvVar, "developer-build"),
+		SecureCookies: boolGet(envGet, helpers.SecureCookiesEnvVar),
+		LocalCF:       boolGet(envGet, helpers.LocalCFEnvVar),
+		AppURL:        mustGet(envGet, helpers.HostnameEnvVar),
+
+		EmailSender: &mailer.SMTPMailer{
+			Host:     mustGet(envGet, helpers.SMTPHostEnvVar),
+			Port:     envGet(helpers.SMTPPortEnvVar, ""),
+			Username: envGet(helpers.SMTPUserEnvVar, ""),
+			Password: envGet(helpers.SMTPPortEnvVar, ""),
+			From:     mustGet(envGet, helpers.SMTPFromEnvVar),
+		},
+
+		TICSecret: envGet(helpers.TICSecretEnvVar, ""),
+
+		NewRelicLicense: envGet(helpers.NewRelicLicenseEnvVar, ""),
+		CSRFKey:         []byte(mustGet(envGet, helpers.SessionKeyEnvVar)),
+
+		ListenAddr: ":" + envGet("PORT", defaultPort),
 	}
 
-	fmt.Println("starting app now...")
-
-	// TODO add better timeout message. By default it will just say "Timeout"
-	protect := csrf.Protect([]byte(envVars.SessionKey), csrf.Secure(settings.SecureCookies))
-	http.ListenAndServe(":"+port, protect(
-		http.TimeoutHandler(context.ClearHandler(app), helpers.TimeoutConstant, ""),
-	))
+	// Up and away
+	log.Fatal(app.Serve())
 }

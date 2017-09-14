@@ -1,6 +1,6 @@
 package helpers
 
-var (
+const (
 	// ClientIDEnvVar is the environment variable key that represents the registered
 	// Client ID for this web app.
 	ClientIDEnvVar = "CONSOLE_CLIENT_ID"
@@ -52,28 +52,3 @@ var (
 	// TICSecretEnvVar is the shared secret with CF API proxy for forwarding client IPs
 	TICSecretEnvVar = "TIC_SECRET"
 )
-
-// EnvVars holds all the environment variable values that a non-test server should have.
-type EnvVars struct {
-	ClientID        string
-	ClientSecret    string
-	Hostname        string
-	LoginURL        string
-	UAAURL          string
-	APIURL          string
-	LogURL          string
-	PProfEnabled    string
-	BuildInfo       string
-	NewRelicLicense string
-	SecureCookies   string
-	LocalCF         string
-	SessionBackend  string
-	SessionKey      string
-	BasePath        string
-	SMTPHost        string
-	SMTPPort        string
-	SMTPUser        string
-	SMTPPass        string
-	SMTPFrom        string
-	TICSecret       string
-}
