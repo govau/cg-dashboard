@@ -3,6 +3,7 @@ package helpers
 import (
 	"crypto/rand"
 	"crypto/tls"
+	"encoding/base64"
 	"encoding/gob"
 	"errors"
 	"fmt"
@@ -155,7 +156,12 @@ func (s *Settings) InitSettings(envVars EnvVars, env *cfenv.App) error {
 	}
 
 	s.StateGenerator = func() (string, error) {
-		return GenerateRandomString(32)
+		b := make([]byte, 32)
+		_, err := rand.Read(b)
+		if err != nil {
+			return "", err
+		}
+		return base64.URLEncoding.EncodeToString(b), err
 	}
 
 	// Initialize Sessions.
