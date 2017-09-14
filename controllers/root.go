@@ -16,7 +16,7 @@ import (
 
 // Context represents the context for all requests that do not need authentication.
 type Context struct {
-	Settings  *helpers.Settings
+	Settings  *Settings
 	templates *helpers.Templates
 	mailer    mailer.Mailer
 }
@@ -78,7 +78,7 @@ type sessionStoreHealth struct {
 }
 
 func createPingData(c *Context) pingData {
-	storeUp := c.Settings.SessionBackendHealthCheck()
+	storeUp := c.Settings.Sessions.CheckHealth()
 	overallStatus := pingDataStatusAlive
 	// if the session storage is out, we have an outage.
 	if !storeUp {
@@ -87,7 +87,7 @@ func createPingData(c *Context) pingData {
 	return pingData{Status: overallStatus,
 		BuildInfo: c.Settings.BuildInfo,
 		SessionStoreHealth: sessionStoreHealth{
-			StoreType: c.Settings.SessionBackend,
+			StoreType: c.Settings.Sessions.Type(),
 			StoreUp:   storeUp,
 		},
 	}
@@ -108,7 +108,7 @@ func (c *Context) Ping(rw web.ResponseWriter, req *web.Request) {
 
 // LoginHandshake is the handler where we authenticate the user and the user authorizes this application access to information.
 func (c *Context) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
-	if token := helpers.GetValidToken(req.Request, c.Settings); token != nil {
+	if token := c.Settings.GetValidToken(req.Request); token != nil {
 		// We should just go to dashboard if the user already has a valid token.
 		dashboardURL := fmt.Sprintf("%s%s", c.Settings.AppURL, "/#/dashboard")
 		http.Redirect(rw, req.Request, dashboardURL, http.StatusFound)
@@ -134,7 +134,7 @@ func (c *Context) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 	}
 
 	// Ignore error, Get will return a session, existing or new.
-	session, _ := c.Settings.Sessions.Get(req.Request, "session")
+	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
 
 	if state == "" || state != session.Values["state"] {
 		rw.WriteHeader(http.StatusUnauthorized)
@@ -168,7 +168,7 @@ func (c *Context) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 
 // Logout is a handler that will attempt to clear the session information for the current user.
 func (c *Context) Logout(rw web.ResponseWriter, req *web.Request) {
-	session, _ := c.Settings.Sessions.Get(req.Request, "session")
+	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
 	// Clear the token
 	session.Values["token"] = nil
 	// Force the session to expire
@@ -179,7 +179,7 @@ func (c *Context) Logout(rw web.ResponseWriter, req *web.Request) {
 }
 
 func (c *Context) redirect(rw web.ResponseWriter, req *web.Request) error {
-	session, _ := c.Settings.Sessions.Get(req.Request, "session")
+	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
 	state, err := c.Settings.StateGenerator()
 	if err != nil {
 		return err

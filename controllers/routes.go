@@ -1,26 +1,28 @@
 package controllers
 
 import (
-	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/gocraft/web"
 
 	"github.com/18F/cg-dashboard/helpers"
-	"github.com/18F/cg-dashboard/mailer"
 )
 
-// InitRouter sets up the router (and subrouters).
+// CreateRouter sets up the router (and subrouters).
 // It also includes the closure middleware where we load the global Settings reference into each request.
-func InitRouter(settings *helpers.Settings, templates *helpers.Templates, mailer mailer.Mailer) *web.Router {
-	if settings == nil {
-		return nil
+// Should only be called once, and normally called by Serve(). It's only public for the tests
+func (s *Settings) CreateRouter() (*web.Router, error) {
+	// Cache templates
+	templates, err := helpers.InitTemplates(s.BasePath)
+	if err != nil {
+		return nil, err
 	}
+
 	router := web.New(Context{})
 
 	// A closure that effectively loads the Settings into every request.
 	router.Middleware(func(c *Context, resp web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
-		c.Settings = settings
+		c.Settings = s
 		c.templates = templates
-		c.mailer = mailer
+		c.mailer = s.EmailSender
 		next(resp, req)
 	})
 
@@ -66,29 +68,5 @@ func InitRouter(settings *helpers.Settings, templates *helpers.Templates, mailer
 	// Set up static file serving to load from the static folder.
 	router.Middleware(StaticMiddleware("static"))
 
-	return router
-}
-
-// InitApp takes in envars and sets up the router and settings that will be used for the unstarted server.
-func InitApp(envVars helpers.EnvVars, env *cfenv.App) (*web.Router, *helpers.Settings, error) {
-	// Initialize the settings.
-	settings := helpers.Settings{}
-	if err := settings.InitSettings(envVars, env); err != nil {
-		return nil, nil, err
-	}
-	mailer, err := mailer.InitSMTPMailer(settings)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	// Cache templates
-	templates, err := helpers.InitTemplates(settings.BasePath)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	// Initialize the router
-	router := InitRouter(&settings, templates, mailer)
-
-	return router, &settings, nil
+	return router, nil
 }
