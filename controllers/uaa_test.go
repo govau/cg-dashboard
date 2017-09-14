@@ -21,7 +21,7 @@ var userinfoTests = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "Basic User Info",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewStringContentTester("test"),
 			ExpectedCode:     http.StatusOK,
@@ -60,7 +60,7 @@ var inviteUsersTest = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "UAA Invite User no body",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewJSONResponseContentTester("{\"status\": \"failure\", \"data\": \"no body in request.\"}"),
 			ExpectedCode:     http.StatusBadRequest,
@@ -74,7 +74,7 @@ var inviteUsersTest = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "UAA Invite User with e-mail in body but missing invite url",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewJSONResponseContentTester("{\"status\": \"failure\", \"data\": \"Missing correct params.\"}"),
 			ExpectedCode:     http.StatusBadRequest,
@@ -107,7 +107,7 @@ var inviteUsersTest = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "UAA Invite User with e-mail in body but missing e-mail",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewJSONResponseContentTester("{\"status\": \"failure\", \"data\": \"Missing correct params.\"}"),
 			ExpectedCode:     http.StatusBadRequest,
@@ -140,7 +140,7 @@ var inviteUsersTest = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "UAA Invite User with e-mail in body (new user)",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewJSONResponseContentTester(fmt.Sprintf("{\"status\": \"success\", \"userGuid\": \"%s\", \"verified\": false}", testUserGUID)),
 			ExpectedCode:     http.StatusOK,
@@ -173,7 +173,7 @@ var inviteUsersTest = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "UAA Invite User with already verified user",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewJSONResponseContentTester(fmt.Sprintf("{\"status\": \"success\", \"userGuid\": \"%s\", \"verified\": true}", testUserGUID)),
 			ExpectedCode:     http.StatusOK,
@@ -218,7 +218,7 @@ var uaainfoTests = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "Basic Uaa Info without guid",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewJSONResponseContentTester(fmt.Sprintf(`{"status": "Bad request", "error_description": "Missing valid guid."}`)),
 			ExpectedCode:     http.StatusBadRequest,
@@ -232,7 +232,7 @@ var uaainfoTests = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "Basic Uaa Info with guid",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewStringContentTester("success"),
 			ExpectedCode:     http.StatusOK,

@@ -13,12 +13,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/gocraft/web"
 	"github.com/gorilla/sessions"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
 
 	"github.com/18F/cg-dashboard/controllers"
 	"github.com/18F/cg-dashboard/helpers"
@@ -109,15 +109,20 @@ func EchoResponseHandler(rw http.ResponseWriter, response *http.Response) {
 }
 
 // CreateRouterWithMockSession will create a settings with the appropriate envVars and load the mock session with the session data.
-func CreateRouterWithMockSession(sessionData map[string]interface{}, settings *controllers.Settings) (*web.Router, *MockSessionStore) {
+func CreateRouterWithMockSession(sessionData map[string]interface{}, envVars helpers.EnvVars) (*web.Router, *MockSessionStore) {
+	// Initialize settings.
+	settings := helpers.Settings{}
+	env, _ := cfenv.Current()
+	settings.InitSettings(envVars, env)
+
 	// Initialize a new session store.
 	store := MockSessionStore{}
 	store.ResetSessionData(sessionData, "")
 
 	// Override the session store.
-	settings.Sessions = &controllers.StoreWrapperHandler{
-		SessionStore: store,
-	}
+	settings.Sessions = store
+
+	templates, _ := helpers.InitTemplates(settings.BasePath)
 
 	// Create the router.
 	mockMailer := new(mocks.Mailer)
@@ -125,12 +130,7 @@ func CreateRouterWithMockSession(sessionData map[string]interface{}, settings *c
 	// argument.
 	mockMailer.On("SendEmail", mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"), mock.AnythingOfType("[]uint8")).Return(nil)
-	settings.EmailSender = mockMailer
-
-	router, err := settings.CreateRouter()
-	if err != nil {
-		panic(err)
-	}
+	router := controllers.InitRouter(&settings, templates, mockMailer)
 
 	return router, &store
 }
@@ -140,7 +140,7 @@ type BasicConsoleUnitTest struct {
 	// Name of the tests
 	TestName string
 	// Set of env vars to set up the settings.
-	Settings *controllers.Settings
+	EnvVars helpers.EnvVars
 	// Ending location of request.
 	Location    string
 	Code        int
@@ -236,31 +236,22 @@ type BasicProxyTest struct {
 }
 
 // GetMockCompleteEnvVars is just a commonly used env vars object that contains non-empty values for all the fields of the EnvVars struct.
-func GetMockCompleteEnvVars() *controllers.Settings {
-	return &controllers.Settings{
-		BasePath: os.Getenv(helpers.BasePathEnvVar),
-		LoginURL: "https://loginurl",
-		//Hostname:  "https://hostname",
-		BuildInfo: "developer-build",
-		OAuthConfig: &oauth2.Config{
-			ClientID:     "ID",
-			ClientSecret: "Secret",
-		},
-		HighPrivilegedOauthConfig: &clientcredentials.Config{
-			ClientID:     "ID",
-			ClientSecret: "secret",
-		},
-		/*ClientID:      "ID",
+func GetMockCompleteEnvVars() helpers.EnvVars {
+	return helpers.EnvVars{
+		ClientID:      "ID",
 		ClientSecret:  "Secret",
+		Hostname:      "https://hostname",
+		LoginURL:      "https://loginurl",
 		UAAURL:        "https://uaaurl",
 		APIURL:        "https://apiurl",
 		LogURL:        "https://logurl",
 		PProfEnabled:  "true",
 		SessionKey:    "lalala",
+		BasePath:      os.Getenv(helpers.BasePathEnvVar),
 		SMTPFrom:      "cloud@cloud.gov",
 		SMTPHost:      "localhost",
 		SecureCookies: "1",
-		TICSecret:     "tic",*/
+		TICSecret:     "tic",
 	}
 }
 
@@ -282,7 +273,7 @@ func CreateExternalServerForPrivileged(t *testing.T, test BasicProxyTest) *httpt
 			if err != nil {
 				t.Errorf("failed reading request body: %s.", err)
 			}
-			expectedRequestBody := "client_id=" + GetMockCompleteEnvVars().OAuthConfig.ClientID + "&grant_type=client_credentials&scope=scim.invite+cloud_controller.admin+scim.read"
+			expectedRequestBody := "client_id=" + GetMockCompleteEnvVars().ClientID + "&grant_type=client_credentials&scope=scim.invite+cloud_controller.admin+scim.read"
 			if string(body) != expectedRequestBody {
 				t.Errorf("payload = %q; want %q", string(body), expectedRequestBody)
 			}
@@ -363,7 +354,10 @@ func PrepareExternalServerCall(t *testing.T, c *controllers.SecureContext, testS
 		c.Token = token
 
 		// Assign settings to context
-		c.Settings = test.Settings
+		mockSettings := &helpers.Settings{}
+		env, _ := cfenv.Current()
+		mockSettings.InitSettings(test.EnvVars, env)
+		c.Settings = mockSettings
 
 		response, request := NewTestRequest(test.RequestMethod, fullURL, test.RequestBody)
 		request.RemoteAddr = httptest.DefaultRemoteAddr + ":81"
@@ -372,9 +366,9 @@ func PrepareExternalServerCall(t *testing.T, c *controllers.SecureContext, testS
 		for header, value := range test.RequestHeaders {
 			request.Header.Set(header, value)
 		}
-		test.Settings.ConsoleAPI = testServer.URL
-		test.Settings.UaaURL = testServer.URL
-		router, _ := CreateRouterWithMockSession(test.SessionData, test.Settings)
+		test.EnvVars.APIURL = testServer.URL
+		test.EnvVars.UAAURL = testServer.URL
+		router, _ := CreateRouterWithMockSession(test.SessionData, test.EnvVars)
 		return response, request, router
 	}
 	t.Errorf("Cannot get token data")

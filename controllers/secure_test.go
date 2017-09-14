@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/18F/cg-dashboard/controllers"
+	"github.com/18F/cg-dashboard/helpers"
 	. "github.com/18F/cg-dashboard/helpers/testhelpers"
 	"github.com/18F/cg-dashboard/helpers/testhelpers/mocks"
 	"github.com/gocraft/web"
@@ -34,37 +35,30 @@ var oauthTests = []BasicSecureTest{
 }
 
 func TestOAuth(t *testing.T) {
-	mockSettings := &controllers.Settings{
-		OAuthConfig: &oauth2.Config{
-			ClientID:     "ClientID",
-			ClientSecret: "ClientSecret",
-			RedirectURL:  "http://hostname.com/oauth2callback",
-			Scopes:       []string{"openid"},
-			Endpoint: oauth2.Endpoint{
-				AuthURL:  "http://loginURL.com/oauth/authorize",
-				TokenURL: "http://tokenURL.com/oauth/token",
-			},
+	mockSettings := helpers.Settings{}
+	mockSettings.OAuthConfig = &oauth2.Config{
+		ClientID:     "ClientID",
+		ClientSecret: "ClientSecret",
+		RedirectURL:  "http://hostname.com/oauth2callback",
+		Scopes:       []string{"openid"},
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  "http://loginURL.com/oauth/authorize",
+			TokenURL: "http://tokenURL.com/oauth/token",
 		},
-		StateGenerator: func() (string, error) {
-			return "state", nil
-		},
-		EmailSender: &mocks.Mailer{},
+	}
+	mockSettings.StateGenerator = func() (string, error) {
+		return "state", nil
 	}
 
 	for _, test := range oauthTests {
 		// Initialize a new session store.
 		store := MockSessionStore{}
 		store.ResetSessionData(test.SessionData, "")
-		mockSettings.Sessions = &controllers.StoreWrapperHandler{
-			SessionStore: store,
-		}
+		mockSettings.Sessions = store
 
 		// Setup a test route on the API router (which is guarded by OAuth)
 		response, request := NewTestRequest("GET", "/v2/test", nil)
-		router, err := mockSettings.CreateRouter()
-		if err != nil {
-			t.FailNow()
-		}
+		router := controllers.InitRouter(&mockSettings, &helpers.Templates{}, &mocks.Mailer{})
 		secureRouter := router.Subrouter(controllers.SecureContext{}, "/")
 		apiRouter := secureRouter.Subrouter(controllers.APIContext{}, "/v2")
 		apiRouter.Middleware((*controllers.APIContext).OAuth)
@@ -87,7 +81,7 @@ func TestPrivilegedProxy(t *testing.T) {
 	for _, test := range proxyTests {
 		// We can only get this after the server has started.
 		testServer := CreateExternalServerForPrivileged(t, test)
-		test.Settings.UaaURL = testServer.URL
+		test.EnvVars.UAAURL = testServer.URL
 		// Construct full url for the proxy.
 		fullURL := fmt.Sprintf("%s%s", testServer.URL, test.RequestPath)
 		c := &controllers.SecureContext{Context: &controllers.Context{}}
@@ -105,7 +99,7 @@ var proxyTests = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "Basic Ok Proxy call",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewStringContentTester("test"),
 			ExpectedCode:     http.StatusOK,
@@ -134,7 +128,7 @@ var proxyTests = []BasicProxyTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
 				TestName:    "Proxy response containing format string",
 				SessionData: ValidTokenData,
-				Settings:    GetMockCompleteEnvVars(),
+				EnvVars:     GetMockCompleteEnvVars(),
 			},
 			ExpectedResponse: NewStringContentTester("hello%world"),
 			ExpectedCode:     http.StatusOK,

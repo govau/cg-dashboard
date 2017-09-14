@@ -2,21 +2,32 @@ package mailer
 
 import (
 	"bytes"
+	"os"
 	"strings"
 	"testing"
 
+	"github.com/18F/cg-dashboard/helpers"
 	. "github.com/18F/cg-dashboard/helpers/testhelpers/docker"
 )
 
 func TestSendEmail(t *testing.T) {
 	hostname, smtpPort, apiPort, cleanup := CreateTestMailCatcher()
-	mailer := &SMTPMailer{
-		Host: hostname,
-		Port: smtpPort,
-		From: "test@dashboard.com",
+	// Test InitSMTPMailer with valid path for templates.
+	settings := helpers.Settings{
+		BasePath: os.Getenv(helpers.BasePathEnvVar),
+		SMTPHost: hostname,
+		SMTPPort: smtpPort,
+		SMTPFrom: "test@dashboard.com",
+	}
+	mailer, err := InitSMTPMailer(settings)
+	if mailer == nil {
+		t.Error("Expected non nil mailer.")
+	}
+	if err != nil {
+		t.Errorf("Expected nil error, found %s", err.Error())
 	}
 	body := bytes.NewBufferString("test html here")
-	err := mailer.SendEmail("test@receiver.com", "sample subject", body.Bytes())
+	err = mailer.SendEmail("test@receiver.com", "sample subject", body.Bytes())
 	if err != nil {
 		t.Errorf("Expected nil error, found %s", err.Error())
 	}
@@ -42,5 +53,19 @@ func TestSendEmail(t *testing.T) {
 	err = mailer.SendEmail("test@receiver.com", "sample subject", body.Bytes())
 	if err == nil {
 		t.Error("Expected non nil error")
+	}
+}
+
+func TestInitSMTPMailer(t *testing.T) {
+	// Test InitSMTPMailer with valid path for templates.
+	settings := helpers.Settings{
+		BasePath: os.Getenv(helpers.BasePathEnvVar),
+	}
+	mailer, err := InitSMTPMailer(settings)
+	if mailer == nil {
+		t.Error("Expected non nil mailer.")
+	}
+	if err != nil {
+		t.Errorf("Expected nil error, found %s", err.Error())
 	}
 }
