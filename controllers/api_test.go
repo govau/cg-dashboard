@@ -10,7 +10,7 @@ var authStatusTests = []BasicSecureTest{
 	{
 		BasicConsoleUnitTest: BasicConsoleUnitTest{
 			TestName:    "Basic Authorized Status Session",
-			Settings:    GetMockCompleteEnvVars(),
+			EnvVars:     GetMockCompleteEnvVars(),
 			SessionData: ValidTokenData,
 		},
 		ExpectedResponse: NewJSONResponseContentTester("{\"status\": \"authorized\"}"),
@@ -22,7 +22,7 @@ func TestAuthStatus(t *testing.T) {
 		// Create request
 		response, request := NewTestRequest("GET", "/v2/authstatus", nil)
 
-		router, _ := CreateRouterWithMockSession(test.SessionData, test.Settings)
+		router, _ := CreateRouterWithMockSession(test.SessionData, test.EnvVars)
 		router.ServeHTTP(response, request)
 		if !test.ExpectedResponse.Check(t, response.Body.String()) {
 			t.Errorf("Expected %s. Found %s\n", test.ExpectedResponse.Display(), response.Body.String())
@@ -34,7 +34,7 @@ var profileTests = []BasicSecureTest{
 	{
 		BasicConsoleUnitTest: BasicConsoleUnitTest{
 			TestName:    "Basic Authorized Profile",
-			Settings:    GetMockCompleteEnvVars(),
+			EnvVars:     GetMockCompleteEnvVars(),
 			SessionData: ValidTokenData,
 		},
 		ExpectedResponse: NewStringContentTester("https://loginurl/profile"),
@@ -46,7 +46,7 @@ func TestProfile(t *testing.T) {
 		// Create request
 		response, request := NewTestRequest("GET", "/v2/profile", nil)
 
-		router, _ := CreateRouterWithMockSession(test.SessionData, test.Settings)
+		router, _ := CreateRouterWithMockSession(test.SessionData, test.EnvVars)
 		router.ServeHTTP(response, request)
 		if !test.ExpectedResponse.Check(t, response.Header().Get("location")) {
 			t.Errorf("Profile route does not redirect to loginurl profile page")

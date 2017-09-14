@@ -5,19 +5,17 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/cloudfoundry-community/go-cfenv"
+
 	"github.com/18F/cg-dashboard/controllers"
-	"github.com/18F/cg-dashboard/helpers"
 	. "github.com/18F/cg-dashboard/helpers/testhelpers"
 	. "github.com/18F/cg-dashboard/helpers/testhelpers/docker"
 )
 
 func TestPing(t *testing.T) {
 	response, request := NewTestRequest("GET", "/ping", nil)
-
-	envVars := GetMockCompleteEnvVars()
-	envVars.Sessions = controllers.NewFilesystemCookieStore([]byte("key"), false)
-
-	router, err := envVars.CreateRouter()
+	env, _ := cfenv.Current()
+	router, _, err := controllers.InitApp(GetMockCompleteEnvVars(), env)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,12 +39,11 @@ func TestPingWithRedis(t *testing.T) {
 	defer cleanUpRedis()
 	// Override the mock env vars to use redis for session backend.
 	envVars := GetMockCompleteEnvVars()
-
-	addr, password := helpers.MustGetRedisSettings(nil)
-	envVars.Sessions = controllers.NewRedisCookieStore(addr, password, []byte("sessionkey"), false)
+	envVars.SessionBackend = "redis"
+	env, _ := cfenv.Current()
 
 	// Setup router.
-	router, err := envVars.CreateRouter()
+	router, _, err := controllers.InitApp(envVars, env)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -93,14 +90,14 @@ func TestPingWithRedis(t *testing.T) {
 var loginHandshakeTests = []BasicConsoleUnitTest{
 	{
 		TestName:    "Login Handshake With Already Authenticated User",
-		Settings:    GetMockCompleteEnvVars(),
+		EnvVars:     GetMockCompleteEnvVars(),
 		Code:        302,
 		Location:    "https://hostname/#/dashboard",
 		SessionData: ValidTokenData,
 	},
 	{
 		TestName: "Login Handshake With Non Authenticated User",
-		Settings: GetMockCompleteEnvVars(),
+		EnvVars:  GetMockCompleteEnvVars(),
 		Code:     302,
 		Location: "https://loginurl/oauth/authorize",
 	},
@@ -109,7 +106,7 @@ var loginHandshakeTests = []BasicConsoleUnitTest{
 func TestLoginHandshake(t *testing.T) {
 	response, request := NewTestRequest("GET", "/handshake", nil)
 	for _, test := range loginHandshakeTests {
-		router, _ := CreateRouterWithMockSession(test.SessionData, test.Settings)
+		router, _ := CreateRouterWithMockSession(test.SessionData, test.EnvVars)
 		router.ServeHTTP(response, request)
 		// Check the return code.
 		if response.Code != test.Code {
@@ -127,7 +124,7 @@ var logoutTests = []BasicSecureTest{
 	{
 		BasicConsoleUnitTest: BasicConsoleUnitTest{
 			TestName:    "Basic Authorized Profile To Logout",
-			Settings:    GetMockCompleteEnvVars(),
+			EnvVars:     GetMockCompleteEnvVars(),
 			SessionData: ValidTokenData,
 		},
 		ExpectedResponse: NewStringContentTester("https://loginurl/logout.do"),
@@ -135,7 +132,7 @@ var logoutTests = []BasicSecureTest{
 	{
 		BasicConsoleUnitTest: BasicConsoleUnitTest{
 			TestName: "Basic Unauthorized Profile To Logout",
-			Settings: GetMockCompleteEnvVars(),
+			EnvVars:  GetMockCompleteEnvVars(),
 		},
 		ExpectedResponse: NewStringContentTester("https://loginurl/logout.do"),
 	},
@@ -146,7 +143,7 @@ func TestLogout(t *testing.T) {
 		// Create request
 		response, request := NewTestRequest("GET", "/logout", nil)
 
-		router, store := CreateRouterWithMockSession(test.SessionData, test.Settings)
+		router, store := CreateRouterWithMockSession(test.SessionData, test.EnvVars)
 		router.ServeHTTP(response, request)
 		location := response.Header().Get("location")
 		if !test.ExpectedResponse.Check(t, location) {
