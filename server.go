@@ -1,8 +1,6 @@
 package main
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"fmt"
 	"log"
 	"os"
@@ -18,162 +16,104 @@ import (
 	"github.com/18F/cg-dashboard/helpers"
 )
 
-const (
-	defaultPort           = "9999"
-	cfUserProvidedService = "dashboard-ups"
-)
-
-type envLookup func(name string) (string, bool)
-
-var (
-	noopLookup = func(string) (string, bool) {
-		return "", false
-	}
-	stdRandStateGenerator = func() (string, error) {
-		b := make([]byte, 32)
-		_, err := rand.Read(b)
-		if err != nil {
-			return "", err
-		}
-		return base64.URLEncoding.EncodeToString(b), err
-	}
-)
-
-// mustGet will print a message with the name in it and call os.Exit(1) if value is not set.
-// else it will return value.
-func mustGet(loader envLoader, name string) string {
-	rv := loader(name, "")
-	if rv == "" {
-		fmt.Printf("Unable to find '%s' in environment. Exiting.\n", name)
-		os.Exit(1)
-	}
-	return rv
-}
-
-// boolGet returns true iff the loader is set to the strings "true" or "1"
-func boolGet(loader envLoader, name string) bool {
-	val := loader(name, "false")
-	return val == "true" || val == "1"
-}
-
-// createEnvFromNamedService looks for a CloudFoundry bound service
-// with the passed name, and will allow sourcing of environment variables
-// from there
-func createEnvFromCFNamedService(cfApp *cfenv.App, namedService string) envLookup {
-	service, err := cfApp.Services.WithName(namedService)
-	if err != nil {
-		fmt.Printf("Warning: No bound service found with name: %s, will not be used for sourcing env variables\n", namedService)
-		return noopLookup
-	}
-
-	return func(name string) (string, bool) {
-		serviceVar, found := service.Credentials[name]
-		if !found {
-			return "", false
-		}
-		serviceVarAsString, ok := serviceVar.(string)
-		if !ok {
-			fmt.Printf("Warning: variable found in service for %s, but unable to cast as string, so ignoring\n", name)
-			return "", false
-		}
-		return serviceVarAsString, true
-	}
-}
-
-type envLoader func(name, defaulVal string) string
-
-func createEnvVarLoader(path []envLookup) envLoader {
-	return func(name, defaulVal string) string {
-		for _, env := range path {
-			rv, found := env(name)
-			if found {
-				return rv
-			}
-		}
-		return defaulVal
-	}
-}
-
 func main() {
-	// Load the cf app data
+	// Load CloudFoundry environment data, if we have it
 	cfApp, err := cfenv.Current()
 	if err != nil {
 		fmt.Println("Warning: No Cloud Foundry Environment found, will not be used for sourcing env variables")
 	}
 
-	// This defines the path by which we look for environment variables
-	envGet := createEnvVarLoader([]envLookup{
-		os.LookupEnv, // check environment first
-		createEnvFromCFNamedService(cfApp, cfUserProvidedService), // fallback to CUPS
-	})
+	// Poke in variables here to fallback to where bits aren't in the normal palce
+	additionalFallbacks := make(map[string]string)
 
+	// e.g. find look for a service binding for Redis
+	redisURI, err := helpers.GetRedisService(cfApp)
+	if err == nil {
+		additionalFallbacks["REDIS_URI"] = redisURI
+	}
+
+	// Create app, serve forever...
+	log.Fatal(createSettingsFromEnv(helpers.CreateEnvVarLoader([]helpers.EnvLookup{
+		os.LookupEnv, // check environment first
+		helpers.CreateEnvFromCFNamedService(cfApp, "dashboard-ups"), // fallback to CUPS
+		helpers.MapEnvLookup(additionalFallbacks),
+	})).Serve())
+}
+
+func createSettingsFromEnv(envGet helpers.EnvLoader) *controllers.Settings {
 	// Configure the application
-	app := &controllers.Settings{
+	return &controllers.Settings{
 		OAuthConfig: &oauth2.Config{
-			ClientID:     mustGet(envGet, helpers.ClientIDEnvVar),
-			ClientSecret: mustGet(envGet, helpers.ClientSecretEnvVar),
-			RedirectURL:  mustGet(envGet, helpers.HostnameEnvVar) + "/oauth2callback",
-			Scopes:       []string{"cloud_controller.read", "cloud_controller.write", "cloud_controller.admin", "scim.read", "openid"},
+			ClientID:     helpers.MustGet(envGet, helpers.ClientIDEnvVar),
+			ClientSecret: helpers.MustGet(envGet, helpers.ClientSecretEnvVar),
+			RedirectURL:  helpers.MustGet(envGet, helpers.HostnameEnvVar) + "/oauth2callback",
+			Scopes: []string{
+				"cloud_controller.read",
+				"cloud_controller.write",
+				"cloud_controller.admin",
+				"scim.read",
+				"openid",
+			},
 			Endpoint: oauth2.Endpoint{
-				AuthURL:  mustGet(envGet, helpers.LoginURLEnvVar) + "/oauth/authorize",
-				TokenURL: mustGet(envGet, helpers.UAAURLEnvVar) + "/oauth/token",
+				AuthURL:  helpers.MustGet(envGet, helpers.LoginURLEnvVar) + "/oauth/authorize",
+				TokenURL: helpers.MustGet(envGet, helpers.UAAURLEnvVar) + "/oauth/token",
 			},
 		},
-		ConsoleAPI: mustGet(envGet, helpers.APIURLEnvVar),
-		LoginURL:   mustGet(envGet, helpers.LoginURLEnvVar),
+		ConsoleAPI: helpers.MustGet(envGet, helpers.APIURLEnvVar),
+		LoginURL:   helpers.MustGet(envGet, helpers.LoginURLEnvVar),
 		Sessions: func() controllers.SessionHandler {
 			switch envGet(helpers.SessionBackendEnvVar, "file") {
 			case "securecookie":
-				return controllers.NewSecureCookieStore(boolGet(envGet, helpers.SecureCookiesEnvVar))
+				return controllers.NewSecureCookieStore(helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar))
 			case "redis":
-				address, password := helpers.MustGetRedisSettings(cfApp)
 				return controllers.NewRedisCookieStore(
-					address, password,
-					[]byte(mustGet(envGet, helpers.SessionKeyEnvVar)),
-					boolGet(envGet, helpers.SecureCookiesEnvVar),
+					envGet("REDIS_URI", "redis://localhost:6379"),
+					[]byte(helpers.MustGet(envGet, helpers.SessionKeyEnvVar)),
+					helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar),
 				)
 			case "file":
 				return controllers.NewFilesystemCookieStore(
-					[]byte(mustGet(envGet, helpers.SessionKeyEnvVar)),
-					boolGet(envGet, helpers.SecureCookiesEnvVar),
+					[]byte(helpers.MustGet(envGet, helpers.SessionKeyEnvVar)),
+					helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar),
 				)
 			default:
 				log.Fatal("unknown session backend")
 				return nil // will never reach
 			}
 		}(),
-		StateGenerator: stdRandStateGenerator,
-		UaaURL:         mustGet(envGet, helpers.UAAURLEnvVar),
-		LogURL:         mustGet(envGet, helpers.LogURLEnvVar),
+		StateGenerator: helpers.StdRandStateGenerator,
+		UaaURL:         helpers.MustGet(envGet, helpers.UAAURLEnvVar),
+		LogURL:         helpers.MustGet(envGet, helpers.LogURLEnvVar),
 		BasePath:       envGet(helpers.BasePathEnvVar, ""),
 		HighPrivilegedOauthConfig: &clientcredentials.Config{
-			ClientID:     mustGet(envGet, helpers.ClientIDEnvVar),
-			ClientSecret: mustGet(envGet, helpers.ClientSecretEnvVar),
-			Scopes:       []string{"scim.invite", "cloud_controller.admin", "scim.read"},
-			TokenURL:     mustGet(envGet, helpers.UAAURLEnvVar) + "/oauth/token",
+			ClientID:     helpers.MustGet(envGet, helpers.ClientIDEnvVar),
+			ClientSecret: helpers.MustGet(envGet, helpers.ClientSecretEnvVar),
+			Scopes: []string{
+				"scim.invite",
+				"cloud_controller.admin",
+				"scim.read",
+			},
+			TokenURL: helpers.MustGet(envGet, helpers.UAAURLEnvVar) + "/oauth/token",
 		},
-		PProfEnabled:  boolGet(envGet, helpers.PProfEnabledEnvVar),
+		PProfEnabled:  helpers.BoolGet(envGet, helpers.PProfEnabledEnvVar),
 		BuildInfo:     envGet(helpers.BuildInfoEnvVar, "developer-build"),
-		SecureCookies: boolGet(envGet, helpers.SecureCookiesEnvVar),
-		LocalCF:       boolGet(envGet, helpers.LocalCFEnvVar),
-		AppURL:        mustGet(envGet, helpers.HostnameEnvVar),
+		SecureCookies: helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar),
+		LocalCF:       helpers.BoolGet(envGet, helpers.LocalCFEnvVar),
+		AppURL:        helpers.MustGet(envGet, helpers.HostnameEnvVar),
 
 		EmailSender: &mailer.SMTPMailer{
-			Host:     mustGet(envGet, helpers.SMTPHostEnvVar),
+			Host:     helpers.MustGet(envGet, helpers.SMTPHostEnvVar),
 			Port:     envGet(helpers.SMTPPortEnvVar, ""),
 			Username: envGet(helpers.SMTPUserEnvVar, ""),
 			Password: envGet(helpers.SMTPPortEnvVar, ""),
-			From:     mustGet(envGet, helpers.SMTPFromEnvVar),
+			From:     helpers.MustGet(envGet, helpers.SMTPFromEnvVar),
 		},
 
 		TICSecret: envGet(helpers.TICSecretEnvVar, ""),
 
 		NewRelicLicense: envGet(helpers.NewRelicLicenseEnvVar, ""),
-		CSRFKey:         []byte(mustGet(envGet, helpers.SessionKeyEnvVar)),
+		CSRFKey:         []byte(helpers.MustGet(envGet, helpers.SessionKeyEnvVar)),
 
-		ListenAddr: ":" + envGet("PORT", defaultPort),
+		ListenAddr: ":" + envGet("PORT", "9999"),
 	}
-
-	// Up and away
-	log.Fatal(app.Serve())
 }

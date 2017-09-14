@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/url"
 	"os"
 	"time"
 
@@ -84,7 +85,18 @@ func NewSecureCookieStore(secureOnly bool) SessionHandler {
 }
 
 // NewRedisCookieStore stores sessions in Redis.
-func NewRedisCookieStore(address, password string, sessionKey []byte, secureOnly bool) SessionHandler {
+func NewRedisCookieStore(uri string, sessionKey []byte, secureOnly bool) SessionHandler {
+	u, err := url.Parse(uri)
+	if err != nil {
+		fmt.Println("unable to parse redis URL, exiting:", err)
+		os.Exit(1)
+	}
+
+	password := ""
+	if u.User != nil {
+		password, _ = u.User.Password()
+	}
+
 	// Create a common redis pool of connections.
 	redisPool := &redis.Pool{
 		MaxIdle:     10,
@@ -98,7 +110,7 @@ func NewRedisCookieStore(address, password string, sessionKey []byte, secureOnly
 			// Currently will limit how long redis should respond back to
 			// 10 seconds. Any time less than the overall connection timeout of 60
 			// seconds is good.
-			c, dialErr := redis.Dial("tcp", address,
+			c, dialErr := redis.Dial("tcp", u.Host,
 				redis.DialConnectTimeout(10*time.Second),
 				redis.DialWriteTimeout(10*time.Second),
 				redis.DialReadTimeout(10*time.Second))

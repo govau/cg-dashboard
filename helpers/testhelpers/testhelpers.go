@@ -238,9 +238,9 @@ type BasicProxyTest struct {
 // GetMockCompleteEnvVars is just a commonly used env vars object that contains non-empty values for all the fields of the EnvVars struct.
 func GetMockCompleteEnvVars() *controllers.Settings {
 	return &controllers.Settings{
-		BasePath:  os.Getenv(helpers.BasePathEnvVar),
-		LoginURL:  "https://loginurl",
-		Hostname:  "https://hostname",
+		BasePath: os.Getenv(helpers.BasePathEnvVar),
+		LoginURL: "https://loginurl",
+		//Hostname:  "https://hostname",
 		BuildInfo: "developer-build",
 		OAuthConfig: &oauth2.Config{
 			ClientID:     "ID",
