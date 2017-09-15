@@ -19,10 +19,12 @@ type dashboardApplication struct {
 	Settings *helpers.Settings
 }
 
+// RunnableApplication can be run
 type RunnableApplication interface {
 	Serve() error
 }
 
+// CreateAppFromSettings creates an app that is ready to start based on the settings
 func CreateAppFromSettings(settings *helpers.Settings) RunnableApplication {
 	return &dashboardApplication{
 		Settings: settings,

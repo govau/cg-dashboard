@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/18F/cg-dashboard/controllers"
 	"github.com/18F/cg-dashboard/mailer"
 
 	"golang.org/x/oauth2"
@@ -32,14 +33,16 @@ func main() {
 	}
 
 	// Create app, serve forever...
-	log.Fatal(controllers.CreateAppFromSettings(createSettingsFromEnv(helpers.CreateEnvVarLoader([]helpers.EnvLookup{
+	log.Fatal(controllers.CreateAppFromSettings(CreateSettingsFromEnv(helpers.CreateEnvVarLoader([]helpers.EnvLookup{
 		os.LookupEnv, // check environment first
 		helpers.CreateEnvFromCFNamedService(cfApp, "dashboard-ups"), // fallback to CUPS
 		helpers.MapEnvLookup(additionalFallbacks),
 	}))).Serve())
 }
 
-func rceateSettingsFromEnv(envGet helpers.EnvLoader) *helpers.Settings {
+// CreateSettingsFromEnv could live in settings, but we keep it here so that someone
+// looking at this app can easily tell what configuring goes in.
+func CreateSettingsFromEnv(envGet helpers.EnvLoader) *helpers.Settings {
 	// Configure the application
 	return &helpers.Settings{
 		OAuthConfig: &oauth2.Config{
@@ -83,7 +86,7 @@ func rceateSettingsFromEnv(envGet helpers.EnvLoader) *helpers.Settings {
 		StateGenerator: helpers.GenerateRandomString,
 		UaaURL:         helpers.MustGet(envGet, helpers.UAAURLEnvVar),
 		LogURL:         helpers.MustGet(envGet, helpers.LogURLEnvVar),
-		BasePath:       envGet(helpers.BasePathEnvVar, ""),
+		Templater:      helpers.MustLoadTemplates(envGet(helpers.BasePathEnvVar, "")),
 		HighPrivilegedOauthConfig: &clientcredentials.Config{
 			ClientID:     helpers.MustGet(envGet, helpers.ClientIDEnvVar),
 			ClientSecret: helpers.MustGet(envGet, helpers.ClientSecretEnvVar),
