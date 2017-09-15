@@ -17,16 +17,16 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// UAAContext stores the session info and access token per user.
+// uaaContext stores the session info and access token per user.
 // All routes within UAAContext represent the routes to the UAA service.
-type UAAContext struct {
-	*SecureContext // Required.
+type uaaContext struct {
+	*secureContext // Required.
 }
 
 // uaaProxy prepares the final URL to pass through the proxy.
 // By setting "escalated" to true, you can use the Dashboard's credentials to
 // make the request instead of the current user's credentials.
-func (c *UAAContext) uaaProxy(rw http.ResponseWriter, req *http.Request,
+func (c *uaaContext) uaaProxy(rw http.ResponseWriter, req *http.Request,
 	uaaEndpoint string, escalated bool) {
 	reqURL := fmt.Sprintf("%s%s", c.Settings.UaaURL, uaaEndpoint)
 	if escalated {
@@ -37,18 +37,18 @@ func (c *UAAContext) uaaProxy(rw http.ResponseWriter, req *http.Request,
 }
 
 // cfProxy is an esclated proxy that we want to use only with certain UAA calls.
-func (c *UAAContext) cfProxy(rw http.ResponseWriter, req *http.Request,
+func (c *uaaContext) cfProxy(rw http.ResponseWriter, req *http.Request,
 	endpoint string) {
 	reqURL := fmt.Sprintf("%s%s", c.Settings.ConsoleAPI, endpoint)
 	c.PrivilegedProxy(rw, req, reqURL, c.GenericResponseHandler)
 }
 
 // UserInfo returns the UAA_API/userinfo information for the logged in user.
-func (c *UAAContext) UserInfo(rw web.ResponseWriter, req *web.Request) {
+func (c *uaaContext) UserInfo(rw web.ResponseWriter, req *web.Request) {
 	c.uaaProxy(rw, req.Request, "/userinfo", false)
 }
 
-func readBodyToStruct(rawBody io.ReadCloser, obj interface{}) *UaaError {
+func readBodyToStruct(rawBody io.ReadCloser, obj interface{}) *uaaError {
 	if rawBody == nil {
 		return newUaaError(http.StatusBadRequest, "no body in request.")
 	}
@@ -67,16 +67,16 @@ func readBodyToStruct(rawBody io.ReadCloser, obj interface{}) *UaaError {
 }
 
 // UaaError contains metadata for a particular UAA error.
-type UaaError struct {
+type uaaError struct {
 	statusCode int
 	err        []byte
 }
 
-func newUaaError(statusCode int, data string) *UaaError {
+func newUaaError(statusCode int, data string) *uaaError {
 	return newUaaErrorWithProxyData(statusCode, data, "")
 }
 
-func newUaaErrorWithProxyData(statusCode int, data, proxyData string) *UaaError {
+func newUaaErrorWithProxyData(statusCode int, data, proxyData string) *uaaError {
 	jb, err := json.Marshal(struct {
 		Status    string `json:"status"`
 		Data      string `json:"data"`
@@ -88,18 +88,18 @@ func newUaaErrorWithProxyData(statusCode int, data, proxyData string) *UaaError 
 	})
 	if err != nil {
 		// If we get here, we're having a really bad day
-		return &UaaError{
+		return &uaaError{
 			statusCode: statusCode,
 			err:        []byte("cannot marshal proper error"),
 		}
 	}
-	return &UaaError{
+	return &uaaError{
 		statusCode: statusCode,
 		err:        jb,
 	}
 }
 
-func (e *UaaError) writeTo(rw http.ResponseWriter) {
+func (e *uaaError) writeTo(rw http.ResponseWriter) {
 	rw.WriteHeader(e.statusCode)
 	rw.Write(e.err)
 }
@@ -133,9 +133,9 @@ type NewInvite struct {
 
 // InviteUAAuser tries to invite the user e-mail which will create the user in
 // the UAA database.
-func (c *UAAContext) InviteUAAuser(
+func (c *uaaContext) InviteUAAuser(
 	inviteUserToOrgRequest InviteUserToOrgRequest) (
-	inviteResponse InviteUAAUserResponse, err *UaaError) {
+	inviteResponse InviteUAAUserResponse, err *uaaError) {
 	// Make request to UAA to invite user (which will create the user in the
 	// UAA database)
 	reqURL := fmt.Sprintf("/invite_users?%s", url.Values{
@@ -171,8 +171,7 @@ type createCFUser struct {
 
 // CreateCFuser will use the UAA user guid and create the user in the
 // CF database.
-func (c *UAAContext) CreateCFuser(userInvite NewInvite) (
-	err *UaaError) {
+func (c *uaaContext) CreateCFuser(userInvite NewInvite) (err *uaaError) {
 	// Creating the JSON for the CF API request which will create the user in
 	// CF database.
 	cfCreateUserBody, jsonErr := json.Marshal(
@@ -206,14 +205,14 @@ type InviteUserToOrgRequest struct {
 
 // ParseInviteUserToOrgReq will return InviteUserToOrgRequest based on the data
 // in the request body.
-func (c *UAAContext) ParseInviteUserToOrgReq(req *http.Request) (
-	inviteUserToOrgRequest InviteUserToOrgRequest, err *UaaError) {
+func (c *uaaContext) ParseInviteUserToOrgReq(req *http.Request) (
+	inviteUserToOrgRequest InviteUserToOrgRequest, err *uaaError) {
 	err = readBodyToStruct(req.Body, &inviteUserToOrgRequest)
 	return
 }
 
 // InviteUserToOrg will invite user in both UAA and CF, send an e-mail.
-func (c *UAAContext) InviteUserToOrg(rw web.ResponseWriter, req *web.Request) {
+func (c *uaaContext) InviteUserToOrg(rw web.ResponseWriter, req *web.Request) {
 	// parse the request
 	inviteUserToOrgRequest, err := c.ParseInviteUserToOrgReq(req.Request)
 	if err != nil {
@@ -286,8 +285,8 @@ type ListUAAUserResponse struct {
 // If multiple are found, an empty response is returned.
 // If none are found, an empty response is returned.
 // Both special cases return no error.
-func (c *UAAContext) GetUAAUserByEmail(email string) (
-	userResponse GetUAAUserResponse, err *UaaError) {
+func (c *uaaContext) GetUAAUserByEmail(email string) (
+	userResponse GetUAAUserResponse, err *uaaError) {
 	// Per https://tools.ietf.org/html/rfc7644#section-3.4.2.2, the value format in a SCIM query is JSON format
 	emailJSONBytes, mErr := json.Marshal(email)
 	if mErr != nil {
@@ -327,16 +326,16 @@ type inviteEmailRequest struct {
 }
 
 // TriggerInvite trigger the email.
-func (c *UAAContext) TriggerInvite(inviteReq inviteEmailRequest) *UaaError {
+func (c *uaaContext) TriggerInvite(inviteReq inviteEmailRequest) *uaaError {
 	if inviteReq.Email == "" || inviteReq.InviteURL == "" {
 		return newUaaError(http.StatusBadRequest, "Missing correct params.")
 	}
 	emailHTML := new(bytes.Buffer)
-	tplErr := c.templates.GetInviteEmail(emailHTML, inviteReq.InviteURL)
+	tplErr := c.Templates.GetInviteEmail(emailHTML, inviteReq.InviteURL)
 	if tplErr != nil {
 		return newUaaError(http.StatusInternalServerError, tplErr.Error())
 	}
-	emailErr := c.mailer.SendEmail(inviteReq.Email, "Invitation to join cloud.gov", emailHTML.Bytes())
+	emailErr := c.Mailer.SendEmail(inviteReq.Email, "Invitation to join cloud.gov", emailHTML.Bytes())
 	if emailErr != nil {
 		return newUaaError(http.StatusInternalServerError, emailErr.Error())
 	}
@@ -344,7 +343,7 @@ func (c *UAAContext) TriggerInvite(inviteReq inviteEmailRequest) *UaaError {
 }
 
 // UaaInfo returns the UAA_API/Users/:id information for the logged in user.
-func (c *UAAContext) UaaInfo(rw web.ResponseWriter, req *web.Request) {
+func (c *uaaContext) UaaInfo(rw web.ResponseWriter, req *web.Request) {
 	// Parse and validate the UUID
 	guid, err := uuid.FromString(req.URL.Query().Get("uaa_guid"))
 	if err != nil {

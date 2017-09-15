@@ -14,21 +14,21 @@ import (
 	"net/http"
 )
 
-// LogContext stores the session info and access token per user.
+// logContext stores the session info and access token per user.
 // All routes within LogContext represent the Loggregator routes
-type LogContext struct {
-	*SecureContext // Required.
+type logContext struct {
+	*secureContext // Required.
 }
 
 // RecentLogs returns a log dump of the given app.
-func (c *LogContext) RecentLogs(rw web.ResponseWriter, req *web.Request) {
+func (c *logContext) RecentLogs(rw web.ResponseWriter, req *web.Request) {
 	reqURL := fmt.Sprintf("%s/%s", c.Settings.LogURL, "recent?app="+req.URL.Query().Get("app"))
 	c.Proxy(rw, req.Request, reqURL, c.logMessageResponseHandler)
 }
 
 // logMessageResponseHandler is a response handler that constructs log messages structs from the response
 // given by the loggregator.
-func (c *LogContext) logMessageResponseHandler(rw http.ResponseWriter, response *http.Response) {
+func (c *logContext) logMessageResponseHandler(rw http.ResponseWriter, response *http.Response) {
 	messages, err := c.ParseLogMessages(&(response.Body), response.Header.Get("Content-Type"))
 	if err != nil {
 		rw.Write([]byte(err.Error()))
@@ -43,7 +43,7 @@ func (c *LogContext) logMessageResponseHandler(rw http.ResponseWriter, response 
 // https://github.com/cloudfoundry/loggregator_consumer/blob/89d7fe237afae1e8222554359ec03b72c8466d10/consumer.go#L145
 // Also, when using their Recent function, we would get unauthorized errors. If we make the request ourselves, it works.
 // TODO eventually figure out the cause of the unauthorized errors
-func (c *LogContext) ParseLogMessages(body *io.ReadCloser, contentType string) (*bytes.Buffer, error) {
+func (c *logContext) ParseLogMessages(body *io.ReadCloser, contentType string) (*bytes.Buffer, error) {
 	_, params, err := mime.ParseMediaType(contentType)
 	if err != nil {
 		return nil, err

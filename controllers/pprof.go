@@ -23,7 +23,7 @@ func InitPProfRouter(parentRouter *web.Router) {
 
 // PProfContext is a debug context to profile information about the backend.
 type PProfContext struct {
-	*DashboardContext // Required.
+	*dashboardContext // Required.
 }
 
 // Index responds with the pprof-formatted profile named by the request.

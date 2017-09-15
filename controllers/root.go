@@ -14,19 +14,19 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// DashboardContext represents the context for all requests that do not need authentication.
-type DashboardContext struct {
-	Settings  *Settings
-	templates *helpers.Templates
-	mailer    mailer.Mailer
+// dashboardContext represents the context for all requests that do not need authentication.
+type dashboardContext struct {
+	Settings *Settings
 
-	Token *oauth2.Token
+	Templates *helpers.Templates
+	Mailer    mailer.Mailer
+	Token     *oauth2.Token
 }
 
 // LoadSession will look for an OAuth token in our session, and if found, and if
 // valid (or refreshable), sets in the context, and saves the session (if refreshed).
 // If it fails for any reason, it is left as nil but no error returned or redirect performed
-func (c *DashboardContext) LoadSession(rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
+func (c *dashboardContext) LoadSession(rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
 	// Get session, ignore error, just means we have an empty session
 	session, _ := c.Settings.Sessions.Store().Get(r.Request, "session")
 
@@ -59,21 +59,21 @@ func (c *DashboardContext) LoadSession(rw web.ResponseWriter, r *web.Request, ne
 	next(rw, r)
 }
 
-// StaticMiddleware provides simple caching middleware for static assets.
-func StaticMiddleware(path string) func(web.ResponseWriter, *web.Request, web.NextMiddlewareFunc) {
-	staticMiddleware := web.StaticMiddleware(path)
+// staticMiddleware provides simple caching middleware for static assets.
+func staticMiddleware(path string) func(web.ResponseWriter, *web.Request, web.NextMiddlewareFunc) {
+	m := web.StaticMiddleware(path)
 	return func(rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
 		// We want clients to cache these assets but it's important that they are
 		// up to date. If the javascript bundle does not match the server API,
 		// undefined behavior could happen.
 		rw.Header().Set("Cache-Control", "public, must-revalidate")
-		staticMiddleware(rw, r, next)
+		m(rw, r, next)
 	}
 }
 
 // Index serves index.html
-func (c *DashboardContext) Index(w web.ResponseWriter, r *web.Request) {
-	c.templates.GetIndex(w,
+func (c *dashboardContext) Index(w web.ResponseWriter, r *web.Request) {
+	c.Templates.GetIndex(w,
 		csrf.Token(r.Request),
 		os.Getenv("GA_TRACKING_ID"),
 		os.Getenv("NEW_RELIC_ID"),
@@ -115,25 +115,21 @@ type sessionStoreHealth struct {
 	StoreUp   bool   `json:"store-up"`
 }
 
-func createPingData(c *DashboardContext) pingData {
+// Ping is just a test endpoint to show that indeed the service is alive.
+func (c *dashboardContext) Ping(rw web.ResponseWriter, req *web.Request) {
 	storeUp := c.Settings.Sessions.CheckHealth()
 	overallStatus := pingDataStatusAlive
 	// if the session storage is out, we have an outage.
 	if !storeUp {
 		overallStatus = pingDataStatusOutage
 	}
-	return pingData{Status: overallStatus,
+	data := &pingData{Status: overallStatus,
 		BuildInfo: c.Settings.BuildInfo,
 		SessionStoreHealth: sessionStoreHealth{
 			StoreType: c.Settings.Sessions.Type(),
 			StoreUp:   storeUp,
 		},
 	}
-}
-
-// Ping is just a test endpoint to show that indeed the service is alive.
-func (c *DashboardContext) Ping(rw web.ResponseWriter, req *web.Request) {
-	data := createPingData(c)
 	dataJSON, conversionSuccess := data.toJSON()
 	if !data.isSystemHealthy() || !conversionSuccess {
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -145,7 +141,7 @@ func (c *DashboardContext) Ping(rw web.ResponseWriter, req *web.Request) {
 }
 
 // LoginHandshake is the handler where we authenticate the user and the user authorizes this application access to information.
-func (c *DashboardContext) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
+func (c *dashboardContext) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
 	if c.Token.Valid() {
 		// We should just go to dashboard if the user already has a valid token.
 		dashboardURL := fmt.Sprintf("%s%s", c.Settings.AppURL, "/#/dashboard")
@@ -162,7 +158,7 @@ func (c *DashboardContext) LoginHandshake(rw web.ResponseWriter, req *web.Reques
 // OAuthCallback is the function that is called when the UAA provider uses the "redirect_uri" field to call back to this backend.
 // This function will extract the code, get the access token and refresh token and save it into 1) the session and redirect to the
 // frontend dashboard.
-func (c *DashboardContext) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
+func (c *dashboardContext) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 	code := req.URL.Query().Get("code")
 	state := req.URL.Query().Get("state")
 
@@ -204,7 +200,7 @@ func (c *DashboardContext) OAuthCallback(rw web.ResponseWriter, req *web.Request
 }
 
 // Logout is a handler that will attempt to clear the session information for the current user.
-func (c *DashboardContext) Logout(rw web.ResponseWriter, req *web.Request) {
+func (c *dashboardContext) Logout(rw web.ResponseWriter, req *web.Request) {
 	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
 	// Clear the token
 	session.Values["token"] = nil
@@ -215,7 +211,7 @@ func (c *DashboardContext) Logout(rw web.ResponseWriter, req *web.Request) {
 	http.Redirect(rw, req.Request, logoutURL, http.StatusFound)
 }
 
-func (c *DashboardContext) redirect(rw web.ResponseWriter, req *web.Request) error {
+func (c *dashboardContext) redirect(rw web.ResponseWriter, req *web.Request) error {
 	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
 	state, err := c.Settings.StateGenerator()
 	if err != nil {
