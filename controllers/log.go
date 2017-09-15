@@ -12,6 +12,7 @@ import (
 	"mime"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 )
 
 // logContext stores the session info and access token per user.
@@ -22,7 +23,9 @@ type logContext struct {
 
 // RecentLogs returns a log dump of the given app.
 func (c *logContext) RecentLogs(rw web.ResponseWriter, req *web.Request) {
-	reqURL := fmt.Sprintf("%s/%s", c.Settings.LogURL, "recent?app="+req.URL.Query().Get("app"))
+	reqURL := fmt.Sprintf("%s/recent?%s", c.Application.Settings.LogURL, url.Values{
+		"app": {req.URL.Query().Get("app")},
+	}.Encode())
 	c.Proxy(rw, req.Request, reqURL, c.logMessageResponseHandler)
 }
 

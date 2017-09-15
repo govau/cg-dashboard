@@ -28,7 +28,7 @@ type uaaContext struct {
 // make the request instead of the current user's credentials.
 func (c *uaaContext) uaaProxy(rw http.ResponseWriter, req *http.Request,
 	uaaEndpoint string, escalated bool) {
-	reqURL := fmt.Sprintf("%s%s", c.Settings.UaaURL, uaaEndpoint)
+	reqURL := fmt.Sprintf("%s%s", c.Application.Settings.UaaURL, uaaEndpoint)
 	if escalated {
 		c.PrivilegedProxy(rw, req, reqURL, c.GenericResponseHandler)
 	} else {
@@ -39,7 +39,7 @@ func (c *uaaContext) uaaProxy(rw http.ResponseWriter, req *http.Request,
 // cfProxy is an esclated proxy that we want to use only with certain UAA calls.
 func (c *uaaContext) cfProxy(rw http.ResponseWriter, req *http.Request,
 	endpoint string) {
-	reqURL := fmt.Sprintf("%s%s", c.Settings.ConsoleAPI, endpoint)
+	reqURL := fmt.Sprintf("%s%s", c.Application.Settings.ConsoleAPI, endpoint)
 	c.PrivilegedProxy(rw, req, reqURL, c.GenericResponseHandler)
 }
 
@@ -139,7 +139,7 @@ func (c *uaaContext) InviteUAAuser(
 	// Make request to UAA to invite user (which will create the user in the
 	// UAA database)
 	reqURL := fmt.Sprintf("/invite_users?%s", url.Values{
-		"redirect_uri": {c.Settings.AppURL},
+		"redirect_uri": {c.Application.Settings.AppURL},
 	}.Encode())
 	requestObj := inviteUAAUserRequest{[]string{inviteUserToOrgRequest.Email}}
 	inviteUAAUserBody, jsonErr := json.Marshal(requestObj)
@@ -331,11 +331,11 @@ func (c *uaaContext) TriggerInvite(inviteReq inviteEmailRequest) *uaaError {
 		return newUaaError(http.StatusBadRequest, "Missing correct params.")
 	}
 	emailHTML := new(bytes.Buffer)
-	tplErr := c.Templates.GetInviteEmail(emailHTML, inviteReq.InviteURL)
+	tplErr := c.Application.Settings.Templater.GetInviteEmail(emailHTML, inviteReq.InviteURL)
 	if tplErr != nil {
 		return newUaaError(http.StatusInternalServerError, tplErr.Error())
 	}
-	emailErr := c.Mailer.SendEmail(inviteReq.Email, "Invitation to join cloud.gov", emailHTML.Bytes())
+	emailErr := c.Application.Settings.EmailSender.SendEmail(inviteReq.Email, "Invitation to join cloud.gov", emailHTML.Bytes())
 	if emailErr != nil {
 		return newUaaError(http.StatusInternalServerError, emailErr.Error())
 	}

@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/18F/cg-dashboard/helpers"
-	"github.com/18F/cg-dashboard/mailer"
 	"github.com/gocraft/web"
 	"github.com/gorilla/csrf"
 	"golang.org/x/oauth2"
@@ -16,11 +14,9 @@ import (
 
 // dashboardContext represents the context for all requests that do not need authentication.
 type dashboardContext struct {
-	Settings *Settings
+	Application *dashboardApplication
 
-	Templates *helpers.Templates
-	Mailer    mailer.Mailer
-	Token     *oauth2.Token
+	Token *oauth2.Token
 }
 
 // LoadSession will look for an OAuth token in our session, and if found, and if
@@ -28,14 +24,14 @@ type dashboardContext struct {
 // If it fails for any reason, it is left as nil but no error returned or redirect performed
 func (c *dashboardContext) LoadSession(rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
 	// Get session, ignore error, just means we have an empty session
-	session, _ := c.Settings.Sessions.Store().Get(r.Request, "session")
+	session, _ := c.Application.Settings.Sessions.Store().Get(r.Request, "session")
 
 	// Attempt to get the token from this session
 	if session != nil {
 		token, ok := session.Values["token"].(*oauth2.Token)
 		if ok {
 			// We have a token, let's get check that it's valid, and try to refresh it if it's not
-			currentToken, err := c.Settings.OAuthConfig.TokenSource(c.Settings.CreateContext(), token).Token()
+			currentToken, err := c.Application.Settings.OAuthConfig.TokenSource(c.Application.CreateOAuth2Context(), token).Token()
 
 			// Assume we'll set this, but first make sure we can save in our session
 			shouldSetInContext := (err == nil)
@@ -73,7 +69,7 @@ func staticMiddleware(path string) func(web.ResponseWriter, *web.Request, web.Ne
 
 // Index serves index.html
 func (c *dashboardContext) Index(w web.ResponseWriter, r *web.Request) {
-	c.Templates.GetIndex(w,
+	c.Application.Settings.Templater.GetIndex(w,
 		csrf.Token(r.Request),
 		os.Getenv("GA_TRACKING_ID"),
 		os.Getenv("NEW_RELIC_ID"),
@@ -117,16 +113,16 @@ type sessionStoreHealth struct {
 
 // Ping is just a test endpoint to show that indeed the service is alive.
 func (c *dashboardContext) Ping(rw web.ResponseWriter, req *web.Request) {
-	storeUp := c.Settings.Sessions.CheckHealth()
+	storeUp := c.Application.Settings.Sessions.CheckHealth()
 	overallStatus := pingDataStatusAlive
 	// if the session storage is out, we have an outage.
 	if !storeUp {
 		overallStatus = pingDataStatusOutage
 	}
 	data := &pingData{Status: overallStatus,
-		BuildInfo: c.Settings.BuildInfo,
+		BuildInfo: c.Application.Settings.BuildInfo,
 		SessionStoreHealth: sessionStoreHealth{
-			StoreType: c.Settings.Sessions.Type(),
+			StoreType: c.Application.Settings.Sessions.Type(),
 			StoreUp:   storeUp,
 		},
 	}
@@ -144,7 +140,7 @@ func (c *dashboardContext) Ping(rw web.ResponseWriter, req *web.Request) {
 func (c *dashboardContext) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
 	if c.Token.Valid() {
 		// We should just go to dashboard if the user already has a valid token.
-		dashboardURL := fmt.Sprintf("%s%s", c.Settings.AppURL, "/#/dashboard")
+		dashboardURL := fmt.Sprintf("%s/#/dashboard", c.Application.Settings.AppURL)
 		http.Redirect(rw, req.Request, dashboardURL, http.StatusFound)
 	} else {
 		// Redirect to the Cloud Foundry Login place.
@@ -167,7 +163,7 @@ func (c *dashboardContext) OAuthCallback(rw web.ResponseWriter, req *web.Request
 	}
 
 	// Ignore error, Get will return a session, existing or new.
-	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
+	session, _ := c.Application.Settings.Sessions.Store().Get(req.Request, "session")
 
 	if state == "" || state != session.Values["state"] {
 		rw.WriteHeader(http.StatusUnauthorized)
@@ -175,7 +171,7 @@ func (c *dashboardContext) OAuthCallback(rw web.ResponseWriter, req *web.Request
 	}
 
 	// Exchange the code for a token.
-	token, err := c.Settings.OAuthConfig.Exchange(c.Settings.CreateContext(), code)
+	token, err := c.Application.Settings.OAuthConfig.Exchange(c.Application.CreateOAuth2Context(), code)
 	if err != nil {
 		fmt.Println("Unable to get access token from code " + code + " error " + err.Error())
 		return
@@ -194,26 +190,26 @@ func (c *dashboardContext) OAuthCallback(rw web.ResponseWriter, req *web.Request
 	}
 
 	// Redirect to the dashboard.
-	dashboardURL := fmt.Sprintf("%s%s", c.Settings.AppURL, "/#/dashboard")
+	dashboardURL := fmt.Sprintf("%s/#/dashboard", c.Application.Settings.AppURL)
 	http.Redirect(rw, req.Request, dashboardURL, http.StatusFound)
 	// TODO. Redirect to the original route.
 }
 
 // Logout is a handler that will attempt to clear the session information for the current user.
 func (c *dashboardContext) Logout(rw web.ResponseWriter, req *web.Request) {
-	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
+	session, _ := c.Application.Settings.Sessions.Store().Get(req.Request, "session")
 	// Clear the token
 	session.Values["token"] = nil
 	// Force the session to expire
 	session.Options.MaxAge = -1
 	session.Save(req.Request, rw)
-	logoutURL := fmt.Sprintf("%s%s", c.Settings.LoginURL, "/logout.do")
+	logoutURL := fmt.Sprintf("%s/logout.do", c.Application.Settings.LoginURL)
 	http.Redirect(rw, req.Request, logoutURL, http.StatusFound)
 }
 
 func (c *dashboardContext) redirect(rw web.ResponseWriter, req *web.Request) error {
-	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
-	state, err := c.Settings.StateGenerator()
+	session, _ := c.Application.Settings.Sessions.Store().Get(req.Request, "session")
+	state, err := c.Application.Settings.StateGenerator()
 	if err != nil {
 		return err
 	}
@@ -224,7 +220,7 @@ func (c *dashboardContext) redirect(rw web.ResponseWriter, req *web.Request) err
 		return err
 	}
 
-	http.Redirect(rw, req.Request, c.Settings.OAuthConfig.AuthCodeURL(state, oauth2.AccessTypeOnline), http.StatusFound)
+	http.Redirect(rw, req.Request, c.Application.Settings.OAuthConfig.AuthCodeURL(state, oauth2.AccessTypeOnline), http.StatusFound)
 
 	return nil
 }

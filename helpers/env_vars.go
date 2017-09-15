@@ -51,4 +51,6 @@ const (
 	SMTPFromEnvVar = "SMTP_FROM"
 	// TICSecretEnvVar is the shared secret with CF API proxy for forwarding client IPs
 	TICSecretEnvVar = "TIC_SECRET"
+	// OurPortEnvVar is the port that we'll listen on
+	OurPortEnvVar = "PORT"
 )

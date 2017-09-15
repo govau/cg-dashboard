@@ -1,4 +1,4 @@
-package controllers
+package helpers
 
 import (
 	"crypto/rand"
@@ -13,18 +13,6 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"github.com/gorilla/sessions"
 )
-
-// SessionHandler handlers sessions
-type SessionHandler interface {
-	// Type returns the name of the type of handler
-	Type() string
-
-	// CheckHealth returns true if the backend is healthy
-	CheckHealth() bool
-
-	// Store returns the session store
-	Store() sessions.Store
-}
 
 // StoreWrapperHandler wraps an existing SessionStore
 type StoreWrapperHandler struct {

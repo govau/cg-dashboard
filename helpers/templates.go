@@ -31,17 +31,17 @@ func findTemplates(basePath string) map[string][]string {
 // Similar to https://hackernoon.com/golang-template-2-template-composition-and-how-to-organize-template-files-4cb40bcdf8f6
 type Templates map[string]*template.Template
 
-// InitTemplates will try to parse the templates.
-func InitTemplates(basePath string) (Templates, error) {
+// MustLoadTemplates will try to parse the templates and panic on error
+func MustLoadTemplates(basePath string) Templates {
 	templates := make(Templates)
 	for templateName, templatePath := range findTemplates(basePath) {
 		tpl, err := template.ParseFiles(templatePath...)
 		if err != nil {
-			return nil, err
+			panic(err)
 		}
 		templates[templateName] = tpl
 	}
-	return templates, nil
+	return templates
 }
 
 func (t Templates) getTemplate(templateKey string) (*template.Template, error) {

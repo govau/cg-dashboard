@@ -16,13 +16,13 @@ type apiContext struct {
 // APIProxy is a handler that serves as a proxy for all the CF API. Any route that comes in the /v2/* route
 // that has not been specified, will just come here.
 func (c *apiContext) APIProxy(rw web.ResponseWriter, req *web.Request) {
-	reqURL := fmt.Sprintf("%s%s", c.Settings.ConsoleAPI, req.URL)
+	reqURL := fmt.Sprintf("%s%s", c.Application.Settings.ConsoleAPI, req.URL)
 	c.Proxy(rw, req.Request, reqURL, c.GenericResponseHandler)
 }
 
 // UserProfile redirects users to the `/profile` page
 func (c *apiContext) UserProfile(rw web.ResponseWriter, req *web.Request) {
-	profileURL := fmt.Sprintf("%s%s", c.Settings.LoginURL, "/profile")
+	profileURL := fmt.Sprintf("%s/profile", c.Application.Settings.LoginURL)
 	http.Redirect(rw, req.Request, profileURL, http.StatusFound)
 }
 

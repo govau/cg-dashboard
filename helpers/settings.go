@@ -1,17 +1,88 @@
 package helpers
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
+
+	"github.com/18F/cg-dashboard/mailer"
 	"github.com/cloudfoundry-community/go-cfenv"
+	"github.com/gorilla/sessions"
 )
+
+// SessionHandler handles sessions
+type SessionHandler interface {
+	// Type returns the name of the type of handler
+	Type() string
+
+	// CheckHealth returns true if the backend is healthy
+	CheckHealth() bool
+
+	// Store returns the session store
+	Store() sessions.Store
+}
+
+// TemplateManager
+type TemplateManager interface {
+	GetInviteEmail(rw io.Writer, url string) error
+	GetIndex(rw io.Writer, csrfToken, gaTrackingID, newRelicID, newRelicBrowserLicenseKey string) error
+}
+
+// Settings is the object to hold global values and objects for the service.
+type Settings struct {
+	// OAuthConfig is the OAuth client with all the parameters to talk with CF's UAA OAuth Provider.
+	OAuthConfig *oauth2.Config
+	// Console API
+	ConsoleAPI string
+	// Login URL - used to redirect users to the logout page
+	LoginURL string
+	// Sessions is the session store for all connected users.
+	Sessions SessionHandler
+	// Generate secure random state
+	StateGenerator func() (string, error)
+	// UAA API
+	UaaURL string
+	// Log API
+	LogURL string
+	// Path to root of project.
+	Templater TemplateManager
+	// High Privileged OauthConfig
+	HighPrivilegedOauthConfig *clientcredentials.Config
+	// A flag to indicate whether profiling should be included (debug purposes).
+	PProfEnabled bool
+	// Build Info
+	BuildInfo string
+	// Set the secure flag on session cookies
+	SecureCookies bool
+	// Inidicates if targeting a local CF environment.
+	LocalCF bool
+	// URL where this app is hosted
+	AppURL string
+
+	EmailSender mailer.Mailer
+
+	// Shared secret with CF API proxy
+	TICSecret string
+
+	// NewRelicLicense license key for NewRelic - optional
+	NewRelicLicense string
+
+	// CSRFKey passed to Gorilla CSRF.
+	CSRFKey []byte
+
+	// ListAddr is the host/port we'll listen on
+	ListenAddr string
+}
 
 // EnvLookup will return the value and whether it was found or not
 type EnvLookup func(name string) (string, bool)
+
+// EnvLoader will return the value or default if not found
+type EnvLoader func(name, defaulVal string) string
 
 // MapEnvLookup creates a lookup based on a map
 func MapEnvLookup(m map[string]string) EnvLookup {
@@ -24,16 +95,6 @@ func MapEnvLookup(m map[string]string) EnvLookup {
 var (
 	noopLookup = func(string) (string, bool) {
 		return "", false
-	}
-
-	// StdRandStateGenerator will return an appopriate state generator
-	StdRandStateGenerator = func() (string, error) {
-		b := make([]byte, 32)
-		_, err := rand.Read(b)
-		if err != nil {
-			return "", err
-		}
-		return base64.URLEncoding.EncodeToString(b), err
 	}
 )
 
@@ -77,9 +138,6 @@ func CreateEnvFromCFNamedService(cfApp *cfenv.App, namedService string) EnvLooku
 		return serviceVarAsString, true
 	}
 }
-
-// EnvLoader will return the value or default if not found
-type EnvLoader func(name, defaulVal string) string
 
 // CreateEnvVarLoader will search a path of environment sources until it finds a value
 func CreateEnvVarLoader(path []EnvLookup) EnvLoader {

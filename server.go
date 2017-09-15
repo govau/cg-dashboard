@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/18F/cg-dashboard/controllers"
 	"github.com/18F/cg-dashboard/mailer"
 
 	"golang.org/x/oauth2"
@@ -33,16 +32,16 @@ func main() {
 	}
 
 	// Create app, serve forever...
-	log.Fatal(createSettingsFromEnv(helpers.CreateEnvVarLoader([]helpers.EnvLookup{
+	log.Fatal(controllers.CreateAppFromSettings(createSettingsFromEnv(helpers.CreateEnvVarLoader([]helpers.EnvLookup{
 		os.LookupEnv, // check environment first
 		helpers.CreateEnvFromCFNamedService(cfApp, "dashboard-ups"), // fallback to CUPS
 		helpers.MapEnvLookup(additionalFallbacks),
-	})).Serve())
+	}))).Serve())
 }
 
-func createSettingsFromEnv(envGet helpers.EnvLoader) *controllers.Settings {
+func rceateSettingsFromEnv(envGet helpers.EnvLoader) *helpers.Settings {
 	// Configure the application
-	return &controllers.Settings{
+	return &helpers.Settings{
 		OAuthConfig: &oauth2.Config{
 			ClientID:     helpers.MustGet(envGet, helpers.ClientIDEnvVar),
 			ClientSecret: helpers.MustGet(envGet, helpers.ClientSecretEnvVar),
@@ -61,18 +60,18 @@ func createSettingsFromEnv(envGet helpers.EnvLoader) *controllers.Settings {
 		},
 		ConsoleAPI: helpers.MustGet(envGet, helpers.APIURLEnvVar),
 		LoginURL:   helpers.MustGet(envGet, helpers.LoginURLEnvVar),
-		Sessions: func() controllers.SessionHandler {
+		Sessions: func() helpers.SessionHandler {
 			switch envGet(helpers.SessionBackendEnvVar, "file") {
 			case "securecookie":
-				return controllers.NewSecureCookieStore(helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar))
+				return helpers.NewSecureCookieStore(helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar))
 			case "redis":
-				return controllers.NewRedisCookieStore(
+				return helpers.NewRedisCookieStore(
 					envGet("REDIS_URI", "redis://localhost:6379"),
 					[]byte(helpers.MustGet(envGet, helpers.SessionKeyEnvVar)),
 					helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar),
 				)
 			case "file":
-				return controllers.NewFilesystemCookieStore(
+				return helpers.NewFilesystemCookieStore(
 					[]byte(helpers.MustGet(envGet, helpers.SessionKeyEnvVar)),
 					helpers.BoolGet(envGet, helpers.SecureCookiesEnvVar),
 				)
@@ -81,7 +80,7 @@ func createSettingsFromEnv(envGet helpers.EnvLoader) *controllers.Settings {
 				return nil // will never reach
 			}
 		}(),
-		StateGenerator: helpers.StdRandStateGenerator,
+		StateGenerator: helpers.GenerateRandomString,
 		UaaURL:         helpers.MustGet(envGet, helpers.UAAURLEnvVar),
 		LogURL:         helpers.MustGet(envGet, helpers.LogURLEnvVar),
 		BasePath:       envGet(helpers.BasePathEnvVar, ""),

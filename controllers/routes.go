@@ -1,27 +1,15 @@
 package controllers
 
-import (
-	"github.com/gocraft/web"
-
-	"github.com/18F/cg-dashboard/helpers"
-)
+import "github.com/gocraft/web"
 
 // CreateRouter sets up the router (and subrouters).
 // It also includes the closure middleware where we load the global Settings reference into each request.
-func (s *Settings) CreateRouter() (*web.Router, error) {
-	// Cache templates
-	templates, err := helpers.InitTemplates(s.BasePath)
-	if err != nil {
-		return nil, err
-	}
-
+func (app *dashboardApplication) CreateRouter() (*web.Router, error) {
 	router := web.New(dashboardContext{})
 
 	// A closure that effectively loads the Settings into every request.
 	router.Middleware(func(c *dashboardContext, resp web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
-		c.Settings = s
-		c.Templates = templates
-		c.Mailer = s.EmailSender
+		c.Application = app
 		next(resp, req)
 	})
 

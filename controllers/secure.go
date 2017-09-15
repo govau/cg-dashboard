@@ -21,8 +21,6 @@ func init() {
 // SecureContext stores the session info and access token per user.
 type secureContext struct {
 	*dashboardContext // Required.
-
-	Token oauth2.Token
 }
 
 // ResponseHandler is a type declaration for the function that will handle the response for the given request.
@@ -53,7 +51,7 @@ func (c *secureContext) LoginRequired(rw web.ResponseWriter, r *web.Request, nex
 func (c *secureContext) PrivilegedProxy(rw http.ResponseWriter, req *http.Request, url string, responseHandler ResponseHandler) {
 	// Acquire the http client and the refresh token if needed
 	// https://godoc.org/golang.org/x/oauth2#Config.Client
-	client := c.Settings.HighPrivilegedOauthConfig.Client(c.Settings.CreateContext())
+	client := c.Application.CreatePrivilegedApplicationOAuthClient()
 	c.submitRequest(rw, req, url, client, responseHandler)
 }
 
@@ -62,7 +60,7 @@ func (c *secureContext) PrivilegedProxy(rw http.ResponseWriter, req *http.Reques
 func (c *secureContext) Proxy(rw http.ResponseWriter, req *http.Request, url string, responseHandler ResponseHandler) {
 	// Acquire the http client and the refresh token if needed
 	// https://godoc.org/golang.org/x/oauth2#Config.Client
-	client := c.Settings.OAuthConfig.Client(c.Settings.CreateContext(), &c.Token)
+	client := c.Application.CreateUserOAuthClient(c.Token)
 	c.submitRequest(rw, req, url, client, responseHandler)
 }
 
@@ -91,7 +89,7 @@ func (c *secureContext) submitRequest(rw http.ResponseWriter, req *http.Request,
 	}
 
 	// Get RemoteAddr from the request
-	if c.Settings.TICSecret != "" {
+	if c.Application.Settings.TICSecret != "" {
 		clientIP, err := GetClientIP(req)
 		if err != nil {
 			log.Println(err)
@@ -101,7 +99,7 @@ func (c *secureContext) submitRequest(rw http.ResponseWriter, req *http.Request,
 		if clientIP != "" {
 			// Set headers for requests to CF API proxy
 			request.Header.Add("X-Client-IP", clientIP)
-			request.Header.Add("X-TIC-Secret", c.Settings.TICSecret)
+			request.Header.Add("X-TIC-Secret", c.Application.Settings.TICSecret)
 		}
 	}
 
