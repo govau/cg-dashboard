@@ -79,11 +79,13 @@ func (s *dashboardApplication) CreateOAuth2Context() context.Context {
 	// If targeting local cf env, we won't have
 	// valid SSL certs so we need to disable verifying them.
 	if s.Settings.LocalCF {
-		httpClient := http.DefaultClient
-		httpClient.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-		ctx = context.WithValue(ctx, oauth2.HTTPClient, httpClient)
+		ctx = context.WithValue(ctx, oauth2.HTTPClient, &http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{
+					InsecureSkipVerify: true,
+				},
+			},
+		})
 	}
 	return ctx
 }
