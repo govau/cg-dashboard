@@ -92,7 +92,7 @@ func (s *Settings) Serve() error {
 	}
 
 	if s.PProfEnabled {
-		InitPProfRouter(router)
+		initPProfRouter(router)
 	}
 
 	if s.NewRelicLicense == "" {
