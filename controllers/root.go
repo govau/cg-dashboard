@@ -14,11 +14,49 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// Context represents the context for all requests that do not need authentication.
-type Context struct {
+// DashboardContext represents the context for all requests that do not need authentication.
+type DashboardContext struct {
 	Settings  *Settings
 	templates *helpers.Templates
 	mailer    mailer.Mailer
+
+	Token *oauth2.Token
+}
+
+// LoadSession will look for an OAuth token in our session, and if found, and if
+// valid (or refreshable), sets in the context, and saves the session (if refreshed).
+// If it fails for any reason, it is left as nil but no error returned or redirect performed
+func (c *DashboardContext) LoadSession(rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
+	// Get session, ignore error, just means we have an empty session
+	session, _ := c.Settings.Sessions.Store().Get(r.Request, "session")
+
+	// Attempt to get the token from this session
+	if session != nil {
+		token, ok := session.Values["token"].(*oauth2.Token)
+		if ok {
+			// We have a token, let's get check that it's valid, and try to refresh it if it's not
+			currentToken, err := c.Settings.OAuthConfig.TokenSource(c.Settings.CreateContext(), token).Token()
+
+			// Assume we'll set this, but first make sure we can save in our session
+			shouldSetInContext := (err == nil)
+
+			// First, let's store what we've got if it's changed.
+			if currentToken != token {
+				session.Values["token"] = currentToken
+				err = session.Save(r.Request, rw)
+				if err != nil {
+					shouldSetInContext = false
+				}
+			}
+
+			if shouldSetInContext {
+				// We're all set
+				c.Token = token
+			}
+		}
+	}
+
+	next(rw, r)
 }
 
 // StaticMiddleware provides simple caching middleware for static assets.
@@ -34,7 +72,7 @@ func StaticMiddleware(path string) func(web.ResponseWriter, *web.Request, web.Ne
 }
 
 // Index serves index.html
-func (c *Context) Index(w web.ResponseWriter, r *web.Request) {
+func (c *DashboardContext) Index(w web.ResponseWriter, r *web.Request) {
 	c.templates.GetIndex(w,
 		csrf.Token(r.Request),
 		os.Getenv("GA_TRACKING_ID"),
@@ -77,7 +115,7 @@ type sessionStoreHealth struct {
 	StoreUp   bool   `json:"store-up"`
 }
 
-func createPingData(c *Context) pingData {
+func createPingData(c *DashboardContext) pingData {
 	storeUp := c.Settings.Sessions.CheckHealth()
 	overallStatus := pingDataStatusAlive
 	// if the session storage is out, we have an outage.
@@ -94,7 +132,7 @@ func createPingData(c *Context) pingData {
 }
 
 // Ping is just a test endpoint to show that indeed the service is alive.
-func (c *Context) Ping(rw web.ResponseWriter, req *web.Request) {
+func (c *DashboardContext) Ping(rw web.ResponseWriter, req *web.Request) {
 	data := createPingData(c)
 	dataJSON, conversionSuccess := data.toJSON()
 	if !data.isSystemHealthy() || !conversionSuccess {
@@ -107,12 +145,11 @@ func (c *Context) Ping(rw web.ResponseWriter, req *web.Request) {
 }
 
 // LoginHandshake is the handler where we authenticate the user and the user authorizes this application access to information.
-func (c *Context) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
-	if token := c.Settings.GetValidToken(req.Request); token != nil {
+func (c *DashboardContext) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
+	if c.Token.Valid() {
 		// We should just go to dashboard if the user already has a valid token.
 		dashboardURL := fmt.Sprintf("%s%s", c.Settings.AppURL, "/#/dashboard")
 		http.Redirect(rw, req.Request, dashboardURL, http.StatusFound)
-
 	} else {
 		// Redirect to the Cloud Foundry Login place.
 		err := c.redirect(rw, req)
@@ -125,7 +162,7 @@ func (c *Context) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
 // OAuthCallback is the function that is called when the UAA provider uses the "redirect_uri" field to call back to this backend.
 // This function will extract the code, get the access token and refresh token and save it into 1) the session and redirect to the
 // frontend dashboard.
-func (c *Context) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
+func (c *DashboardContext) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 	code := req.URL.Query().Get("code")
 	state := req.URL.Query().Get("state")
 
@@ -151,7 +188,7 @@ func (c *Context) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 
 	// Drop refresh token because we can't it in session. TODO Fix!!!
 	token.RefreshToken = ""
-	session.Values["token"] = *token
+	session.Values["token"] = token
 	delete(session.Values, "state")
 
 	// Save session.
@@ -167,7 +204,7 @@ func (c *Context) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 }
 
 // Logout is a handler that will attempt to clear the session information for the current user.
-func (c *Context) Logout(rw web.ResponseWriter, req *web.Request) {
+func (c *DashboardContext) Logout(rw web.ResponseWriter, req *web.Request) {
 	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
 	// Clear the token
 	session.Values["token"] = nil
@@ -178,7 +215,7 @@ func (c *Context) Logout(rw web.ResponseWriter, req *web.Request) {
 	http.Redirect(rw, req.Request, logoutURL, http.StatusFound)
 }
 
-func (c *Context) redirect(rw web.ResponseWriter, req *web.Request) error {
+func (c *DashboardContext) redirect(rw web.ResponseWriter, req *web.Request) error {
 	session, _ := c.Settings.Sessions.Store().Get(req.Request, "session")
 	state, err := c.Settings.StateGenerator()
 	if err != nil {

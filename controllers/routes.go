@@ -16,31 +16,42 @@ func (s *Settings) CreateRouter() (*web.Router, error) {
 		return nil, err
 	}
 
-	router := web.New(Context{})
+	router := web.New(DashboardContext{})
 
 	// A closure that effectively loads the Settings into every request.
-	router.Middleware(func(c *Context, resp web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
+	router.Middleware(func(c *DashboardContext, resp web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
 		c.Settings = s
 		c.templates = templates
 		c.mailer = s.EmailSender
 		next(resp, req)
 	})
 
-	router.Get("/", (*Context).Index)
+	// Looks for an OAuth token in the session and load into context
+	router.Middleware((*DashboardContext).LoadSession)
+
+	// Frontend Route Initialization
+	// Set up static file serving to load from the static folder.
+	router.Middleware(StaticMiddleware("static"))
+
+	router.Get("/", (*DashboardContext).Index)
 
 	// Backend Route Initialization
 	// Initialize the Gocraft Router with the basic context and routes
-	router.Get("/ping", (*Context).Ping)
-	router.Get("/handshake", (*Context).LoginHandshake)
-	router.Get("/oauth2callback", (*Context).OAuthCallback)
-	router.Get("/logout", (*Context).Logout)
+	router.Get("/ping", (*DashboardContext).Ping)
+	router.Get("/handshake", (*DashboardContext).LoginHandshake)
+	router.Get("/oauth2callback", (*DashboardContext).OAuthCallback)
+	router.Get("/logout", (*DashboardContext).Logout)
 
-	// Secure all the other routes
+	// While the above can be accessed with no authentication, for the
+	// following authentication is required
 	secureRouter := router.Subrouter(SecureContext{}, "/")
+
+	// Add auth middleware
+	secureRouter.Middleware((*SecureContext).LoginRequired)
 
 	// Setup the /api subrouter.
 	apiRouter := secureRouter.Subrouter(APIContext{}, "/v2")
-	apiRouter.Middleware((*APIContext).OAuth)
+
 	// All routes accepted
 	apiRouter.Get("/authstatus", (*APIContext).AuthStatus)
 	apiRouter.Get("/profile", (*APIContext).UserProfile)
@@ -51,22 +62,13 @@ func (s *Settings) CreateRouter() (*web.Router, error) {
 
 	// Setup the /uaa subrouter.
 	uaaRouter := secureRouter.Subrouter(UAAContext{}, "/uaa")
-	uaaRouter.Middleware((*UAAContext).OAuth)
 	uaaRouter.Get("/userinfo", (*UAAContext).UserInfo)
 	uaaRouter.Get("/uaainfo", (*UAAContext).UaaInfo)
 	uaaRouter.Post("/invite/users", (*UAAContext).InviteUserToOrg)
 
 	// Setup the /log subrouter.
 	logRouter := secureRouter.Subrouter(LogContext{}, "/log")
-	logRouter.Middleware((*LogContext).OAuth)
 	logRouter.Get("/recent", (*LogContext).RecentLogs)
-
-	// Add auth middleware
-	secureRouter.Middleware((*SecureContext).LoginRequired)
-
-	// Frontend Route Initialization
-	// Set up static file serving to load from the static folder.
-	router.Middleware(StaticMiddleware("static"))
 
 	return router, nil
 }

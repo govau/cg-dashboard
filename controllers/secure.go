@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/gob"
 	"io"
 	"log"
 	"net"
@@ -12,37 +13,26 @@ import (
 	"golang.org/x/oauth2"
 )
 
+func init() {
+	// Want to save a struct into the session. Have to register it.
+	gob.Register(&oauth2.Token{})
+}
+
 // SecureContext stores the session info and access token per user.
 type SecureContext struct {
-	*Context // Required.
-	Token    oauth2.Token
+	*DashboardContext // Required.
+	Token             oauth2.Token
 }
 
 // ResponseHandler is a type declaration for the function that will handle the response for the given request.
 type ResponseHandler func(http.ResponseWriter, *http.Response)
 
-// OAuth is a middle ware that checks whether or not the user has a valid token.
-// If the token is present and still valid, it just passes it on.
-// If the token is 1) present and expired or 2) not present, it will return unauthorized.
-func (c *SecureContext) OAuth(rw web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
-	// Get valid token if it exists from session store.
-	if token := c.Settings.GetValidToken(req.Request); token != nil {
-		c.Token = *token
-	} else {
-		// If no token, return unauthorized.
-		http.Error(rw, "{\"status\": \"unauthorized\"}", http.StatusUnauthorized)
-		return
-	}
-	// Proceed to the next middleware or to the handler if last middleware.
-	next(rw, req)
-}
-
 // LoginRequired is a middleware that requires a valid token or returns Unauthorized
 func (c *SecureContext) LoginRequired(rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
-
-	// If there is no request just continue
-	if r == nil {
-		next(rw, r)
+	// Get valid token if it exists from session store.
+	if !c.Token.Valid() {
+		// If no token, return unauthorized.
+		http.Error(rw, `{"status": "unauthorized"}`, http.StatusUnauthorized)
 		return
 	}
 
@@ -52,14 +42,8 @@ func (c *SecureContext) LoginRequired(rw web.ResponseWriter, r *web.Request, nex
 	rw.Header().Set("pragma", "no-cache")
 	rw.Header().Set("expires", "-1")
 
-	token := c.Settings.GetValidToken(r.Request)
-	if token != nil {
-		next(rw, r)
-	} else {
-		// Respond with Unauthorized, the client should detect this,
-		// show appropriate messaging or redirect to login
-		rw.WriteHeader(http.StatusUnauthorized)
-	}
+	// Proceed to the next middleware or to the handler if last middleware.
+	next(rw, r)
 }
 
 // PrivilegedProxy is an internal function that will construct the client using
