@@ -29,13 +29,11 @@ func findTemplates(basePath string) map[string][]string {
 // This works if we ever want to use the .define blocks which are good for
 // creating a main template with swappable content.
 // Similar to https://hackernoon.com/golang-template-2-template-composition-and-how-to-organize-template-files-4cb40bcdf8f6
-type Templates struct {
-	templates map[string]*template.Template
-}
+type Templates map[string]*template.Template
 
 // InitTemplates will try to parse the templates.
-func InitTemplates(basePath string) (*Templates, error) {
-	templates := make(map[string]*template.Template)
+func InitTemplates(basePath string) (Templates, error) {
+	templates := make(Templates)
 	for templateName, templatePath := range findTemplates(basePath) {
 		tpl, err := template.ParseFiles(templatePath...)
 		if err != nil {
@@ -43,11 +41,11 @@ func InitTemplates(basePath string) (*Templates, error) {
 		}
 		templates[templateName] = tpl
 	}
-	return &Templates{templates}, nil
+	return templates, nil
 }
 
-func (t *Templates) getTemplate(templateKey string) (*template.Template, error) {
-	if template, ok := t.templates[templateKey]; ok {
+func (t Templates) getTemplate(templateKey string) (*template.Template, error) {
+	if template, ok := t[templateKey]; ok {
 		return template, nil
 	}
 	return nil, fmt.Errorf("unable to find template with key %s", templateKey)
@@ -59,7 +57,7 @@ type inviteEmail struct {
 }
 
 // GetInviteEmail gets the filled in invite email template.
-func (t *Templates) GetInviteEmail(rw io.Writer, url string) error {
+func (t Templates) GetInviteEmail(rw io.Writer, url string) error {
 	tpl, err := t.getTemplate(InviteEmailTemplate)
 	if err != nil {
 		return err
@@ -68,7 +66,7 @@ func (t *Templates) GetInviteEmail(rw io.Writer, url string) error {
 }
 
 // GetIndex gets the filled in index.html
-func (t *Templates) GetIndex(rw io.Writer, csrfToken, gaTrackingID, newRelicID,
+func (t Templates) GetIndex(rw io.Writer, csrfToken, gaTrackingID, newRelicID,
 	newRelicBrowserLicenseKey string) error {
 	tpl, err := t.getTemplate(IndexTemplate)
 	if err != nil {
