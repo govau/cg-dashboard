@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/18F/cg-dashboard/helpers"
 	"github.com/18F/cg-dashboard/mailer"
@@ -108,7 +109,7 @@ func (c *Context) Ping(rw web.ResponseWriter, req *web.Request) {
 
 // LoginHandshake is the handler where we authenticate the user and the user authorizes this application access to information.
 func (c *Context) LoginHandshake(rw web.ResponseWriter, req *web.Request) {
-	if token := helpers.GetValidToken(req.Request, c.Settings); token != nil {
+	if token := helpers.GetValidToken(req.Request, rw, c.Settings); token != nil {
 		// We should just go to dashboard if the user already has a valid token.
 		dashboardURL := fmt.Sprintf("%s%s", c.Settings.AppURL, "/#/dashboard")
 		http.Redirect(rw, req.Request, dashboardURL, http.StatusFound)
@@ -142,15 +143,37 @@ func (c *Context) OAuthCallback(rw web.ResponseWriter, req *web.Request) {
 	}
 
 	// Exchange the code for a token.
-	token, err := c.Settings.OAuthConfig.Exchange(c.Settings.CreateContext(), code)
+	// Note, we are being a bit devious here - we take the configured OAuth2 client,
+	// and create a clone that requests tokens come back in an opaque format.
+	// Doing so makes the refresh token small enough to fit into a session cookie.
+	opaqueToken, err := (&oauth2.Config{
+		ClientID:     c.Settings.OAuthConfig.ClientID,
+		ClientSecret: c.Settings.OAuthConfig.ClientSecret,
+		RedirectURL:  c.Settings.OAuthConfig.RedirectURL,
+		Scopes:       c.Settings.OAuthConfig.Scopes,
+		Endpoint: oauth2.Endpoint{
+			TokenURL: c.Settings.OAuthConfig.Endpoint.TokenURL + "?token_format=opaque",
+		},
+	}).Exchange(c.Settings.CreateContext(), code)
 	if err != nil {
 		fmt.Println("Unable to get access token from code " + code + " error " + err.Error())
 		return
 		// TODO: Handle. Return 500.
 	}
 
-	// Drop refresh token because we can't it in session. TODO Fix!!!
-	token.RefreshToken = "" // in theory if we use opaque tokens, we'd be small enough. but CC controller doesn't support yet
+	// Now, since CF hasn't yet been update to understand an opaque access token, we'll
+	// refresh it for a JWT version, but retain our smaller refresh token. Hacky huh?
+	opaqueToken.AccessToken = ""     // nothing
+	opaqueToken.Expiry = time.Time{} // epoch, thus expired
+	token, err := c.Settings.OAuthConfig.TokenSource(c.Settings.CreateContext(), opaqueToken).Token()
+	if err != nil {
+		fmt.Println("Unable to get access token from code " + code + " error " + err.Error())
+		return
+		// TODO: Handle. Return 500.
+	}
+
+	// Now, keep our old refresh token, it was smaller
+	token.RefreshToken = opaqueToken.RefreshToken
 	session.Values["token"] = *token
 	delete(session.Values, "state")
 
