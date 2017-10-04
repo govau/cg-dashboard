@@ -5168,7 +5168,7 @@
     },
     "query-string": {
       "version": "4.3.4",
-      "from": "query-string@>=4.1.0 <5.0.0",
+      "from": "query-string@4.3.4",
       "resolved": "https://registry.npmjs.org/query-string/-/query-string-4.3.4.tgz"
     },
     "querystring": {
