@@ -25,7 +25,9 @@ const config = {
     sourceMapFilename: 'bundle.js.map'
   },
 
-  devtool: PRODUCTION ? 'cheap-source-map' : 'eval-source-map',
+  devtool: process.env.DEVTOOL
+    ? process.env.DEVTOOL
+    : PRODUCTION ? 'cheap-source-map' : 'eval-source-map',
 
   module: {
     rules: [
