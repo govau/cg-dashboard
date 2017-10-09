@@ -9,7 +9,7 @@ module.exports = function(config) {
 
     frameworks: ['jasmine', 'jasmine-matchers', 'jasmine-sinon'],
 
-    files: ['./static_src/tests.bundle.js'],
+    files: ['./static_src/setup_tests.js', './static_src/tests.bundle.js'],
 
     exclude: [],
 
