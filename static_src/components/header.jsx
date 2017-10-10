@@ -39,13 +39,15 @@ export default class Header extends React.Component {
     <header className={ this.styler('header', 'header-no_sidebar', 'test-header') }>
       <div className={ this.styler('header-wrap') }>
         <div className={ this.styler('header-title') } style={{marginTop: '-0.45rem'}}>
-          <img src={logo} alt="console" style={{
-            float: 'left',
-            width: '40px',
-            paddingTop: '13px',
-            paddingRight: '10px'
-          }} />
-          <span style={{display: 'inline-block', color: '#17788d', fontSize: '2.25rem', fontWeight: 300}}>console</span>
+          <a href="/" style={{display: 'block'}}>
+            <img src={logo} alt="console" style={{
+              float: 'left',
+              width: '40px',
+              paddingTop: '13px',
+              paddingRight: '10px'
+            }} />
+            <span style={{display: 'inline-block', color: '#17788d', fontSize: '2.25rem', fontWeight: 300}}>console</span>
+          </a>
         </div>
         <nav className={ this.styler('header-side') }>
           <ul className={ this.styler('nav') }>
