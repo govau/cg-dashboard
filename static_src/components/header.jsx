@@ -4,6 +4,7 @@ import React from 'react';
 
 import LoginStore from '../stores/login_store.js';
 import HeaderLink from './header_link.jsx';
+import logo from './cloud.gov.au-logo.svg';
 
 import Action from './action.jsx';
 import createStyler from '../util/create_styler';
@@ -37,16 +38,14 @@ export default class Header extends React.Component {
     return (
     <header className={ this.styler('header', 'header-no_sidebar', 'test-header') }>
       <div className={ this.styler('header-wrap') }>
-        <div className={ this.styler('header-title') }>
-          <a href="/#/" className={ this.styler('logo') } title="Home">
-            <svg className={ this.styler('logo-img') }>
-              <use
-                xlinkHref={ this.getImagePath('logo-dashboard') }
-              >
-              </use>
-            </svg>
-          </a>
-          <h1 className={ this.styler('usa-sr-only') }>cloud.gov</h1>
+        <div className={ this.styler('header-title') } style={{marginTop: '-0.45rem'}}>
+          <img src={logo} alt="console" style={{
+            float: 'left',
+            width: '40px',
+            paddingTop: '13px',
+            paddingRight: '10px'
+          }} />
+          <span style={{display: 'inline-block', color: '#17788d', fontSize: '2.25rem', fontWeight: 300}}>console</span>
         </div>
         <nav className={ this.styler('header-side') }>
           <ul className={ this.styler('nav') }>

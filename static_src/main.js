@@ -2,6 +2,7 @@ import 'cloudgov-style/css/base.css';
 import './css/main.css';
 // Icon used in cg-uaa.
 import './img/dashboard-uaa-icon.jpg';
+import './img/favicon.png';
 import 'cloudgov-style/img/favicon.ico';
 
 import React from 'react';
