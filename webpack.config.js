@@ -60,6 +60,7 @@ const config = {
   resolve: {
     alias: {
       'cloudgov-style': 'cloudgov-style',
+      dashboard: path.resolve(__dirname, 'static_src'),
       skin: path.resolve(__dirname, `static_src/skins/${CF_SKIN}`)
     },
 
