@@ -255,8 +255,8 @@ func (c *UAAContext) InviteUserToOrg(rw web.ResponseWriter, req *web.Request) {
 			InviteURL: userInvite.InviteLink,
 		})
 		if err != nil {
-			err.writeTo(rw)
-			return
+			// err.writeTo(rw) // TODO
+			// return
 		}
 		// Set the user info that get from the newly invited user.
 		getUserResp.ID = userInvite.UserID

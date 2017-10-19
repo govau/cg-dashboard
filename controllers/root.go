@@ -20,10 +20,10 @@ import (
 
 // Context represents the context for all requests that do not need authentication.
 type Context struct {
-	Settings            *helpers.Settings
-	templates           *helpers.Templates
-	emailTemplateGetter *emailtemplate.Getter
-	mailer              mailer.Mailer
+	Settings       *helpers.Settings
+	templates      *helpers.Templates
+	emailTemplates *emailtemplate.Getter
+	mailer         mailer.Mailer
 }
 
 // StaticMiddleware provides simple caching middleware for static assets.

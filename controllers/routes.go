@@ -13,7 +13,7 @@ import (
 
 // InitRouter sets up the router (and subrouters).
 // It also includes the closure middleware where we load the global Settings reference into each request.
-func InitRouter(settings *helpers.Settings, templates *helpers.Templates, emailTemplateGetter *emailtemplate.Getter, mailer mailer.Mailer) *web.Router {
+func InitRouter(settings *helpers.Settings, templates *helpers.Templates, emailTemplates *emailtemplate.Getter, mailer mailer.Mailer) *web.Router {
 	if settings == nil {
 		return nil
 	}
@@ -23,7 +23,7 @@ func InitRouter(settings *helpers.Settings, templates *helpers.Templates, emailT
 	router.Middleware(func(c *Context, resp web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
 		c.Settings = settings
 		c.templates = templates
-		c.emailTemplateGetter = emailTemplateGetter
+		c.emailTemplates = emailTemplates
 		c.mailer = mailer
 		next(resp, req)
 	})
@@ -43,9 +43,15 @@ func InitRouter(settings *helpers.Settings, templates *helpers.Templates, emailT
 	// Setup the /api subrouter.
 	apiRouter := secureRouter.Subrouter(APIContext{}, "/v2")
 	apiRouter.Middleware((*APIContext).OAuth)
-	// All routes accepted
+
 	apiRouter.Get("/authstatus", (*APIContext).AuthStatus)
 	apiRouter.Get("/profile", (*APIContext).UserProfile)
+
+	// Setup the /organization subrouter.
+	organizationRouter := apiRouter.Subrouter(OrganizationContext{}, "/organizations")
+	organizationRouter.Put("/:id/users/:userId", (*OrganizationContext).PutUser)
+
+	// All routes accepted
 	apiRouter.Get("/:*", (*APIContext).APIProxy)
 	apiRouter.Put("/:*", (*APIContext).APIProxy)
 	apiRouter.Post("/:*", (*APIContext).APIProxy)
@@ -101,8 +107,3 @@ func InitApp(envVars *helpers.EnvVars, env *cfenv.App) (*web.Router, *helpers.Se
 
 	return router, &settings, nil
 }
-
-const (
-	emailTemplateUserAssociatedWithOrganization emailtemplate.Key = "userAssociatedWithOrganization"
-	emailTemplateUserAssociatedWithSpace                          = "userAssociatedWithSpace"
-)
