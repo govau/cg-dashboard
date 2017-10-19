@@ -1,6 +1,7 @@
 import React from 'react';
 
 export { default as header } from './header';
+import 'cloudgov-style/img/favicon.ico';
 
 import * as homePage from './home_page';
 
