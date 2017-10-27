@@ -30,7 +30,7 @@ const config = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['es2015', 'react'],
+          presets: ['env', 'react'],
           plugins: ['transform-object-rest-spread', 'transform-runtime']
         },
         exclude: /node_modules/
