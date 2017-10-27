@@ -1,4 +1,3 @@
-
 /*
  * Store for user data. Will store and update user data on changes from UI and
  * server.
@@ -26,8 +25,12 @@ export class UserStore extends BaseStore {
   }
 
   get loading() {
-    return !this._loading || this._loading.currentUser ||
-      this._loading.entityUsers || this._loading.entityRoles;
+    return (
+      !this._loading ||
+      this._loading.currentUser ||
+      this._loading.entityUsers ||
+      this._loading.entityRoles
+    );
   }
 
   _registerToActions(action) {
@@ -49,8 +52,11 @@ export class UserStore extends BaseStore {
 
       case userActionTypes.ORG_USER_ROLES_RECEIVED: {
         this._loading.entityRoles = false;
-        this.associateUsersAndRolesToEntity(action.orgUserRoles, action.orgGuid,
-          'organization_roles');
+        this.associateUsersAndRolesToEntity(
+          action.orgUserRoles,
+          action.orgGuid,
+          'organization_roles'
+        );
         this.emitChange();
         break;
       }
@@ -86,13 +92,20 @@ export class UserStore extends BaseStore {
         break;
       }
 
-      case userActionTypes.USER_ORG_ASSOCIATED : {
+      case userActionTypes.USER_ORG_ASSOCIATED: {
         this._inviteInputActive = true;
-        const user = Object.assign({}, {
-          guid: action.userGuid
-        }, action.user);
-        this.associateUsersAndRolesToEntity([user], action.entityGuid,
-          'organization_roles');
+        const user = Object.assign(
+          {},
+          {
+            guid: action.userGuid
+          },
+          action.user
+        );
+        this.associateUsersAndRolesToEntity(
+          [user],
+          action.entityGuid,
+          'organization_roles'
+        );
         this.emitChange();
         break;
       }
@@ -102,8 +115,11 @@ export class UserStore extends BaseStore {
         const user = Object.assign({}, action.user, {
           guid: action.userGuid
         });
-        this.associateUsersAndRolesToEntity([user], action.entityGuid,
-          'space_roles');
+        this.associateUsersAndRolesToEntity(
+          [user],
+          action.entityGuid,
+          'space_roles'
+        );
         this.emitChange();
         break;
       }
@@ -117,8 +133,13 @@ export class UserStore extends BaseStore {
       case userActionTypes.USER_ROLES_ADDED: {
         this._saving = false;
         const user = this.get(action.userGuid);
-        this.addUserRole(user, action.entityType, action.entityGuid,
-          action.roles, () => this.emitChange());
+        this.addUserRole(
+          user,
+          action.entityType,
+          action.entityGuid,
+          action.roles,
+          () => this.emitChange()
+        );
         break;
       }
 
@@ -136,8 +157,13 @@ export class UserStore extends BaseStore {
       case userActionTypes.USER_ROLES_DELETED: {
         this._saving = false;
         const user = this.get(action.userGuid);
-        this.deleteUserRole(user, action.entityType, action.entityGuid,
-          action.roles, () => this.emitChange());
+        this.deleteUserRole(
+          user,
+          action.entityType,
+          action.entityGuid,
+          action.roles,
+          () => this.emitChange()
+        );
         break;
       }
 
@@ -146,11 +172,11 @@ export class UserStore extends BaseStore {
         const orgGuid = action.orgGuid;
         const orgUsers = action.users;
 
-        const updatedUsers = orgUsers.map((orgUser) =>
+        const updatedUsers = orgUsers.map(orgUser =>
           Object.assign({}, orgUser, { orgGuid })
         );
 
-        this.mergeMany('guid', updatedUsers, (changed) => {
+        this.mergeMany('guid', updatedUsers, changed => {
           if (changed) {
             this._error = null;
           }
@@ -166,7 +192,7 @@ export class UserStore extends BaseStore {
       }
 
       case userActionTypes.USER_DELETED: {
-        this.delete(action.userGuid, (changed) => {
+        this.delete(action.userGuid, changed => {
           if (changed) this.emitChange();
         });
         break;
@@ -175,7 +201,9 @@ export class UserStore extends BaseStore {
       case userActionTypes.USER_REMOVED_ALL_SPACE_ROLES: {
         const user = this.get(action.userGuid);
         if (user) {
-          this.deleteProp(action.userGuid, 'space_roles', () => this.emitChange());
+          this.deleteProp(action.userGuid, 'space_roles', () =>
+            this.emitChange()
+          );
         }
         break;
       }
@@ -223,11 +251,7 @@ export class UserStore extends BaseStore {
 
       case userActionTypes.CURRENT_USER_INFO_RECEIVED: {
         const guid = action.currentUser.user_id;
-        const userInfo = Object.assign(
-          {},
-          action.currentUser,
-          { guid }
-        );
+        const userInfo = Object.assign({}, action.currentUser, { guid });
         this.merge('guid', userInfo, () => {
           this._currentUserGuid = guid;
 
@@ -247,9 +271,9 @@ export class UserStore extends BaseStore {
           // with a display key that equals 'cloud_controller.admin',
           // then return is false.
           // If there is a proper response, then the return is true.
-          this._currentUserIsAdmin = !!(uaaInfo.groups.find((group) => (
-            group.display === 'cloud_controller.admin'
-          )));
+          this._currentUserIsAdmin = !!uaaInfo.groups.find(
+            group => group.display === 'cloud_controller.admin'
+          );
         }
 
         // Always emit change
@@ -263,7 +287,9 @@ export class UserStore extends BaseStore {
       }
 
       case userActionTypes.USER_RECEIVED: {
-        const receivedUser = Object.assign({}, action.user, { fetching: false });
+        const receivedUser = Object.assign({}, action.user, {
+          fetching: false
+        });
         if (action.user) {
           this.merge('guid', receivedUser, () => this.emitChange());
         }
@@ -307,7 +333,7 @@ export class UserStore extends BaseStore {
 
   associateUsersAndRolesToEntity(users, entityGuid, roleType) {
     const updatedUsers = this.mergeRoles(users, entityGuid, roleType);
-    this.mergeMany('guid', updatedUsers, () => { });
+    this.mergeMany('guid', updatedUsers, () => {});
   }
 
   addUserRole(user, entityType, entityGuid, addedRole, cb) {
@@ -353,24 +379,23 @@ export class UserStore extends BaseStore {
    * Get all users in a certain space
    */
   getAllInSpace(spaceGuid) {
-    const usersInSpace = this._data.filter((user) =>
-      !!user.get('space_roles') && !!user.get('space_roles').get(spaceGuid)
+    const usersInSpace = this._data.filter(
+      user =>
+        !!user.get('space_roles') && !!user.get('space_roles').get(spaceGuid)
     );
     return usersInSpace.toJS();
   }
 
   getAllInOrg(orgGuid) {
-    const usersInOrg = this._data.filter((user) =>
-      !!user.get('roles') && !!user.get('roles').get(orgGuid)
+    const usersInOrg = this._data.filter(
+      user => !!user.get('roles') && !!user.get('roles').get(orgGuid)
     );
 
     return usersInOrg.toJS();
   }
 
   getAllInOrgAndNotSpace() {
-    const usersInOrg = this._data.toJS().filter((user) =>
-      !user.space_roles
-    );
+    const usersInOrg = this._data.toJS().filter(user => !user.space_roles);
 
     return usersInOrg;
   }
@@ -388,8 +413,11 @@ export class UserStore extends BaseStore {
   }
 
   mergeRoles(roles, entityGuid, entityType) {
-    return roles.map((role) => {
-      const user = Object.assign({}, this.get(role.guid) || this.getDefaultUserInfo(role));
+    return roles.map(role => {
+      const user = Object.assign(
+        {},
+        this.get(role.guid) || this.getDefaultUserInfo(role)
+      );
       const updatingRoles = role[entityType] || [];
 
       if (entityType === 'space_roles') {
@@ -425,9 +453,11 @@ export class UserStore extends BaseStore {
 
     const key = entityGuid;
     const user = this.get(userGuid);
-    const roles = [...(user && user.roles && user.roles[key] || []),
-      ...(user && user.space_roles && user.space_roles[key] || [])];
-    return !!roles.find((role) => wrappedRoles.includes(role));
+    const roles = [
+      ...((user && user.roles && user.roles[key]) || []),
+      ...((user && user.space_roles && user.space_roles[key]) || [])
+    ];
+    return !!roles.find(role => wrappedRoles.includes(role));
   }
 
   usersSelectorDisabled() {

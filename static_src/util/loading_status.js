@@ -19,7 +19,7 @@ class LoadingStatus extends EventEmitter {
     this._requests++;
 
     // On complete, decrement the semaphore
-    const onComplete = (result) => {
+    const onComplete = result => {
       this._requests--;
 
       if (this.isLoaded) {
@@ -43,6 +43,5 @@ class LoadingStatus extends EventEmitter {
     }
   }
 }
-
 
 export default LoadingStatus;

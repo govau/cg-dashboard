@@ -38,7 +38,9 @@ const cRouter = {
     ReactDOM.render(
       <MainContainer>
         <RouteProvider />
-      </MainContainer>, renderEl);
+      </MainContainer>,
+      renderEl
+    );
 
     router.init('/');
   }

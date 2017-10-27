@@ -35,14 +35,15 @@ class ServiceInstanceTableRow extends React.Component {
   get confirmationBox() {
     const { instance } = this.props;
 
-    return !instance.confirmDelete ? null :
+    return !instance.confirmDelete ? null : (
       <ConfirmationBox
         style="nexto"
-        confirmHandler={ this.handleConfirmDelete }
-        cancelHandler={ this.handleCancelDelete }
-        disabled={ instance.deleting }
-        message={ null }
-      />;
+        confirmHandler={this.handleConfirmDelete}
+        cancelHandler={this.handleCancelDelete}
+        disabled={instance.deleting}
+        message={null}
+      />
+    );
   }
 
   render() {
@@ -56,22 +57,22 @@ class ServiceInstanceTableRow extends React.Component {
 
     return (
       <tr>
-        <td>{ instance.name }</td>
-        <td>{ lastOp.type }</td>
-        <td>{ formatDateTime(lastOpTime) }</td>
-        <td style={ specialtdStyles }>
+        <td>{instance.name}</td>
+        <td>{lastOp.type}</td>
+        <td>{formatDateTime(lastOpTime)}</td>
+        <td style={specialtdStyles}>
           <div>
             <Action
               style="base"
-              classes={ ['test-delete_instance'] }
-              disabled={ instance.confirmDelete }
-              clickHandler={ this.handleBeginDelete }
+              classes={['test-delete_instance']}
+              disabled={instance.confirmDelete}
+              clickHandler={this.handleBeginDelete}
               label="delete"
             >
               <span>Delete Instance</span>
             </Action>
           </div>
-          { this.confirmationBox }
+          {this.confirmationBox}
         </td>
       </tr>
     );

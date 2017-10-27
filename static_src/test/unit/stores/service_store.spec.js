@@ -1,4 +1,3 @@
-
 import Immutable from 'immutable';
 
 import '../../global_setup.js';
@@ -7,7 +6,7 @@ import AppDispatcher from '../../../dispatcher.js';
 import { ServiceStore as ServiceStoreClass } from '../../../stores/service_store.js';
 import { serviceActionTypes } from '../../../constants.js';
 
-describe('ServiceStore', function () {
+describe('ServiceStore', function() {
   let sandbox, ServiceStore;
 
   beforeEach(() => {
@@ -19,8 +18,8 @@ describe('ServiceStore', function () {
     sandbox.restore();
   });
 
-  describe('on services fetch', function () {
-    it('should set loading to true', function () {
+  describe('on services fetch', function() {
+    it('should set loading to true', function() {
       const guid = 'zxncvz8xcvhn32';
       AppDispatcher.handleViewAction({
         type: serviceActionTypes.SERVICES_FETCH,
@@ -31,8 +30,8 @@ describe('ServiceStore', function () {
     });
   });
 
-  describe('on services received', function () {
-    beforeEach(function () {
+  describe('on services received', function() {
+    beforeEach(function() {
       const sharedGuid = 'adxvcbxv';
       const expected = [
         { guid: 'zxvcjz', name: 'zxkjv' },
@@ -49,12 +48,12 @@ describe('ServiceStore', function () {
       });
     });
 
-    it('should merge in services to current data', function () {
+    it('should merge in services to current data', function() {
       const services = ServiceStore.getAll();
       expect(services.length).toEqual(2);
     });
 
-    it('should emit a change event', function () {
+    it('should emit a change event', function() {
       expect(ServiceStore.emitChange).toHaveBeenCalledOnce();
     });
   });

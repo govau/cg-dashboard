@@ -16,7 +16,7 @@ describe('<ServiceListItem />', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<ServiceListItem { ...props } />);
+    wrapper = shallow(<ServiceListItem {...props} />);
   });
 
   it('renders a <ServicePlanList /> component', () => {
@@ -29,4 +29,3 @@ describe('<ServiceListItem />', () => {
     });
   });
 });
-

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import userProvider from './user_provider.jsx';
@@ -27,7 +26,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = stateSetter();;
+    this.state = stateSetter();
     this._onChange = this._onChange.bind(this);
   }
 
@@ -51,9 +50,7 @@ class App extends React.Component {
         <div className="main_content content-no_sidebar">
           <GlobalErrorContainer />
           <main className="usa-content">
-            <div className="content grid">
-              { this.props.children }
-            </div>
+            <div className="content grid">{this.props.children}</div>
           </main>
         </div>
         <Footer />

@@ -1,4 +1,3 @@
-
 // Whhhhaaat? Yeah, you can import and use as you like.
 
 const dedent = require('dedent');
@@ -40,7 +39,8 @@ function pullBudget(name) {
 function launchChromeRunLighthouse(url, flags) {
   const launcher = new ChromeLauncher({ port: 9222, autoSelectChrome: true });
 
-  return launcher.isDebuggerReady()
+  return launcher
+    .isDebuggerReady()
     .catch(() => {
       if (flags.skipAutolaunch) {
         return Promise.resolve();
@@ -57,24 +57,23 @@ function launchChromeRunLighthouse(url, flags) {
     );
 }
 
-
 // We'll process the results and then pass to our tests
 // Based on Paul Irish's PWMetric sample
 // https://github.com/paulirish/pwmetrics/
 
-describe('Lighthouse speed test', function () {
+describe('Lighthouse speed test', function() {
   // We'll run our lighthouse set once and store for compare in this sample
   // you could very easily build a different sort of runner
   let result;
-  let pullResult = function () {};
+  let pullResult = function() {};
   jasmine.getEnv().defaultTimeoutInterval = 150000;
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 150000;
 
-  beforeAll((done) => {
+  beforeAll(done => {
     launchChromeRunLighthouse(testUrl, {}, lighthouseOptions)
-      .then((res) => {
+      .then(res => {
         result = res.audits;
-        pullResult = function (name) {
+        pullResult = function(name) {
           return result[name].rawValue;
         };
         const toWrite = res;
@@ -83,7 +82,7 @@ describe('Lighthouse speed test', function () {
         const jsonWrite = Printer.write(toWrite, 'json', jsonOut);
         Promise.all([jsonWrite, htmlWrite]).then(done, done.fail);
       })
-      .catch((err) => {
+      .catch(err => {
         done.fail(err);
       });
   });
@@ -100,32 +99,37 @@ describe('Lighthouse speed test', function () {
     expect(result).toBeDefined();
   });
 
-  it(`should have a speed index under ${pullBudget('speed-index-metric')}`,
-  () => {
-    expect(pullResult('speed-index-metric'))
-      .toBeLessThan(pullBudget('speed-index-metric'));
+  it(`should have a speed index under ${pullBudget(
+    'speed-index-metric'
+  )}`, () => {
+    expect(pullResult('speed-index-metric')).toBeLessThan(
+      pullBudget('speed-index-metric')
+    );
   });
 
-  it(`should have a input latency under ${pullBudget('estimated-input-latency')}`,
-  () => {
+  it(`should have a input latency under ${pullBudget(
+    'estimated-input-latency'
+  )}`, () => {
     // Disabled as measurement is currently innacurate.
   });
 
-  it(`should have a time to interactive under ${pullBudget('time-to-interactive')}`,
-  () => {
-    expect(pullResult('time-to-interactive'))
-      .toBeLessThan(pullBudget('time-to-interactive'));
+  it(`should have a time to interactive under ${pullBudget(
+    'time-to-interactive'
+  )}`, () => {
+    expect(pullResult('time-to-interactive')).toBeLessThan(
+      pullBudget('time-to-interactive')
+    );
   });
 
-  it(`should have a page weight under ${pullBudget('total-byte-weight')}`,
-  () => {
-    expect(pullResult('total-byte-weight'))
-      .toBeLessThan(pullBudget('total-byte-weight'));
+  it(`should have a page weight under ${pullBudget(
+    'total-byte-weight'
+  )}`, () => {
+    expect(pullResult('total-byte-weight')).toBeLessThan(
+      pullBudget('total-byte-weight')
+    );
   });
 
-  it(`should have less then ${pullBudget('dom-size')} dom nodes`,
-  () => {
-    expect(pullResult('dom-size'))
-      .toBeLessThan(pullBudget('dom-size'));
+  it(`should have less then ${pullBudget('dom-size')} dom nodes`, () => {
+    expect(pullResult('dom-size')).toBeLessThan(pullBudget('dom-size'));
   });
 });

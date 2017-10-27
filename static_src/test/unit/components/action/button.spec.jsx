@@ -17,7 +17,7 @@ describe('<Button/>', () => {
       type: 'button',
       label: 'my-button'
     };
-    const button = shallow(<Button { ...props } />);
+    const button = shallow(<Button {...props} />);
     const actualProps = button.find('button').props();
 
     expect(actualProps.className).toEqual(props.className);

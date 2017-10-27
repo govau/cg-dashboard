@@ -1,4 +1,3 @@
-
 /*
  * Actions for route entities. Any actions such as fetching, creating, updating,
  * etc should go here.

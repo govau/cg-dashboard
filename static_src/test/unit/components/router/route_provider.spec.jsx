@@ -11,7 +11,7 @@ describe('<RouteProvider />', () => {
   });
 
   it('sets a default state from the RouteStore', () => {
-    const component = () => <div></div>;
+    const component = () => <div />;
     const props = { some: 'data' };
     RouterStore.routeComponent = Object.assign({}, { component, props });
     const wrapper = shallow(<RouteProvider />);

@@ -1,4 +1,3 @@
-
 import BaseElement from './base.element';
 import NotificationElement from './notification.element';
 
@@ -29,4 +28,3 @@ export default class GlobalErrorsElement extends BaseElement {
     return !!this.isVisible();
   }
 }
-

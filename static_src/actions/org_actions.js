@@ -1,4 +1,3 @@
-
 /*
  * Actions for organization entities. Any actions such as fetching, creating,
  * updating, etc should go here.
@@ -11,7 +10,6 @@ import { orgActionTypes } from '../constants';
 import spaceActions from './space_actions';
 
 const orgActions = {
-
   changeCurrentOrg(orgGuid) {
     AppDispatcher.handleViewAction({
       type: orgActionTypes.ORG_CHANGE_CURRENT,
@@ -27,9 +25,10 @@ const orgActions = {
       orgGuid
     });
 
-    return cfApi.fetchOrg(orgGuid)
+    return cfApi
+      .fetchOrg(orgGuid)
       .then(orgActions.receivedOrg)
-      .catch((err) =>
+      .catch(err =>
         errorActions.importantDataFetchError(
           err,
           'organization data may be incomplete'
@@ -42,17 +41,19 @@ const orgActions = {
       type: orgActionTypes.ORGS_FETCH
     });
 
-    return cfApi.fetchOrgs()
+    return cfApi
+      .fetchOrgs()
       .then(orgs =>
         Promise.all(
-          orgs.map(
-            org =>
-              cfApi.fetchOrgSummary(org.guid).then(summary => Object.assign({}, org, summary))
+          orgs.map(org =>
+            cfApi
+              .fetchOrgSummary(org.guid)
+              .then(summary => Object.assign({}, org, summary))
           )
         )
       )
       .then(orgActions.receivedOrgs)
-      .catch((err) =>
+      .catch(err =>
         errorActions.importantDataFetchError(
           err,
           'unable to fetch organizations'
@@ -100,7 +101,7 @@ const orgActions = {
 
     return fetch.then(
       () => this.toggleQuicklookSuccess(org.guid),
-      (err) => this.toggleQuicklookError(org.guid, err)
+      err => this.toggleQuicklookError(org.guid, err)
     );
   },
 

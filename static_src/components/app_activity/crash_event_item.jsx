@@ -20,10 +20,11 @@ const propTypes = {
   exitStatus: PropTypes.string
 };
 
-const CrashEventItem = ({ exitStatus, exitDescription }) =>
+const CrashEventItem = ({ exitStatus, exitDescription }) => (
   <span>
-    The app crashed because { crashReason(exitStatus, exitDescription) }.
-  </span>;
+    The app crashed because {crashReason(exitStatus, exitDescription)}.
+  </span>
+);
 
 CrashEventItem.propTypes = propTypes;
 export default CrashEventItem;

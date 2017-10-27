@@ -1,4 +1,3 @@
-
 import BaseElement from './base.element';
 
 // https://www.martinfowler.com/bliki/PageObject.html
@@ -31,10 +30,12 @@ export default class UserInviteElement extends BaseElement {
     browser.waitForExist(`${selectors.primary} ${selectors.submit}`);
     const existingUserCount = this.countNumberOfUsers();
     this.element(selectors.submit).click();
-    browser.waitUntil(() =>
-      this.countNumberOfUsers() > existingUserCount ||
-      browser.isExisting(`${selectors.primary} ${selectors.error}`)
-    , 10000);
+    browser.waitUntil(
+      () =>
+        this.countNumberOfUsers() > existingUserCount ||
+        browser.isExisting(`${selectors.primary} ${selectors.error}`),
+      10000
+    );
   }
 
   // TODO move this to user list element.

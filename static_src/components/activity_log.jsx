@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import Action from './action.jsx';
@@ -12,14 +11,16 @@ import ServiceInstanceStore from '../stores/service_instance_store';
 
 function stateSetter() {
   const appGuid = AppStore.currentAppGuid;
-  const activity = ActivityStore
-    .getAll()
+  const activity = ActivityStore.getAll()
     .filter(item => {
       if (item.activity_type === 'log') {
         return item.app_guid === appGuid && item.status_code >= 400;
       }
 
-      if (item.activity_type === 'event' && item.type === 'audit.service_binding.create') {
+      if (
+        item.activity_type === 'event' &&
+        item.type === 'audit.service_binding.create'
+      ) {
         return item.metadata.request.app_guid === appGuid;
       }
 
@@ -28,11 +29,12 @@ function stateSetter() {
       }
 
       return false;
-    }).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    })
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
   return {
     activity,
-    empty: (ActivityStore.fetched && activity.length === 0),
+    empty: ActivityStore.fetched && activity.length === 0,
     hasErrors: ActivityStore.hasErrors,
     errors: ActivityStore.errors
   };
@@ -49,7 +51,9 @@ const defaultProps = {
 export default class ActivityLog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = Object.assign({}, stateSetter(props), { maxItems: props.maxItems });
+    this.state = Object.assign({}, stateSetter(props), {
+      maxItems: props.maxItems
+    });
 
     this._onChange = this._onChange.bind(this);
     this.handleMore = this.handleMore.bind(this);
@@ -81,70 +85,75 @@ export default class ActivityLog extends React.Component {
   }
 
   showMoreActivity() {
-    if (this.state.activity.length > this.props.maxItems &&
-        this.state.activity.length >= this.state.maxItems) {
+    if (
+      this.state.activity.length > this.props.maxItems &&
+      this.state.activity.length >= this.state.maxItems
+    ) {
       return true;
     }
     return false;
   }
 
   render() {
-    let content = <div></div>;
+    let content = <div />;
 
     if (this.state.empty && this.state.hasErrors) {
-      content = <h5 className="test-none_message">An error occurred fetching recent activity</h5>;
+      content = (
+        <h5 className="test-none_message">
+          An error occurred fetching recent activity
+        </h5>
+      );
     } else if (this.state.empty) {
       content = <h5 className="test-none_message">No recent activity</h5>;
     } else {
-      let showMore = this.showMoreActivity() &&
-        (
-          <PanelActions>
-            <Action label="View more" clickHandler={ this.handleMore } type="outline">
-              Show more activity
-            </Action>
-          </PanelActions>
-        );
+      let showMore = this.showMoreActivity() && (
+        <PanelActions>
+          <Action
+            label="View more"
+            clickHandler={this.handleMore}
+            type="outline"
+          >
+            Show more activity
+          </Action>
+        </PanelActions>
+      );
       content = (
         <div>
           <ul className="activity_log">
-            { this.state.activity
-                .slice(0, this.state.maxItems)
-                .map(item => {
-                  let service;
-                  if (item.metadata.request && item.metadata.service_instance_guid) {
-                    service = ServiceInstanceStore.get(
-                      item.metadata.request.service_instance_guid
-                    );
-                  }
+            {this.state.activity.slice(0, this.state.maxItems).map(item => {
+              let service;
+              if (
+                item.metadata.request &&
+                item.metadata.service_instance_guid
+              ) {
+                service = ServiceInstanceStore.get(
+                  item.metadata.request.service_instance_guid
+                );
+              }
 
-                  let domain;
-                  const route = RouteStore.get(item.metadata.route_guid);
-                  if (route) {
-                    domain = DomainStore.get(route.domain_guid);
-                  }
+              let domain;
+              const route = RouteStore.get(item.metadata.route_guid);
+              if (route) {
+                domain = DomainStore.get(route.domain_guid);
+              }
 
-                  return (
-                    <AppActivity
-                      key={ item.guid }
-                      item={ item }
-                      service={ service }
-                      route={ route }
-                      domain={ domain }
-                    />
-                  );
-                })
-            }
-            { showMore }
+              return (
+                <AppActivity
+                  key={item.guid}
+                  item={item}
+                  service={service}
+                  route={route}
+                  domain={domain}
+                />
+              );
+            })}
+            {showMore}
           </ul>
         </div>
       );
     }
 
-    return (
-      <div className="activity_log-container">
-        { content }
-      </div>
-    );
+    return <div className="activity_log-container">{content}</div>;
   }
 }
 

@@ -1,4 +1,3 @@
-
 /**
  * Renders a list of service plans
  */
@@ -15,7 +14,7 @@ const propTypes = {
 
 const empty = plans => !ServicePlanStore.loading && !plans.length;
 
-const sortPlansByCost = (plans) =>
+const sortPlansByCost = plans =>
   plans.sort((a, b) => {
     const costA = ServicePlanStore.getCost(a);
     const costB = ServicePlanStore.getCost(b);
@@ -55,7 +54,7 @@ export default class ServicePlanList extends React.Component {
 
   render() {
     const plans = sortPlansByCost(this.props.plans);
-    let content = <div></div>;
+    let content = <div />;
 
     if (empty(plans)) {
       content = <h4 className="test-none_message">No service plans</h4>;
@@ -64,38 +63,32 @@ export default class ServicePlanList extends React.Component {
         <table>
           <thead>
             <tr>
-              { this.columns.map((column) => {
+              {this.columns.map(column => {
                 return (
-                  <th className={ column.key } key={ column.key }>
-                    { column.label }
+                  <th className={column.key} key={column.key}>
+                    {column.label}
                   </th>
                 );
               })}
             </tr>
           </thead>
           <tbody>
-            {
-              plans.map((plan, index) => {
-                return (
-                  <ServicePlan
-                    cost={ this.cost(plan) }
-                    key={ index }
-                    onAddInstance={ this._handleAdd }
-                    plan={ plan }
-                  />
-                );
-              })
-            }
+            {plans.map((plan, index) => {
+              return (
+                <ServicePlan
+                  cost={this.cost(plan)}
+                  key={index}
+                  onAddInstance={this._handleAdd}
+                  plan={plan}
+                />
+              );
+            })}
           </tbody>
         </table>
       );
     }
 
-    return (
-      <div className='tableWrapper'>
-        { content }
-      </div>
-    );
+    return <div className="tableWrapper">{content}</div>;
   }
 }
 

@@ -1,4 +1,3 @@
-
 /*
  * Actions for domain entities. Any actions such as fetching, creating,
  * etc should go here.

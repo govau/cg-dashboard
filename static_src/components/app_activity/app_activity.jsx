@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -44,13 +43,13 @@ export default class ActivityLogItem extends React.Component {
     if (item.activity_type === activityTypes.LOG) {
       return (
         <LogItem
-          statusCode={ item.status_code }
-          requestedUrl={ item.requested_url }
+          statusCode={item.status_code}
+          requestedUrl={item.requested_url}
         />
       );
     }
 
-    return <span className="activity_log-item_text">{ this.eventContent }</span>;
+    return <span className="activity_log-item_text">{this.eventContent}</span>;
   }
 
   get CrashEventItem() {
@@ -59,12 +58,12 @@ export default class ActivityLogItem extends React.Component {
     const exitStatus = metadata.exit_status;
     const props = { exitDescription, exitStatus };
 
-    return <CrashEventItem { ...props } />;
+    return <CrashEventItem {...props} />;
   }
 
   routeEventItem(actor, domain, route, unmapped) {
     const props = { actor, domain, route, unmapped };
-    return <RouteEventItem { ...props } />;
+    return <RouteEventItem {...props} />;
   }
 
   formatStorageUpdateMessage(actor, metadata) {
@@ -73,7 +72,9 @@ export default class ActivityLogItem extends React.Component {
       return `${actor} modified resource allocation of the app.`;
     }
 
-    const appState = metadata.request.state ? metadata.request.state.toLowerCase() : 'updated';
+    const appState = metadata.request.state
+      ? metadata.request.state.toLowerCase()
+      : 'updated';
 
     return `${actor} ${appState} the app.`;
   }
@@ -92,7 +93,8 @@ export default class ActivityLogItem extends React.Component {
       case eventLogTypes.APP_CRASH:
         return this.CrashEventItem;
       case eventLogTypes.APP_CREATE:
-        return `${item.actor_name} created the app with ${metadata.request.memory} MBs of memory.`;
+        return `${item.actor_name} created the app with ${metadata.request
+          .memory} MBs of memory.`;
       case eventLogTypes.APP_MAP_ROUTE:
         return this.routeEventItem(item.actor_name, domain, route);
       case eventLogTypes.APP_UNMAP_ROUTE:
@@ -102,7 +104,10 @@ export default class ActivityLogItem extends React.Component {
       case eventLogTypes.APP_UPDATE:
         return this.formatStorageUpdateMessage(item.actor_name, metadata);
       case eventLogTypes.APP_BIND_SERVICE:
-        return this.formatBoundServiceMessage(item.actor_name, this.props.service);
+        return this.formatBoundServiceMessage(
+          item.actor_name,
+          this.props.service
+        );
       default:
         return `${itemType} isn't handled`;
     }
@@ -115,30 +120,31 @@ export default class ActivityLogItem extends React.Component {
       return 'activity_log-item-console';
     }
 
-    return item.activity_type === activityTypes.EVENT ? {
-      'activity_log-item-error': item.type === eventLogTypes.APP_CRASH,
-      'activity_log-item-warning': item.type === eventLogTypes.APP_UPDATE ||
-        item.type === eventLogTypes.APP_RESTAGE,
-      'activity_log-item-success': item.type === eventLogTypes.APP_CREATE
-    } : {};
+    return item.activity_type === activityTypes.EVENT
+      ? {
+          'activity_log-item-error': item.type === eventLogTypes.APP_CRASH,
+          'activity_log-item-warning':
+            item.type === eventLogTypes.APP_UPDATE ||
+            item.type === eventLogTypes.APP_RESTAGE,
+          'activity_log-item-success': item.type === eventLogTypes.APP_CREATE
+        }
+      : {};
   }
 
   render() {
     const { item } = this.props;
 
     return (
-      <li className={ classnames('activity_log-item', this.cssClass) }>
-        <div className="activity_log-item_line" onClick={ this.toggleRawJson }>
+      <li className={classnames('activity_log-item', this.cssClass)}>
+        <div className="activity_log-item_line" onClick={this.toggleRawJson}>
           <ElasticLine>
-            <ElasticLineItem>
-              { this.logItem }
-            </ElasticLineItem>
+            <ElasticLineItem>{this.logItem}</ElasticLineItem>
             <ElasticLineItem align="end">
-              <Timestamp timestamp={ item.timestamp } />
+              <Timestamp timestamp={item.timestamp} />
             </ElasticLineItem>
           </ElasticLine>
         </div>
-        <RawJSONDetail item={ item } visible={ this.state.showRawJson} />
+        <RawJSONDetail item={item} visible={this.state.showRawJson} />
       </li>
     );
   }

@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 /**
  * Renders a list of users.
@@ -69,7 +68,7 @@ export default class UserList extends React.Component {
   }
 
   get userTypePretty() {
-    return (this.props.userType === 'org_users') ? 'Organization' : 'Space';
+    return this.props.userType === 'org_users' ? 'Organization' : 'Space';
   }
 
   get inviteDocumentation() {
@@ -77,10 +76,12 @@ export default class UserList extends React.Component {
 
     return (
       <span>
-        To invite a user and give them roles, see <a href={ config.docs.invite_user }>Managing Teammates</a>.&nbsp;
+        To invite a user and give them roles, see{' '}
+        <a href={config.docs.invite_user}>Managing Teammates</a>.&nbsp;
         <b>
-          Removing all roles does not remove a user from an organization.
-          Users with no roles can view other users and their roles while being unable to make any changes.
+          Removing all roles does not remove a user from an organization. Users
+          with no roles can view other users and their roles while being unable
+          to make any changes.
         </b>
       </span>
     );
@@ -90,9 +91,12 @@ export default class UserList extends React.Component {
     return (
       <PanelDocumentation description>
         <p>
-          { this.userTypePretty } Managers can change these roles. For details
-            about these roles, see <a href="https://docs.cloudfoundry.org/concepts/roles.html#roles">Cloud Foundry roles and permissions</a>.
-          { this.inviteDocumentation }
+          {this.userTypePretty} Managers can change these roles. For details
+          about these roles, see{' '}
+          <a href="https://docs.cloudfoundry.org/concepts/roles.html#roles">
+            Cloud Foundry roles and permissions
+          </a>.
+          {this.inviteDocumentation}
         </p>
       </PanelDocumentation>
     );
@@ -100,81 +104,84 @@ export default class UserList extends React.Component {
 
   get emptyState() {
     const callout = `There are no users in this ${this.userTypePretty.toLowerCase()}`;
-    const content = config.docs.invite_user &&
-      <a href={ config.docs.invite_user }>Read more about adding users to this space.</a>
-
-    return (
-      <EntityEmpty callout={ callout }>
-        { content }
-      </EntityEmpty>
+    const content = config.docs.invite_user && (
+      <a href={config.docs.invite_user}>
+        Read more about adding users to this space.
+      </a>
     );
+
+    return <EntityEmpty callout={callout}>{content}</EntityEmpty>;
   }
 
   render() {
     let buttonText;
-    let content = <div><Loading text="Loading users" /></div>;
+    let content = (
+      <div>
+        <Loading text="Loading users" />
+      </div>
+    );
 
     if (this.props.empty) {
       content = this.emptyState;
     } else if (!this.props.loading && this.props.users.length) {
       content = (
-      <div className="test-user_list">
-        <Loading active={ this.props.saving } loadingDelayMS={0} text="Saving" style="globalSaving" />
-        { this.documentation }
-        <ComplexList>
-          { this.props.users.map((user) => {
-            let actions;
-            if (this.props.onRemove) {
-              let button = <span></span>;
-              if (this.props.currentUserAccess) {
-                if (this.props.userType === 'org_users') {
-                  buttonText = 'Remove User From Org';
-                } else if (this.props.userType === 'space_users') {
-                  buttonText = 'Remove All Space Roles';
+        <div className="test-user_list">
+          <Loading
+            active={this.props.saving}
+            loadingDelayMS={0}
+            text="Saving"
+            style="globalSaving"
+          />
+          {this.documentation}
+          <ComplexList>
+            {this.props.users.map(user => {
+              let actions;
+              if (this.props.onRemove) {
+                let button = <span />;
+                if (this.props.currentUserAccess) {
+                  if (this.props.userType === 'org_users') {
+                    buttonText = 'Remove User From Org';
+                  } else if (this.props.userType === 'space_users') {
+                    buttonText = 'Remove All Space Roles';
+                  }
+                  button = (
+                    <Action
+                      style="base"
+                      clickHandler={this._handleDelete.bind(this, user.guid)}
+                      label="delete"
+                    >
+                      <span>{buttonText}</span>
+                    </Action>
+                  );
                 }
-                button = (
-                  <Action
-                    style="base"
-                    clickHandler={ this._handleDelete.bind(this, user.guid) }
-                    label="delete">
-                    <span>{ buttonText }</span>
-                  </Action>
+                actions = (
+                  <ElasticLineItem align="end">{button}</ElasticLineItem>
                 );
               }
-              actions = (
-                <ElasticLineItem align="end">
-                  { button }
-                </ElasticLineItem>
-              );
-            }
 
-            return (
-              <ElasticLine key={ user.guid }>
-                <ElasticLineItem>{ user.username }</ElasticLineItem>
-                <ElasticLineItem key={ `${user.guid}-role` } align="end">
-                  <UserRoleListControl
-                    userType={ this.props.userType }
-                    currentUserAccess={ this.props.currentUserAccess }
-                    onAddPermissions={ this.props.onAddPermissions }
-                    onRemovePermissions={ this.props.onRemovePermissions }
-                    entityGuid={ this.props.entityGuid }
-                    user={ user }
-                  />
-                </ElasticLineItem>
-                { actions }
-              </ElasticLine>
+              return (
+                <ElasticLine key={user.guid}>
+                  <ElasticLineItem>{user.username}</ElasticLineItem>
+                  <ElasticLineItem key={`${user.guid}-role`} align="end">
+                    <UserRoleListControl
+                      userType={this.props.userType}
+                      currentUserAccess={this.props.currentUserAccess}
+                      onAddPermissions={this.props.onAddPermissions}
+                      onRemovePermissions={this.props.onRemovePermissions}
+                      entityGuid={this.props.entityGuid}
+                      user={user}
+                    />
+                  </ElasticLineItem>
+                  {actions}
+                </ElasticLine>
               );
-          })}
-        </ComplexList>
-      </div>
+            })}
+          </ComplexList>
+        </div>
       );
     }
 
-    return (
-    <div className="tableWrapper">
-      { content }
-    </div>
-    );
+    return <div className="tableWrapper">{content}</div>;
   }
 }
 

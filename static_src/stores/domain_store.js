@@ -1,4 +1,3 @@
-
 /*
  * Store for domain data. Will store and update domain data on changes from UI and
  * server.
@@ -25,7 +24,7 @@ class DomainStore extends BaseStore {
       }
 
       case domainActionTypes.DOMAIN_RECEIVED: {
-        this.merge('guid', action.domain, (changed) => {
+        this.merge('guid', action.domain, changed => {
           if (changed) this.emitChange();
         });
         break;

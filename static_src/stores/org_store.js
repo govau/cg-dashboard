@@ -55,20 +55,20 @@ export class OrgStore extends BaseStore {
 
       case orgActionTypes.ORGS_RECEIVED: {
         this._fetchAll = false;
-        const updates = action.orgs.map((d) => {
+        const updates = action.orgs.map(d => {
           if (d.spaces) {
             return d;
           }
 
           const org = this.get(d.guid);
-          return Object.assign(d, { spaces: org && org.spaces || [] });
+          return Object.assign(d, { spaces: (org && org.spaces) || [] });
         });
         this.mergeMany('guid', updates);
         break;
       }
 
       case orgActionTypes.ORGS_SUMMARIES_RECEIVED: {
-        this.mergeMany('guid', action.orgs, (changed) => {
+        this.mergeMany('guid', action.orgs, changed => {
           if (changed) {
             const orgUpdates = this.updateOpenOrgs(this._currentOrgGuid);
             this.mergeMany('guid', orgUpdates, () => {});
@@ -81,7 +81,7 @@ export class OrgStore extends BaseStore {
       case orgActionTypes.ORG_TOGGLE_SPACE_MENU: {
         this._currentOrgGuid = action.orgGuid;
         const updates = this.updateOpenOrgs(action.orgGuid);
-        this.mergeMany('guid', updates, (changed) => {
+        this.mergeMany('guid', updates, changed => {
           if (changed) this.emitChange();
         });
         break;
@@ -94,7 +94,8 @@ export class OrgStore extends BaseStore {
         }
 
         const orgQuicklook = new Quicklook(org.quicklook || {});
-        const toggledOrg = { ...org,
+        const toggledOrg = {
+          ...org,
           quicklook: orgQuicklook.merge({ open: !orgQuicklook.open })
         };
         this.merge('guid', toggledOrg);
@@ -108,7 +109,8 @@ export class OrgStore extends BaseStore {
         }
 
         const orgQuicklook = new Quicklook(org.quicklook);
-        const toggledOrg = { ...org,
+        const toggledOrg = {
+          ...org,
           quicklook: orgQuicklook.merge({ isLoaded: true, error: null })
         };
         this.merge('guid', toggledOrg);
@@ -122,7 +124,8 @@ export class OrgStore extends BaseStore {
         }
 
         const orgQuicklook = org.quicklook;
-        const toggledOrg = { ...org,
+        const toggledOrg = {
+          ...org,
           quicklook: orgQuicklook.merge({ isLoaded: true, error: action.error })
         };
         this.merge('guid', toggledOrg);
@@ -154,7 +157,7 @@ export class OrgStore extends BaseStore {
 
   updateOpenOrgs(openOrgGuid) {
     const allOrgs = this.getAll();
-    const updates = allOrgs.map((org) => {
+    const updates = allOrgs.map(org => {
       if (org.guid === openOrgGuid) {
         return Object.assign({}, org, { space_menu_open: true });
       }

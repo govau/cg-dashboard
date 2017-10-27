@@ -6,10 +6,11 @@ const propTypes = {
   requestedUrl: PropTypes.string
 };
 
-const LogItem = ({ statusCode, requestedUrl }) =>
+const LogItem = ({ statusCode, requestedUrl }) => (
   <span className="activity_log-item_text">
-    { statusCode } { requestedUrl }
-  </span>;
+    {statusCode} {requestedUrl}
+  </span>
+);
 
 LogItem.propTypes = propTypes;
 

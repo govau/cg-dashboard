@@ -7,7 +7,6 @@ import Immutable from 'immutable';
 import BaseStore from './base_store.js';
 import { errorActionTypes } from '../constants.js';
 
-
 export class ErrorStore extends BaseStore {
   constructor() {
     super();
@@ -44,7 +43,7 @@ export class ErrorStore extends BaseStore {
       }
 
       case errorActionTypes.DISMISS: {
-        const errIdx = this.getAll().findIndex((err) => err === action.err);
+        const errIdx = this.getAll().findIndex(err => err === action.err);
         if (errIdx) {
           // TODO little unsafe to access data here?
           this._data = this._data.delete(errIdx);

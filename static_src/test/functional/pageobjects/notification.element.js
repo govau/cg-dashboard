@@ -1,4 +1,3 @@
-
 import BaseElement from './base.element';
 
 // https://www.martinfowler.com/bliki/PageObject.html
@@ -14,7 +13,6 @@ const selectors = {
 };
 
 export default class NotificationElement extends BaseElement {
-
   message() {
     return this.element(selectors.notificationMessage).getText();
   }
@@ -27,9 +25,7 @@ export default class NotificationElement extends BaseElement {
     return this.element(selectors.notificationAction);
   }
 
-  notificationStatus() {
-
-  }
+  notificationStatus() {}
 
   exists() {
     return !!this.isVisible();

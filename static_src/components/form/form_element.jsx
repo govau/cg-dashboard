@@ -57,14 +57,22 @@ export default class FormElement extends React.Component {
     const value = e.target.value;
     const err = this.props.validator(value, this.props.name);
     this.setState({ err, value }, () => {
-      formActions.changeField(this.props.formGuid, this.props.name, value)
+      formActions
+        .changeField(this.props.formGuid, this.props.name, value)
         .then(() => {
           let promise;
           if (err) {
             err.value = value;
-            promise = formActions.changeFieldError(this.props.formGuid, this.props.name, err);
+            promise = formActions.changeFieldError(
+              this.props.formGuid,
+              this.props.name,
+              err
+            );
           } else {
-            promise = formActions.changeFieldSuccess(this.props.formGuid, this.props.name);
+            promise = formActions.changeFieldSuccess(
+              this.props.formGuid,
+              this.props.name
+            );
           }
 
           return promise;
@@ -73,7 +81,9 @@ export default class FormElement extends React.Component {
   }
 
   get classes() {
-    return this.props.classes.length ? classNames(...this.props.classes) : this.props.className;
+    return this.props.classes.length
+      ? classNames(...this.props.classes)
+      : this.props.className;
   }
 
   get key() {

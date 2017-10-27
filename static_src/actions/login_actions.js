@@ -1,4 +1,3 @@
-
 /*
  * Actions for login information such as login status. Actions for getting and
  * modifying login information should go here.
@@ -14,7 +13,8 @@ const loginActions = {
       type: loginActionTypes.FETCH_STATUS
     });
 
-    return cfApi.getAuthStatus()
+    return cfApi
+      .getAuthStatus()
       .then(loginActions.receivedStatus)
       .catch(loginActions.errorStatus);
   },

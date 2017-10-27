@@ -3,8 +3,8 @@ const webpack = require('webpack');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const PRODUCTION = (process.env.NODE_ENV === 'prod');
-const TEST = (process.env.NODE_ENV === 'test');
+const PRODUCTION = process.env.NODE_ENV === 'prod';
+const TEST = process.env.NODE_ENV === 'test';
 const CG_STYLE_PATH = process.env.CG_STYLE_PATH;
 const CF_SKIN = process.env.CF_SKIN || 'cg';
 
@@ -14,10 +14,7 @@ const compiledDir = './static/assets';
 const config = {
   bail: false,
 
-  entry: [
-    'babel-polyfill',
-    `${srcDir}/main.js`
-  ],
+  entry: ['babel-polyfill', `${srcDir}/main.js`],
 
   output: {
     path: path.resolve(compiledDir),
@@ -49,7 +46,8 @@ const config = {
         test: /\.(svg|ico|png|gif|jpe?g)$/,
         loader: 'url-loader?limit=1024&name=img/[name].[ext]'
       },
-      { test: /\.(ttf|woff2?|eot)$/,
+      {
+        test: /\.(ttf|woff2?|eot)$/,
         loader: 'url-loader?limit=1024&name=font/[name].[ext]'
       }
     ]
@@ -96,11 +94,13 @@ if (TEST) {
 }
 
 if (PRODUCTION) {
-  config.plugins.push(new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: JSON.stringify('production')
-    }
-  }));
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    })
+  );
 }
 
 module.exports = config;

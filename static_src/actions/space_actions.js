@@ -1,4 +1,3 @@
-
 /*
  * Actions for space entities. Any actions such as fetching, creating, updating,
  * etc should go here.
@@ -17,9 +16,10 @@ export default {
       spaceGuid
     });
 
-    return cfApi.fetchSpace(spaceGuid)
+    return cfApi
+      .fetchSpace(spaceGuid)
       .then(this.receivedSpace)
-      .catch((err) =>
+      .catch(err =>
         errorActions.importantDataFetchError(err, 'unable to fetch space')
       );
   },
@@ -29,10 +29,14 @@ export default {
       type: spaceActionTypes.SPACES_FETCH
     });
 
-    return cfApi.fetchSpaces()
+    return cfApi
+      .fetchSpaces()
       .then(this.receivedSpaces)
-      .catch((err) =>
-        errorActions.importantDataFetchError(err, 'space data may be incomplete')
+      .catch(err =>
+        errorActions.importantDataFetchError(
+          err,
+          'space data may be incomplete'
+        )
       );
   },
 
@@ -42,11 +46,11 @@ export default {
       orgGuid
     });
 
-    return Promise.all(SpaceStore.getAll()
-      .filter(space => space.organization_guid === orgGuid)
-      .map(space => this.fetch(space.guid))
-    )
-    .catch((err) =>
+    return Promise.all(
+      SpaceStore.getAll()
+        .filter(space => space.organization_guid === orgGuid)
+        .map(space => this.fetch(space.guid))
+    ).catch(err =>
       errorActions.importantDataFetchError(err, 'space data may be incomplete')
     );
   },

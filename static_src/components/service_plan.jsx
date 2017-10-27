@@ -52,15 +52,15 @@ class ServicePlan extends React.Component {
 
     return (
       <tr>
-        <td label="Name">{ plan.name }</td>
-        <td label="Description">{ plan.description }</td>
+        <td label="Name">{plan.name}</td>
+        <td label="Description">{plan.description}</td>
         <td label="Actions">
           <Action
-            classes={ ['test-create_service_instance'] }
-            clickHandler={ this.handleClick }
+            classes={['test-create_service_instance']}
+            clickHandler={this.handleClick}
             label="create"
           >
-            { this.buttonText }
+            {this.buttonText}
           </Action>
         </td>
       </tr>

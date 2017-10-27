@@ -1,4 +1,3 @@
-
 import Immutable from 'immutable';
 
 import '../../global_setup.js';
@@ -27,7 +26,7 @@ describe('QuotaStore', function() {
   });
 
   describe('on ORGS_QUOTAS_FETCH', function() {
-    it('should fetch quotas for all organizations', function () {
+    it('should fetch quotas for all organizations', function() {
       var spy = sandbox.spy(cfApi, 'fetchOrgsQuotas');
       AppDispatcher.handleViewAction({
         type: quotaActionTypes.ORGS_QUOTAS_FETCH
@@ -36,8 +35,8 @@ describe('QuotaStore', function() {
     });
   });
 
-  describe('on ORGS_QUOTAS_RECEIVED', function () {
-    it('should call mergeMany with new quotas', function () {
+  describe('on ORGS_QUOTAS_RECEIVED', function() {
+    it('should call mergeMany with new quotas', function() {
       var spy = sandbox.spy(QuotaStore, 'mergeMany');
       var quotas = [
         {
@@ -52,11 +51,11 @@ describe('QuotaStore', function() {
         quotas
       });
       expect(spy).toHaveBeenCalledOnce();
-    })
+    });
   });
 
   describe('on SPACES_QUOTAS_FETCH', function() {
-    it('should fetch quotas for all organizations', function () {
+    it('should fetch quotas for all organizations', function() {
       var spy = sandbox.spy(cfApi, 'fetchSpacesQuotas');
       AppDispatcher.handleViewAction({
         type: quotaActionTypes.SPACES_QUOTAS_FETCH
@@ -65,8 +64,8 @@ describe('QuotaStore', function() {
     });
   });
 
-  describe('on SPACES_QUOTAS_RECEIVED', function () {
-    it('should call mergeMany with new quotas', function () {
+  describe('on SPACES_QUOTAS_RECEIVED', function() {
+    it('should call mergeMany with new quotas', function() {
       var spy = sandbox.spy(QuotaStore, 'mergeMany');
       var quotas = [
         {
@@ -81,6 +80,6 @@ describe('QuotaStore', function() {
         quotas
       });
       expect(spy).toHaveBeenCalledOnce();
-    })
+    });
   });
 });

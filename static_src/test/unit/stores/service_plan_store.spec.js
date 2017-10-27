@@ -1,4 +1,3 @@
-
 import '../../global_setup.js';
 
 import Immutable from 'immutable';
@@ -9,7 +8,7 @@ import { ServicePlanStore as ServicePlanStoreClass } from '../../../stores/servi
 import serviceActions from '../../../actions/service_actions.js';
 import { serviceActionTypes } from '../../../constants.js';
 
-describe('ServicePlanStore', function () {
+describe('ServicePlanStore', function() {
   let sandbox, ServicePlanStore;
 
   beforeEach(() => {
@@ -28,8 +27,7 @@ describe('ServicePlanStore', function () {
   });
 
   describe('getAllFromService()', function() {
-    it('should only return servicePlans with the correct service guid',
-        function() {
+    it('should only return servicePlans with the correct service guid', function() {
       var expectedServiceGuid = 'alkdsfjxcvzmcnvqsdxf';
       let expectedServices = [
         { service_guid: expectedServiceGuid, guid: 'zvcxklz' },
@@ -45,7 +43,6 @@ describe('ServicePlanStore', function () {
       expect(actual.length).toEqual(2);
       expect(actual).toEqual(expectedServices);
     });
-
   });
 
   describe('getCost()', function() {
@@ -61,7 +58,7 @@ describe('ServicePlanStore', function () {
       expect(actual).toEqual(0);
 
       serviceInstance = {
-        extra: { costs: [{}]}
+        extra: { costs: [{}] }
       };
       actual = ServicePlanStore.getCost(serviceInstance);
       expect(actual).toEqual(0);
@@ -70,15 +67,15 @@ describe('ServicePlanStore', function () {
     it('should return number if found', function() {
       const cost = 10.23343;
       let serviceInstance = {
-        extra: { costs: [{ amount: { usd: cost }}]}
+        extra: { costs: [{ amount: { usd: cost } }] }
       };
       let actual = ServicePlanStore.getCost(serviceInstance);
       expect(actual).toEqual(cost);
     });
   });
 
-  describe('on service plans fetch', function () {
-    beforeEach(function () {
+  describe('on service plans fetch', function() {
+    beforeEach(function() {
       sandbox.spy(ServicePlanStore, 'emitChange');
 
       AppDispatcher.handleViewAction({
@@ -87,20 +84,19 @@ describe('ServicePlanStore', function () {
       });
     });
 
-    it('should set loading to true', function () {
+    it('should set loading to true', function() {
       expect(ServicePlanStore.loading).toEqual(true);
     });
 
-    it('should emit a change', function () {
+    it('should emit a change', function() {
       expect(ServicePlanStore.emitChange).toHaveBeenCalledOnce();
     });
   });
 
   describe('on service plans fetch', function() {
-    it('should call the cf api for all service plans belonging to the service',
-        function() {
+    it('should call the cf api for all service plans belonging to the service', function() {
       var spy = sandbox.spy(cfApi, 'fetchAllServicePlans'),
-          expectedServiceGuid = 'zxncvz8xcvhn32';
+        expectedServiceGuid = 'zxncvz8xcvhn32';
 
       serviceActions.fetchAllPlans(expectedServiceGuid);
 
@@ -130,7 +126,7 @@ describe('ServicePlanStore', function () {
       expect(actual).toEqual(expected[0]);
     });
 
-    it('should set loading state false', function () {
+    it('should set loading state false', function() {
       sandbox.spy(ServicePlanStore, 'emitChange');
       ServicePlanStore._fetchAll = true;
 

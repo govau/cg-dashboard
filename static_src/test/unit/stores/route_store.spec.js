@@ -1,4 +1,3 @@
-
 import Immutable from 'immutable';
 
 import '../../global_setup.js';
@@ -33,7 +32,7 @@ describe('RouteStore', function() {
   describe('getRouteURLForApp()', function() {
     it('should be a full url for a route with no domain', function() {
       const appGuid = 'zmxcvnw4r';
-      const domain_name = 'cloud.com'
+      const domain_name = 'cloud.com';
       const host = 'cloud';
       const route = {
         app_guid: appGuid,
@@ -64,7 +63,7 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_APP_ASSOCIATE', function () {
+  describe('routeActionTypes.ROUTE_APP_ASSOCIATE', function() {
     it('should call put ap route assocaation with app, route guid', function() {
       const appGuid = 'zxvnalsf25gh9';
       const routeGuid = 'xvxvcmnsdjfkh3jdf';
@@ -102,9 +101,8 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_APP_ASSOCIATED', function () {
-    it('should add app_guid to the route object and set editing, error to false',
-        function () {
+  describe('routeActionTypes.ROUTE_APP_ASSOCIATED', function() {
+    it('should add app_guid to the route object and set editing, error to false', function() {
       const appGuid = 'fake-app-guid';
       const routeGuid = 'fake-route-guid';
 
@@ -122,8 +120,7 @@ describe('RouteStore', function() {
       expect(actual.error).toBeFalsy();
     });
 
-    it('should set showCreateRouteForm and error to false and emitChange()',
-        function () {
+    it('should set showCreateRouteForm and error to false and emitChange()', function() {
       const appGuid = 'fake-app-guid';
       const routeGuid = 'fake-route-guid';
       const spy = sandbox.spy(RouteStore, 'emitChange');
@@ -153,10 +150,9 @@ describe('RouteStore', function() {
   });
 
   describe('on route app unnassociate', function() {
-    it('should call the cf api unassociate route app with app, route guid',
-      function() {
+    it('should call the cf api unassociate route app with app, route guid', function() {
       const spy = sandbox.stub(cfApi, 'deleteAppRouteAssociation');
-      spy.returns(Promise.resolve({data: {}}));
+      spy.returns(Promise.resolve({ data: {} }));
       const appGuid = 'adfa3456vcsdf';
       const routeGuid = 'zxcv8zvcx234';
 
@@ -197,7 +193,9 @@ describe('RouteStore', function() {
     const appGuid = 'zcxv98xcv234';
 
     it('should remove the app guid route if found', function() {
-      RouteStore._data = Immutable.fromJS([{ guid: routeGuid, appGuid: appGuid }]);
+      RouteStore._data = Immutable.fromJS([
+        { guid: routeGuid, appGuid: appGuid }
+      ]);
 
       routeActions.unassociatedApp(routeGuid, appGuid);
 
@@ -207,7 +205,9 @@ describe('RouteStore', function() {
     });
 
     it('should emit a change', function() {
-      RouteStore._data = Immutable.fromJS([{ guid: routeGuid, appGuid: appGuid }]);
+      RouteStore._data = Immutable.fromJS([
+        { guid: routeGuid, appGuid: appGuid }
+      ]);
 
       const spy = sandbox.spy(RouteStore, 'emitChange');
 
@@ -229,7 +229,7 @@ describe('RouteStore', function() {
   });
 
   describe('routeActionTypes.ROUTE_CREATE', function() {
-    it('should call cfApi.createRoute with params', function (){
+    it('should call cfApi.createRoute with params', function() {
       const domainGuid = 'fake-domain-guid';
       const spaceGuid = 'fake-space-guid';
       const host = 'fake-host';
@@ -275,7 +275,7 @@ describe('RouteStore', function() {
   });
 
   describe('routeActionTypes.ROUTE_CREATE_AND_ASSOCIATE', function() {
-    it('should emitChange()', function () {
+    it('should emitChange()', function() {
       const appGuid = 'fake-app-guid';
       const domainGuid = 'fake-domain-guid';
       const spaceGuid = 'fake-space-guid';
@@ -305,7 +305,10 @@ describe('RouteStore', function() {
         path: 'fake-path'
       };
       const createRouteSpy = sandbox.stub(cfApi, 'createRoute');
-      const putAppRouteAssociationSpy = sandbox.stub(cfApi, 'putAppRouteAssociation');
+      const putAppRouteAssociationSpy = sandbox.stub(
+        cfApi,
+        'putAppRouteAssociation'
+      );
 
       createRouteSpy.returns(Promise.resolve());
       putAppRouteAssociationSpy.returns(Promise.resolve());
@@ -324,14 +327,13 @@ describe('RouteStore', function() {
   });
 
   describe('routeActionTypes.ROUTE_CREATE_FORM_HIDE', function() {
-    it('should set showCreateRouteForm, error to false and emitChange()',
-        function () {
+    it('should set showCreateRouteForm, error to false and emitChange()', function() {
       const spy = sandbox.spy(RouteStore, 'emitChange');
 
       RouteStore.showCreateRouteForm = true;
       AppDispatcher.handleUIAction({
         type: routeActionTypes.ROUTE_CREATE_FORM_HIDE
-      })
+      });
 
       expect(RouteStore.showCreateRouteForm).toEqual(false);
       expect(RouteStore.error).toEqual(null);
@@ -339,15 +341,14 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_CREATE_FORM_SHOW', function () {
-    it('should set showCreateRouteForm, error to true and emitChange()',
-        function () {
+  describe('routeActionTypes.ROUTE_CREATE_FORM_SHOW', function() {
+    it('should set showCreateRouteForm, error to true and emitChange()', function() {
       const spy = sandbox.spy(RouteStore, 'emitChange');
 
       RouteStore.showCreateRouteForm = false;
       AppDispatcher.handleUIAction({
         type: routeActionTypes.ROUTE_CREATE_FORM_SHOW
-      })
+      });
 
       expect(RouteStore.showCreateRouteForm).toEqual(true);
       expect(RouteStore.error).toEqual(null);
@@ -355,8 +356,8 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_CREATED', function () {
-    it('should add route and emitChange()', function () {
+  describe('routeActionTypes.ROUTE_CREATED', function() {
+    it('should add route and emitChange()', function() {
       const routeGuid = 'fake-route-guid';
       const route = { guid: routeGuid };
       const spy = sandbox.spy(RouteStore, 'emitChange');
@@ -371,8 +372,8 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_DELETE', function () {
-    it('should call cfApi.deleteRoute with a route guid', function () {
+  describe('routeActionTypes.ROUTE_DELETE', function() {
+    it('should call cfApi.deleteRoute with a route guid', function() {
       const routeGuid = 'fake-route-guid';
       const spy = sandbox.spy(cfApi, 'deleteRoute');
 
@@ -387,8 +388,8 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_DELETED', function () {
-    it('should remove the route and emitChange()', function () {
+  describe('routeActionTypes.ROUTE_DELETED', function() {
+    it('should remove the route and emitChange()', function() {
       const routeGuid = 'fake-route-guid';
       const spy = sandbox.spy(RouteStore, 'emitChange');
 
@@ -407,7 +408,7 @@ describe('RouteStore', function() {
   describe('routeActionTypes.ROUTES_FOR_APP_FETCH', function() {
     it('should fetch routes for app with app guid from api', function() {
       var spy = sandbox.spy(cfApi, 'fetchRoutesForApp'),
-          expectedGuid = 'adfasdzcvzxcvb23r';
+        expectedGuid = 'adfasdzcvzxcvb23r';
 
       AppDispatcher.handleViewAction({
         type: routeActionTypes.ROUTES_FOR_APP_FETCH,
@@ -437,7 +438,7 @@ describe('RouteStore', function() {
     it('should emit a change event if new routes', function() {
       const spy = sandbox.spy(RouteStore, 'emitChange');
 
-      routeActions.receivedRoutes([{ metadata: { guid: 'zxcv' }, entity: {}}]);
+      routeActions.receivedRoutes([{ metadata: { guid: 'zxcv' }, entity: {} }]);
 
       expect(spy).toHaveBeenCalledOnce();
     });
@@ -445,7 +446,7 @@ describe('RouteStore', function() {
     it('should merge in the routes with mergeMany', function() {
       const spy = sandbox.spy(RouteStore, 'mergeMany');
 
-      routeActions.receivedRoutes([{ metadata: { guid: 'zxcv' }, entity: {}}]);
+      routeActions.receivedRoutes([{ metadata: { guid: 'zxcv' }, entity: {} }]);
 
       expect(spy).toHaveBeenCalledOnce();
     });
@@ -459,7 +460,7 @@ describe('RouteStore', function() {
       AppDispatcher.handleViewAction({
         type: routeActionTypes.ROUTES_FOR_APP_RECEIVED,
         appGuid: appGuid,
-        routes: [ { guid: 'adsfa' } ]
+        routes: [{ guid: 'adsfa' }]
       });
 
       expect(spy).toHaveBeenCalledOnce();
@@ -473,13 +474,14 @@ describe('RouteStore', function() {
       AppDispatcher.handleServerAction({
         type: routeActionTypes.ROUTES_FOR_APP_RECEIVED,
         appGuid: sharedGuid,
-        routes: [ routeA ]
+        routes: [routeA]
       });
 
       let actual = RouteStore.get(routeA.guid);
 
       expect(actual).toEqual(
-        Object.assign({}, routeA, { app_guid: sharedGuid }));
+        Object.assign({}, routeA, { app_guid: sharedGuid })
+      );
     });
 
     it('should merge all the routes in', function() {
@@ -524,8 +526,8 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_TOGGLE_EDIT', function () {
-    it('should toggle the "editing" value of the route', function () {
+  describe('routeActionTypes.ROUTE_TOGGLE_EDIT', function() {
+    it('should toggle the "editing" value of the route', function() {
       const routeGuid = 'route-guid';
       const route = { guid: routeGuid };
 
@@ -547,7 +549,7 @@ describe('RouteStore', function() {
   });
 
   describe('on route toggle remove', function() {
-    it('should toggle the "editing" value of the route', function () {
+    it('should toggle the "editing" value of the route', function() {
       const routeGuid = 'route-guid';
       const route = { guid: routeGuid };
 
@@ -567,8 +569,8 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_UPDATE', function () {
-    it('should call cfApi.putRouteUpdate with params', function () {
+  describe('routeActionTypes.ROUTE_UPDATE', function() {
+    it('should call cfApi.putRouteUpdate with params', function() {
       const routeGuid = 'fake-route-guid';
       const domainGuid = 'fake-domain-guid';
       const spaceGuid = 'fake-space-guid';
@@ -615,8 +617,8 @@ describe('RouteStore', function() {
     });
   });
 
-  describe('routeActionTypes.ROUTE_UPDATED', function () {
-    it('should update route and set editing, error to false', function () {
+  describe('routeActionTypes.ROUTE_UPDATED', function() {
+    it('should update route and set editing, error to false', function() {
       const routeGuid = 'fake-route-guid';
       const route = { guid: routeGuid, foo: 'bar' };
 
@@ -644,7 +646,7 @@ describe('RouteStore', function() {
       expect(actual.loading).toBeFalsy();
     });
 
-    it('should emitChange()', function () {
+    it('should emitChange()', function() {
       const routeGuid = 'fake-route-guid';
       const route = { guid: routeGuid };
       const spy = sandbox.spy(RouteStore, 'emitChange');
@@ -666,7 +668,7 @@ describe('RouteStore', function() {
       error_code: 'CF-RouteHostTaken'
     };
 
-    it('should toggle the "error" value of the route', function () {
+    it('should toggle the "error" value of the route', function() {
       const routeGuid = 'route-guid-zcvzxcv';
       const route = { guid: routeGuid };
       const err = testCFError;

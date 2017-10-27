@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import CountStatus from './count_status.jsx';
@@ -22,14 +21,21 @@ export default class ServiceCountStatus extends React.Component {
     let health = entityHealth.inactive;
 
     if (props.services.length) {
-      health = appInstanceHealth(worstAppInstanceState(
-	props.services.map(ServiceInstanceStore.getMappedAppState.bind(ServiceInstanceStore))
-      ));
+      health = appInstanceHealth(
+        worstAppInstanceState(
+          props.services.map(
+            ServiceInstanceStore.getMappedAppState.bind(ServiceInstanceStore)
+          )
+        )
+      );
     }
 
     return (
-      <CountStatus count={ props.serviceCount } name="services"
-        health={ health } iconType="service"
+      <CountStatus
+        count={props.serviceCount}
+        name="services"
+        health={health}
+        iconType="service"
       />
     );
   }

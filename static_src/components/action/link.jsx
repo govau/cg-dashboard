@@ -11,15 +11,16 @@ const propTypes = {
 };
 const defaultHref = '#';
 
-const Link = ({ className, label, href, clickHandler, children }) =>
+const Link = ({ className, label, href, clickHandler, children }) => (
   <a
-    className={ classnames(className, 'action-link') }
-    title={ label }
-    onClick={ clickHandler }
-    href={ href || defaultHref }
+    className={classnames(className, 'action-link')}
+    title={label}
+    onClick={clickHandler}
+    href={href || defaultHref}
   >
-    { children }
-  </a>;
+    {children}
+  </a>
+);
 
 Link.propTypes = propTypes;
 

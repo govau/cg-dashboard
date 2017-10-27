@@ -16,16 +16,21 @@ describe('<ServiceInstanceStore />', () => {
   beforeEach(() => {
     ServiceInstanceStore._data = Immutable.fromJS(instances);
     wrapper = shallow(<ServiceInstanceTable />);
-    wrapper.setState({
-      serviceInstances: ServiceInstanceStore.getAll(),
-      empty: false,
-      updating: true
-    }, () => wrapper.update());
+    wrapper.setState(
+      {
+        serviceInstances: ServiceInstanceStore.getAll(),
+        empty: false,
+        updating: true
+      },
+      () => wrapper.update()
+    );
   });
 
   describe('children', () => {
     it('renders a <ServiceInstanceTableRow /> for each service', () => {
-      expect(wrapper.find(ServiceInstanceTableRow).length).toBe(instances.length);
+      expect(wrapper.find(ServiceInstanceTableRow).length).toBe(
+        instances.length
+      );
     });
 
     it('passes the correct props', () => {

@@ -1,4 +1,3 @@
-
 function guidFromEntity(entity) {
   if (!entity) {
     throw new Error('Entity must be provided.');

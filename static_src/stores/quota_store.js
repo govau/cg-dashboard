@@ -1,4 +1,3 @@
-
 /*
  * Store for quota data.
  */
@@ -18,7 +17,6 @@ class QuotaStore extends BaseStore {
 
   _registerToActions(action) {
     switch (action.type) {
-
       case quotaActionTypes.ORGS_QUOTAS_FETCH: {
         this.load([cfApi.fetchOrgsQuotas()]);
         this.emitChange();
@@ -27,7 +25,7 @@ class QuotaStore extends BaseStore {
 
       case quotaActionTypes.ORGS_QUOTAS_RECEIVED: {
         const quotas = action.quotas;
-        this.mergeMany('guid', quotas, (changed) => {
+        this.mergeMany('guid', quotas, changed => {
           if (changed) this.emitChange();
         });
         break;
@@ -41,7 +39,7 @@ class QuotaStore extends BaseStore {
 
       case quotaActionTypes.SPACES_QUOTAS_RECEIVED: {
         const quotas = action.quotas;
-        this.mergeMany('guid', quotas, (changed) => {
+        this.mergeMany('guid', quotas, changed => {
           if (changed) this.emitChange();
         });
         break;

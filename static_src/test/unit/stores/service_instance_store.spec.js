@@ -1,4 +1,3 @@
-
 import '../../global_setup.js';
 
 import Immutable from 'immutable';
@@ -6,9 +5,7 @@ import Immutable from 'immutable';
 import AppDispatcher from '../../../dispatcher';
 import cfApi from '../../../util/cf_api';
 import ServiceInstanceStore from '../../../stores/service_instance_store';
-import {
-  SERVICE_INSTANCE_CREATE_ERROR_MAP
-} from '../../../stores/service_instance_store';
+import { SERVICE_INSTANCE_CREATE_ERROR_MAP } from '../../../stores/service_instance_store';
 import errorActions from '../../../actions/error_actions';
 import serviceActions from '../../../actions/service_actions';
 import { serviceActionTypes } from '../../../constants';
@@ -58,7 +55,7 @@ describe('ServiceInstanceStore', function() {
 
   describe('get createError()', function() {
     it('should return createError', function() {
-      var expected = {msg: 'adsf'};
+      var expected = { msg: 'adsf' };
       let actual = ServiceInstanceStore.createError;
 
       expect(actual).toBeFalsy();
@@ -80,7 +77,7 @@ describe('ServiceInstanceStore', function() {
         last_operation: {
           state: 'failed'
         }
-      }
+      };
       const actual = ServiceInstanceStore.getInstanceState(instance);
 
       expect(actual).toEqual('failed');
@@ -91,7 +88,7 @@ describe('ServiceInstanceStore', function() {
         last_operation: {
           type: 'delete'
         }
-      }
+      };
       const actual = ServiceInstanceStore.getInstanceState(instance);
 
       expect(actual).toEqual('deleting');
@@ -103,7 +100,7 @@ describe('ServiceInstanceStore', function() {
           type: 'create',
           state: 'success'
         }
-      }
+      };
       const actual = ServiceInstanceStore.getInstanceState(instance);
 
       expect(actual).toEqual('running');
@@ -112,7 +109,7 @@ describe('ServiceInstanceStore', function() {
 
   describe('getServiceBindingForApp()', function() {
     it('should return null if no service bindings', function() {
-      const instance = { serviceBindings: []};
+      const instance = { serviceBindings: [] };
 
       const actual = ServiceInstanceStore.getServiceBindingForApp('', instance);
 
@@ -124,26 +121,26 @@ describe('ServiceInstanceStore', function() {
       const binding = { guid: 'zcxv', app_guid: appGuid };
       const instance = { serviceBindings: [binding] };
 
-      const actual = ServiceInstanceStore.getServiceBindingForApp(appGuid,
-        instance);
+      const actual = ServiceInstanceStore.getServiceBindingForApp(
+        appGuid,
+        instance
+      );
 
       expect(actual).toEqual(binding);
     });
   });
 
   describe('isInstanceBound()', function() {
-    it('should return false if no service bindings on instance passed in',
-      function() {
-      const instance = { serviceBindings: []};
+    it('should return false if no service bindings on instance passed in', function() {
+      const instance = { serviceBindings: [] };
 
       const actual = ServiceInstanceStore.isInstanceBound(instance);
 
       expect(actual).toBeFalsy();
     });
 
-    it('should return false if none of bindings passed in found on instance',
-      function() {
-      const instance = { serviceBindings: [{ guid: 'adsf'}]};
+    it('should return false if none of bindings passed in found on instance', function() {
+      const instance = { serviceBindings: [{ guid: 'adsf' }] };
       const binding = { guid: '230984' };
       const bindings = [binding];
 
@@ -154,19 +151,18 @@ describe('ServiceInstanceStore', function() {
 
     it('should return true if bindings passed in found on instance', function() {
       const bindingGuid = 'zxklvcj234czxb';
-      const instance = { serviceBindings: [{ guid: bindingGuid}]};
+      const instance = { serviceBindings: [{ guid: bindingGuid }] };
       const binding = { guid: bindingGuid };
       const bindings = [binding];
 
       const actual = ServiceInstanceStore.isInstanceBound(instance, bindings);
 
       expect(actual).toBeTruthy();
-
     });
   });
 
-  describe('on service instances fetch', function () {
-    it('should be loading', function () {
+  describe('on service instances fetch', function() {
+    it('should be loading', function() {
       AppDispatcher.handleViewAction({
         type: serviceActionTypes.SERVICE_INSTANCES_FETCH,
         spaceGuid: 'fakeguid'
@@ -246,23 +242,27 @@ describe('ServiceInstanceStore', function() {
   });
 
   describe('on service instance create ui', () => {
-    it('should set createInstanceForm to object with service and plan from stores', (done) => {
+    it('should set createInstanceForm to object with service and plan from stores', done => {
       const expectedService = { guid: 'adsf3232222a' };
       const expectedServicePlan = { guid: 'zxvczvqe' };
 
       sandbox.stub(ServiceStore, 'get').returns(expectedService);
       sandbox.stub(ServicePlanStore, 'get').returns(expectedServicePlan);
-      sandbox.stub(serviceActions, 'createInstanceFormCancel').returns(Promise.resolve());
+      sandbox
+        .stub(serviceActions, 'createInstanceFormCancel')
+        .returns(Promise.resolve());
 
-      serviceActions.createInstanceForm('adfkjvnzxczv', 'aldsfjalqwe').then(() => {
-        const actual = ServiceInstanceStore.createInstanceForm;
+      serviceActions
+        .createInstanceForm('adfkjvnzxczv', 'aldsfjalqwe')
+        .then(() => {
+          const actual = ServiceInstanceStore.createInstanceForm;
 
-        expect(actual).toBeTruthy();
-        expect(actual.error).toBe(null);
-        expect(actual.service).toEqual(expectedService);
-        expect(actual.servicePlan).toEqual(expectedServicePlan);
-        done();
-      }, done);
+          expect(actual).toBeTruthy();
+          expect(actual.error).toBe(null);
+          expect(actual.service).toEqual(expectedService);
+          expect(actual.servicePlan).toEqual(expectedServicePlan);
+          done();
+        }, done);
     });
 
     it('should emit a change event', function() {
@@ -277,18 +277,22 @@ describe('ServiceInstanceStore', function() {
   describe('on service instance create', function() {
     it('should call an api method to create a service instance', function() {
       var spy = sandbox.spy(cfApi, 'createServiceInstance'),
-          expectedName = 'blah',
-          expectedSpaceGuid = 'q9208fhdasl',
-          expectedServicePlanGuid = 'a098fduadshf2';
+        expectedName = 'blah',
+        expectedSpaceGuid = 'q9208fhdasl',
+        expectedServicePlanGuid = 'a098fduadshf2';
 
       serviceActions.createInstance(
-          expectedName,
-          expectedSpaceGuid,
-          expectedServicePlanGuid);
+        expectedName,
+        expectedSpaceGuid,
+        expectedServicePlanGuid
+      );
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(expectedName, expectedSpaceGuid,
-                                       expectedServicePlanGuid);
+      expect(spy).toHaveBeenCalledWith(
+        expectedName,
+        expectedSpaceGuid,
+        expectedServicePlanGuid
+      );
     });
   });
 
@@ -326,21 +330,24 @@ describe('ServiceInstanceStore', function() {
       actual = ServiceInstanceStore._createInstanceForm.error;
 
       expect(actual).toEqual({
-        description: SERVICE_INSTANCE_CREATE_ERROR_MAP['CF-ServiceInstanceInvalid']
+        description:
+          SERVICE_INSTANCE_CREATE_ERROR_MAP['CF-ServiceInstanceInvalid']
       });
 
       serviceActions.errorCreateInstance(configError);
       actual = ServiceInstanceStore._createInstanceForm.error;
 
       expect(actual).toEqual({
-        description: SERVICE_INSTANCE_CREATE_ERROR_MAP['CF-ServiceBrokerBadResponse']
+        description:
+          SERVICE_INSTANCE_CREATE_ERROR_MAP['CF-ServiceBrokerBadResponse']
       });
 
       serviceActions.errorCreateInstance(dupeNameError);
       actual = ServiceInstanceStore._createInstanceForm.error;
 
       expect(actual).toEqual({
-        description: SERVICE_INSTANCE_CREATE_ERROR_MAP['CF-ServiceInstanceNameTaken']
+        description:
+          SERVICE_INSTANCE_CREATE_ERROR_MAP['CF-ServiceInstanceNameTaken']
       });
     });
 
@@ -353,8 +360,8 @@ describe('ServiceInstanceStore', function() {
     });
   });
 
-  describe('on service instance created', function () {
-    it('emits a change event', function () {
+  describe('on service instance created', function() {
+    it('emits a change event', function() {
       const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
 
       serviceActions.createdInstance({ guid: 'adsfavzxc' });
@@ -362,16 +369,15 @@ describe('ServiceInstanceStore', function() {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should set created temporary notification to true', function () {
-      serviceActions.createdInstance(
-        { guid: 'asdf9a8fasss', name: 'nameA' });
+    it('should set created temporary notification to true', function() {
+      serviceActions.createdInstance({ guid: 'asdf9a8fasss', name: 'nameA' });
 
       expect(ServiceInstanceStore.createdTempNotification).toBeTruthy();
     });
   });
 
-  describe('on service instance delete', function () {
-    it('should do nothing if the service isn\'t in data', function () {
+  describe('on service instance delete', function() {
+    it("should do nothing if the service isn't in data", function() {
       const spy = sandbox.spy(cfApi, 'deleteUnboundServiceInstance');
 
       AppDispatcher.handleViewAction({
@@ -401,7 +407,7 @@ describe('ServiceInstanceStore', function() {
 
       addServiceInstanceToStore(instanceGuid, ServiceInstanceStore);
 
-      serviceActions.deleteInstanceConfirm(instanceGuid);;
+      serviceActions.deleteInstanceConfirm(instanceGuid);
 
       expect(spy).toHaveBeenCalledOnce();
     });
@@ -410,7 +416,7 @@ describe('ServiceInstanceStore', function() {
       const instanceGuid = '2903fdkhgasd980';
 
       addServiceInstanceToStore(instanceGuid, ServiceInstanceStore);
-      serviceActions.deleteInstanceConfirm(instanceGuid);;
+      serviceActions.deleteInstanceConfirm(instanceGuid);
 
       const actual = ServiceInstanceStore.get(instanceGuid);
       expect(actual.confirmDelete).toBeTruthy();
@@ -422,10 +428,10 @@ describe('ServiceInstanceStore', function() {
       const instanceGuid = '2903fdkhzxcvzxcv';
 
       addServiceInstanceToStore(instanceGuid, ServiceInstanceStore);
-      serviceActions.deleteInstanceConfirm(instanceGuid);;
+      serviceActions.deleteInstanceConfirm(instanceGuid);
 
       const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
-      serviceActions.deleteInstanceCancel(instanceGuid);;
+      serviceActions.deleteInstanceCancel(instanceGuid);
 
       expect(spy).toHaveBeenCalledOnce();
     });
@@ -435,11 +441,11 @@ describe('ServiceInstanceStore', function() {
 
       addServiceInstanceToStore(instanceGuid, ServiceInstanceStore);
 
-      serviceActions.deleteInstanceConfirm(instanceGuid);;
+      serviceActions.deleteInstanceConfirm(instanceGuid);
       let actual = ServiceInstanceStore.get(instanceGuid);
       expect(actual.confirmDelete).toBeTruthy();
 
-      serviceActions.deleteInstanceCancel(instanceGuid);;
+      serviceActions.deleteInstanceCancel(instanceGuid);
       actual = ServiceInstanceStore.get(instanceGuid);
 
       expect(actual.confirmDelete).toBeFalsy();
@@ -507,7 +513,7 @@ describe('ServiceInstanceStore', function() {
       ServiceInstanceStore._data = Immutable.fromJS([testInstance]);
 
       const binding = {
-        guid: 'zxc' ,
+        guid: 'zxc',
         service_instance_guid: testGuid
       };
 
@@ -525,7 +531,7 @@ describe('ServiceInstanceStore', function() {
       const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
 
       const binding = {
-        guid: 'zxc' ,
+        guid: 'zxc',
         service_instance_guid: testGuid
       };
 
@@ -685,8 +691,10 @@ describe('ServiceInstanceStore', function() {
     it('should emit a change event', function() {
       const serviceInstanceGuid = 'zxvcadsf23bv';
       const instance = { guid: serviceInstanceGuid };
-      const binding = { guid: 'zxcvzxc',
-        service_instance_guid: serviceInstanceGuid };
+      const binding = {
+        guid: 'zxcvzxc',
+        service_instance_guid: serviceInstanceGuid
+      };
 
       ServiceInstanceStore.push(instance);
 
@@ -699,8 +707,10 @@ describe('ServiceInstanceStore', function() {
     it('should set loading to Binding', function() {
       const serviceInstanceGuid = 'zxvcadsf23bv';
       const instance = { guid: serviceInstanceGuid };
-      const binding = { guid: 'zxcvzxc',
-        service_instance_guid: serviceInstanceGuid };
+      const binding = {
+        guid: 'zxcvzxc',
+        service_instance_guid: serviceInstanceGuid
+      };
 
       ServiceInstanceStore.push(instance);
 

@@ -1,27 +1,13 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import iconImg from 'cloudgov-style/img/cloudgov-sprite.svg';
 
-const ICON_TYPES = [
-  'fill',
-  'stroke'
-];
+const ICON_TYPES = ['fill', 'stroke'];
 
-const ICON_SIZE = [
-  'small',
-  'medium',
-  'large'
-];
+const ICON_SIZE = ['small', 'medium', 'large'];
 
-const STYLE_TYPES = [
-  'alt',
-  'ok',
-  'inactive',
-  'error',
-  'default'
-];
+const STYLE_TYPES = ['alt', 'ok', 'inactive', 'error', 'default'];
 
 const propTypes = {
   children: PropTypes.node,
@@ -54,10 +40,10 @@ export default class Icon extends React.Component {
 
     return (
       <span>
-        <svg className={ classes }>
-          <use xlinkHref={ this.getImagePath(this.props.name) }>
-          </use>
-        </svg> { this.props.children }
+        <svg className={classes}>
+          <use xlinkHref={this.getImagePath(this.props.name)} />
+        </svg>{' '}
+        {this.props.children}
       </span>
     );
   }

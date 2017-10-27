@@ -1,4 +1,3 @@
-
 import AppDispatcher from '../dispatcher.js';
 import { pageActionTypes } from '../constants.js';
 

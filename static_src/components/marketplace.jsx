@@ -24,7 +24,7 @@ function stateSetter() {
     loading: loading,
     currentOrg: OrgStore.get(currentOrgGuid),
     createInstanceForm: ServiceInstanceStore.createInstanceForm,
-    services: ServiceStore.getAll().map((service) => {
+    services: ServiceStore.getAll().map(service => {
       const plan = ServicePlanStore.getAllFromService(service.guid);
       return { ...service, servicePlans: plan };
     })
@@ -62,13 +62,19 @@ export default class Marketplace extends React.Component {
     return (
       <PanelDocumentation description>
         <p>
-          Use this marketplace to create service instances for apps in this space. Then bind service instances to apps.
-          See <a href="https://cloud.gov/docs/services/">docs for these services</a>, and 
-          { config.docs.managed_services &&
+          Use this marketplace to create service instances for apps in this
+          space. Then bind service instances to apps. See{' '}
+          <a href="https://cloud.gov/docs/services/">
+            docs for these services
+          </a>, and
+          {config.docs.managed_services && (
             <span>
-              <a href={ config.docs.managed_services }> learn about using service instances</a>.
+              <a href={config.docs.managed_services}>
+                {' '}
+                learn about using service instances
+              </a>.
             </span>
-          }
+          )}
         </p>
       </PanelDocumentation>
     );
@@ -81,9 +87,9 @@ export default class Marketplace extends React.Component {
     if (state.createInstanceForm) {
       form = (
         <CreateServiceInstance
-          error={ state.createInstanceForm.error }
-          service={ state.createInstanceForm.service }
-          servicePlan={ state.createInstanceForm.servicePlan }
+          error={state.createInstanceForm.error}
+          service={state.createInstanceForm.service}
+          servicePlan={state.createInstanceForm.servicePlan}
         />
       );
     }
@@ -93,18 +99,14 @@ export default class Marketplace extends React.Component {
     if (!state.loading) {
       content = (
         <div>
-          { this.documentation }
-          <ServiceList services={ state.services } />
-          { form }
+          {this.documentation}
+          <ServiceList services={state.services} />
+          {form}
         </div>
       );
     }
 
-    return (
-      <div>
-        { content }
-      </div>
-    );
+    return <div>{content}</div>;
   }
 }
 

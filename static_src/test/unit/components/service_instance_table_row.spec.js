@@ -16,7 +16,9 @@ describe('<ServiceInstanceTableRow/>', () => {
   };
 
   it('renders a button to begin instance deletion process', () => {
-    const wrapper = shallow(<ServiceInstanceTableRow instance={ baseInstance } />);
+    const wrapper = shallow(
+      <ServiceInstanceTableRow instance={baseInstance} />
+    );
 
     expect(wrapper.find(Action).length).toBe(1);
   });
@@ -25,7 +27,7 @@ describe('<ServiceInstanceTableRow/>', () => {
     const instance = Object.assign({}, baseInstance, {
       confirmDelete: false
     });
-    const wrapper = shallow(<ServiceInstanceTableRow instance={ instance } />);
+    const wrapper = shallow(<ServiceInstanceTableRow instance={instance} />);
 
     expect(wrapper.find(ConfirmationBox).length).toBe(0);
   });
@@ -34,7 +36,7 @@ describe('<ServiceInstanceTableRow/>', () => {
     const instance = Object.assign({}, baseInstance, {
       confirmDelete: true
     });
-    const wrapper = shallow(<ServiceInstanceTableRow instance={ instance } />);
+    const wrapper = shallow(<ServiceInstanceTableRow instance={instance} />);
 
     expect(wrapper.find(ConfirmationBox).length).toBe(1);
   });
@@ -43,9 +45,11 @@ describe('<ServiceInstanceTableRow/>', () => {
     const props = {
       instance: baseInstance
     };
-    const wrapper = shallow(<ServiceInstanceTableRow { ...props } />);
+    const wrapper = shallow(<ServiceInstanceTableRow {...props} />);
 
-    expect(wrapper.find(Action).prop('clickHandler')).toEqual(wrapper.instance().handleBeginDelete);
+    expect(wrapper.find(Action).prop('clickHandler')).toEqual(
+      wrapper.instance().handleBeginDelete
+    );
   });
 
   it('supplies correct props to <ConfirmationBox/>', () => {
@@ -55,7 +59,7 @@ describe('<ServiceInstanceTableRow/>', () => {
         confirmDelete: true
       })
     };
-    const wrapper = shallow(<ServiceInstanceTableRow { ...props } />);
+    const wrapper = shallow(<ServiceInstanceTableRow {...props} />);
     const box = wrapper.find(ConfirmationBox);
     const component = wrapper.instance();
     const expectedProps = {

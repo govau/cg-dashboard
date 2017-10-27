@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -24,13 +23,13 @@ export default class EntityIcon extends React.Component {
 
     return (
       <Icon
-        name={ this.props.entity }
-        styleType={ statusClass }
-        iconSize={ this.props.iconSize }
+        name={this.props.entity}
+        styleType={statusClass}
+        iconSize={this.props.iconSize}
         iconType="fill"
-        bordered={ ['app', 'space', 'service'].includes(this.props.entity) }
+        bordered={['app', 'space', 'service'].includes(this.props.entity)}
       >
-        { this.props.children }
+        {this.props.children}
       </Icon>
     );
   }

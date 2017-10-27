@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -16,8 +15,8 @@ const defaultProps = {
 export default class PanelActions extends React.Component {
   render() {
     return (
-      <span className={ `panel-actions panel-actions-${this.props.align}` }>
-        { this.props.children }
+      <span className={`panel-actions panel-actions-${this.props.align}`}>
+        {this.props.children}
       </span>
     );
   }

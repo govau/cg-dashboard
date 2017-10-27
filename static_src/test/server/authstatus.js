@@ -4,10 +4,10 @@ module.exports = function authstatus(smocks) {
     label: 'Auth status', // label is optional
     path: '/v2/authstatus',
 
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       reply({
-        "status": "authorized"
-      })
+        status: 'authorized'
+      });
     }
-  })
+  });
 };

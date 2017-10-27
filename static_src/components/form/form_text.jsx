@@ -10,7 +10,7 @@ export default class FormText extends FormElement {
       return null;
     }
 
-    return <FormError message={ this.state.err.message } />;
+    return <FormError message={this.state.err.message} />;
   }
 
   render() {
@@ -20,15 +20,19 @@ export default class FormText extends FormElement {
     });
 
     // Spaces in label give a healthy space for inline forms
-    const label = <label htmlFor={ this.key }> { this.props.label } </label>;
+    const label = <label htmlFor={this.key}> {this.props.label} </label>;
     return (
-      <div className={ classes }>
-        { !this.props.labelAfter && label }
-        <input type="text" id={ this.key } value={ this.state.value }
-          onChange={ this.onChange } className={ this.classes }
+      <div className={classes}>
+        {!this.props.labelAfter && label}
+        <input
+          type="text"
+          id={this.key}
+          value={this.state.value}
+          onChange={this.onChange}
+          className={this.classes}
         />
-        { this.props.labelAfter && label }
-        { this.error }
+        {this.props.labelAfter && label}
+        {this.error}
       </div>
     );
   }

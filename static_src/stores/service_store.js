@@ -1,4 +1,3 @@
-
 /*
  * Store for services data. Will store and update services data on changes from
  * UI and server.
@@ -40,7 +39,6 @@ export class ServiceStore extends BaseStore {
 
       default:
         break;
-
     }
   }
 }

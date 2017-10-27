@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
@@ -26,11 +25,11 @@ export default class ExpandableBox extends React.Component {
     });
 
     return (
-      <div className={ classes }>
-        <div className="expandable_box-click" onClick={ this.props.clickHandler }>
-          { this.props.clickableContent }
+      <div className={classes}>
+        <div className="expandable_box-click" onClick={this.props.clickHandler}>
+          {this.props.clickableContent}
         </div>
-        { this.props.children }
+        {this.props.children}
       </div>
     );
   }

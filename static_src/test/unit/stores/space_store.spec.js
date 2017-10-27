@@ -1,4 +1,3 @@
-
 import '../../global_setup.js';
 
 import Immutable from 'immutable';
@@ -29,14 +28,12 @@ describe('SpaceStore', function() {
   });
 
   describe('on org actions org received', function() {
-    it('should include the org guid in the space', function () {
+    it('should include the org guid in the space', function() {
       var spaceGuid = 'spaceGuid';
       var orgGuid = 'orgGuid';
       var org = {
         guid: orgGuid,
-        spaces: [
-          { guid: spaceGuid }
-        ]
+        spaces: [{ guid: spaceGuid }]
       };
       var expected = {
         guid: spaceGuid,
@@ -68,7 +65,7 @@ describe('SpaceStore', function() {
       var spy = sandbox.spy(SpaceStore, 'emitChange');
       const testGuid = 'adfadsafdacxvx';
 
-      orgActions.receivedOrg({ guid: testGuid, spaces: [{}]});
+      orgActions.receivedOrg({ guid: testGuid, spaces: [{}] });
       orgActions.receivedOrg({ guid: testGuid });
 
       expect(spy).toHaveBeenCalledOnce();
@@ -89,8 +86,7 @@ describe('SpaceStore', function() {
       expect(stub).toHaveBeenCalledTwice();
     });
 
-    it('should emit a change from load call if there are spaces to be fetched',
-      () => {
+    it('should emit a change from load call if there are spaces to be fetched', () => {
       const orgGuid = '240jejxcb';
       SpaceStore.push({ guid: 'abc0', organization_guid: orgGuid });
 
@@ -104,9 +100,9 @@ describe('SpaceStore', function() {
   });
 
   describe('on space actions all spaces received', function() {
-    it('should call mergeMany with spaces from action', function () {
+    it('should call mergeMany with spaces from action', function() {
       const spy = sandbox.spy(SpaceStore, 'mergeMany');
-      const spaces = [{ guid: 'fake-guid-one' }]
+      const spaces = [{ guid: 'fake-guid-one' }];
       const res = spaces;
 
       spaceActions.receivedSpaces(res);
@@ -142,8 +138,7 @@ describe('SpaceStore', function() {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should should change the current space to the passed in guid',
-        function() {
+    it('should should change the current space to the passed in guid', function() {
       const spaceGuid = 'zcxvadsjfcvbnm';
 
       SpaceStore._currentSpaceGuid = 'adskfjxvb';

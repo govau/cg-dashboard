@@ -13,21 +13,28 @@ const propTypes = {
   servicePlans: PropTypes.array
 };
 
-const ServiceListItem = ({ guid, label, description, updatedAt, servicePlans }) =>
+const ServiceListItem = ({
+  guid,
+  label,
+  description,
+  updatedAt,
+  servicePlans
+}) => (
   <div className="panel-section">
     <ElasticLine>
       <ElasticLineItem>
         <h3 className="sans-s6">
-          <strong>{ label }</strong>
+          <strong>{label}</strong>
         </h3>
-        <span>{ description }</span>
+        <span>{description}</span>
       </ElasticLineItem>
       <ElasticLineItem align="end">
-        Updated { formatDateTime(updatedAt) }
+        Updated {formatDateTime(updatedAt)}
       </ElasticLineItem>
     </ElasticLine>
-    <ServicePlanList plans={ servicePlans } serviceGuid={ guid } />
-  </div>;
+    <ServicePlanList plans={servicePlans} serviceGuid={guid} />
+  </div>
+);
 
 ServiceListItem.propTypes = propTypes;
 

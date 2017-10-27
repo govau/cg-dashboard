@@ -26,7 +26,6 @@ import UPSIStore from '../stores/upsi_store';
 import UsageLimits from './usage_and_limits.jsx';
 import appActions from '../actions/app_actions.js';
 
-
 function appReady(app) {
   return !!app && !!app.name;
 }
@@ -39,15 +38,19 @@ function mapStoreToState() {
   const envUpdateError = EnvStore.getUpdateError(currentAppGuid);
   const space = SpaceStore.get(SpaceStore.currentSpaceGuid);
   const org = OrgStore.get(OrgStore.currentOrgGuid);
-  const upsisRequest = space ? UPSIStore.getAllForSpaceRequest(space.guid) : null;
+  const upsisRequest = space
+    ? UPSIStore.getAllForSpaceRequest(space.guid)
+    : null;
 
   if (app) {
-  // This depends on DomainStore
+    // This depends on DomainStore
     route = RouteStore.getRouteURLForApp(app);
   }
 
-  const quotaGuid = (space && space.space_quota_definition_guid) ||
-    (org && org.quota_definition_guid) || null;
+  const quotaGuid =
+    (space && space.space_quota_definition_guid) ||
+    (org && org.quota_definition_guid) ||
+    null;
 
   const quota = QuotaStore.get(quotaGuid);
 
@@ -119,12 +122,12 @@ export default class AppContainer extends React.Component {
     if (this.state.app.state === appStates.started) {
       // If the app is started, use the instance state
       worstState = worstAppInstanceState(
-	(this.state.app.app_instances || []).map(instance => instance.state)
+        (this.state.app.app_instances || []).map(instance => instance.state)
       );
     }
 
     if (worstState) {
-      label = <span className="usa-label">{ worstState }</span>;
+      label = <span className="usa-label">{worstState}</span>;
     }
 
     return label;
@@ -136,7 +139,7 @@ export default class AppContainer extends React.Component {
     return (
       <Action
         style="primary"
-        href={ `https://${route}` }
+        href={`https://${route}`}
         label="open app"
         type="outline"
       >
@@ -166,11 +169,11 @@ export default class AppContainer extends React.Component {
     const action = loading || (
       <Action
         style="primary"
-        clickHandler={ handler }
-        label={ actionText }
+        clickHandler={handler}
+        label={actionText}
         type="outline"
       >
-        <span>{ actionText }</span>
+        <span>{actionText}</span>
       </Action>
     );
 
@@ -181,9 +184,7 @@ export default class AppContainer extends React.Component {
     let error;
 
     if (this.state.app.error) {
-      error = (
-        <SystemErrorMessage error={ this.state.app.error } />
-      );
+      error = <SystemErrorMessage error={this.state.app.error} />;
     }
 
     return error;
@@ -192,7 +193,6 @@ export default class AppContainer extends React.Component {
   get logsDocumentation() {
     return <config.snippets.logs />;
   }
-
 
   render() {
     const {
@@ -205,12 +205,16 @@ export default class AppContainer extends React.Component {
     } = this.state;
 
     let loading = <Loading text="Loading app" />;
-    let content = <div>{ loading }</div>;
+    let content = <div>{loading}</div>;
     const title = (
       <span>
-       <EntityIcon entity="app" health={ appHealth(this.state.app) } iconSize="large" />
-       { this.state.app.name } { this.statusUI }
-     </span>
+        <EntityIcon
+          entity="app"
+          health={appHealth(this.state.app)}
+          iconSize="large"
+        />
+        {this.state.app.name} {this.statusUI}
+      </span>
     );
 
     if (this.state.empty) {
@@ -221,15 +225,15 @@ export default class AppContainer extends React.Component {
           <div className="grid">
             <div className="grid-width-12">
               <Breadcrumbs org={org} space={space} app={app} />
-              <PageHeader title={ title }>
-                { this.error }
-                { this.openApp }
-                { this.restart }
+              <PageHeader title={title}>
+                {this.error}
+                {this.openApp}
+                {this.restart}
               </PageHeader>
             </div>
           </div>
           <Panel title="Usage and allocation">
-            <UsageLimits app={ this.state.app } quota={ this.state.quota } />
+            <UsageLimits app={this.state.app} quota={this.state.quota} />
           </Panel>
 
           <Panel title="Routes">
@@ -240,12 +244,7 @@ export default class AppContainer extends React.Component {
             <ServiceInstancePanel />
           </Panel>
 
-          {upsisRequest && (
-            <UPSIPanel
-              app={app}
-              upsisRequest={upsisRequest}
-            />
-          )}
+          {upsisRequest && <UPSIPanel app={app} upsisRequest={upsisRequest} />}
 
           {envRequest && (
             <EnvPanel
@@ -256,19 +255,15 @@ export default class AppContainer extends React.Component {
           )}
 
           <Panel title="Recent activity">
-            { this.logsDocumentation }
+            {this.logsDocumentation}
             <ActivityLog />
           </Panel>
         </div>
       );
     }
 
-    return (
-      <div>
-        { content }
-      </div>
-    );
+    return <div>{content}</div>;
   }
 }
 
-AppContainer.propTypes = { };
+AppContainer.propTypes = {};

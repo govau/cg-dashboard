@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -18,9 +17,7 @@ export default class PanelGroup extends React.Component {
       gridClass = `grid-width-${this.props.columns}`;
     }
     return (
-      <div className={ `panel-group ${gridClass}` }>
-        { this.props.children }
-      </div>
+      <div className={`panel-group ${gridClass}`}>{this.props.children}</div>
     );
   }
 }

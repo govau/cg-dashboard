@@ -1,8 +1,12 @@
-
 import '../../global_setup.js';
 
 import AppDispatcher from '../../../dispatcher.js';
-import { assertAction, setupViewSpy, setupServerSpy, setupUISpy } from '../helpers.js';
+import {
+  assertAction,
+  setupViewSpy,
+  setupServerSpy,
+  setupUISpy
+} from '../helpers.js';
 import cfApi from '../../../util/cf_api.js';
 import quotaActions from '../../../actions/quota_actions.js';
 import { quotaActionTypes } from '../../../constants.js';
@@ -20,7 +24,7 @@ describe('quotaActions', function() {
 
   describe('fetchQuotasForAllOrgs()', function() {
     it('should dispatch a view event to get all organization quotas', function() {
-      let spy = setupViewSpy(sandbox)
+      let spy = setupViewSpy(sandbox);
 
       quotaActions.fetchQuotasForAllOrgs();
 
@@ -31,7 +35,7 @@ describe('quotaActions', function() {
   describe('receivedQuotasForAllOrgs()', function() {
     it('should dispatch a server event to process recieved organizations quotas', function() {
       let spy = setupServerSpy(sandbox);
-      let quotas = [ { guid: 'fake-quota-one' } ];
+      let quotas = [{ guid: 'fake-quota-one' }];
 
       quotaActions.receivedQuotasForAllOrgs(quotas);
 
@@ -41,7 +45,7 @@ describe('quotaActions', function() {
 
   describe('fetchQuotasForAllSpaces()', function() {
     it('should dispatch a view event to get all space quotas', function() {
-      let spy = setupViewSpy(sandbox)
+      let spy = setupViewSpy(sandbox);
 
       quotaActions.fetchQuotasForAllSpaces();
 
@@ -50,9 +54,9 @@ describe('quotaActions', function() {
   });
 
   describe('receivedQuotasForAllSpaces()', function() {
-    it('should dispatch a server event to process recieved spaces quotas', function () {
+    it('should dispatch a server event to process recieved spaces quotas', function() {
       let spy = setupServerSpy(sandbox);
-      let quotas = [ { guid: 'fake-quota-one' } ];
+      let quotas = [{ guid: 'fake-quota-one' }];
 
       quotaActions.receivedQuotasForAllSpaces(quotas);
 

@@ -77,64 +77,73 @@ export class Nav extends React.Component {
   }
 
   render() {
-    const mainList = "usa-sidenav-list sidenav-list sidenav-level-one";
-    const secondList = "usa-sidenav-sub_list sidenav-list sidenav-level-two";
-    const thirdList = "sidenav-list sidenav-level-three";
-    const downArrow = "menu-arrow sidenav-arrow sidenav-arrow-down";
-    const rightArrow = "menu-arrow sidenav-arrow sidenav-arrow-right";
-    const header = "sidenav-header";
-    const sortedOrgs = this.state.orgs.sort((a, b) => a.name < b.name ? -1 : 1);
+    const mainList = 'usa-sidenav-list sidenav-list sidenav-level-one';
+    const secondList = 'usa-sidenav-sub_list sidenav-list sidenav-level-two';
+    const thirdList = 'sidenav-list sidenav-level-three';
+    const downArrow = 'menu-arrow sidenav-arrow sidenav-arrow-down';
+    const rightArrow = 'menu-arrow sidenav-arrow sidenav-arrow-right';
+    const header = 'sidenav-header';
+    const sortedOrgs = this.state.orgs.sort(
+      (a, b) => (a.name < b.name ? -1 : 1)
+    );
 
     return (
       <div className="test-nav-primary">
-        <ul className={ mainList }>
+        <ul className={mainList}>
           <li key="overview" className="sidenav-entity">
-            <a href="/#" onClick={this._handleOverviewClick}>Overview</a>
+            <a href="/#" onClick={this._handleOverviewClick}>
+              Overview
+            </a>
           </li>
           <li key="organizations" className="sidenav-header">
-            <span className="sidenav-header-text">
-              Organizations</span>
+            <span className="sidenav-header-text">Organizations</span>
           </li>
-        { sortedOrgs.map((org) => {
-          let toggleSpaceHandler = this._toggleSpacesMenu.bind(this, org.guid);
-          let arrowClasses = (org.space_menu_open) ? downArrow : rightArrow;
-          let activeOrgClasses = (org.space_menu_open) ? 'sidenav-active' : '';
-          let subList = <div></div>;
-          const sortedSpaces = org.spaces.sort((a, b) => a.name < b.name ? -1 : 1);
-
-          if (org.space_menu_open) {
-            subList = (
-              <ul className={ secondList }>
-                <li>
-                  <a href={ this.orgHref(org) }>{ org.name } overview</a>
-                  <ul className={ thirdList }>
-                    { sortedSpaces.map((space) => {
-                      let activeSpaceClasses = (this.isCurrentSpace(space.guid)) ?
-                          'sidenav-active' : '';
-                      return (
-                        <li key={ space.guid } className={activeSpaceClasses}>
-                          <a href={ this.spaceHref(org, space.guid) }>
-                            <span>{ space.name }</span>
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </li>
-              </ul>
+          {sortedOrgs.map(org => {
+            let toggleSpaceHandler = this._toggleSpacesMenu.bind(
+              this,
+              org.guid
             );
-          }
+            let arrowClasses = org.space_menu_open ? downArrow : rightArrow;
+            let activeOrgClasses = org.space_menu_open ? 'sidenav-active' : '';
+            let subList = <div />;
+            const sortedSpaces = org.spaces.sort(
+              (a, b) => (a.name < b.name ? -1 : 1)
+            );
 
-          return (
-            <li key={ org.guid } className={ activeOrgClasses }>
-              <a href="#" onClick={ toggleSpaceHandler } >
-                <span>{ org.name }</span>
-                <span className={ arrowClasses }></span>
-              </a>
-              { subList }
-            </li>
-          );
-        })}
+            if (org.space_menu_open) {
+              subList = (
+                <ul className={secondList}>
+                  <li>
+                    <a href={this.orgHref(org)}>{org.name} overview</a>
+                    <ul className={thirdList}>
+                      {sortedSpaces.map(space => {
+                        let activeSpaceClasses = this.isCurrentSpace(space.guid)
+                          ? 'sidenav-active'
+                          : '';
+                        return (
+                          <li key={space.guid} className={activeSpaceClasses}>
+                            <a href={this.spaceHref(org, space.guid)}>
+                              <span>{space.name}</span>
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                </ul>
+              );
+            }
+
+            return (
+              <li key={org.guid} className={activeOrgClasses}>
+                <a href="#" onClick={toggleSpaceHandler}>
+                  <span>{org.name}</span>
+                  <span className={arrowClasses} />
+                </a>
+                {subList}
+              </li>
+            );
+          })}
         </ul>
       </div>
     );

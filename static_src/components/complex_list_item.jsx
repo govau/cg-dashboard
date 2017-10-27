@@ -9,11 +9,7 @@ const defaultProps = {};
 
 export default class ComplexListItem extends React.Component {
   render() {
-    return (
-      <div className="complex_list-item">
-        { this.props.children }
-      </div>
-    );
+    return <div className="complex_list-item">{this.props.children}</div>;
   }
 }
 

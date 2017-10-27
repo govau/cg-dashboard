@@ -1,16 +1,17 @@
-
 import '../../global_setup.js';
 
 import { trackAction, trackPageView } from '../../../util/analytics';
 
-describe('analytics helpers', function () {
-  describe('with GA loaded and on production', function () {
+describe('analytics helpers', function() {
+  describe('with GA loaded and on production', function() {
     var sandbox;
-    var window = (window) ? window : global;
+    var window = window ? window : global;
 
     beforeEach(() => {
       sandbox = sinon.sandbox.create();
-      window.ga = function() { return; }
+      window.ga = function() {
+        return;
+      };
     });
 
     afterEach(() => {
@@ -18,7 +19,7 @@ describe('analytics helpers', function () {
       delete window.ga;
     });
 
-    it('should track action with event', function () {
+    it('should track action with event', function() {
       var action = {
         source: 'test-source',
         type: 'test-type'
@@ -35,7 +36,7 @@ describe('analytics helpers', function () {
       expect(spy).toHaveBeenCalledWith('send', expected);
     });
 
-    it('should track page view with event', function () {
+    it('should track page view with event', function() {
       var url = 'fake/url/for/testing';
       var expected = {
         hitType: 'pageview',

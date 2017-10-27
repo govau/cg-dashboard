@@ -1,11 +1,14 @@
-
 /*
  * Store for services data. Will store and update services data on changes from
  * UI and server.
  */
 import AppDispatcher from '../dispatcher';
 import BaseStore from './base_store.js';
-import { appStates, serviceActionTypes, errorActionTypes } from '../constants.js';
+import {
+  appStates,
+  serviceActionTypes,
+  errorActionTypes
+} from '../constants.js';
 import ServiceStore from './service_store.js';
 import ServicePlanStore from './service_plan_store.js';
 
@@ -32,15 +35,18 @@ const APP_STATE_MAP = {
 };
 
 const SERVICE_INSTANCE_CREATE_ERROR_MAP = {
-  'CF-ServiceInstanceNameTaken': 'The service instance name is taken. Please use a unique name.',
+  'CF-ServiceInstanceNameTaken':
+    'The service instance name is taken. Please use a unique name.',
   'CF-ServiceInstanceInvalid': 'Invalid space selected.',
-  'CF-ServiceBrokerBadResponse': 'This service instance must be created using the CF CLI.' +
+  'CF-ServiceBrokerBadResponse':
+    'This service instance must be created using the CF CLI.' +
     ' Please refer to https://cloud.gov/docs/services/ for more information.',
   'CF-MessageParseError': 'One or more form fields are blank or invalid.'
 };
 
 const BINDING_ERROR_MAP = {
-  'CF-ServiceBindingAppServiceTaken': 'Service instance already bound to the current app',
+  'CF-ServiceBindingAppServiceTaken':
+    'Service instance already bound to the current app',
   'CF-BindingCannot': 'Cannot bind service instance.'
 };
 
@@ -93,8 +99,9 @@ export class ServiceInstanceStore extends BaseStore {
   }
 
   getAllBySpaceGuid(spaceGuid) {
-    return this.getAll().filter((serviceInstance) =>
-      serviceInstance.space_guid === spaceGuid);
+    return this.getAll().filter(
+      serviceInstance => serviceInstance.space_guid === spaceGuid
+    );
   }
 
   getInstanceState(serviceInstance) {
@@ -129,17 +136,17 @@ export class ServiceInstanceStore extends BaseStore {
 
   getServiceBindingForApp(appGuid, serviceInstance) {
     if (!serviceInstance.serviceBindings.length) return null;
-    return serviceInstance.serviceBindings.find((serviceBinding) =>
-      serviceBinding.app_guid === appGuid
+    return serviceInstance.serviceBindings.find(
+      serviceBinding => serviceBinding.app_guid === appGuid
     );
   }
 
   isInstanceBound(serviceInstance, serviceBindings) {
     if (!serviceInstance.serviceBindings.length) return false;
     let isBound = false;
-    serviceInstance.serviceBindings.forEach((instanceBinding) => {
-      isBound = serviceBindings.find((serviceBinding) =>
-        instanceBinding.guid === serviceBinding.guid
+    serviceInstance.serviceBindings.forEach(instanceBinding => {
+      isBound = serviceBindings.find(
+        serviceBinding => instanceBinding.guid === serviceBinding.guid
       );
     });
 
@@ -223,11 +230,18 @@ export class ServiceInstanceStore extends BaseStore {
       }
 
       case serviceActionTypes.SERVICE_INSTANCE_CREATE_ERROR: {
-        this._createInstanceForm = Object.assign({}, this._createInstanceForm || {}, {
-          error: {
-            description: getFriendlyError(action.error, SERVICE_INSTANCE_CREATE_ERROR_MAP)
+        this._createInstanceForm = Object.assign(
+          {},
+          this._createInstanceForm || {},
+          {
+            error: {
+              description: getFriendlyError(
+                action.error,
+                SERVICE_INSTANCE_CREATE_ERROR_MAP
+              )
+            }
           }
-        });
+        );
         this._createLoading = false;
 
         this.emitChange();
@@ -242,7 +256,7 @@ export class ServiceInstanceStore extends BaseStore {
             guid: action.serviceInstanceGuid,
             confirmDelete: true
           };
-          this.merge('guid', toConfirm, (changed) => {
+          this.merge('guid', toConfirm, changed => {
             if (changed) this.emitChange();
           });
         }
@@ -256,7 +270,7 @@ export class ServiceInstanceStore extends BaseStore {
             guid: action.serviceInstanceGuid,
             confirmDelete: false
           };
-          this.merge('guid', toConfirm, (changed) => {
+          this.merge('guid', toConfirm, changed => {
             if (changed) this.emitChange();
           });
         }
@@ -281,7 +295,9 @@ export class ServiceInstanceStore extends BaseStore {
       case serviceActionTypes.SERVICE_BIND: {
         const instance = this.get(action.serviceInstanceGuid);
         if (instance) {
-          const newInstance = Object.assign({}, instance, { loading: 'Binding' });
+          const newInstance = Object.assign({}, instance, {
+            loading: 'Binding'
+          });
           this.merge('guid', newInstance, () => this.emitChange());
         }
         break;
@@ -290,8 +306,9 @@ export class ServiceInstanceStore extends BaseStore {
       case serviceActionTypes.SERVICE_UNBIND: {
         const instance = this.get(action.serviceBinding.service_instance_guid);
         if (instance) {
-          const newInstance = Object.assign({}, instance,
-            { loading: 'Unbinding' });
+          const newInstance = Object.assign({}, instance, {
+            loading: 'Unbinding'
+          });
           this.merge('guid', newInstance, () => this.emitChange());
         }
         break;
@@ -350,15 +367,16 @@ export class ServiceInstanceStore extends BaseStore {
           loading: false
         });
 
-        this.merge('guid', newInstance, (changed) => {
+        this.merge('guid', newInstance, changed => {
           if (changed) this.emitChange();
         });
         break;
       }
 
       case errorActionTypes.CLEAR: {
-        const clearedInstances = this._data.filter((val) => val.has('error'))
-          .map((instance) => instance.update('error', () => null));
+        const clearedInstances = this._data
+          .filter(val => val.has('error'))
+          .map(instance => instance.update('error', () => null));
 
         this._createError = null;
         this.mergeMany('guid', clearedInstances, () => {
@@ -370,7 +388,6 @@ export class ServiceInstanceStore extends BaseStore {
 
       default:
         break;
-
     }
   }
 }
@@ -381,7 +398,4 @@ _ServiceInstanceStore.OPERATION_STATES = OPERATION_STATES;
 
 export default _ServiceInstanceStore;
 
-export {
-  SERVICE_INSTANCE_CREATE_ERROR_MAP,
-  BINDING_ERROR_MAP
-};
+export { SERVICE_INSTANCE_CREATE_ERROR_MAP, BINDING_ERROR_MAP };

@@ -26,9 +26,11 @@ describe('<CrashEventItem />', () => {
 
     Object.keys(descriptions).forEach(description => {
       const props = { exitDescription: description, exitStatus: status };
-      const wrapper = shallow(<CrashEventItem { ...props } />);
+      const wrapper = shallow(<CrashEventItem {...props} />);
 
-      expect(wrapper.text()).toBe(`${crashPrefix} ${descriptions[description]}`);
+      expect(wrapper.text()).toBe(
+        `${crashPrefix} ${descriptions[description]}`
+      );
     });
   });
 });

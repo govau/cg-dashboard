@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 /**
  * form.jsx
@@ -7,7 +6,6 @@ import PropTypes from 'prop-types';
  * in order to update FormFields in the FormStore and handle form submit
  * actions.
  **/
-
 
 import React from 'react';
 import classNames from 'classnames';
@@ -40,7 +38,6 @@ function stateSetter(props) {
   };
 }
 
-
 export default class Form extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +69,7 @@ export default class Form extends React.Component {
     e.preventDefault();
     // Only show error message after form was submitted
     const model = this.state.model;
-    const errors = Object.keys(model && model.fields || {})
+    const errors = Object.keys((model && model.fields) || {})
       .map(fieldName => model.fields[fieldName].error)
       .filter(error => !!error);
 
@@ -87,19 +84,21 @@ export default class Form extends React.Component {
     const classes = classNames(...this.props.classes);
 
     if (this.props.errorOverride) {
-      errorMsg = <FormError message={ this.props.errorOverride } />;
+      errorMsg = <FormError message={this.props.errorOverride} />;
     } else if (this.state.errors.length) {
       errorMsg = <FormError message="There were errors submitting the form." />;
     }
 
     return (
-      <form id={ this.props.guid } action={ this.props.action } method={ this.props.method }
-        onSubmit={ this._onSubmit } className={ classes }
+      <form
+        id={this.props.guid}
+        action={this.props.action}
+        method={this.props.method}
+        onSubmit={this._onSubmit}
+        className={classes}
       >
-        { errorMsg }
-        <fieldset>
-          { this.props.children }
-        </fieldset>
+        {errorMsg}
+        <fieldset>{this.props.children}</fieldset>
       </form>
     );
   }

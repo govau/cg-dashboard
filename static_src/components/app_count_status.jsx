@@ -25,8 +25,11 @@ export default class AppCountStatus extends React.Component {
     }
 
     return (
-      <CountStatus count={ props.appCount } name="apps"
-        health={ health } iconType="app"
+      <CountStatus
+        count={props.appCount}
+        name="apps"
+        health={health}
+        iconType="app"
       />
     );
   }

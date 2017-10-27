@@ -1,4 +1,3 @@
-
 import '../../global_setup.js';
 
 import appActions from '../../../actions/app_actions.js';
@@ -7,7 +6,7 @@ import cfApi from '../../../util/cf_api.js';
 import { AppStore as AppStoreClass } from '../../../stores/app_store.js';
 import { appActionTypes } from '../../../constants';
 
-describe('AppStore', function () {
+describe('AppStore', function() {
   let AppStore, sandbox;
 
   beforeEach(() => {
@@ -20,14 +19,14 @@ describe('AppStore', function () {
     sandbox.restore();
   });
 
-  describe('constructor()', function () {
-    it('should start data as empty array', function () {
+  describe('constructor()', function() {
+    it('should start data as empty array', function() {
       expect(AppStore.getAll()).toBeEmptyArray();
     });
   });
 
-  describe('on app fetch', function () {
-    it('should update fetch state', function () {
+  describe('on app fetch', function() {
+    it('should update fetch state', function() {
       const expectedGuid = 'adfasd.vdam;dksa';
 
       expect(AppStore._fetchApp).toBe(false);
@@ -41,8 +40,8 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app stats fetch', function () {
-    it('should update fetch state for app stats', function () {
+  describe('on app stats fetch', function() {
+    it('should update fetch state for app stats', function() {
       const expectedGuid = 'adfasddksazxcvzxcvz';
 
       expect(AppStore._fetchAppStats).toBe(false);
@@ -55,8 +54,8 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app all fetch', function () {
-    it('should fetch all of an app\'s information from api', function () {
+  describe('on app all fetch', function() {
+    it("should fetch all of an app's information from api", function() {
       const expectedGuid = 'adfasddksazxcvzxcvz';
 
       expect(AppStore._fetchAll).toBe(false);
@@ -70,8 +69,8 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app received', function () {
-    it('should update the fetch state to not loading', function () {
+  describe('on app received', function() {
+    it('should update the fetch state to not loading', function() {
       AppStore._fetchApp = true;
       expect(AppStore.loading).toBe(true);
       AppDispatcher.handleViewAction({
@@ -83,7 +82,7 @@ describe('AppStore', function () {
       expect(AppStore.loading).toBe(false);
     });
 
-    it('should emit a change event if data was updated', function () {
+    it('should emit a change event if data was updated', function() {
       const spy = sandbox.spy(AppStore, 'emitChange');
 
       AppDispatcher.handleViewAction({
@@ -94,7 +93,7 @@ describe('AppStore', function () {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should emit a change event even if data was not changed', function () {
+    it('should emit a change event even if data was not changed', function() {
       const app = { guid: 'asdf' };
 
       AppStore.push(app);
@@ -109,7 +108,7 @@ describe('AppStore', function () {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should merge app with existing app if it exists', function () {
+    it('should merge app with existing app if it exists', function() {
       const sharedGuid = 'cmadkljcsa';
 
       const existingApp = { guid: sharedGuid, name: 'adsfa' };
@@ -125,11 +124,14 @@ describe('AppStore', function () {
       });
 
       const actual = AppStore.get(sharedGuid);
-      expect(actual).toEqual({ guid: sharedGuid, name: 'adsfa',
-          instances: 2 });
+      expect(actual).toEqual({
+        guid: sharedGuid,
+        name: 'adsfa',
+        instances: 2
+      });
     });
 
-    it('should add app to data if it doesn\'t already exist', function () {
+    it("should add app to data if it doesn't already exist", function() {
       const expectedGuid = 'adcasdc',
         expected = { guid: expectedGuid, name: 'asdf' };
 
@@ -143,8 +145,8 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app all received', function () {
-    it('should emit change', function () {
+  describe('on app all received', function() {
+    it('should emit change', function() {
       const spy = sandbox.spy(AppStore, 'emitChange');
 
       AppStore._fetchAll = true;
@@ -160,8 +162,8 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app stats received', function () {
-    it('should update the fetch state to not loading', function () {
+  describe('on app stats received', function() {
+    it('should update the fetch state to not loading', function() {
       AppStore._fetchAppStats = true;
       AppDispatcher.handleViewAction({
         type: appActionTypes.APP_STATS_RECEIVED,
@@ -171,7 +173,7 @@ describe('AppStore', function () {
       expect(AppStore._fetchAppStats).toBe(false);
     });
 
-    it('should emit a change event if data was updated', function () {
+    it('should emit a change event if data was updated', function() {
       const sharedGuid = '2893hazxcmv';
 
       const existingApp = { guid: sharedGuid, name: 'asddd' };
@@ -188,7 +190,7 @@ describe('AppStore', function () {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should merge app stats with existing app if it exists', function () {
+    it('should merge app stats with existing app if it exists', function() {
       const sharedGuid = 'cmadkljcsa';
 
       const existingApp = { guid: sharedGuid, name: 'adsfa' };
@@ -207,13 +209,15 @@ describe('AppStore', function () {
       expect(actual).toEqual({
         guid: sharedGuid,
         name: 'adsfa',
-        app_instances: [{
-          stats: { mem_quota: 123543 }
-        }]
+        app_instances: [
+          {
+            stats: { mem_quota: 123543 }
+          }
+        ]
       });
     });
 
-    it('should create a new app if it doesn\'t already exist', function () {
+    it("should create a new app if it doesn't already exist", function() {
       const expectedGuid = 'adcasdcccsss',
         expected = { app_instances: [{ stats: { mem_quota: 12 } }] };
 
@@ -231,18 +235,19 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app change current', function () {
-    it('should set the current app guid to passed guid', function (done) {
+  describe('on app change current', function() {
+    it('should set the current app guid to passed guid', function(done) {
       const expectedGuid = 'aldfjvcczxcv';
 
-      appActions.changeCurrentApp(expectedGuid)
+      appActions
+        .changeCurrentApp(expectedGuid)
         .then(() => {
           expect(AppStore.currentAppGuid).toEqual(expectedGuid);
         })
         .then(done, done.fail);
     });
 
-    it('should emit a change event', function () {
+    it('should emit a change event', function() {
       const spy = sandbox.spy(AppStore, 'emitChange');
 
       appActions.changeCurrentApp('0');
@@ -251,8 +256,8 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app start', function () {
-    it('should set app "state" to "starting"', function () {
+  describe('on app start', function() {
+    it('should set app "state" to "starting"', function() {
       const appGuid = 'zkvkljsf';
       const app = { guid: appGuid, state: 'STOPPED' };
       AppStore.push(app);
@@ -263,7 +268,7 @@ describe('AppStore', function () {
       expect(actual.state).toEqual('STARTING');
     });
 
-    it('should emit a change', function () {
+    it('should emit a change', function() {
       const appGuid = 'zkvkljsf';
       const app = { guid: appGuid, state: 'STOPPED' };
       AppStore.push(app);
@@ -275,8 +280,8 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app restart', function () {
-    it('should set app "state" to "restarting"', function () {
+  describe('on app restart', function() {
+    it('should set app "state" to "restarting"', function() {
       const appGuid = 'zkvkljsf';
       const app = { guid: appGuid, state: 'RUNNING' };
       AppStore.push(app);
@@ -287,7 +292,7 @@ describe('AppStore', function () {
       expect(actual.state).toEqual('RESTARTING');
     });
 
-    it('should emit a change', function () {
+    it('should emit a change', function() {
       const appGuid = 'zkvkljsf';
       const app = { guid: appGuid, state: 'RUNNING' };
       AppStore.push(app);
@@ -299,16 +304,16 @@ describe('AppStore', function () {
     });
   });
 
-  describe('on app update', function () {
-    beforeEach(function () {
+  describe('on app update', function() {
+    beforeEach(function() {
       sandbox.stub(cfApi, 'putApp');
       AppStore.push({ guid: '1234', instances: 2, memory: 128 });
       appActions.updateApp('1234', { instances: 3 });
     });
   });
 
-  describe('on app error', function () {
-    it('should add an error property on the app with the error', function () {
+  describe('on app error', function() {
+    it('should add an error property on the app with the error', function() {
       const appGuid = 'zxcnv';
       const err = { status_code: 230894 };
       const app = { guid: appGuid };
@@ -321,13 +326,13 @@ describe('AppStore', function () {
       expect(actual.error).toEqual(err);
     });
 
-    it('should emit a change event', function () {
+    it('should emit a change event', function() {
       const appGuid = 'zx23423kljsf';
       const app = { guid: appGuid };
       AppStore.push(app);
       const spy = sandbox.spy(AppStore, 'emitChange');
 
-      appActions.error(appGuid, { });
+      appActions.error(appGuid, {});
 
       expect(spy).toHaveBeenCalledOnce();
     });

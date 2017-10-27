@@ -18,7 +18,7 @@ describe('routerActions', () => {
   describe('navigate()', () => {
     it('dispatches `NAVIGATE` action and passes a component and props', () => {
       const props = { some: 'data' };
-      const component = () => <div></div>;
+      const component = () => <div />;
       const expected = { component, props };
       const spy = setupViewSpy(sandbox);
 

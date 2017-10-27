@@ -20,7 +20,7 @@ describe('<ServicePlan />', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<ServicePlan { ...props } />);
+    wrapper = shallow(<ServicePlan {...props} />);
   });
 
   it('renders an action button for service instance creation', () => {
@@ -72,7 +72,7 @@ describe('with multi param plan', () => {
     for (let i = plans.length - 1; i >= 0; i--) {
       updatedProp = Object.assign(props);
       updatedProp.plan.name = plans[i];
-      wrapper = shallow(<ServicePlan { ...props } />);
+      wrapper = shallow(<ServicePlan {...props} />);
       button = wrapper.find(Action);
 
       expect(button.length).toBe(1);

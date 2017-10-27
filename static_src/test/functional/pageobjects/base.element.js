@@ -1,4 +1,3 @@
-
 // https://www.martinfowler.com/bliki/PageObject.html
 
 /**
@@ -22,7 +21,10 @@ export default class BaseElement {
       webElement = browser.element(webElementOrSelector);
     }
 
-    assert(webElement.value, `Element '${webElement.selector}' does not exist in the DOM.`);
+    assert(
+      webElement.value,
+      `Element '${webElement.selector}' does not exist in the DOM.`
+    );
     this.webElementId = webElement.value.ELEMENT;
   }
 

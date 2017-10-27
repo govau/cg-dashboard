@@ -23,7 +23,8 @@ function stateSetter() {
     currentOrgGuid: OrgStore.currentOrgGuid,
     currentSpaceGuid: SpaceStore.currentSpaceGuid,
     currentUser: UserStore.currentUser,
-    loading: SpaceStore.loading || OrgStore.loading || UserStore.isLoadingCurrentUser
+    loading:
+      SpaceStore.loading || OrgStore.loading || UserStore.isLoadingCurrentUser
   };
 }
 
@@ -75,49 +76,53 @@ export default class SpaceContainer extends React.Component {
 
     const { currentOrg: org, space } = this.state;
 
-    let main = <div></div>;
+    let main = <div />;
     const title = (
       <span>
-        <EntityIcon entity="space" iconSize="large" /> { space.name }
+        <EntityIcon entity="space" iconSize="large" /> {space.name}
       </span>
     );
 
     if (space && space.guid) {
       main = (
-      <div>
-        <div className="grid">
-          <div className="grid-width-12">
-            <Breadcrumbs org={org} space={space} />
-            <PageHeader title={ title } />
-          </div>
-        </div>
-        <Panel title="">
-          <div className="grid panel-overview-header">
-            <div className="grid-width-8">
-              <h1 className="panel-title">Space overview</h1>
+        <div>
+          <div className="grid">
+            <div className="grid-width-12">
+              <Breadcrumbs org={org} space={space} />
+              <PageHeader title={title} />
             </div>
-            <div className="grid-width-4">
-              <div className="count_status_container">
-                <AppCountStatus apps={ space.apps } appCount={ space.apps && space.apps.length } />
-                <ServiceCountStatus services={ space.services }
-                  serviceCount={ space.services && space.services.length }
-                />
+          </div>
+          <Panel title="">
+            <div className="grid panel-overview-header">
+              <div className="grid-width-8">
+                <h1 className="panel-title">Space overview</h1>
+              </div>
+              <div className="grid-width-4">
+                <div className="count_status_container">
+                  <AppCountStatus
+                    apps={space.apps}
+                    appCount={space.apps && space.apps.length}
+                  />
+                  <ServiceCountStatus
+                    services={space.services}
+                    serviceCount={space.services && space.services.length}
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <AppList />
-        </Panel>
-        <Panel title="Service instances">
-          <ServiceInstanceTable />
-        </Panel>
-        <Panel title="Marketplace">
-          <Marketplace />
-        </Panel>
-        <Panel title="Space users">
-          <Users />
-        </Panel>
-      </div>
+            <AppList />
+          </Panel>
+          <Panel title="Service instances">
+            <ServiceInstanceTable />
+          </Panel>
+          <Panel title="Marketplace">
+            <Marketplace />
+          </Panel>
+          <Panel title="Space users">
+            <Users />
+          </Panel>
+        </div>
       );
     }
 

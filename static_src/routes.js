@@ -36,19 +36,17 @@ export function overview(next) {
 
   Promise.all([
     orgActions.fetchAll(),
-    spaceActions.fetchAll()
-      .then(spaces => {
-        let i = 0;
-        const max = Math.min(MAX_OVERVIEW_SPACES, spaces.length);
-        const fetches = [];
-        for (; i < max; i++) {
-          fetches.push(spaceActions.fetch(spaces[i].guid));
-        }
+    spaceActions.fetchAll().then(spaces => {
+      let i = 0;
+      const max = Math.min(MAX_OVERVIEW_SPACES, spaces.length);
+      const fetches = [];
+      for (; i < max; i++) {
+        fetches.push(spaceActions.fetch(spaces[i].guid));
+      }
 
-        return Promise.all(fetches);
-      })
-  ])
-  .then(pageActions.loadSuccess, pageActions.loadError);
+      return Promise.all(fetches);
+    })
+  ]).then(pageActions.loadSuccess, pageActions.loadError);
   routerActions.navigate(Overview);
   next();
 }
@@ -98,7 +96,7 @@ export function app(orgGuid, spaceGuid, appGuid, next) {
   activityActions.fetchAppLogs(appGuid);
   quotaActions.fetchAll();
   appActions.changeCurrentApp(appGuid);
-  appActions.fetch(appGuid).then((res) => {
+  appActions.fetch(appGuid).then(res => {
     // Only fetch app stats when the app is running, otherwise the stats
     // request will fail.
     if (appHealth(res) === entityHealth.ok) {

@@ -52,7 +52,9 @@ describe('<Users />', () => {
         beforeEach(() => {
           const stub = sinon.stub(UserStore, 'hasRole');
           stub.withArgs(userGuid, sinon.match.any, 'org_manager').returns(true);
-          stub.withArgs(userGuid, sinon.match.any, 'space_manager').returns(false);
+          stub
+            .withArgs(userGuid, sinon.match.any, 'space_manager')
+            .returns(false);
           users = shallow(<Users />);
           users.setState({ currentType: 'org_users' });
         });
@@ -88,7 +90,9 @@ describe('<Users />', () => {
           users = shallow(<Users />);
           users.setState({ currentType: 'org_users' });
           const stub = sinon.stub(UserStore, 'hasRole');
-          stub.withArgs(userGuid, sinon.match.any, sinon.match.any).returns(false);
+          stub
+            .withArgs(userGuid, sinon.match.any, sinon.match.any)
+            .returns(false);
         });
 
         afterEach(() => {
@@ -97,10 +101,11 @@ describe('<Users />', () => {
 
         it('renders message telling user to ask an org manager to add users', () => {
           expect(users.find(PanelDocumentation).length).toBe(1);
-          expect(users.find(PanelDocumentation).prop('children'))
-            .toEqual('Only an Org Manager can new invite users to this ' +
-            'organization via the dashboard. Speak to your Org Manager if ' +
-            'you need to add a user to this organization');
+          expect(users.find(PanelDocumentation).prop('children')).toEqual(
+            'Only an Org Manager can new invite users to this ' +
+              'organization via the dashboard. Speak to your Org Manager if ' +
+              'you need to add a user to this organization'
+          );
         });
 
         it('should not render a <UsersSelector />', () => {
@@ -127,7 +132,9 @@ describe('<Users />', () => {
         beforeEach(() => {
           const stub = sinon.stub(UserStore, 'hasRole');
           stub.withArgs(userGuid, sinon.match.any, 'org_manager').returns(true);
-          stub.withArgs(userGuid, sinon.match.any, 'space_manager').returns(false);
+          stub
+            .withArgs(userGuid, sinon.match.any, 'space_manager')
+            .returns(false);
           users = shallow(<Users />);
         });
 
@@ -157,8 +164,12 @@ describe('<Users />', () => {
           UserStore._data = Immutable.fromJS([spaceUser]);
           users = shallow(<Users />);
           const stub = sinon.stub(UserStore, 'hasRole');
-          stub.withArgs(userGuid, sinon.match.any, 'org_manager').returns(false);
-          stub.withArgs(userGuid, sinon.match.any, 'space_manager').returns(false);
+          stub
+            .withArgs(userGuid, sinon.match.any, 'org_manager')
+            .returns(false);
+          stub
+            .withArgs(userGuid, sinon.match.any, 'space_manager')
+            .returns(false);
         });
 
         afterEach(() => {
@@ -175,9 +186,10 @@ describe('<Users />', () => {
 
         it('should render a <PanelDocumentation />', () => {
           expect(users.find(PanelDocumentation).length).toBe(1);
-          expect(users.find(PanelDocumentation).prop('children'))
-            .toEqual('If you wish to invite users into this space, please ask ' +
-            'an Org Manager or a Space Manager');
+          expect(users.find(PanelDocumentation).prop('children')).toEqual(
+            'If you wish to invite users into this space, please ask ' +
+              'an Org Manager or a Space Manager'
+          );
         });
       });
 
@@ -191,7 +203,9 @@ describe('<Users />', () => {
           users = shallow(<Users />);
           const stub = sinon.stub(UserStore, 'hasRole');
           stub.withArgs(userGuid, sinon.match.any, 'org_manager').returns(true);
-          stub.withArgs(userGuid, sinon.match.any, 'space_manager').returns(false);
+          stub
+            .withArgs(userGuid, sinon.match.any, 'space_manager')
+            .returns(false);
         });
 
         afterEach(() => {
@@ -208,10 +222,11 @@ describe('<Users />', () => {
 
         it('should show a <PanelDocumentation />', () => {
           expect(users.find(PanelDocumentation).length).toBe(1);
-          expect(users.find(PanelDocumentation).prop('children'))
-            .toEqual('As an Space Manager, you can invite existing organization ' +
-            'users into your space. If you wish to invite a person who is not in ' +
-            'the organization into your space, please ask an Org Manager');
+          expect(users.find(PanelDocumentation).prop('children')).toEqual(
+            'As an Space Manager, you can invite existing organization ' +
+              'users into your space. If you wish to invite a person who is not in ' +
+              'the organization into your space, please ask an Org Manager'
+          );
         });
       });
     });

@@ -11,7 +11,7 @@ describe('<LogItem />', () => {
   it('renders its props as a message to the user', () => {
     const url = 'https://great-url.biz';
     const code = 200;
-    const wrapper = shallow(<LogItem statusCode={ code } requestedUrl={ url } />);
+    const wrapper = shallow(<LogItem statusCode={code} requestedUrl={url} />);
 
     expect(wrapper.text()).toBe(`${code} ${url}`);
   });

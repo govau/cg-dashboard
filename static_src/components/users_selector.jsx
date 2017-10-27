@@ -50,7 +50,13 @@ export default class UsersSelector extends React.Component {
     const role = SPACE_AUDITOR_NAME;
     if (values.userGuid) {
       const userGuid = values.userGuid.value;
-      userActions.addUserRoles(role, userRole, userGuid, currentEntityGuid, currentEntity);
+      userActions.addUserRoles(
+        role,
+        userRole,
+        userGuid,
+        currentEntityGuid,
+        currentEntity
+      );
     }
   }
 
@@ -63,9 +69,10 @@ export default class UsersSelector extends React.Component {
 
   get userSelector() {
     const { parentEntityUsers } = this.props;
-    const orgUsers = parentEntityUsers.map((user) =>
-      ({ value: user.guid, label: user.username })
-    );
+    const orgUsers = parentEntityUsers.map(user => ({
+      value: user.guid,
+      label: user.username
+    }));
 
     if (!orgUsers) {
       return null;
@@ -73,12 +80,12 @@ export default class UsersSelector extends React.Component {
 
     return (
       <FormSelect
-        formGuid={ USERS_SELECTOR_GUID }
-        classes={ ['test-users-selector-field'] }
+        formGuid={USERS_SELECTOR_GUID}
+        classes={['test-users-selector-field']}
         label="Username"
         name="userGuid"
-        options={ orgUsers }
-        validator={ this.validateString }
+        options={orgUsers}
+        validator={this.validateString}
       />
     );
   }
@@ -94,27 +101,22 @@ export default class UsersSelector extends React.Component {
     return (
       <div className="test-users-selector">
         <PanelDocumentation description>
-          <p>{ this.invitationMessage }</p>
+          <p>{this.invitationMessage}</p>
         </PanelDocumentation>
         <Form
-          guid={ USERS_SELECTOR_GUID }
-          classes={ ['users_selector'] }
+          guid={USERS_SELECTOR_GUID}
+          classes={['users_selector']}
           ref="form"
-          onSubmit={ this._onSubmitForm }
+          onSubmit={this._onSubmitForm}
         >
-          { this.userSelector }
-          <Action
-            label="submit"
-            type="submit"
-            disabled={ usersSelectorDisabled }
-          >
-            Add user to this { currentEntity }
+          {this.userSelector}
+          <Action label="submit" type="submit" disabled={usersSelectorDisabled}>
+            Add user to this {currentEntity}
           </Action>
         </Form>
       </div>
     );
   }
-
 }
 
 UsersSelector.propTypes = propTypes;

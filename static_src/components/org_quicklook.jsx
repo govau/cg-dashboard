@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import AppCountStatus from './app_count_status.jsx';
@@ -69,9 +68,13 @@ export default class OrgQuicklook extends React.Component {
       return <h4>No spaces in this organization</h4>;
     }
 
-    return this.props.spaces.map(space =>
-      <SpaceQuicklook space={ space } orgGuid={ this.props.org.guid } key={ space.guid } />
-    );
+    return this.props.spaces.map(space => (
+      <SpaceQuicklook
+        space={space}
+        orgGuid={this.props.org.guid}
+        key={space.guid}
+      />
+    ));
   }
 
   render() {
@@ -80,31 +83,35 @@ export default class OrgQuicklook extends React.Component {
 
     return (
       <ExpandableBox
-        clickHandler={ this.onRowClick }
-        isExpanded={ expand }
+        clickHandler={this.onRowClick}
+        isExpanded={expand}
         classes={['test-org-quicklook']}
-        clickableContent={(
+        clickableContent={
           <ElasticLine>
             <ElasticLineItem>
               <h2 className="card-title-primary">
                 <EntityIcon entity="org" iconSize="medium" />
-                <a onClick={ this.onOrgClick } className="test-org-quicklook-title">
-                  { props.org.name }
+                <a
+                  onClick={this.onOrgClick}
+                  className="test-org-quicklook-title"
+                >
+                  {props.org.name}
                 </a>
               </h2>
             </ElasticLineItem>
             <ElasticLineItem align="end">
               <div className="count_status_container">
-                <SpaceCountStatus spaces={ props.org.spaces } />
-                <AppCountStatus appCount={ this.totalAppCount(props.org.spaces) }
-                  apps={ this.allApps() }
+                <SpaceCountStatus spaces={props.org.spaces} />
+                <AppCountStatus
+                  appCount={this.totalAppCount(props.org.spaces)}
+                  apps={this.allApps()}
                 />
               </div>
             </ElasticLineItem>
           </ElasticLine>
-        )}
+        }
       >
-        { this.spacesContent }
+        {this.spacesContent}
       </ExpandableBox>
     );
   }

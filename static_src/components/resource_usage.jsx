@@ -48,14 +48,15 @@ export default class ResourceUsage extends React.Component {
     };
 
     if (props.amountUsed && props.amountTotal) {
-      properties = { ...properties,
+      properties = {
+        ...properties,
         primaryStat: props.amountUsed,
         secondaryInfo: <span>{this.available()} available</span>,
         statState: this.statState(props.amountUsed, props.amountTotal)
       };
     }
 
-    return <Stat { ...properties } />;
+    return <Stat {...properties} />;
   }
 }
 

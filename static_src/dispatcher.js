@@ -1,4 +1,3 @@
-
 import { Dispatcher } from 'flux';
 
 import { trackAction } from './util/analytics';

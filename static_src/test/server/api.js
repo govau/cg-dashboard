@@ -1,4 +1,3 @@
-
 var anyEvents = require('./fixtures/events');
 var appRoutes = require('./fixtures/app_routes.js');
 var appSummaries = require('./fixtures/app_summaries');
@@ -46,11 +45,10 @@ function MultiResponse(responses) {
     prev_url: null,
     next_url: null,
     resources: responses
-  }
+  };
 }
 
 module.exports = function api(smocks) {
-
   smocks.route({
     id: 'uaa-uaainfo-no-uaa-permissions',
     label: 'UAA user info fake-personb - no special UAA permissions',
@@ -58,7 +56,7 @@ module.exports = function api(smocks) {
     handler: function(req, reply) {
       // 'cca7537f-601d-48c4-9705-4583ba54ea4c' == "cloud_controller.admin"
       // 'bba7537f-601d-48c4-9705-4583ba54ea4b' != "cloud_controller.admin"
-      if (req.query.uaa_guid == 'cca7537f-601d-48c4-9705-4583ba54ea4c'){
+      if (req.query.uaa_guid == 'cca7537f-601d-48c4-9705-4583ba54ea4c') {
         // UAA user with admin permissions
         // Noted in groups: []
         reply(uaaRoles['uaa_admin']);
@@ -76,7 +74,10 @@ module.exports = function api(smocks) {
     path: '/uaa/userinfo',
     handler: function(req, reply) {
       let userRoleObject;
-      if(req.state['testing_user_role'] && userRoles[req.state['testing_user_role']]){
+      if (
+        req.state['testing_user_role'] &&
+        userRoles[req.state['testing_user_role']]
+      ) {
         userRoleObject = userRoles[req.state['testing_user_role']];
       } else {
         userRoleObject = userRoles['default'];
@@ -95,11 +96,11 @@ module.exports = function api(smocks) {
     handler: function(req, reply) {
       let userInviteResponse;
       const email = req.payload.email;
-      if (email && userInviteResponses[email]){
+      if (email && userInviteResponses[email]) {
         userInviteResponse = userInviteResponses[email];
         reply(userInviteResponse);
       } else if (!email.length || !/(.+)@(.+){2,}\.(.+){2,}/.test(email)) {
-        reply({ message: 'Invalid email'}).code(500);
+        reply({ message: 'Invalid email' }).code(500);
       } else {
         userInviteResponse = userInviteResponses['default'];
         reply(userInviteResponse);
@@ -111,7 +112,7 @@ module.exports = function api(smocks) {
     id: 'app-routes',
     label: 'App routes',
     path: `${BASE_URL}/apps/{guid}/routes`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const routes = appRoutes;
       reply(MultiResponse(routes));
@@ -122,7 +123,7 @@ module.exports = function api(smocks) {
     id: 'app-summary',
     label: 'App summary',
     path: `${BASE_URL}/apps/{guid}/summary`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const app = appSummaries.find(function(app) {
         return app.guid === guid;
@@ -135,13 +136,13 @@ module.exports = function api(smocks) {
     id: 'app-stats',
     label: 'App stats',
     path: `${BASE_URL}/apps/{guid}/stats`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const appStat = appStats.find(function(app) {
         return app.guid === guid;
       });
       if (guid === '3c37ff32-d954-4f9f-b730-15e22442fd82') {
-        reply({ message: 'There is a problem with the server'}).code(503);
+        reply({ message: 'There is a problem with the server' }).code(503);
       } else {
         reply(SingleResponse(appStat));
       }
@@ -152,7 +153,7 @@ module.exports = function api(smocks) {
     id: 'organizations',
     label: 'Organizations',
     path: `${BASE_URL}/organizations`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       if (ENV_NO_ORGS) {
         reply(MultiResponse([]));
       } else {
@@ -165,7 +166,7 @@ module.exports = function api(smocks) {
     id: 'organization',
     label: 'Organization',
     path: `${BASE_URL}/organizations/{guid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const org = organizations.find(function(organization) {
         return organization.metadata.guid === guid;
@@ -178,7 +179,7 @@ module.exports = function api(smocks) {
     id: 'organizations-services',
     label: 'Organizations services',
     path: `${BASE_URL}/organizations/{guid}/services`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       reply(MultiResponse(services));
     }
   });
@@ -187,9 +188,11 @@ module.exports = function api(smocks) {
     id: 'organizations-summary',
     label: 'Organization Summary',
     path: `${BASE_URL}/organizations/{guid}/summary`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
-      const organization = organizationSummaries.find(function(organizationSummary) {
+      const organization = organizationSummaries.find(function(
+        organizationSummary
+      ) {
         return organizationSummary.guid === guid;
       });
       reply(SingleResponse(organization));
@@ -200,7 +203,7 @@ module.exports = function api(smocks) {
     id: 'organization-memory-usage',
     label: 'Organization memory usage',
     path: `${BASE_URL}/organizations/{guid}/memory_usage`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       reply(SingleResponse(organizationMemoryUsage));
     }
   });
@@ -209,7 +212,7 @@ module.exports = function api(smocks) {
     id: 'organization-quota-definitions',
     label: 'Organization quota definitions',
     path: `${BASE_URL}/quota_definitions/{guid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const quota = organizationQuotaDefinitions.find(function(orgQuota) {
         return orgQuota.metadata.guid === guid;
@@ -222,7 +225,7 @@ module.exports = function api(smocks) {
     id: 'organization-users',
     label: 'Organization users',
     path: `${BASE_URL}/organizations/{guid}/users`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       if (ENV_NO_ORG_USERS) {
         reply(MultiResponse([organizationUsers[0]]));
       } else {
@@ -235,10 +238,11 @@ module.exports = function api(smocks) {
     id: 'user',
     label: 'User',
     path: `${BASE_URL}/users/{guid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
-      let user = organizationUsers.find((orgUser) =>
-        orgUser.metadata.guid === guid);
+      let user = organizationUsers.find(
+        orgUser => orgUser.metadata.guid === guid
+      );
       if (!user) {
         for (const userName in userInviteResponses) {
           const invite = userInviteResponses[userName];
@@ -250,7 +254,7 @@ module.exports = function api(smocks) {
               entity: {
                 username: userName
               }
-            }
+            };
           }
         }
       }
@@ -258,7 +262,7 @@ module.exports = function api(smocks) {
       if (user) {
         reply(SingleResponse(user));
       } else {
-        reply({ message: 'User not found'}).code(400);
+        reply({ message: 'User not found' }).code(400);
       }
     }
   });
@@ -270,7 +274,7 @@ module.exports = function api(smocks) {
     handler: function(req, reply) {
       const guid = req.params.guid;
       let userOrgFlag = 'default';
-      if(userOrganizations[guid]){
+      if (userOrganizations[guid]) {
         userOrgFlag = guid;
       }
       reply(MultiResponse(userOrganizations[userOrgFlag]));
@@ -285,7 +289,7 @@ module.exports = function api(smocks) {
     handler: function(req, reply) {
       let userCreateResponse;
       const guid = req.params.guid;
-      if ( guid && userAssociationResponses[guid] ){
+      if (guid && userAssociationResponses[guid]) {
         userCreateResponse = userAssociationResponses[guid];
       } else {
         userCreateResponse = userAssociationResponses['default'];
@@ -301,7 +305,7 @@ module.exports = function api(smocks) {
     handler: function(req, reply) {
       const guid = req.params.guid;
       let userSpaceFlag = 'default';
-      if(userSpaces[guid]){
+      if (userSpaces[guid]) {
         userSpaceFlag = guid;
       }
       reply(MultiResponse(userSpaces[userSpaceFlag]));
@@ -312,10 +316,10 @@ module.exports = function api(smocks) {
     id: 'organization-users-roles',
     label: 'Organization user roles',
     path: `${BASE_URL}/organizations/{guid}/user_roles`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       let orgResponseName;
       const guid = req.params.guid;
-      if ( organizationUserRoles[guid] ) {
+      if (organizationUserRoles[guid]) {
         orgResponseName = guid;
       } else {
         orgResponseName = 'default';
@@ -329,7 +333,7 @@ module.exports = function api(smocks) {
     label: 'User roles Org Add New role',
     method: 'PUT',
     path: `${BASE_URL}/organizations/{orgGuid}/{role}/{userGuid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const orgGuid = req.params.orgGuid;
       const role = req.params.role;
       const user = userRoleOrgAddNewRole(orgGuid);
@@ -351,7 +355,7 @@ module.exports = function api(smocks) {
     label: 'User roles Org Delete role',
     method: 'DELETE',
     path: `${BASE_URL}/organizations/{orgGuid}/{role}/{userGuid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const role = req.params.role;
       switch (role) {
         case 'managers':
@@ -370,7 +374,7 @@ module.exports = function api(smocks) {
     id: 'spaces',
     label: 'Spaces',
     path: `${BASE_URL}/spaces`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       if (ENV_NO_SPACES) {
         reply(MultiResponse([]));
       } else {
@@ -383,7 +387,7 @@ module.exports = function api(smocks) {
     id: 'space-events',
     label: 'Space events',
     path: `${BASE_URL}/spaces/{guid}/events`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const spaceEvents = anyEvents.filter(function(event) {
         return event.entity.space_guid === guid;
@@ -396,7 +400,7 @@ module.exports = function api(smocks) {
     id: 'space-service-instances',
     label: 'Space service instsances',
     path: `${BASE_URL}/spaces/{guid}/service_instances`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const instances = serviceInstances.filter(function(serviceInstance) {
         return serviceInstance.entity.space_guid === guid;
@@ -409,7 +413,7 @@ module.exports = function api(smocks) {
     id: 'space-routes',
     label: 'Space routes',
     path: `${BASE_URL}/spaces/{guid}/routes`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const routes = spaceRoutes.filter(function(spaceRoute) {
         return spaceRoute.entity.space_guid === guid;
@@ -422,7 +426,7 @@ module.exports = function api(smocks) {
     id: 'space-summary',
     label: 'Space summary',
     path: `${BASE_URL}/spaces/{guid}/summary`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const space = spaceSummaries.find(function(spaceSummary) {
         return spaceSummary.guid === guid;
@@ -438,7 +442,7 @@ module.exports = function api(smocks) {
     id: 'space-quota-definitions',
     label: 'Space quota definitions',
     path: `${BASE_URL}/space_quota_definitions`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       reply(MultiResponse(spaceQuotaDefinitions));
     }
   });
@@ -447,10 +451,10 @@ module.exports = function api(smocks) {
     id: 'space-user-roles',
     label: 'Space user roles',
     path: `${BASE_URL}/spaces/{guid}/user_roles`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       let spaceResponseName = 'default';
       const guid = req.params.guid;
-      if ( spaceUserRoles[guid] && !ENV_NO_SPACE_USERS ) {
+      if (spaceUserRoles[guid] && !ENV_NO_SPACE_USERS) {
         spaceResponseName = guid;
       }
       reply(MultiResponse(spaceUserRoles[spaceResponseName]));
@@ -462,7 +466,7 @@ module.exports = function api(smocks) {
     label: 'User roles Space Add New role',
     method: 'PUT',
     path: `${BASE_URL}/spaces/{spaceGuid}/{role}/{userGuid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const role = req.params.role;
       switch (role) {
         case 'managers':
@@ -482,7 +486,7 @@ module.exports = function api(smocks) {
     label: 'User roles Space Delete role',
     method: 'DELETE',
     path: `${BASE_URL}/spaces/{spaceGuid}/{role}/{userGuid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const role = req.params.role;
       switch (role) {
         case 'managers':
@@ -501,7 +505,7 @@ module.exports = function api(smocks) {
     id: 'service-bindings',
     label: 'Service bindings',
     path: `${BASE_URL}/service_bindings`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       reply(MultiResponse(serviceBindings));
     }
   });
@@ -510,7 +514,7 @@ module.exports = function api(smocks) {
     id: 'service-plans',
     label: 'Service plans',
     path: `${BASE_URL}/service_plans/{guid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const plan = servicePlans.find(function(servicePlan) {
         return servicePlan.metadata.guid === guid;
@@ -523,7 +527,7 @@ module.exports = function api(smocks) {
     id: 'service-service-plans',
     label: 'Service service plans',
     path: `${BASE_URL}/services/{guid}/service_plans`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const serviceGuid = req.params.guid;
       const plans = servicePlans.filter(function(servicePlan) {
         return servicePlan.entity.service_guid === serviceGuid;
@@ -536,7 +540,7 @@ module.exports = function api(smocks) {
     id: 'quota-definitions',
     label: 'Quota definitions',
     path: `${BASE_URL}/quota_definitions`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       // TODO should be renamed just quotaDefinitions?
       reply(MultiResponse(organizationQuotaDefinitions));
     }
@@ -546,7 +550,7 @@ module.exports = function api(smocks) {
     id: 'shared-domains',
     label: 'Shared domains',
     path: `${BASE_URL}/shared_domains/{guid}`,
-    handler: function (req, reply) {
+    handler: function(req, reply) {
       const guid = req.params.guid;
       const domain = sharedDomains.find(function(sharedDomain) {
         return sharedDomain.metadata.guid === guid;

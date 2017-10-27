@@ -1,4 +1,3 @@
-
 import BaseStore from './base_store.js';
 import { pageActionTypes } from '../constants.js';
 

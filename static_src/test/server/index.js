@@ -1,4 +1,3 @@
-
 import hapi from 'hapi';
 import inert from 'inert';
 import smocks from 'smocks';
@@ -35,10 +34,7 @@ export function start(...args) {
     pkg: require('../../../package.json')
   };
 
-  server.register([
-    inert,
-    smocksplugin
-  ]);
+  server.register([inert, smocksplugin]);
 
   // serve static assets
   server.route({
@@ -77,8 +73,10 @@ export function start(...args) {
       throw err;
     }
 
-    console.log( // eslint-disable-line no-console
-      `Started smocks server on ${server.info.port}. Visit ${server.info.uri}/_admin to configure.`
+    console.log(
+      // eslint-disable-line no-console
+      `Started smocks server on ${server.info.port}. Visit ${server.info
+        .uri}/_admin to configure.`
     );
   }
 

@@ -1,11 +1,9 @@
-
 /*
  * Store to hold and update login status.
  */
 
 import BaseStore from './base_store.js';
 import { loginActionTypes } from '../constants.js';
-
 
 // Babel doesn't like extending native types with `class`, so use prototype
 // inheritence.
@@ -19,14 +17,14 @@ export function LoginError(err) {
     this.description = `An error occurred while trying to check your authorization. You may need to
       login again. Error: ${err.message}`;
   } else {
-    this.description = 'An error occurred while trying to check your authorization. You may need ' +
+    this.description =
+      'An error occurred while trying to check your authorization. You may need ' +
       'to login again.';
   }
 }
 
 LoginError.prototype = Object.create(Error.prototype);
 LoginError.prototype.constructor = Error;
-
 
 export class LoginStore extends BaseStore {
   constructor() {

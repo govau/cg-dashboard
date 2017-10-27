@@ -6,7 +6,7 @@ import Action from '../../../components/action.jsx';
 import FormError from '../../../components/form/form_error.jsx';
 import { shallow } from 'enzyme';
 
-const wrapperFactory = (Component, props) => shallow(<Component { ...props } />);
+const wrapperFactory = (Component, props) => shallow(<Component {...props} />);
 
 describe('<ServiceInstance />', () => {
   describe('when service instance is not bound', () => {

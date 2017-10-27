@@ -1,8 +1,12 @@
-
 import '../../global_setup.js';
 
 import AppDispatcher from '../../../dispatcher.js';
-import { assertAction, setupViewSpy, setupServerSpy, setupUISpy } from '../helpers.js';
+import {
+  assertAction,
+  setupViewSpy,
+  setupServerSpy,
+  setupUISpy
+} from '../helpers.js';
 import cfApi from '../../../util/cf_api.js';
 import routeActions from '../../../actions/route_actions.js';
 import { routeActionTypes } from '../../../constants.js';
@@ -19,8 +23,7 @@ describe('routeActions', function() {
   });
 
   describe('associateApp()', function() {
-    it('should dispatch ROUTE_APP_ASSOCIATED view event & the app/route guids',
-    function () {
+    it('should dispatch ROUTE_APP_ASSOCIATED view event & the app/route guids', function() {
       const appGuid = 'fake-app-guid';
       const routeGuid = 'fake-route-guid';
       const expected = {
@@ -32,12 +35,11 @@ describe('routeActions', function() {
       routeActions.associateApp(routeGuid, appGuid);
 
       assertAction(spy, routeActionTypes.ROUTE_APP_ASSOCIATE, expected);
-    })
+    });
   });
 
   describe('associatedApp()', function() {
-    it('should dispatch ROUTE_APP_ASSOCIATED view event & the app/route guids',
-    function () {
+    it('should dispatch ROUTE_APP_ASSOCIATED view event & the app/route guids', function() {
       const appGuid = 'fake-app-guid';
       const routeGuid = 'fake-route-guid';
       const expected = {
@@ -49,12 +51,11 @@ describe('routeActions', function() {
       routeActions.associatedApp(routeGuid, appGuid);
 
       assertAction(spy, routeActionTypes.ROUTE_APP_ASSOCIATED, expected);
-    })
+    });
   });
 
   describe('unassociateApp()', function() {
-    it('should dispatch ROUTE_APP_UNASSOCIATE view event & the app/route guids',
-    function () {
+    it('should dispatch ROUTE_APP_UNASSOCIATE view event & the app/route guids', function() {
       const appGuid = 'fake-app-guid';
       const routeGuid = 'fake-route-guid';
       const expected = {
@@ -66,12 +67,11 @@ describe('routeActions', function() {
       routeActions.unassociateApp(routeGuid, appGuid);
 
       assertAction(spy, routeActionTypes.ROUTE_APP_UNASSOCIATE, expected);
-    })
+    });
   });
 
   describe('unassociatedApp()', function() {
-    it('should dispatch ROUTE_APP_ASSOCIATED view event & the app/route guids',
-    function () {
+    it('should dispatch ROUTE_APP_ASSOCIATED view event & the app/route guids', function() {
       const appGuid = 'fake-app-guid';
       const routeGuid = 'fake-route-guid';
       const expected = {
@@ -83,11 +83,11 @@ describe('routeActions', function() {
       routeActions.unassociatedApp(routeGuid, appGuid);
 
       assertAction(spy, routeActionTypes.ROUTE_APP_UNASSOCIATED, expected);
-    })
+    });
   });
 
-  describe('createRoute()', function () {
-    it('should dispatch ROUTE_CREATE view event with params', function () {
+  describe('createRoute()', function() {
+    it('should dispatch ROUTE_CREATE view event with params', function() {
       const domainGuid = 'fake-domain-guid';
       const spaceGuid = 'fake-space-guid';
       const route = {
@@ -109,7 +109,7 @@ describe('routeActions', function() {
 
   describe('errorCreateRoute()', function() {
     it('should dispatch a ROUTE_CREATE_ERROR with error object', function() {
-      const err = { status: 500, data: { }};
+      const err = { status: 500, data: {} };
       const params = {
         error: err
       };
@@ -122,7 +122,7 @@ describe('routeActions', function() {
   });
 
   describe('createdRoute()', function() {
-    it('should dipsatch ROUTE_CREATED server event with route', function () {
+    it('should dipsatch ROUTE_CREATED server event with route', function() {
       const route = { guid: 'fake-route-guid' };
       const spy = setupServerSpy(sandbox);
 
@@ -137,9 +137,7 @@ describe('routeActions', function() {
       const appGuid = 'fake-app-guid';
       const domainGuid = 'fake-domain-guid';
       const spaceGuid = 'fake-space-guid';
-      const route = {
-
-      };
+      const route = {};
       const expected = {
         appGuid,
         domainGuid,
@@ -148,44 +146,48 @@ describe('routeActions', function() {
       };
       const spy = setupViewSpy(sandbox);
 
-      routeActions.createRouteAndAssociate(appGuid, domainGuid, spaceGuid, route);
+      routeActions.createRouteAndAssociate(
+        appGuid,
+        domainGuid,
+        spaceGuid,
+        route
+      );
       assertAction(spy, routeActionTypes.ROUTE_CREATE_AND_ASSOCIATE, expected);
     });
   });
 
   describe('deleteRoute()', function() {
-    it('should dispatch ROUTE_DELETE view event with route guid', function () {
+    it('should dispatch ROUTE_DELETE view event with route guid', function() {
       const routeGuid = 'fake-route-guid';
       const spy = setupViewSpy(sandbox);
 
       routeActions.deleteRoute(routeGuid);
       assertAction(spy, routeActionTypes.ROUTE_DELETE, { routeGuid });
-    })
-  })
+    });
+  });
 
   describe('deletedRoute()', function() {
-    it('should dispatch ROUTE_DELETED view event with route guid', function () {
+    it('should dispatch ROUTE_DELETED view event with route guid', function() {
       const routeGuid = 'fake-route-guid';
       const spy = setupViewSpy(sandbox);
 
       routeActions.deletedRoute(routeGuid);
       assertAction(spy, routeActionTypes.ROUTE_DELETED, { routeGuid });
-    })
+    });
   });
 
   describe('fetchRoutesForApp()', function() {
     it('should dispatch ROUTES_FOR_APP_FETCH view event with params', function() {
       var expectedAppGuid = 'asdflkjzzxcv',
-          expectedParams = {
-            appGuid: expectedAppGuid
-          };
+        expectedParams = {
+          appGuid: expectedAppGuid
+        };
 
-      let spy = setupViewSpy(sandbox)
+      let spy = setupViewSpy(sandbox);
 
       routeActions.fetchRoutesForApp(expectedAppGuid);
 
-      assertAction(spy, routeActionTypes.ROUTES_FOR_APP_FETCH,
-                   expectedParams)
+      assertAction(spy, routeActionTypes.ROUTES_FOR_APP_FETCH, expectedParams);
     });
   });
 
@@ -196,12 +198,15 @@ describe('routeActions', function() {
         spaceGuid: expectedSpaceGuid
       };
 
-      const spy = setupViewSpy(sandbox)
+      const spy = setupViewSpy(sandbox);
 
       routeActions.fetchRoutesForSpace(expectedSpaceGuid);
 
-      assertAction(spy, routeActionTypes.ROUTES_FOR_SPACE_FETCH,
-                   expectedParams)
+      assertAction(
+        spy,
+        routeActionTypes.ROUTES_FOR_SPACE_FETCH,
+        expectedParams
+      );
     });
   });
 
@@ -215,37 +220,34 @@ describe('routeActions', function() {
   });
 
   describe('receivedRoutesForApp()', function() {
-    it('should dispatch a server event of type routes for app resv with data',
-        function() {
+    it('should dispatch a server event of type routes for app resv with data', function() {
       const appGuid = 'adflkjzxcbvzxqwr12';
       const expected = {
-        resources: [
-          { guid: 'asdfa', host: 'somethingxz' }
-        ]
-      }
+        resources: [{ guid: 'asdfa', host: 'somethingxz' }]
+      };
       const expectedParams = {
         routes: expected,
         appGuid: appGuid
       };
 
-      let spy = setupServerSpy(sandbox)
+      let spy = setupServerSpy(sandbox);
 
       routeActions.receivedRoutesForApp(expected, appGuid);
 
-      assertAction(spy, routeActionTypes.ROUTES_FOR_APP_RECEIVED,
-                   expectedParams)
+      assertAction(
+        spy,
+        routeActionTypes.ROUTES_FOR_APP_RECEIVED,
+        expectedParams
+      );
     });
   });
 
   describe('receivedRoutes()', function() {
-    it('should dispatch a server event of type routes for space resv with data',
-        function() {
+    it('should dispatch a server event of type routes for space resv with data', function() {
       const spaceGuid = 'adflkjzxcbvzxqwr12';
       const expected = {
-        resources: [
-          { guid: 'asdfa', host: 'somethingxz' }
-        ]
-      }
+        resources: [{ guid: 'asdfa', host: 'somethingxz' }]
+      };
       const expectedParams = {
         routes: expected
       };
@@ -254,8 +256,7 @@ describe('routeActions', function() {
 
       routeActions.receivedRoutes(expected);
 
-      assertAction(spy, routeActionTypes.ROUTES_RECEIVED,
-                   expectedParams)
+      assertAction(spy, routeActionTypes.ROUTES_RECEIVED, expectedParams);
     });
   });
 
@@ -268,14 +269,14 @@ describe('routeActions', function() {
     });
   });
 
-  describe('toggleEdit()', function () {
-    it('should dispatch a UI action with a route guid', function () {
+  describe('toggleEdit()', function() {
+    it('should dispatch a UI action with a route guid', function() {
       var expectedRouteGuid = 'route-guid',
-          expectedParams = {
-            routeGuid: expectedRouteGuid
-          };
+        expectedParams = {
+          routeGuid: expectedRouteGuid
+        };
 
-      let spy = setupUISpy(sandbox)
+      let spy = setupUISpy(sandbox);
 
       routeActions.toggleEdit(expectedRouteGuid);
 
@@ -283,14 +284,14 @@ describe('routeActions', function() {
     });
   });
 
-  describe('toggleRemove()', function () {
-    it('should dispatch a UI action with a route guid', function () {
+  describe('toggleRemove()', function() {
+    it('should dispatch a UI action with a route guid', function() {
       const expectedRouteGuid = 'route-guid';
       const expectedParams = {
         routeGuid: expectedRouteGuid
       };
 
-      let spy = setupUISpy(sandbox)
+      let spy = setupUISpy(sandbox);
 
       routeActions.toggleRemove(expectedRouteGuid);
 
@@ -298,7 +299,7 @@ describe('routeActions', function() {
     });
   });
 
-  describe('updateRoute()', function (){
+  describe('updateRoute()', function() {
     it('should dispatch ROUTE_UPDATE view event with params', function() {
       const routeGuid = 'fake-route-guid';
       const domainGuid = 'fake-domain-guid';
@@ -315,12 +316,12 @@ describe('routeActions', function() {
       };
       const spy = setupViewSpy(sandbox);
 
-      routeActions.updateRoute(routeGuid, domainGuid, spaceGuid, route)
+      routeActions.updateRoute(routeGuid, domainGuid, spaceGuid, route);
       assertAction(spy, routeActionTypes.ROUTE_UPDATE, expected);
     });
   });
 
-  describe('updatedRoute()', function (){
+  describe('updatedRoute()', function() {
     it('should dispatch ROUTE_UPDATED server event with params', function() {
       const routeGuid = 'fake-route-guid';
       const route = {
@@ -337,7 +338,7 @@ describe('routeActions', function() {
   describe('error()', function() {
     it('should dispatch route error with route guid and error', function() {
       const routeGuid = 'adfzcvb2cvb435n';
-      const err = { status: 500, data: { }};
+      const err = { status: 500, data: {} };
       const params = {
         routeGuid: routeGuid,
         error: err

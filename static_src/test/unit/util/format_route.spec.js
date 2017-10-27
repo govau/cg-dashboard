@@ -1,4 +1,3 @@
-
 import '../../global_setup.js';
 
 import formatRoute from '../../../util/format_route';

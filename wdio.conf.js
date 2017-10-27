@@ -2,13 +2,13 @@
 var PORT = process.env.PORT || 8001;
 
 exports.config = {
-  specs: [
-    './static_src/test/functional/**/*.spec.js'
-  ],
+  specs: ['./static_src/test/functional/**/*.spec.js'],
 
-  capabilities: [{
-    browserName: 'chrome'
-  }],
+  capabilities: [
+    {
+      browserName: 'chrome'
+    }
+  ],
 
   sync: true,
   logLevel: 'error',
@@ -45,7 +45,7 @@ exports.config = {
     defaultTimeoutInterval: 100000
   },
 
-  before: function () {
+  before: function() {
     require('babel-register');
   }
 };

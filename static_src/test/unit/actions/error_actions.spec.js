@@ -1,11 +1,10 @@
-
 import '../../global_setup.js';
 
 import { setupUISpy, setupServerSpy } from '../helpers.js';
 import errorActions from '../../../actions/error_actions.js';
 import { errorActionTypes } from '../../../constants.js';
 
-describe('errorActions', function () {
+describe('errorActions', function() {
   let sandbox;
 
   beforeEach(() => {
@@ -16,7 +15,7 @@ describe('errorActions', function () {
     sandbox.restore();
   });
 
-  describe('dismissError()', function () {
+  describe('dismissError()', function() {
     it('should dispatch a server dismiss event with error object', () => {
       const err = { description: 'error' };
       const dispatchSpy = setupUISpy(sandbox);
@@ -30,7 +29,7 @@ describe('errorActions', function () {
     });
   });
 
-  describe('importantDataFetchError()', function () {
+  describe('importantDataFetchError()', function() {
     let dispatchSpy;
     let dispatch;
     const message = 'app broken';
@@ -51,7 +50,8 @@ describe('errorActions', function () {
 
     it('should wrap the supplied error message with generic messaging', () => {
       expect(dispatch.msg).toEqual(
-        `There was an issue connecting to the dashboard, ${message}`);
+        `There was an issue connecting to the dashboard, ${message}`
+      );
     });
   });
 });

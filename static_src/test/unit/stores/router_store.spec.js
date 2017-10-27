@@ -21,7 +21,7 @@ describe('RouterStore', () => {
   });
 
   describe('responding to actions', () => {
-    const component = () => <div></div>;
+    const component = () => <div />;
 
     it('sets the current route information passed by `NAVIGATE` action', () => {
       dispatchNavigationAction(component);

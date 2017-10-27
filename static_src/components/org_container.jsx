@@ -23,11 +23,15 @@ function stateSetter() {
   const currentUserGuid = currentUser && currentUser.guid;
   const currentUserCanViewSpace =
     UserStore.hasRole(currentUserGuid, currentOrgGuid, 'org_manager') ||
-    UserStore.hasRole(currentUserGuid, currentSpaceGuid, SpaceStore.viewPermissionRoles());
+    UserStore.hasRole(
+      currentUserGuid,
+      currentSpaceGuid,
+      SpaceStore.viewPermissionRoles()
+    );
 
   const org = OrgStore.get(currentOrgGuid);
   const spaces = SpaceStore.getAll()
-    .filter((space) => space.organization_guid === currentOrgGuid)
+    .filter(space => space.organization_guid === currentOrgGuid)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return {
@@ -69,36 +73,37 @@ export default class OrgContainer extends React.Component {
     let callout;
 
     if (this.state.currentUserCanViewSpace) {
-      const spaceLink = config.docs.concepts_spaces ?
-        <a href={ config.docs.concepts_spaces }>Spaces</a> :
-        <span>Spaces</span>;
-      const contactLink = config.docs.contact ?
-        <a href={ config.docs.contact }>contact us</a> :
-        <span>contact us</span>;
+      const spaceLink = config.docs.concepts_spaces ? (
+        <a href={config.docs.concepts_spaces}>Spaces</a>
+      ) : (
+        <span>Spaces</span>
+      );
+      const contactLink = config.docs.contact ? (
+        <a href={config.docs.contact}>contact us</a>
+      ) : (
+        <span>contact us</span>
+      );
 
       callout = 'You have no spaces in this organization';
       content = (
         <p>
-          { spaceLink } are environments for development, deployment, and
-          maintenance of  apps and services. If you think you have spaces you
-          don’t see here, { contactLink }.
+          {spaceLink} are environments for development, deployment, and
+          maintenance of apps and services. If you think you have spaces you
+          don’t see here, {contactLink}.
         </p>
       );
     } else {
-      callout = 'You don’t have permission to see the spaces in this organization.';
+      callout =
+        'You don’t have permission to see the spaces in this organization.';
       content = (
         <p>
-          Organization auditors and billing managers can’t view spaces.
-          Ask your organization’s administrator to give you these permissions..
+          Organization auditors and billing managers can’t view spaces. Ask your
+          organization’s administrator to give you these permissions..
         </p>
       );
     }
 
-    return (
-      <EntityEmpty callout={ callout }>
-        { content }
-      </EntityEmpty>
-    );
+    return <EntityEmpty callout={callout}>{content}</EntityEmpty>;
   }
 
   allServices() {
@@ -123,22 +128,23 @@ export default class OrgContainer extends React.Component {
     const { org } = this.state;
     const state = this.state;
     let loading = <Loading text="Loading organization" />;
-    let content = <div>{ loading }</div>;
+    let content = <div>{loading}</div>;
     const title = (
       <span>
-        <EntityIcon entity="org" iconSize="large" /> { org.name }
+        <EntityIcon entity="org" iconSize="large" /> {org.name}
       </span>
     );
-    const spaces = !state.spaces.length ? this.emptyState :
-      state.spaces.map((space) => (
-        <SpaceQuicklook
-          key={ space.guid }
-          space={ space }
-          orgGuid={ state.currentOrgGuid }
-          user={ state.currentUser }
-          showAppDetail
-        />
-      ));
+    const spaces = !state.spaces.length
+      ? this.emptyState
+      : state.spaces.map(space => (
+          <SpaceQuicklook
+            key={space.guid}
+            space={space}
+            orgGuid={state.currentOrgGuid}
+            user={state.currentUser}
+            showAppDetail
+          />
+        ));
 
     if (state.empty) {
       content = <h4 className="test-none_message">No organizations</h4>;
@@ -148,35 +154,39 @@ export default class OrgContainer extends React.Component {
 
       // TODO repeated pattern space_container, overview
       content = (
-      <div className="grid">
         <div className="grid">
-          <div className="grid-width-12">
-            <Breadcrumbs org={org} />
-            <PageHeader title={ title } />
-          </div>
-        </div>
-        <Panel title="">
-          <div className="grid panel-overview-header">
-            <div className="grid-width-6">
-              <h1 className="panel-title">Organization overview</h1>
+          <div className="grid">
+            <div className="grid-width-12">
+              <Breadcrumbs org={org} />
+              <PageHeader title={title} />
             </div>
-            <div className="grid-width-6">
-              <div className="count_status_container">
-                <SpaceCountStatus spaces={ state.spaces } />
-                <AppCountStatus apps={ allApps } appCount={ allApps && allApps.length } />
-                <ServiceCountStatus services={ allServices }
-                  serviceCount={ allServices && allServices.length }
-                />
+          </div>
+          <Panel title="">
+            <div className="grid panel-overview-header">
+              <div className="grid-width-6">
+                <h1 className="panel-title">Organization overview</h1>
+              </div>
+              <div className="grid-width-6">
+                <div className="count_status_container">
+                  <SpaceCountStatus spaces={state.spaces} />
+                  <AppCountStatus
+                    apps={allApps}
+                    appCount={allApps && allApps.length}
+                  />
+                  <ServiceCountStatus
+                    services={allServices}
+                    serviceCount={allServices && allServices.length}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          { spaces }
-        </Panel>
+            {spaces}
+          </Panel>
 
-        <Panel title="Organization users">
-          <Users />
-        </Panel>
-      </div>
+          <Panel title="Organization users">
+            <Users />
+          </Panel>
+        </div>
       );
     }
 

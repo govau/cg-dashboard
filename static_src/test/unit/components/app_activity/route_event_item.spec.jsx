@@ -9,7 +9,7 @@ describe('<RouteEventItem />', () => {
       route: { host: 'app', path: 'dummy-app' },
       domain: { name: 'test.domain.io' }
     };
-    const wrapper = shallow(<RouteEventItem { ...props } />);
+    const wrapper = shallow(<RouteEventItem {...props} />);
     const child = wrapper.find('a');
 
     expect(child.length).toBe(1);

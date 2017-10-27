@@ -15,7 +15,11 @@ describe('<Link />', () => {
   });
 
   it('sets a base class of `action-link`', () => {
-    expect(shallow(<Link />).find('a').hasClass('action-link')).toBe(true);
+    expect(
+      shallow(<Link />)
+        .find('a')
+        .hasClass('action-link')
+    ).toBe(true);
   });
 
   it('renders its children', () => {

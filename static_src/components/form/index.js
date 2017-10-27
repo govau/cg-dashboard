@@ -5,11 +5,4 @@ import FormNumber from './form_number.jsx';
 import FormSelect from './form_select.jsx';
 import FormText from './form_text.jsx';
 
-export {
-  Form,
-  FormElement,
-  FormError,
-  FormNumber,
-  FormSelect,
-  FormText
-};
+export { Form, FormElement, FormError, FormNumber, FormSelect, FormText };

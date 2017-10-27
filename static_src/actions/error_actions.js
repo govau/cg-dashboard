@@ -1,4 +1,3 @@
-
 /*
  * Actions for global errors across the whole application.
  */
@@ -47,7 +46,8 @@ export default {
   },
 
   importantDataFetchError(err, entityMessage) {
-    const msg = 'There was an issue connecting to the dashboard, ' +
+    const msg =
+      'There was an issue connecting to the dashboard, ' +
       `${entityMessage || 'please try again later.'}`;
 
     AppDispatcher.handleServerAction({

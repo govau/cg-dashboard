@@ -1,4 +1,3 @@
-
 // TODO pull these values from ./config.json to remove duplication.
 module.exports = {
   'speed-index-metric': {

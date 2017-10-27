@@ -1,4 +1,3 @@
-
 import '../../global_setup';
 import { appHealth, isHealthyApp } from '../../../util/health';
 
@@ -71,7 +70,7 @@ describe('isHealthyApp()', function() {
         state: 'STARTED',
         instances: 1,
         running_instances: 1
-      }
+      };
     });
 
     it('returns true', function() {
@@ -85,7 +84,7 @@ describe('isHealthyApp()', function() {
         guid: '1234',
         state: 'STOPPED',
         running_instances: 0
-      }
+      };
     });
 
     it('returns true', function() {
@@ -100,7 +99,7 @@ describe('isHealthyApp()', function() {
         state: 'STARTED',
         instances: 2,
         running_instances: 1
-      }
+      };
     });
 
     it('returns false', function() {
@@ -114,7 +113,7 @@ describe('isHealthyApp()', function() {
         guid: '1234',
         state: 'STOPPED',
         running_instances: -1
-      }
+      };
     });
 
     it('returns false', function() {

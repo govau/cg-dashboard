@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
@@ -28,8 +27,8 @@ export default class PanelRow extends React.Component {
     });
 
     return (
-      <div id={ id } className={ classes }>
-        { children }
+      <div id={id} className={classes}>
+        {children}
       </div>
     );
   }

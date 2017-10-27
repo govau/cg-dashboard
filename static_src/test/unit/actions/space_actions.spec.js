@@ -1,9 +1,13 @@
-
 import '../../global_setup.js';
 
 import AppDispatcher from '../../../dispatcher.js';
-import { assertAction, setupViewSpy, setupUISpy, setupServerSpy, wrapInRes }
-  from '../helpers.js';
+import {
+  assertAction,
+  setupViewSpy,
+  setupUISpy,
+  setupServerSpy,
+  wrapInRes
+} from '../helpers.js';
 import cfApi from '../../../util/cf_api.js';
 import spaceActions from '../../../actions/space_actions.js';
 import { spaceActionTypes } from '../../../constants.js';
@@ -28,7 +32,9 @@ describe('spaceActions', () => {
 
     beforeEach(function(done) {
       dispatcherSpy = setupViewSpy(sandbox);
-      fetchSpaceStub = sandbox.stub(cfApi, 'fetchSpace').returns(Promise.resolve(expectedSpace));
+      fetchSpaceStub = sandbox
+        .stub(cfApi, 'fetchSpace')
+        .returns(Promise.resolve(expectedSpace));
       receivedSpaceStub = sandbox.stub(spaceActions, 'receivedSpace');
       expectedGuid = 'abc1';
       expectedSpace = { guid: expectedGuid };
@@ -81,10 +87,10 @@ describe('spaceActions', () => {
   describe('receivedSpace()', () => {
     it('should dispatch server event of type space received', () => {
       var expected = { guid: 'asdf' },
-          spy = setupServerSpy(sandbox),
-          expectedParams = {
-            space: expected
-          };
+        spy = setupServerSpy(sandbox),
+        expectedParams = {
+          space: expected
+        };
 
       spaceActions.receivedSpace(expected);
 

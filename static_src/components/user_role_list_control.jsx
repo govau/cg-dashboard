@@ -41,7 +41,11 @@ const roleMapping = {
   ],
   org_users: [
     { key: 'org_manager', apiKey: 'managers', label: 'Org Manager' },
-    { key: 'billing_manager', apiKey: 'billing_managers', label: 'Billing Manager' },
+    {
+      key: 'billing_manager',
+      apiKey: 'billing_managers',
+      label: 'Billing Manager'
+    },
     { key: 'org_auditor', apiKey: 'auditors', label: 'Org Auditor' }
   ]
 };
@@ -52,14 +56,14 @@ const propTypes = {
   currentUserAccess: PropTypes.bool,
   entityGuid: PropTypes.string,
   onRemovePermissions: PropTypes.func,
-  onAddPermissions: PropTypes.func,
+  onAddPermissions: PropTypes.func
 };
 
 const defaultProps = {
   userType: 'space_users',
   currentUserAccess: false,
-  onRemovePermissions: function defaultRemove() { },
-  onAddPermissions: function defaultAdd() { }
+  onRemovePermissions: function defaultRemove() {},
+  onAddPermissions: function defaultAdd() {}
 };
 
 export default class UserRoleListControl extends React.Component {
@@ -70,12 +74,13 @@ export default class UserRoleListControl extends React.Component {
   }
 
   checkRole(roleKey) {
-    return (this.roles().indexOf(roleKey) > -1);
+    return this.roles().indexOf(roleKey) > -1;
   }
 
   _onChange(roleKey, checked) {
-    const handler = !checked ? this.props.onRemovePermissions :
-      this.props.onAddPermissions;
+    const handler = !checked
+      ? this.props.onRemovePermissions
+      : this.props.onAddPermissions;
     const apiKey = this.roleMap.filter(role => role.key === roleKey)[0].apiKey;
 
     handler(roleKey, apiKey, this.props.user.guid);
@@ -88,9 +93,7 @@ export default class UserRoleListControl extends React.Component {
     } else {
       roles = this.props.user.roles;
     }
-    return roles ?
-      (roles[this.props.entityGuid] || []) :
-      []
+    return roles ? roles[this.props.entityGuid] || [] : [];
   }
 
   get roleMap() {
@@ -101,18 +104,18 @@ export default class UserRoleListControl extends React.Component {
     return (
       <span className="test-user-roles-list-control">
         <ElasticLine>
-        { this.roleMap.map((role) =>
-          <ElasticLineItem key={ role.key }>
-            <UserRoleControl
-              roleName={ role.label }
-              roleKey={ role.key }
-              value={ this.checkRole(role.key) }
-              enableControl={ this.props.currentUserAccess }
-              onChange={ this._onChange }
-              userId={ this.props.user.guid }
-            />
-          </ElasticLineItem>
-        )}
+          {this.roleMap.map(role => (
+            <ElasticLineItem key={role.key}>
+              <UserRoleControl
+                roleName={role.label}
+                roleKey={role.key}
+                value={this.checkRole(role.key)}
+                enableControl={this.props.currentUserAccess}
+                onChange={this._onChange}
+                userId={this.props.user.guid}
+              />
+            </ElasticLineItem>
+          ))}
         </ElasticLine>
       </span>
     );

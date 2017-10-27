@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
@@ -11,13 +10,7 @@ const BUTTON_TYPES = {
   LINK: 'link',
   SUBMIT: 'submit'
 };
-const BUTTON_STYLES = [
-  'warning',
-  'primary',
-  'finish',
-  'base',
-  'white'
-];
+const BUTTON_STYLES = ['warning', 'primary', 'finish', 'base', 'white'];
 const propTypes = {
   children: PropTypes.any,
   classes: PropTypes.array,
@@ -49,10 +42,14 @@ export default class Action extends React.Component {
   get buttonClasses() {
     if (this.typeOfLink) return {};
 
-    return classnames({
-      'action-outline': this.props.type === BUTTON_TYPES.OUTLINE,
-      'usa-button-disabled': this.props.disabled
-    }, 'usa-button', `usa-button-${this.props.style}`);
+    return classnames(
+      {
+        'action-outline': this.props.type === BUTTON_TYPES.OUTLINE,
+        'usa-button-disabled': this.props.disabled
+      },
+      'usa-button',
+      `usa-button-${this.props.style}`
+    );
   }
 
   get sharedProps() {
@@ -64,8 +61,10 @@ export default class Action extends React.Component {
   }
 
   get buttonProps() {
-    const htmlButtonType = this.props.type === BUTTON_TYPES.BUTTON ?
-      BUTTON_TYPES.BUTTON : BUTTON_TYPES.SUBMIT;
+    const htmlButtonType =
+      this.props.type === BUTTON_TYPES.BUTTON
+        ? BUTTON_TYPES.BUTTON
+        : BUTTON_TYPES.SUBMIT;
 
     return { disabled: this.props.disabled, type: htmlButtonType };
   }
@@ -91,8 +90,8 @@ export default class Action extends React.Component {
     const extraProps = this.isLink ? this.linkProps : this.buttonProps;
 
     return (
-      <Component { ...this.sharedProps } { ...extraProps }>
-        { this.props.children }
+      <Component {...this.sharedProps} {...extraProps}>
+        {this.props.children}
       </Component>
     );
   }

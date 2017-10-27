@@ -17,13 +17,14 @@ const appRouteLink = (domain, route) => {
 
   const href = formatRoute(domain.name, route.host, route.path);
 
-  return <a href={ `//${href}` }>{ href }</a>;
+  return <a href={`//${href}`}>{href}</a>;
 };
 
-const RouteEventItem = ({ actor, domain, route, unmapped }) =>
+const RouteEventItem = ({ actor, domain, route, unmapped }) => (
   <span>
-    { actor } { unmapped || 'mapped'} { appRouteLink(domain, route) } to the app.
-  </span>;
+    {actor} {unmapped || 'mapped'} {appRouteLink(domain, route)} to the app.
+  </span>
+);
 
 RouteEventItem.propTypes = propTypes;
 export default RouteEventItem;

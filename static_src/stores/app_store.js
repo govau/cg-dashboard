@@ -1,4 +1,3 @@
-
 /*
  * Store for app data. Will store and update app data on changes from UI and
  * server.
@@ -61,7 +60,10 @@ export class AppStore extends BaseStore {
 
       case appActionTypes.APP_UPDATE: {
         const existingApp = this.get(action.appGuid);
-        const updatedApp = Object.assign({}, existingApp, { updating: true, ...action.appPartial });
+        const updatedApp = Object.assign({}, existingApp, {
+          updating: true,
+          ...action.appPartial
+        });
         this.merge('guid', updatedApp);
         break;
       }
@@ -119,9 +121,10 @@ export class AppStore extends BaseStore {
       case appActionTypes.APP_START: {
         const app = this.get(action.appGuid);
         if (app) {
-          const startingApp = Object.assign({}, app,
-            { state: appStates.starting });
-          this.merge('guid', startingApp, (changed) => {
+          const startingApp = Object.assign({}, app, {
+            state: appStates.starting
+          });
+          this.merge('guid', startingApp, changed => {
             if (changed) this.emitChange();
           });
         }
@@ -131,9 +134,10 @@ export class AppStore extends BaseStore {
       case appActionTypes.APP_RESTART: {
         const app = this.get(action.appGuid);
         if (app) {
-          const restartingApp = Object.assign({}, app,
-            { state: appStates.restarting });
-          this.merge('guid', restartingApp, (changed) => {
+          const restartingApp = Object.assign({}, app, {
+            state: appStates.restarting
+          });
+          this.merge('guid', restartingApp, changed => {
             if (changed) this.emitChange();
           });
         }

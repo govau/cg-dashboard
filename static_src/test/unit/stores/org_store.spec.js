@@ -1,4 +1,3 @@
-
 import Immutable from 'immutable';
 
 import '../../global_setup.js';
@@ -26,26 +25,26 @@ describe('OrgStore', () => {
     });
   });
 
-  describe('get currentOrgGuid', function () {
-    it('should start with null, none selected', function () {
+  describe('get currentOrgGuid', function() {
+    it('should start with null, none selected', function() {
       expect(OrgStore.currentOrgGuid).toBe(null);
     });
 
-    it('should return the current org its on', function () {
+    it('should return the current org its on', function() {
       const expected = 'asdlfkja;';
       OrgStore._currentOrgGuid = expected;
       expect(OrgStore.currentOrgGuid).toEqual(expected);
     });
   });
 
-  describe('updateOpenOrgs()', function () {
-    it('should return an array', function () {
+  describe('updateOpenOrgs()', function() {
+    it('should return an array', function() {
       const guid = 'orgguid';
       const actual = OrgStore.updateOpenOrgs(guid);
       expect(actual.length).toEqual(0);
     });
 
-    it('should set the org to open', function () {
+    it('should set the org to open', function() {
       const guid = 'orgguid';
       OrgStore._data = Immutable.fromJS([{ guid }]);
       const expected = [{ guid, space_menu_open: true }];
@@ -54,7 +53,7 @@ describe('OrgStore', () => {
       expect(actual).toEqual(expected);
     });
 
-    it('should set all other orgs to not open', function () {
+    it('should set all other orgs to not open', function() {
       const guid = 'orgguid';
       const initial = [{ guid }, { guid: guid * 2 }, { guid: guid * 3 }];
       const expected = [
@@ -103,8 +102,8 @@ describe('OrgStore', () => {
     });
   });
 
-  describe('on org fetch', function () {
-    it('should set loading to true', function () {
+  describe('on org fetch', function() {
+    it('should set loading to true', function() {
       AppDispatcher.handleViewAction({
         type: orgActionTypes.ORG_FETCH,
         orgGuid: 'orgGuid'
@@ -114,8 +113,8 @@ describe('OrgStore', () => {
     });
   });
 
-  describe('on org received', function () {
-    it('should emit a change event', function () {
+  describe('on org received', function() {
+    it('should emit a change event', function() {
       const spy = sandbox.spy(OrgStore, 'emitChange');
 
       AppDispatcher.handleViewAction({
@@ -150,15 +149,15 @@ describe('OrgStore', () => {
     });
   });
 
-  describe('on a space menu toggle', function () {
+  describe('on a space menu toggle', function() {
     let expected;
 
-    beforeEach(function () {
+    beforeEach(function() {
       expected = { guid: 'sdsf', name: 'testA' };
       OrgStore.push(expected);
     });
 
-    it('should toggle space_menu_open on the correct org', function () {
+    it('should toggle space_menu_open on the correct org', function() {
       const spy = sandbox.spy(OrgStore, 'emitChange');
 
       AppDispatcher.handleViewAction({
@@ -171,14 +170,14 @@ describe('OrgStore', () => {
     });
   });
 
-  describe('get currentOrgName()', function () {
-    it('should return emtpy string if no org', function () {
+  describe('get currentOrgName()', function() {
+    it('should return emtpy string if no org', function() {
       const actual = OrgStore.currentOrgName;
 
       expect(actual).toEqual('');
     });
 
-    it('should return org name if org', function () {
+    it('should return org name if org', function() {
       const guid = 'zmn,vweiqodnjt7';
       const expected = 'orgname';
       const org = { guid, name: expected };
@@ -192,10 +191,10 @@ describe('OrgStore', () => {
     });
   });
 
-  describe('on toggle quicklook', function () {
+  describe('on toggle quicklook', function() {
     let guid;
 
-    beforeEach(function () {
+    beforeEach(function() {
       guid = 'osdvnx23bvc2';
 
       const org = { guid, name: 'org' };
@@ -209,12 +208,12 @@ describe('OrgStore', () => {
       });
     });
 
-    it('should set quicklook.open to true for the org', function () {
+    it('should set quicklook.open to true for the org', function() {
       const org = OrgStore.get(guid);
       expect(org.quicklook.open).toBeTruthy();
     });
 
-    it('should emit a change', function () {
+    it('should emit a change', function() {
       expect(OrgStore.emitChange).toHaveBeenCalledOnce();
     });
   });

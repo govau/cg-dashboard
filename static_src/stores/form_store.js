@@ -1,7 +1,5 @@
-
 import BaseStore from './base_store.js';
 import { formActionTypes } from '../constants.js';
-
 
 export class FormStore extends BaseStore {
   constructor() {

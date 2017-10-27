@@ -25,7 +25,7 @@ class RouteProvider extends React.Component {
 
   render() {
     const { component: Component, props } = this.state;
-    return Component ? <Component { ...props } /> : <Loading />;
+    return Component ? <Component {...props} /> : <Loading />;
   }
 }
 

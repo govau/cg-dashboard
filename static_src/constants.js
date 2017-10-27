@@ -1,4 +1,3 @@
-
 import keymirror from 'keymirror';
 
 const appStates = {
@@ -55,7 +54,6 @@ const formActionTypes = keymirror({
   // The form field change is not a valid input
   FORM_FIELD_CHANGE_ERROR: null
 });
-
 
 const loginActionTypes = keymirror({
   // Action of fetching a login status, whether the user is logged in or not.

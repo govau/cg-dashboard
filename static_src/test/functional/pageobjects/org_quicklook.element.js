@@ -1,4 +1,3 @@
-
 import BaseElement from './base.element';
 
 // https://www.martinfowler.com/bliki/PageObject.html

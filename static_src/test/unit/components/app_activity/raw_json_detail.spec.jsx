@@ -11,7 +11,7 @@ describe('<RawJSONDetail />', () => {
   });
 
   it('renders a code block of raw json when visible', () => {
-    const wrapper = shallow(<RawJSONDetail visible={ 1 } item={ {} } />);
+    const wrapper = shallow(<RawJSONDetail visible={1} item={{}} />);
 
     expect(wrapper.find('.activity_log-item_raw').length).toBe(1);
     expect(wrapper.find('code').length).toBe(1);

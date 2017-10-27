@@ -1,4 +1,3 @@
-
 import '../../global_setup.js';
 
 import Immutable from 'immutable';
@@ -9,7 +8,7 @@ import { UserStore as _UserStore } from '../../../stores/user_store.js';
 import userActions from '../../../actions/user_actions.js';
 import { userActionTypes, errorActionTypes } from '../../../constants';
 
-describe('UserStore', function () {
+describe('UserStore', function() {
   let sandbox, UserStore;
 
   beforeEach(() => {
@@ -143,9 +142,7 @@ describe('UserStore', function () {
   });
 
   describe('on org users received', function() {
-    it('should merge and update new users with existing users in data',
-        function() {
-    });
+    it('should merge and update new users with existing users in data', function() {});
   });
 
   describe('on space user roles received', () => {
@@ -159,30 +156,30 @@ describe('UserStore', function () {
       const spaceUserRoles = [
         {
           guid: userGuidA,
-          username: "userA",
-          space_roles: [ 'space_developer' ]
+          username: 'userA',
+          space_roles: ['space_developer']
         },
         {
           guid: userGuidB,
-          space_roles: [ 'space_developer', 'space_manager' ]
+          space_roles: ['space_developer', 'space_manager']
         }
-      ]
+      ];
       const currentUsers = [
         {
           guid: userGuidB,
-          username: "userB",
+          username: 'userB',
           space_roles: { [spaceGuid]: ['space_developer'] }
         }
       ];
       expectedUsers = [
         {
           guid: userGuidA,
-          username: "userA",
+          username: 'userA',
           space_roles: { [spaceGuid]: ['space_developer'] }
         },
         {
           guid: userGuidB,
-          username: "userB",
+          username: 'userB',
           space_roles: { [spaceGuid]: ['space_developer', 'space_manager'] }
         }
       ];
@@ -220,8 +217,10 @@ describe('UserStore', function () {
     it('should emit a change event if data changed', function() {
       const spy = sandbox.spy(UserStore, 'emitChange');
 
-      userActions.receivedOrgUserRoles([{ guid: 'adsfa', organization_roles: [] }],
-        'asdf');
+      userActions.receivedOrgUserRoles(
+        [{ guid: 'adsfa', organization_roles: [] }],
+        'asdf'
+      );
 
       expect(spy).toHaveBeenCalledOnce();
     });
@@ -231,17 +230,18 @@ describe('UserStore', function () {
       const orgGuid = 'org-534789';
       const currentUsers = [
         { guid: userGuid },
-        { guid: 'asdf',
+        {
+          guid: 'asdf',
           roles: {
-            [ orgGuid ]: [ 'org_manager' ] ,
-            'adjf': [ 'org_manager' ]
+            [orgGuid]: ['org_manager'],
+            adjf: ['org_manager']
           }
         }
       ];
       const roles = [
         {
           guid: userGuid,
-          organization_roles: [ 'org_manager', 'org_auditor' ]
+          organization_roles: ['org_manager', 'org_auditor']
         },
         {
           guid: 'asdf',
@@ -255,8 +255,10 @@ describe('UserStore', function () {
         },
         {
           guid: 'asdf',
-          roles: { 'adjf': ['org_manager'],
-                   [orgGuid]: ['org_manager'] }
+          roles: {
+            adjf: ['org_manager'],
+            [orgGuid]: ['org_manager']
+          }
         }
       ];
 
@@ -279,9 +281,18 @@ describe('UserStore', function () {
         guid: userGuid,
         username: 'person@person.com'
       };
-      orgUsers = [user, {userGuid: 'wrong-udid'}, {userGuid: 'wrong-udid-2'}];
+      orgUsers = [
+        user,
+        { userGuid: 'wrong-udid' },
+        { userGuid: 'wrong-udid-2' }
+      ];
       sandbox.spy(UserStore, 'emitChange');
-      userActions.createdUserAndAssociated(userGuid, orgGuid, orgUsers, 'org_users');
+      userActions.createdUserAndAssociated(
+        userGuid,
+        orgGuid,
+        orgUsers,
+        'org_users'
+      );
     });
 
     it('should emit a change', function() {
@@ -299,12 +310,12 @@ describe('UserStore', function () {
   describe('on org user association received', function() {
     it('should emit a change event if data changed', function() {
       var spy = sandbox.spy(UserStore, 'emitChange');
-      const userGuid = "fake-user-guid";
-      const entityGuid = "fake-org-guid";
+      const userGuid = 'fake-user-guid';
+      const entityGuid = 'fake-org-guid';
       const entityUsers = [
-        {userGuid: userGuid},
-        {userGuid: "fake-user-guid-2"},
-        {userGuid: "fake-user-guid-3"}
+        { userGuid: userGuid },
+        { userGuid: 'fake-user-guid-2' },
+        { userGuid: 'fake-user-guid-3' }
       ];
 
       userActions.createdUserAndAssociated(userGuid, entityGuid, entityUsers);
@@ -340,9 +351,18 @@ describe('UserStore', function () {
         guid: userGuid,
         username: 'person@person.com'
       };
-      spaceUsers = [user, {userGuid: 'wrong-udid'}, {userGuid: 'wrong-udid-2'}];
+      spaceUsers = [
+        user,
+        { userGuid: 'wrong-udid' },
+        { userGuid: 'wrong-udid-2' }
+      ];
       sandbox.spy(UserStore, 'emitChange');
-      userActions.createdUserAndAssociated(userGuid, spaceGuid, spaceUsers, 'space_users');
+      userActions.createdUserAndAssociated(
+        userGuid,
+        spaceGuid,
+        spaceUsers,
+        'space_users'
+      );
     });
 
     it('should emit a change', function() {
@@ -360,12 +380,12 @@ describe('UserStore', function () {
   describe('on space user association received', function() {
     it('should emit a change event if data changed', function() {
       var spy = sandbox.spy(UserStore, 'emitChange');
-      const userGuid = "fake-user-guid";
-      const entityGuid = "fake-space-guid";
+      const userGuid = 'fake-user-guid';
+      const entityGuid = 'fake-space-guid';
       const entityUsers = [
-        {userGuid: userGuid},
-        {userGuid: "fake-user-guid-2"},
-        {userGuid: "fake-user-guid-3"}
+        { userGuid: userGuid },
+        { userGuid: 'fake-user-guid-2' },
+        { userGuid: 'fake-user-guid-3' }
       ];
 
       userActions.createdUserAndAssociated(userGuid, entityGuid, entityUsers);
@@ -408,15 +428,14 @@ describe('UserStore', function () {
   });
 
   describe('on user roles add', function() {
-    it('should call the api for org add if type org to update the role',
-        function() {
+    it('should call the api for org add if type org to update the role', function() {
       var spy = sandbox.stub(cfApi, 'putOrgUserPermissions'),
-          expectedRoles = 'org_manager',
-          expectedApiKey = 'managers',
-          expectedUserGuid = 'zjkxcvadfzxcvz',
-          expectedOrgGuid = 'zxcvzcxvzxroiter';
+        expectedRoles = 'org_manager',
+        expectedApiKey = 'managers',
+        expectedUserGuid = 'zjkxcvadfzxcvz',
+        expectedOrgGuid = 'zxcvzcxvzxroiter';
 
-      let testPromise = Promise.resolve()
+      let testPromise = Promise.resolve();
       spy.returns(testPromise);
 
       userActions.addUserRoles(
@@ -457,8 +476,7 @@ describe('UserStore', function () {
 
         UserStore._data = Immutable.fromJS([existingUser]);
         sandbox.spy(UserStore, 'emitChange'),
-
-        userActions.addedUserRoles(addedRole, userGuid, spaceGuid, 'space');
+          userActions.addedUserRoles(addedRole, userGuid, spaceGuid, 'space');
         user = UserStore.get(userGuid);
       });
 
@@ -480,10 +498,10 @@ describe('UserStore', function () {
       beforeEach(function() {
         const existingUser = {
           guid: userGuid
-        }
+        };
         UserStore._data = Immutable.fromJS([existingUser]);
         sandbox.spy(UserStore, 'emitChange'),
-        userActions.addedUserRoles(addedRole, userGuid, spaceGuid, 'space');
+          userActions.addedUserRoles(addedRole, userGuid, spaceGuid, 'space');
         user = UserStore.get(userGuid);
       });
 
@@ -515,12 +533,10 @@ describe('UserStore', function () {
 
       UserStore._data = Immutable.fromJS([existingUser]);
       sandbox.spy(UserStore, 'emitChange'),
-
-      userActions.deletedUserRoles(expectedRole, testGuid, orgGuid, 'org');
+        userActions.deletedUserRoles(expectedRole, testGuid, orgGuid, 'org');
     });
 
-    it('should update the resource type roles array if it exists with new roles',
-        function() {
+    it('should update the resource type roles array if it exists with new roles', function() {
       let actual = UserStore.get(testGuid);
       expect(actual).toBeTruthy();
       expect(actual.roles[orgGuid]).not.toContain(expectedRole);
@@ -536,8 +552,8 @@ describe('UserStore', function () {
   describe('on user delete', function() {
     it('should delete the user on the server', function() {
       var spy = sandbox.spy(cfApi, 'deleteUser'),
-          expectedUserGuid = 'znxvmnzvmz',
-          expectedOrgGuid = '029fjaskdjfalskdna';
+        expectedUserGuid = 'znxvmnzvmz',
+        expectedOrgGuid = '029fjaskdjfalskdna';
       userActions.deleteUser(expectedUserGuid, expectedOrgGuid);
 
       expect(spy).toHaveBeenCalledOnce();
@@ -555,7 +571,7 @@ describe('UserStore', function () {
 
     it('should remove the user of the guid from the data', function() {
       var expectedUserGuid = 'zxkvnakjdva',
-          expectedUser = { guid: expectedUserGuid };
+        expectedUser = { guid: expectedUserGuid };
 
       UserStore._data.push(expectedUser);
 
@@ -568,20 +584,23 @@ describe('UserStore', function () {
   describe('on user spaces roles removed', function() {
     it('should remove the user of the guid from the data', function() {
       var expectedUserGuid = 'zxkvnakjdva',
-          expectedUser = { guid: expectedUserGuid };
+        expectedUser = { guid: expectedUserGuid };
 
       UserStore._data.push(expectedUser);
 
-      userActions.handleSpaceRolesRemoved(['random-response'], expectedUserGuid);
+      userActions.handleSpaceRolesRemoved(
+        ['random-response'],
+        expectedUserGuid
+      );
 
       expect(UserStore.get(expectedUserGuid)).toBeFalsy();
     });
 
     it('should emit a change event if it deletes something', function() {
       var spy = sandbox.spy(UserStore, 'emitChange'),
-          testUserGuid = 'qpweoiralkfdsj';
+        testUserGuid = 'qpweoiralkfdsj';
 
-      UserStore._data = Immutable.fromJS([{guid: testUserGuid}]);
+      UserStore._data = Immutable.fromJS([{ guid: testUserGuid }]);
       userActions.handleSpaceRolesRemoved(['random-response'], testUserGuid);
 
       expect(spy).toHaveBeenCalledOnce();
@@ -599,7 +618,7 @@ describe('UserStore', function () {
   describe('on user deleted', function() {
     it('should remove the user of the guid from the data', function() {
       var expectedUserGuid = 'zxkvnakjdva',
-          expectedUser = { guid: expectedUserGuid };
+        expectedUser = { guid: expectedUserGuid };
 
       UserStore._data.push(expectedUser);
 
@@ -610,9 +629,9 @@ describe('UserStore', function () {
 
     it('should emit a change event if it deletes something', function() {
       var spy = sandbox.spy(UserStore, 'emitChange'),
-          testUserGuid = 'qpweoiralkfdsj';
+        testUserGuid = 'qpweoiralkfdsj';
 
-      UserStore._data = Immutable.fromJS([{guid: testUserGuid}]);
+      UserStore._data = Immutable.fromJS([{ guid: testUserGuid }]);
       userActions.deletedUser(testUserGuid, 'testOrgGuid');
 
       expect(spy).toHaveBeenCalledOnce();
@@ -667,8 +686,8 @@ describe('UserStore', function () {
     });
   });
 
-  describe('on current user info received', function () {
-    it('should emit a change event always', function () {
+  describe('on current user info received', function() {
+    it('should emit a change event always', function() {
       const userGuid = 'zxsdkfjasdfladsf';
       const user = { user_id: userGuid, user_name: 'mr' };
       const existingUser = { guid: userGuid };
@@ -683,7 +702,7 @@ describe('UserStore', function () {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should merge the currentUser', function () {
+    it('should merge the currentUser', function() {
       const userGuid = 'zxsdkfjasdfladsf';
       const currentUserInfo = { user_id: userGuid, user_name: 'mr' };
       const existingUser = { guid: userGuid };
@@ -699,7 +718,7 @@ describe('UserStore', function () {
     });
   });
 
-  describe('on CURRENT_UAA_INFO_RECEIVED', function () {
+  describe('on CURRENT_UAA_INFO_RECEIVED', function() {
     let userGuid, existingUser, spy, currentUaaInfo;
 
     beforeEach(() => {
@@ -709,9 +728,9 @@ describe('UserStore', function () {
       UserStore._data = Immutable.fromJS([existingUser]);
     });
 
-    it('should not fail when groups is missing in uaaInfo', function () {
+    it('should not fail when groups is missing in uaaInfo', function() {
       currentUaaInfo = { guid: '1234' };
-      const uaaInfo = {groups: []};
+      const uaaInfo = { groups: [] };
 
       AppDispatcher.handleViewAction({
         type: userActionTypes.CURRENT_UAA_INFO_RECEIVED,
@@ -721,7 +740,7 @@ describe('UserStore', function () {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should emit a change event always', function () {
+    it('should emit a change event always', function() {
       currentUaaInfo = { groups: [{}], guid: '1234' };
 
       AppDispatcher.handleViewAction({
@@ -732,7 +751,7 @@ describe('UserStore', function () {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should test when UAA group for is not admin', function () {
+    it('should test when UAA group for is not admin', function() {
       currentUaaInfo = { groups: [{}], guid: '1234' };
 
       AppDispatcher.handleViewAction({
@@ -745,8 +764,11 @@ describe('UserStore', function () {
       expect(actual._currentUserIsAdmin).toEqual(false);
     });
 
-    it('should test when UAA group for admin is there', function () {
-      currentUaaInfo = { groups: [{display: 'cloud_controller.admin'}], guid: '1234' };
+    it('should test when UAA group for admin is there', function() {
+      currentUaaInfo = {
+        groups: [{ display: 'cloud_controller.admin' }],
+        guid: '1234'
+      };
 
       UserStore._data = Immutable.fromJS([existingUser]);
       AppDispatcher.handleViewAction({
@@ -764,7 +786,10 @@ describe('UserStore', function () {
     // TODO possibly move this functionality to shared place.
     it('should find all user that have the space guid passed in', function() {
       var spaceGuid = 'asdfa';
-      var testUser = { guid: 'adfzxcv', space_roles: { [spaceGuid]: [ 'space_user'] } };
+      var testUser = {
+        guid: 'adfzxcv',
+        space_roles: { [spaceGuid]: ['space_user'] }
+      };
 
       UserStore.push(testUser);
 
@@ -791,7 +816,7 @@ describe('UserStore', function () {
     it('should find all users that are in an org and not in the space', function() {
       var spaceGuid = 'sdfadf';
       var orgGuid = 'asdfa';
-      var testUser = { guid: 'adfzxcv', roles: { [orgGuid]: [ 'org_user'] } };
+      var testUser = { guid: 'adfzxcv', roles: { [orgGuid]: ['org_user'] } };
 
       UserStore.push(testUser);
 
@@ -801,9 +826,9 @@ describe('UserStore', function () {
     });
   });
 
-  describe('USER_FETCH', function () {
+  describe('USER_FETCH', function() {
     let user;
-    beforeEach(function () {
+    beforeEach(function() {
       AppDispatcher.handleViewAction({
         type: userActionTypes.USER_FETCH,
         userGuid: '123'
@@ -812,14 +837,14 @@ describe('UserStore', function () {
       user = UserStore.get('123');
     });
 
-    it('sets user state to fetching', function () {
+    it('sets user state to fetching', function() {
       expect(user.fetching).toBe(true);
     });
   });
 
-  describe('USER_RECEIVED', function () {
+  describe('USER_RECEIVED', function() {
     let user;
-    beforeEach(function () {
+    beforeEach(function() {
       AppDispatcher.handleViewAction({
         type: userActionTypes.USER_RECEIVED,
         user: { guid: '123' }
@@ -828,34 +853,34 @@ describe('UserStore', function () {
       user = UserStore.get('123');
     });
 
-    it('sets user state to non-fetching', function () {
+    it('sets user state to non-fetching', function() {
       expect(user.fetching).toBe(false);
     });
   });
 
-  describe('CURRENT_USER_FETCH', function () {
-    beforeEach(function () {
+  describe('CURRENT_USER_FETCH', function() {
+    beforeEach(function() {
       sandbox.spy(UserStore, 'emitChange');
       AppDispatcher.handleViewAction({
         type: userActionTypes.CURRENT_USER_FETCH
       });
     });
 
-    it('sets loading state true', function () {
+    it('sets loading state true', function() {
       expect(UserStore.isLoadingCurrentUser).toBe(true);
     });
 
-    it('sets loading currentUser state true', function () {
+    it('sets loading currentUser state true', function() {
       expect(UserStore._loading.currentUser).toBe(true);
     });
 
-    it('emits change', function () {
+    it('emits change', function() {
       expect(UserStore.emitChange).toHaveBeenCalledOnce();
     });
   });
 
-  describe('CURRENT_USER_RECEIVED', function () {
-    beforeEach(function () {
+  describe('CURRENT_USER_RECEIVED', function() {
+    beforeEach(function() {
       const currentUser = { guid: '1234' };
       sandbox.spy(UserStore, 'emitChange');
 
@@ -865,15 +890,15 @@ describe('UserStore', function () {
       });
     });
 
-    it('sets loading state false', function () {
+    it('sets loading state false', function() {
       expect(UserStore.isLoadingCurrentUser).toBe(false);
     });
 
-    it('sets loading currentUser state false', function () {
+    it('sets loading currentUser state false', function() {
       expect(UserStore._loading.currentUser).toBe(false);
     });
 
-    it('emits change', function () {
+    it('emits change', function() {
       expect(UserStore.emitChange).toHaveBeenCalledOnce();
     });
   });
@@ -882,7 +907,11 @@ describe('UserStore', function () {
     let notice;
 
     beforeEach(function() {
-      notice = { noticeType: "finish", description: "An email invite was sent to undefined. Their account has been associated to this space, and their space roles can be controlled below." };
+      notice = {
+        noticeType: 'finish',
+        description:
+          'An email invite was sent to undefined. Their account has been associated to this space, and their space roles can be controlled below.'
+      };
       UserStore._userListNotification = notice;
       sandbox.spy(UserStore, 'emitChange');
 
@@ -891,8 +920,12 @@ describe('UserStore', function () {
 
     it('should create notification for user invite', function() {
       expect(UserStore.getUserListNotification()).toBeDefined();
-      expect(UserStore.getUserListNotification().description).toEqual(notice.description);
-      expect(UserStore.getUserListNotification().noticeType).toEqual(notice.noticeType);
+      expect(UserStore.getUserListNotification().description).toEqual(
+        notice.description
+      );
+      expect(UserStore.getUserListNotification().noticeType).toEqual(
+        notice.noticeType
+      );
     });
 
     it('should emit a change event', function() {
@@ -904,7 +937,7 @@ describe('UserStore', function () {
     let notice;
 
     beforeEach(function() {
-      notice = { noticeType: "finish", description: "message" };
+      notice = { noticeType: 'finish', description: 'message' };
       UserStore._userListNotification = notice;
       sandbox.spy(UserStore, 'emitChange');
 
@@ -913,8 +946,12 @@ describe('UserStore', function () {
 
     it('should clear notification for user invite', function() {
       expect(UserStore.getUserListNotification()).toBeDefined();
-      expect(UserStore.getUserListNotification().description).not.toEqual(notice.description);
-      expect(UserStore.getUserListNotification().noticeType).not.toEqual(notice.noticeType);
+      expect(UserStore.getUserListNotification().description).not.toEqual(
+        notice.description
+      );
+      expect(UserStore.getUserListNotification().noticeType).not.toEqual(
+        notice.noticeType
+      );
     });
 
     it('should emit a change event', function() {
@@ -937,8 +974,12 @@ describe('UserStore', function () {
 
     it('should add a error message to the user invite error field', function() {
       expect(UserStore.getUserListNotificationError()).toBeDefined();
-      expect(UserStore.getUserListNotificationError().contextualMessage).toEqual(message);
-      expect(UserStore.getUserListNotificationError().message).toEqual(error.message);
+      expect(
+        UserStore.getUserListNotificationError().contextualMessage
+      ).toEqual(message);
+      expect(UserStore.getUserListNotificationError().message).toEqual(
+        error.message
+      );
     });
 
     it('should emit a change event', function() {
@@ -946,11 +987,11 @@ describe('UserStore', function () {
     });
   });
 
-  describe('getUserListNotification()', function () {
-    describe('user with _userListNotification', function () {
+  describe('getUserListNotification()', function() {
+    describe('user with _userListNotification', function() {
       let user, space, org, actual, notice;
 
-      beforeEach(function () {
+      beforeEach(function() {
         notice = { noticeType: 'finish', description: 'a message' };
         org = { guid: 'org1234' };
         space = { guid: 'space1234' };
@@ -965,28 +1006,26 @@ describe('UserStore', function () {
         UserStore.push(user);
       });
 
-      it('returns notice when _userListNotification has content', function () {
+      it('returns notice when _userListNotification has content', function() {
         UserStore._userListNotification = notice;
-        actual = UserStore.getUserListNotification()
+        actual = UserStore.getUserListNotification();
         expect(actual).toBe(notice);
       });
-
     });
   });
 
   describe('on CLEAR', () => {
     beforeEach(function() {
-      const notice = { noticeType: "finish", description: "message" };
+      const notice = { noticeType: 'finish', description: 'message' };
       UserStore._userListNotification = notice;
       UserStore._error = 'something';
       UserStore._saving = true;
       UserStore._userListNotificationError = 'invite error';
-      UserStore._loading = {currentUser: true};
+      UserStore._loading = { currentUser: true };
       sandbox.spy(UserStore, 'emitChange');
       AppDispatcher.handleViewAction({
-        type: errorActionTypes.CLEAR,
+        type: errorActionTypes.CLEAR
       });
-
     });
     it('resets all of the notifications and errors', () => {
       expect(UserStore._userListNotification).toEqual({});
@@ -997,11 +1036,11 @@ describe('UserStore', function () {
     });
   });
 
-  describe('currentlyViewedType()', function () {
-    describe('user with _currentViewedType', function () {
+  describe('currentlyViewedType()', function() {
+    describe('user with _currentViewedType', function() {
       let user, space, org, actual;
 
-      beforeEach(function () {
+      beforeEach(function() {
         org = { guid: 'org1234' };
         space = { guid: 'space1234' };
         user = {
@@ -1015,25 +1054,25 @@ describe('UserStore', function () {
         UserStore.push(user);
       });
 
-      it('returns space for _currentViewedType equals space_user', function () {
+      it('returns space for _currentViewedType equals space_user', function() {
         UserStore._currentViewedType = 'space_user';
-        actual = UserStore.currentlyViewedType
+        actual = UserStore.currentlyViewedType;
         expect(actual).toBe('space_user');
       });
 
-      it('returns org for _currentViewedType equals org_user', function () {
+      it('returns org for _currentViewedType equals org_user', function() {
         UserStore._currentViewedType = 'org_user';
-        actual = UserStore.currentlyViewedType
+        actual = UserStore.currentlyViewedType;
         expect(actual).toBe('org_user');
       });
     });
   });
 
-  describe('isAdmin()', function () {
-    describe('user with _currentUserIsAdmin', function () {
+  describe('isAdmin()', function() {
+    describe('user with _currentUserIsAdmin', function() {
       let user, space, org, actual;
 
-      beforeEach(function () {
+      beforeEach(function() {
         org = { guid: 'org1234' };
         space = { guid: 'space1234' };
         user = {
@@ -1047,25 +1086,25 @@ describe('UserStore', function () {
         UserStore.push(user);
       });
 
-      it('returns true for _currentUserIsAdmin equals true', function () {
+      it('returns true for _currentUserIsAdmin equals true', function() {
         UserStore._currentUserIsAdmin = true;
-        actual = UserStore.isAdmin()
+        actual = UserStore.isAdmin();
         expect(actual).toBe(true);
       });
 
-      it('returns true for _currentUserIsAdmin equals false', function () {
+      it('returns true for _currentUserIsAdmin equals false', function() {
         UserStore._currentUserIsAdmin = false;
-        actual = UserStore.isAdmin()
+        actual = UserStore.isAdmin();
         expect(actual).toBe(false);
       });
     });
   });
 
-  describe('hasRole()', function () {
-    describe('user with space_developer and org roles', function () {
+  describe('hasRole()', function() {
+    describe('user with space_developer and org roles', function() {
       let user, space, org, isAdmin;
 
-      beforeEach(function () {
+      beforeEach(function() {
         org = { guid: 'org1234' };
         space = { guid: 'space1234' };
         user = {
@@ -1079,57 +1118,87 @@ describe('UserStore', function () {
         UserStore.push(user);
       });
 
-      it('returns true for space_developer', function () {
-        expect(UserStore.hasRole(user.guid, space.guid, 'space_developer')).toBe(true);
+      it('returns true for space_developer', function() {
+        expect(
+          UserStore.hasRole(user.guid, space.guid, 'space_developer')
+        ).toBe(true);
       });
 
-      it('returns false for space_manager', function () {
-        expect(UserStore.hasRole(user.guid, space.guid, 'space_manager')).toBe(false);
+      it('returns false for space_manager', function() {
+        expect(UserStore.hasRole(user.guid, space.guid, 'space_manager')).toBe(
+          false
+        );
       });
 
       it('returns true for org_manager', function() {
-        expect(UserStore.hasRole(user.guid, org.guid, 'org_manager')).toBe(true);
+        expect(UserStore.hasRole(user.guid, org.guid, 'org_manager')).toBe(
+          true
+        );
       });
 
       it('returns true for org_manager and org_auditor', function() {
-        expect(UserStore.hasRole(user.guid, org.guid, ['org_manager', 'org_auditor'])).toBe(true);
+        expect(
+          UserStore.hasRole(user.guid, org.guid, ['org_manager', 'org_auditor'])
+        ).toBe(true);
       });
 
       it('returns true for org_manager and org_developer', function() {
-        expect(UserStore.hasRole(user.guid, org.guid, ['org_manager', 'org_developer'])).toBe(true);
+        expect(
+          UserStore.hasRole(user.guid, org.guid, [
+            'org_manager',
+            'org_developer'
+          ])
+        ).toBe(true);
       });
 
-      it('returns true for space_developer as uaa admin', function () {
+      it('returns true for space_developer as uaa admin', function() {
         UserStore._currentUserIsAdmin = true;
-        expect(UserStore.hasRole(user.guid, space.guid, 'space_developer')).toBe(true);
+        expect(
+          UserStore.hasRole(user.guid, space.guid, 'space_developer')
+        ).toBe(true);
       });
 
-      it('returns false for space_manager as uaa admin', function () {
+      it('returns false for space_manager as uaa admin', function() {
         UserStore._currentUserIsAdmin = true;
-        expect(UserStore.hasRole(user.guid, space.guid, 'space_manager')).toBe(true);
+        expect(UserStore.hasRole(user.guid, space.guid, 'space_manager')).toBe(
+          true
+        );
       });
 
       it('returns true for org_manager as uaa admin', function() {
         UserStore._currentUserIsAdmin = true;
-        expect(UserStore.hasRole(user.guid, org.guid, 'org_manager')).toBe(true);
+        expect(UserStore.hasRole(user.guid, org.guid, 'org_manager')).toBe(
+          true
+        );
       });
 
       it('returns true for org_manager and org_auditor as uaa admin', function() {
         UserStore._currentUserIsAdmin = true;
-        expect(UserStore.hasRole(user.guid, org.guid, ['org_manager', 'org_auditor'])).toBe(true);
+        expect(
+          UserStore.hasRole(user.guid, org.guid, ['org_manager', 'org_auditor'])
+        ).toBe(true);
       });
 
       it('returns true for org_manager and org_developer as uaa admin', function() {
         UserStore._currentUserIsAdmin = true;
-        expect(UserStore.hasRole(user.guid, org.guid, ['org_manager', 'org_developer'])).toBe(true);
+        expect(
+          UserStore.hasRole(user.guid, org.guid, [
+            'org_manager',
+            'org_developer'
+          ])
+        ).toBe(true);
       });
 
-      it('returns false for another space', function () {
-        expect(UserStore.hasRole(user.guid, 'otherspace123', 'space_developer')).toBe(false);
+      it('returns false for another space', function() {
+        expect(
+          UserStore.hasRole(user.guid, 'otherspace123', 'space_developer')
+        ).toBe(false);
       });
 
-      it('returns false for another user', function () {
-        expect(UserStore.hasRole('otheruser123', space.guid, 'space_developer')).toBe(false);
+      it('returns false for another user', function() {
+        expect(
+          UserStore.hasRole('otheruser123', space.guid, 'space_developer')
+        ).toBe(false);
       });
     });
   });
