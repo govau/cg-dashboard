@@ -5,7 +5,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const PRODUCTION = process.env.NODE_ENV === 'prod';
 const TEST = process.env.NODE_ENV === 'test';
-const CG_STYLE_PATH = process.env.CG_STYLE_PATH;
 const CF_SKIN = process.env.CF_SKIN || 'cg';
 
 const srcDir = './static_src';
@@ -55,7 +54,6 @@ const config = {
 
   resolve: {
     alias: {
-      'cloudgov-style': 'cloudgov-style',
       dashboard: path.resolve(__dirname, 'static_src'),
       skin: path.resolve(__dirname, `static_src/skins/${CF_SKIN}`)
     },

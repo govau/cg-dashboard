@@ -109,7 +109,6 @@ likely occur in the `cg-style` repo. You can see your changes in real time by
 linking and watching for the changes there.
 
 ```sh
-export CG_STYLE_PATH=/path/to/cg-style/repo/here
 docker-compose up -d watch_cg_style
 # If you're tailing the logs, you will see the `frontend` service will restart
 

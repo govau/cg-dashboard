@@ -146,20 +146,7 @@ Documentation is not a focus right now.
 
 #### How to upgrade dependencies
 
-To upgrade all dependencies to version stipulated in package.json
-
-- Ensure cloudgov-style or other dependencies are unlinked by running `npm unlink cloudgov-style`.
-- Remove `npm-shrinkwrap.json`.
-- Use `npm update --save --saveDev` to update all dependencies.
-- Make sure it works (run linting, tests, and acceptance tests).
-- Add back the shrinkwrap with `npm shrinkwrap --dev` and commit it.
-
-To update a single package to a specific version
-
-- Ensure cloudgov-style or other dependencies are unlinked by running `npm unlink cloudgov-style`.
-- Run `npm install --save[Dev] {package name}@{version}` where package name is the name of the package to update and version is the version you want to update to.
-- If there are errors related to peer dependencies, continue installing them in the same fashion.
-- If there are no errors, both package.json and npm-shrinkwrap.json should have changes that can be committed.
+Use `npm`.
 
 ### Code review
 - When doing code reviews, the reviewer should pull down the code and test on their local computer. This is because the staging site is not often used, meaning bugs could be present for long amounts of time.
