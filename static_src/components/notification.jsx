@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import keymirror from 'keymirror';
 import Action from './action.jsx';
-import { entityHealth } from '../constants.js';
+import { entityHealth } from '../constants';
 
 const STATUSES = Object.assign(
   {},

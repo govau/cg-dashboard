@@ -3,7 +3,7 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher.js';
+import AppDispatcher from '../dispatcher';
 import cfApi from '../util/cf_api';
 import uaaApi from '../util/uaa_api';
 import { userActionTypes } from '../constants';

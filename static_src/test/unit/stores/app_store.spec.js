@@ -1,7 +1,7 @@
-import appActions from '../../../actions/app_actions.js';
-import AppDispatcher from '../../../dispatcher.js';
-import cfApi from '../../../util/cf_api.js';
-import { AppStore as AppStoreClass } from '../../../stores/app_store.js';
+import appActions from '../../../actions/app_actions';
+import AppDispatcher from '../../../dispatcher';
+import cfApi from '../../../util/cf_api';
+import { AppStore as AppStoreClass } from '../../../stores/app_store';
 import { appActionTypes } from '../../../constants';
 
 describe('AppStore', function() {

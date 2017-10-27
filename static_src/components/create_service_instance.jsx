@@ -8,10 +8,10 @@ import Action from './action.jsx';
 import { Form, FormText, FormSelect, FormElement, FormError } from './form';
 import FormStore from '../stores/form_store';
 import Loading from './loading.jsx';
-import OrgStore from '../stores/org_store.js';
-import SpaceStore from '../stores/space_store.js';
-import ServiceInstanceStore from '../stores/service_instance_store.js';
-import serviceActions from '../actions/service_actions.js';
+import OrgStore from '../stores/org_store';
+import SpaceStore from '../stores/space_store';
+import ServiceInstanceStore from '../stores/service_instance_store';
+import serviceActions from '../actions/service_actions';
 import formActions from '../actions/form_actions';
 import { validateString } from '../util/validators';
 

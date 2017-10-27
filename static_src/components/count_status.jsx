@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { entityHealth } from '../constants.js';
+import { entityHealth } from '../constants';
 import EntityIcon from './entity_icon.jsx';
 
 const ICON_TYPES = ['space', 'app', 'service'];

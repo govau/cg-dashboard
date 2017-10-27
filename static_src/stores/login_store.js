@@ -2,8 +2,8 @@
  * Store to hold and update login status.
  */
 
-import BaseStore from './base_store.js';
-import { loginActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import { loginActionTypes } from '../constants';
 
 // Babel doesn't like extending native types with `class`, so use prototype
 // inheritence.

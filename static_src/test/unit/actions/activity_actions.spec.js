@@ -1,7 +1,7 @@
-import { assertAction, setupViewSpy, setupServerSpy } from '../helpers.js';
-import cfApi from '../../../util/cf_api.js';
-import activityActions from '../../../actions/activity_actions.js';
-import { activityActionTypes } from '../../../constants.js';
+import { assertAction, setupViewSpy, setupServerSpy } from '../helpers';
+import cfApi from '../../../util/cf_api';
+import activityActions from '../../../actions/activity_actions';
+import { activityActionTypes } from '../../../constants';
 
 describe('activityActions', () => {
   let sandbox;

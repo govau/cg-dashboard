@@ -3,7 +3,7 @@ import React from 'react';
 
 import Notification from './notification.jsx';
 import { config } from 'skin';
-import errorActions from '../actions/error_actions.js';
+import errorActions from '../actions/error_actions';
 
 const propTypes = {
   err: PropTypes.object

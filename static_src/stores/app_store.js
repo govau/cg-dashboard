@@ -6,8 +6,8 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 
-import BaseStore from './base_store.js';
-import { appStates, appActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import { appStates, appActionTypes } from '../constants';
 
 export const appPropType = PropTypes.shape({
   guid: PropTypes.string.isRequired,

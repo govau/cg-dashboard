@@ -1,15 +1,15 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import {
   assertAction,
   setupViewSpy,
   setupUISpy,
   setupServerSpy
-} from '../helpers.js';
+} from '../helpers';
 import moxios from 'moxios';
-import cfApi from '../../../util/cf_api.js';
-import uaaApi from '../../../util/uaa_api.js';
-import userActions from '../../../actions/user_actions.js';
-import { userActionTypes } from '../../../constants.js';
+import cfApi from '../../../util/cf_api';
+import uaaApi from '../../../util/uaa_api';
+import userActions from '../../../actions/user_actions';
+import { userActionTypes } from '../../../constants';
 import UserStore from '../../../stores/user_store';
 import OrgStore from '../../../stores/org_store';
 

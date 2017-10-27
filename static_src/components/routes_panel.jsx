@@ -1,17 +1,17 @@
 import React from 'react';
 
-import AppStore from '../stores/app_store.js';
+import AppStore from '../stores/app_store';
 import Action from './action.jsx';
 import ComplexList from './complex_list.jsx';
-import DomainStore from '../stores/domain_store.js';
-import OrgStore from '../stores/org_store.js';
+import DomainStore from '../stores/domain_store';
+import OrgStore from '../stores/org_store';
 import PanelActions from './panel_actions.jsx';
-import routeActions from '../actions/route_actions.js';
+import routeActions from '../actions/route_actions';
 import Route from './route.jsx';
 import RouteForm from './route_form.jsx';
-import RouteStore from '../stores/route_store.js';
-import QuotaStore from '../stores/quota_store.js';
-import SpaceStore from '../stores/space_store.js';
+import RouteStore from '../stores/route_store';
+import QuotaStore from '../stores/quota_store';
+import SpaceStore from '../stores/space_store';
 import { spaceHref } from '../util/url';
 
 function stateSetter() {

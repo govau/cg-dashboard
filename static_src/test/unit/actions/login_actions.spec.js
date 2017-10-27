@@ -1,4 +1,4 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import cfApi from '../../../util/cf_api';
 import loginActions from '../../../actions/login_actions';
 import { loginActionTypes } from '../../../constants';

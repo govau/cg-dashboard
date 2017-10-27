@@ -1,10 +1,10 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import cfApi from '../../../util/cf_api.js';
-import { ServicePlanStore as ServicePlanStoreClass } from '../../../stores/service_plan_store.js';
-import serviceActions from '../../../actions/service_actions.js';
-import { serviceActionTypes } from '../../../constants.js';
+import AppDispatcher from '../../../dispatcher';
+import cfApi from '../../../util/cf_api';
+import { ServicePlanStore as ServicePlanStoreClass } from '../../../stores/service_plan_store';
+import serviceActions from '../../../actions/service_actions';
+import { serviceActionTypes } from '../../../constants';
 
 describe('ServicePlanStore', function() {
   let sandbox, ServicePlanStore;

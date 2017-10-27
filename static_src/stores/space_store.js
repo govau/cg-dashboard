@@ -6,8 +6,8 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 
-import BaseStore from './base_store.js';
-import { orgActionTypes, spaceActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import { orgActionTypes, spaceActionTypes } from '../constants';
 
 export const spacePropType = PropTypes.shape({
   guid: PropTypes.string.isRequired,

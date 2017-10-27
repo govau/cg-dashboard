@@ -6,9 +6,9 @@
 // TODO consider splitting this up into separate files for bind, instance, and
 // plan actions similar to how stores are divided
 
-import AppDispatcher from '../dispatcher.js';
-import cfApi from '../util/cf_api.js';
-import errorActions from './error_actions.js';
+import AppDispatcher from '../dispatcher';
+import cfApi from '../util/cf_api';
+import errorActions from './error_actions';
 import { serviceActionTypes } from '../constants';
 import ServiceInstanceStore from '../stores/service_instance_store';
 

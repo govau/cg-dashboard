@@ -1,13 +1,13 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import {
   assertAction,
   setupUISpy,
   setupViewSpy,
   setupServerSpy
-} from '../helpers.js';
-import cfApi from '../../../util/cf_api.js';
-import orgActions from '../../../actions/org_actions.js';
-import { orgActionTypes } from '../../../constants.js';
+} from '../helpers';
+import cfApi from '../../../util/cf_api';
+import orgActions from '../../../actions/org_actions';
+import { orgActionTypes } from '../../../constants';
 
 describe('orgActions', () => {
   let sandbox;

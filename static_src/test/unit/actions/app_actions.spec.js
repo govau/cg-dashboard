@@ -3,10 +3,10 @@ import {
   setupUISpy,
   setupViewSpy,
   setupServerSpy
-} from '../helpers.js';
-import cfApi from '../../../util/cf_api.js';
-import appActions from '../../../actions/app_actions.js';
-import { appActionTypes } from '../../../constants.js';
+} from '../helpers';
+import cfApi from '../../../util/cf_api';
+import appActions from '../../../actions/app_actions';
+import { appActionTypes } from '../../../constants';
 
 describe('appActions', function() {
   let sandbox;

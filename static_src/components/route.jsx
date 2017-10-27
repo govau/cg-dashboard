@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Action from './action.jsx';
 import ConfirmationBox from './confirmation_box.jsx';
-import DomainStore from '../stores/domain_store.js';
+import DomainStore from '../stores/domain_store';
 import ElasticLine from './elastic_line.jsx';
 import ElasticLineItem from './elastic_line_item.jsx';
 import Loading from './loading.jsx';
 import RouteForm from './route_form.jsx';
-import RouteStore from '../stores/route_store.js';
+import RouteStore from '../stores/route_store';
 import formatRoute from '../util/format_route';
-import routeActions from '../actions/route_actions.js';
+import routeActions from '../actions/route_actions';
 
 const propTypes = {
   appGuid: PropTypes.string.isRequired,

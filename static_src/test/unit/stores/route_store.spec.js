@@ -1,10 +1,10 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import cfApi from '../../../util/cf_api.js';
-import routeActions from '../../../actions/route_actions.js';
-import DomainStore from '../../../stores/domain_store.js';
-import RouteStore from '../../../stores/route_store.js';
+import AppDispatcher from '../../../dispatcher';
+import cfApi from '../../../util/cf_api';
+import routeActions from '../../../actions/route_actions';
+import DomainStore from '../../../stores/domain_store';
+import RouteStore from '../../../stores/route_store';
 import { domainActionTypes, routeActionTypes } from '../../../constants';
 
 describe('RouteStore', function() {

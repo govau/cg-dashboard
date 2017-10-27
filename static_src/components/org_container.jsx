@@ -6,15 +6,15 @@ import Breadcrumbs from './breadcrumbs';
 import EntityIcon from './entity_icon.jsx';
 import EntityEmpty from './entity_empty.jsx';
 import Loading from './loading.jsx';
-import OrgStore from '../stores/org_store.js';
+import OrgStore from '../stores/org_store';
 import PageHeader from './page_header.jsx';
 import Panel from './panel.jsx';
 import ServiceCountStatus from './service_count_status.jsx';
 import SpaceCountStatus from './space_count_status.jsx';
-import SpaceStore from '../stores/space_store.js';
+import SpaceStore from '../stores/space_store';
 import SpaceQuicklook from './space_quicklook.jsx';
 import Users from './users.jsx';
-import UserStore from '../stores/user_store.js';
+import UserStore from '../stores/user_store';
 
 function stateSetter() {
   const currentOrgGuid = OrgStore.currentOrgGuid;

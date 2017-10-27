@@ -1,12 +1,12 @@
 import React from 'react';
-import AppStore from '../stores/app_store.js';
+import AppStore from '../stores/app_store';
 import Loading from './loading.jsx';
-import OrgStore from '../stores/org_store.js';
-import ServiceBindingStore from '../stores/service_binding_store.js';
+import OrgStore from '../stores/org_store';
+import ServiceBindingStore from '../stores/service_binding_store';
 import ServiceInstanceList from './service_instance_list.jsx';
-import ServiceInstanceStore from '../stores/service_instance_store.js';
-import ServicePlanStore from '../stores/service_plan_store.js';
-import SpaceStore from '../stores/space_store.js';
+import ServiceInstanceStore from '../stores/service_instance_store';
+import ServicePlanStore from '../stores/service_plan_store';
+import SpaceStore from '../stores/space_store';
 import { spaceHref } from '../util/url';
 
 const propTypes = {};

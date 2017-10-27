@@ -1,6 +1,6 @@
-import AppDispatcher from '../dispatcher.js';
+import AppDispatcher from '../dispatcher';
 import { activityActionTypes } from '../constants';
-import cfApi from '../util/cf_api.js';
+import cfApi from '../util/cf_api';
 
 const activityActions = {
   fetchSpaceEvents(spaceGuid, appGuid) {

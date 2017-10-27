@@ -1,9 +1,9 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import cfApi from '../../../util/cf_api.js';
-import { wrapInRes, unwrapOfRes } from '../helpers.js';
-import DomainStore from '../../../stores/domain_store.js';
+import AppDispatcher from '../../../dispatcher';
+import cfApi from '../../../util/cf_api';
+import { wrapInRes, unwrapOfRes } from '../helpers';
+import DomainStore from '../../../stores/domain_store';
 import { domainActionTypes, routeActionTypes } from '../../../constants';
 
 describe('DomainStore', function() {

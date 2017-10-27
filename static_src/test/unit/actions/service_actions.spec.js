@@ -1,16 +1,16 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import {
   assertAction,
   setupViewSpy,
   setupServerSpy,
   setupUISpy
-} from '../helpers.js';
-import cfApi from '../../../util/cf_api.js';
-import errorActions from '../../../actions/error_actions.js';
-import serviceActions from '../../../actions/service_actions.js';
-import { serviceActionTypes } from '../../../constants.js';
+} from '../helpers';
+import cfApi from '../../../util/cf_api';
+import errorActions from '../../../actions/error_actions';
+import serviceActions from '../../../actions/service_actions';
+import { serviceActionTypes } from '../../../constants';
 import ServiceInstanceStore from '../../../stores/service_instance_store';
-import { wrapInRes, unwrapOfRes } from '../helpers.js';
+import { wrapInRes, unwrapOfRes } from '../helpers';
 
 describe('serviceActions', function() {
   var sandbox;

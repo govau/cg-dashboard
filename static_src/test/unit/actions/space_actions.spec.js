@@ -1,14 +1,14 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import {
   assertAction,
   setupViewSpy,
   setupUISpy,
   setupServerSpy,
   wrapInRes
-} from '../helpers.js';
-import cfApi from '../../../util/cf_api.js';
-import spaceActions from '../../../actions/space_actions.js';
-import { spaceActionTypes } from '../../../constants.js';
+} from '../helpers';
+import cfApi from '../../../util/cf_api';
+import spaceActions from '../../../actions/space_actions';
+import { spaceActionTypes } from '../../../constants';
 
 describe('spaceActions', () => {
   var sandbox;

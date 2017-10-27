@@ -4,8 +4,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ServicePlan from './service_plan.jsx';
-import serviceActions from '../actions/service_actions.js';
-import ServicePlanStore from '../stores/service_plan_store.js';
+import serviceActions from '../actions/service_actions';
+import ServicePlanStore from '../stores/service_plan_store';
 
 const propTypes = {
   plans: PropTypes.array,

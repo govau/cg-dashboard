@@ -4,9 +4,9 @@
 
 import Immutable from 'immutable';
 
-import BaseStore from './base_store.js';
-import cfApi from '../util/cf_api.js';
-import { quotaActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import cfApi from '../util/cf_api';
+import { quotaActionTypes } from '../constants';
 
 class QuotaStore extends BaseStore {
   constructor() {

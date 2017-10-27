@@ -1,6 +1,6 @@
-import { setupUISpy, setupServerSpy } from '../helpers.js';
-import errorActions from '../../../actions/error_actions.js';
-import { errorActionTypes } from '../../../constants.js';
+import { setupUISpy, setupServerSpy } from '../helpers';
+import errorActions from '../../../actions/error_actions';
+import { errorActionTypes } from '../../../constants';
 
 describe('errorActions', function() {
   let sandbox;

@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import { OrgStore as OrgStoreClass } from '../../../stores/org_store.js';
+import AppDispatcher from '../../../dispatcher';
+import { OrgStore as OrgStoreClass } from '../../../stores/org_store';
 import { orgActionTypes } from '../../../constants';
 
 describe('OrgStore', () => {

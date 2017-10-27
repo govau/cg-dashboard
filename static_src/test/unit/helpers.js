@@ -1,4 +1,4 @@
-import AppDispatcher from '../../dispatcher.js';
+import AppDispatcher from '../../dispatcher';
 
 export function wrapInRes(responses) {
   var n = 0;

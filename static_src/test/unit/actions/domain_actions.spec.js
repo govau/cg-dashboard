@@ -1,7 +1,7 @@
-import AppDispatcher from '../../../dispatcher.js';
-import { assertAction, setupViewSpy, setupServerSpy } from '../helpers.js';
-import domainActions from '../../../actions/domain_actions.js';
-import { domainActionTypes } from '../../../constants.js';
+import AppDispatcher from '../../../dispatcher';
+import { assertAction, setupViewSpy, setupServerSpy } from '../helpers';
+import domainActions from '../../../actions/domain_actions';
+import { domainActionTypes } from '../../../constants';
 
 describe('domainActions', function() {
   var sandbox;

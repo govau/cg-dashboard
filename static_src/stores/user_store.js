@@ -5,8 +5,8 @@
 
 import Immutable from 'immutable';
 
-import BaseStore from './base_store.js';
-import { userActionTypes, errorActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import { userActionTypes, errorActionTypes } from '../constants';
 
 export class UserStore extends BaseStore {
   constructor() {

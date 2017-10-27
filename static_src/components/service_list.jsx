@@ -4,7 +4,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ServiceListItem from './service_list_item.jsx';
-import ServiceStore from '../stores/service_store.js';
+import ServiceStore from '../stores/service_store';
 
 const propTypes = {
   services: PropTypes.array

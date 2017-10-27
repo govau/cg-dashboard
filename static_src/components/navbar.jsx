@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import spaceActions from '../actions/space_actions.js';
-import orgActions from '../actions/org_actions.js';
-import OrgStore from '../stores/org_store.js';
-import SpaceStore from '../stores/space_store.js';
+import spaceActions from '../actions/space_actions';
+import orgActions from '../actions/org_actions';
+import OrgStore from '../stores/org_store';
+import SpaceStore from '../stores/space_store';
 import * as url from '../util/url';
 
 const propTypes = {

@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
-import BaseStore from './base_store.js';
-import { activityActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import { activityActionTypes } from '../constants';
 
 function parseLogTimestamp(timestamp) {
   const split = timestamp.split(':');

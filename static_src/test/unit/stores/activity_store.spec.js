@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import ActivityStore from '../../../stores/activity_store.js';
+import AppDispatcher from '../../../dispatcher';
+import ActivityStore from '../../../stores/activity_store';
 import { activityActionTypes } from '../../../constants';
 
 describe('ActivityStore', function() {

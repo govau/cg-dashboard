@@ -2,10 +2,10 @@ import React from 'react';
 import Loading from './loading.jsx';
 import PanelDocumentation from './panel_documentation.jsx';
 import ServiceInstanceTableRow from './service_instance_table_row.jsx';
-import ServiceInstanceStore from '../stores/service_instance_store.js';
-import SpaceStore from '../stores/space_store.js';
+import ServiceInstanceStore from '../stores/service_instance_store';
+import SpaceStore from '../stores/space_store';
 import { config } from 'skin';
-import serviceActions from '../actions/service_actions.js';
+import serviceActions from '../actions/service_actions';
 
 function stateSetter() {
   const currentSpaceGuid = SpaceStore.currentSpaceGuid;

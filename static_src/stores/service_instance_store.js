@@ -3,14 +3,14 @@
  * UI and server.
  */
 import AppDispatcher from '../dispatcher';
-import BaseStore from './base_store.js';
+import BaseStore from './base_store';
 import {
   appStates,
   serviceActionTypes,
   errorActionTypes
-} from '../constants.js';
-import ServiceStore from './service_store.js';
-import ServicePlanStore from './service_plan_store.js';
+} from '../constants';
+import ServiceStore from './service_store';
+import ServicePlanStore from './service_plan_store';
 
 export const OPERATION_FAILED = 'failed';
 export const OPERATION_DELETING = 'deleting';

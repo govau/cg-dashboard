@@ -6,7 +6,7 @@ import ComplexList from './complex_list.jsx';
 import EntityEmpty from './entity_empty.jsx';
 import EntityIcon from './entity_icon.jsx';
 import InfoAppCreate from './info_app_create.jsx';
-import OrgStore from '../stores/org_store.js';
+import OrgStore from '../stores/org_store';
 import { spaceHref } from '../util/url';
 
 const propTypes = {

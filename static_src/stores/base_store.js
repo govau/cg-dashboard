@@ -5,8 +5,8 @@
 import { EventEmitter } from 'events';
 import Immutable from 'immutable';
 
-import AppDispatcher from '../dispatcher.js';
-import LoadingStatus from '../util/loading_status.js';
+import AppDispatcher from '../dispatcher';
+import LoadingStatus from '../util/loading_status';
 
 // TODO clean up the listeners and reduce the MAX_LISTENERS to 15
 const MAX_LISTENERS = 20;

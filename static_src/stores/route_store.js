@@ -5,11 +5,11 @@
 
 import Immutable from 'immutable';
 
-import BaseStore from './base_store.js';
-import DomainStore from './domain_store.js';
-import cfApi from '../util/cf_api.js';
-import formatRoute from '../util/format_route.js';
-import { routeActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import DomainStore from './domain_store';
+import cfApi from '../util/cf_api';
+import formatRoute from '../util/format_route';
+import { routeActionTypes } from '../constants';
 
 class RouteStore extends BaseStore {
   constructor() {

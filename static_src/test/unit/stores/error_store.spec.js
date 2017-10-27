@@ -1,5 +1,5 @@
-import errorActions from '../../../actions/error_actions.js';
-import { ErrorStore as ErrorStoreClass } from '../../../stores/error_store.js';
+import errorActions from '../../../actions/error_actions';
+import { ErrorStore as ErrorStoreClass } from '../../../stores/error_store';
 
 describe('ErrorStore', function() {
   let ErrorStore, sandbox;

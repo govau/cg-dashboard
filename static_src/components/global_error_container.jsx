@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import ErrorStore from '../stores/error_store.js';
+import ErrorStore from '../stores/error_store';
 import GlobalError from './global_error.jsx';
 
 const propTypes = {

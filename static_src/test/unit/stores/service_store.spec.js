@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import { ServiceStore as ServiceStoreClass } from '../../../stores/service_store.js';
-import { serviceActionTypes } from '../../../constants.js';
+import AppDispatcher from '../../../dispatcher';
+import { ServiceStore as ServiceStoreClass } from '../../../stores/service_store';
+import { serviceActionTypes } from '../../../constants';
 
 describe('ServiceStore', function() {
   let sandbox, ServiceStore;

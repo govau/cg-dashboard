@@ -8,7 +8,7 @@ import ExpandableBox from './expandable_box.jsx';
 import Loading from './loading.jsx';
 import SpaceCountStatus from './space_count_status.jsx';
 import SpaceQuicklook from './space_quicklook.jsx';
-import orgActions from '../actions/org_actions.js';
+import orgActions from '../actions/org_actions';
 import { orgHref } from '../util/url';
 
 const propTypes = {

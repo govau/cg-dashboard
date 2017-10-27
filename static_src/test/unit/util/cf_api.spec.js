@@ -8,15 +8,15 @@ import cfApi, {
   encodeFilter,
   encodeFilters
 } from '../../../util/cf_api';
-import domainActions from '../../../actions/domain_actions.js';
-import errorActions from '../../../actions/error_actions.js';
-import loginActions from '../../../actions/login_actions.js';
-import orgActions from '../../../actions/org_actions.js';
-import OrgStore from '../../../stores/org_store.js';
-import quotaActions from '../../../actions/quota_actions.js';
-import routeActions from '../../../actions/route_actions.js';
-import userActions from '../../../actions/user_actions.js';
-import { wrapInRes } from '../helpers.js';
+import domainActions from '../../../actions/domain_actions';
+import errorActions from '../../../actions/error_actions';
+import loginActions from '../../../actions/login_actions';
+import orgActions from '../../../actions/org_actions';
+import OrgStore from '../../../stores/org_store';
+import quotaActions from '../../../actions/quota_actions';
+import routeActions from '../../../actions/route_actions';
+import userActions from '../../../actions/user_actions';
+import { wrapInRes } from '../helpers';
 
 function createPromise(res, err) {
   // TODO figure out how to do this with actual Promise object.

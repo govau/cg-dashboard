@@ -2,7 +2,7 @@
  * Actions for global errors across the whole application.
  */
 
-import AppDispatcher from '../dispatcher.js';
+import AppDispatcher from '../dispatcher';
 import { errorActionTypes } from '../constants';
 
 /* eslint-disable no-alert, no-console */

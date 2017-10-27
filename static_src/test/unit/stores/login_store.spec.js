@@ -1,4 +1,4 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import { loginActionTypes } from '../../../constants';
 import {
   LoginStore as _LoginStore,

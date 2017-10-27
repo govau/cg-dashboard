@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { header } from 'skin';
-import LoginStore from '../../stores/login_store.js';
+import LoginStore from '../../stores/login_store';
 import HeaderLink from './header_link';
 import Action from '../action.jsx';
 

@@ -1,11 +1,11 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import SpaceStore from '../../../stores/space_store.js';
+import AppDispatcher from '../../../dispatcher';
+import SpaceStore from '../../../stores/space_store';
 
-import cfApi from '../../../util/cf_api.js';
-import orgActions from '../../../actions/org_actions.js';
-import spaceActions from '../../../actions/space_actions.js';
+import cfApi from '../../../util/cf_api';
+import orgActions from '../../../actions/org_actions';
+import spaceActions from '../../../actions/space_actions';
 
 describe('SpaceStore', function() {
   var sandbox;

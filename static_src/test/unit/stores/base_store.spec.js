@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import BaseStore from '../../../stores/base_store.js';
+import BaseStore from '../../../stores/base_store';
 
 describe('BaseStore', () => {
   var sandbox, store;

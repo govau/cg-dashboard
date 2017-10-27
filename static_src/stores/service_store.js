@@ -4,9 +4,9 @@
  */
 
 import AppDispatcher from '../dispatcher';
-import BaseStore from './base_store.js';
-import { serviceActionTypes } from '../constants.js';
-import ServicePlanStore from './service_plan_store.js';
+import BaseStore from './base_store';
+import { serviceActionTypes } from '../constants';
+import ServicePlanStore from './service_plan_store';
 
 export class ServiceStore extends BaseStore {
   constructor() {

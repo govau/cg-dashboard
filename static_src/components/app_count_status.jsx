@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import CountStatus from './count_status.jsx';
-import { entityHealth } from '../constants.js';
+import { entityHealth } from '../constants';
 import { appHealth, worstHealth } from '../util/health';
 
 const propTypes = {

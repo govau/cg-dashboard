@@ -3,7 +3,7 @@ import React from 'react';
 import Action from './action.jsx';
 import AppActivity from './app_activity/app_activity.jsx';
 import ActivityStore from '../stores/activity_store';
-import AppStore from '../stores/app_store.js';
+import AppStore from '../stores/app_store';
 import DomainStore from '../stores/domain_store';
 import PanelActions from './panel_actions.jsx';
 import RouteStore from '../stores/route_store';

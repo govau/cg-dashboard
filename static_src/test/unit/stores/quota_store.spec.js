@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import cfApi from '../../../util/cf_api.js';
-import QuotaStore from '../../../stores/quota_store.js';
+import AppDispatcher from '../../../dispatcher';
+import cfApi from '../../../util/cf_api';
+import QuotaStore from '../../../stores/quota_store';
 import { quotaActionTypes } from '../../../constants';
 
 describe('QuotaStore', function() {

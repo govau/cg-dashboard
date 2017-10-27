@@ -1,13 +1,13 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import {
   assertAction,
   setupViewSpy,
   setupServerSpy,
   setupUISpy
-} from '../helpers.js';
-import cfApi from '../../../util/cf_api.js';
-import quotaActions from '../../../actions/quota_actions.js';
-import { quotaActionTypes } from '../../../constants.js';
+} from '../helpers';
+import cfApi from '../../../util/cf_api';
+import quotaActions from '../../../actions/quota_actions';
+import { quotaActionTypes } from '../../../constants';
 
 describe('quotaActions', function() {
   var sandbox;

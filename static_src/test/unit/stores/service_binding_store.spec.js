@@ -1,10 +1,10 @@
 import Immutable from 'immutable';
 
-import AppDispatcher from '../../../dispatcher.js';
-import cfApi from '../../../util/cf_api.js';
-import { ServiceBindingStore as ServiceBindingStoreClass } from '../../../stores/service_binding_store.js';
+import AppDispatcher from '../../../dispatcher';
+import cfApi from '../../../util/cf_api';
+import { ServiceBindingStore as ServiceBindingStoreClass } from '../../../stores/service_binding_store';
 
-import { serviceActionTypes } from '../../../constants.js';
+import { serviceActionTypes } from '../../../constants';
 
 describe('ServiceBindingStore', function() {
   let sandbox, ServiceBindingStore;

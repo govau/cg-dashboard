@@ -5,9 +5,9 @@
 import PropTypes from 'prop-types';
 
 import AppDispatcher from '../dispatcher';
-import BaseStore from './base_store.js';
-import LoginStore from './login_store.js';
-import { orgActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import LoginStore from './login_store';
+import { orgActionTypes } from '../constants';
 import Quicklook from '../models/quicklook';
 
 export const orgPropType = PropTypes.shape({

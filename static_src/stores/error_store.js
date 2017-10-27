@@ -4,8 +4,8 @@
 
 import Immutable from 'immutable';
 
-import BaseStore from './base_store.js';
-import { errorActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import { errorActionTypes } from '../constants';
 
 export class ErrorStore extends BaseStore {
   constructor() {

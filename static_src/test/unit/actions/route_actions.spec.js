@@ -1,13 +1,13 @@
-import AppDispatcher from '../../../dispatcher.js';
+import AppDispatcher from '../../../dispatcher';
 import {
   assertAction,
   setupViewSpy,
   setupServerSpy,
   setupUISpy
-} from '../helpers.js';
-import cfApi from '../../../util/cf_api.js';
-import routeActions from '../../../actions/route_actions.js';
-import { routeActionTypes } from '../../../constants.js';
+} from '../helpers';
+import cfApi from '../../../util/cf_api';
+import routeActions from '../../../actions/route_actions';
+import { routeActionTypes } from '../../../constants';
 
 describe('routeActions', function() {
   var sandbox;

@@ -3,8 +3,8 @@
  * instances.
  */
 
-import BaseStore from './base_store.js';
-import { serviceActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import { serviceActionTypes } from '../constants';
 
 export class ServiceBindingStore extends BaseStore {
   constructor() {

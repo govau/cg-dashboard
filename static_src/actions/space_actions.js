@@ -3,10 +3,10 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher.js';
+import AppDispatcher from '../dispatcher';
 import cfApi from '../util/cf_api';
-import errorActions from './error_actions.js';
-import { spaceActionTypes } from '../constants.js';
+import errorActions from './error_actions';
+import { spaceActionTypes } from '../constants';
 import SpaceStore from '../stores/space_store';
 
 export default {

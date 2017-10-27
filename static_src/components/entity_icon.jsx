@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Icon from './icon.jsx';
-import { entityHealth } from '../constants.js';
+import { entityHealth } from '../constants';
 
 const ENTITIES = ['app', 'service', 'space', 'org'];
 

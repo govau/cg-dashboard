@@ -3,11 +3,11 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher.js';
+import AppDispatcher from '../dispatcher';
 import { appActionTypes } from '../constants';
-import errorActions from './error_actions.js';
-import cfApi from '../util/cf_api.js';
-import poll from '../util/poll.js';
+import errorActions from './error_actions';
+import cfApi from '../util/cf_api';
+import poll from '../util/poll';
 
 const appActions = {
   fetch(appGuid) {

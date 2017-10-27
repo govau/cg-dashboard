@@ -6,11 +6,11 @@ import ElasticLine from './elastic_line.jsx';
 import ElasticLineItem from './elastic_line_item.jsx';
 import FormError from './form/form_error.jsx';
 import Loading from './loading.jsx';
-import ServicePlanStore from '../stores/service_plan_store.js';
-import ServiceInstanceStore from '../stores/service_instance_store.js';
-import serviceActions from '../actions/service_actions.js';
+import ServicePlanStore from '../stores/service_plan_store';
+import ServiceInstanceStore from '../stores/service_instance_store';
+import serviceActions from '../actions/service_actions';
 
-import { OPERATION_FAILED } from '../stores/service_instance_store.js';
+import { OPERATION_FAILED } from '../stores/service_instance_store';
 
 const propTypes = {
   currentAppGuid: PropTypes.string.isRequired,

@@ -3,7 +3,7 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher.js';
+import AppDispatcher from '../dispatcher';
 import { formActionTypes } from '../constants';
 
 const formActions = {

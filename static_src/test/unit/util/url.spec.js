@@ -1,4 +1,4 @@
-import * as url from '../../../util/url.js';
+import * as url from '../../../util/url';
 
 describe('url', function() {
   describe('appHref()', function() {

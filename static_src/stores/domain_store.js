@@ -5,9 +5,9 @@
 
 import Immutable from 'immutable';
 
-import BaseStore from './base_store.js';
-import cfApi from '../util/cf_api.js';
-import { domainActionTypes } from '../constants.js';
+import BaseStore from './base_store';
+import cfApi from '../util/cf_api';
+import { domainActionTypes } from '../constants';
 
 class DomainStore extends BaseStore {
   constructor() {

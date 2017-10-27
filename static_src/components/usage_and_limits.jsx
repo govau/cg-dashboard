@@ -12,7 +12,7 @@ import ResourceUsage from './resource_usage.jsx';
 
 import { appHealth } from '../util/health';
 import { entityHealth } from '../constants';
-import appActions from '../actions/app_actions.js';
+import appActions from '../actions/app_actions';
 import formatBytes from '../util/format_bytes';
 
 // Calculates the running average based on a fixed n number of items To average

@@ -3,9 +3,9 @@
  * updating, etc should go here.
  */
 
-import AppDispatcher from '../dispatcher.js';
-import cfApi from '../util/cf_api.js';
-import errorActions from './error_actions.js';
+import AppDispatcher from '../dispatcher';
+import cfApi from '../util/cf_api';
+import errorActions from './error_actions';
 import { orgActionTypes } from '../constants';
 import spaceActions from './space_actions';
 

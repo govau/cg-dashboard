@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { Router } from 'director';
 
-import { trackPageView } from './util/analytics.js';
+import { trackPageView } from './util/analytics';
 import routes, { checkAuth, clearErrors, notFound } from './routes';
 
 import MainContainer from './components/main_container.jsx';

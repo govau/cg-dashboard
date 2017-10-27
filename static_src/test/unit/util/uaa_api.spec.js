@@ -1,9 +1,9 @@
 import http from 'axios';
 
-import errorActions from '../../../actions/error_actions.js';
-import uaaApi from '../../../util/uaa_api.js';
-import userActions from '../../../actions/user_actions.js';
-import { wrapInRes, unwrapOfRes } from '../helpers.js';
+import errorActions from '../../../actions/error_actions';
+import uaaApi from '../../../util/uaa_api';
+import userActions from '../../../actions/user_actions';
+import { wrapInRes, unwrapOfRes } from '../helpers';
 
 function createPromise(res, err) {
   // TODO figure out how to do this with actual Promise object.

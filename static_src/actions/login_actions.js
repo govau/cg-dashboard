@@ -3,7 +3,7 @@
  * modifying login information should go here.
  */
 
-import AppDispatcher from '../dispatcher.js';
+import AppDispatcher from '../dispatcher';
 import cfApi from '../util/cf_api';
 import { loginActionTypes } from '../constants';
 

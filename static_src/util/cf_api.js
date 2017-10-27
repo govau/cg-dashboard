@@ -1,11 +1,11 @@
 import http from 'axios';
 import queryString from 'query-string';
 
-import { noticeError } from '../util/analytics.js';
-import domainActions from '../actions/domain_actions.js';
-import errorActions from '../actions/error_actions.js';
-import quotaActions from '../actions/quota_actions.js';
-import routeActions from '../actions/route_actions.js';
+import { noticeError } from '../util/analytics';
+import domainActions from '../actions/domain_actions';
+import errorActions from '../actions/error_actions';
+import quotaActions from '../actions/quota_actions';
+import routeActions from '../actions/route_actions';
 
 const APIV = '/v2';
 
