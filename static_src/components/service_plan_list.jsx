@@ -20,9 +20,8 @@ const sortPlansByCost = plans =>
     const costB = ServicePlanStore.getCost(b);
     if (costA === costB) {
       return a.name.localeCompare(b.name);
-    } else {
-      return costA - costB;
     }
+    return costA - costB;
   });
 
 export default class ServicePlanList extends React.Component {
@@ -63,26 +62,22 @@ export default class ServicePlanList extends React.Component {
         <table>
           <thead>
             <tr>
-              {this.columns.map(column => {
-                return (
-                  <th className={column.key} key={column.key}>
-                    {column.label}
-                  </th>
-                );
-              })}
+              {this.columns.map(column => (
+                <th className={column.key} key={column.key}>
+                  {column.label}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {plans.map((plan, index) => {
-              return (
-                <ServicePlan
-                  cost={this.cost(plan)}
-                  key={index}
-                  onAddInstance={this._handleAdd}
-                  plan={plan}
-                />
-              );
-            })}
+            {plans.map((plan, index) => (
+              <ServicePlan
+                cost={this.cost(plan)}
+                key={index}
+                onAddInstance={this._handleAdd}
+                plan={plan}
+              />
+            ))}
           </tbody>
         </table>
       );

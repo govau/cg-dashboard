@@ -7,7 +7,7 @@ import DomainStore from '../../../stores/domain_store';
 import { domainActionTypes, routeActionTypes } from '../../../constants';
 
 describe('DomainStore', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     DomainStore._data = Immutable.List();
@@ -35,6 +35,7 @@ describe('DomainStore', function() {
       });
 
       const arg = spy.getCall(0).args[0];
+
       expect(spy).toHaveBeenCalledOnce();
       expect(arg).toEqual(domainGuid);
     });

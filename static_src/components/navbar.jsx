@@ -99,12 +99,14 @@ export class Nav extends React.Component {
             <span className="sidenav-header-text">Organizations</span>
           </li>
           {sortedOrgs.map(org => {
-            let toggleSpaceHandler = this._toggleSpacesMenu.bind(
+            const toggleSpaceHandler = this._toggleSpacesMenu.bind(
               this,
               org.guid
             );
-            let arrowClasses = org.space_menu_open ? downArrow : rightArrow;
-            let activeOrgClasses = org.space_menu_open ? 'sidenav-active' : '';
+            const arrowClasses = org.space_menu_open ? downArrow : rightArrow;
+            const activeOrgClasses = org.space_menu_open
+              ? 'sidenav-active'
+              : '';
             let subList = <div />;
             const sortedSpaces = org.spaces.sort(
               (a, b) => (a.name < b.name ? -1 : 1)
@@ -117,7 +119,9 @@ export class Nav extends React.Component {
                     <a href={this.orgHref(org)}>{org.name} overview</a>
                     <ul className={thirdList}>
                       {sortedSpaces.map(space => {
-                        let activeSpaceClasses = this.isCurrentSpace(space.guid)
+                        const activeSpaceClasses = this.isCurrentSpace(
+                          space.guid
+                        )
                           ? 'sidenav-active'
                           : '';
                         return (

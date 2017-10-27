@@ -14,7 +14,7 @@ import UserStore from '../../../stores/user_store';
 import OrgStore from '../../../stores/org_store';
 
 describe('userActions', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -110,12 +110,12 @@ describe('userActions', function() {
   describe('receivedOrgUsers()', function() {
     it(`should dispatch a server event of type org users received with received
         data`, function() {
-      var expected = [{ entity: {}, metadata: { guid: 'adf' } }],
+      let expected = [{ entity: {}, metadata: { guid: 'adf' } }],
         expectedParams = {
           users: expected
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.receivedOrgUsers(expected);
 
@@ -125,14 +125,14 @@ describe('userActions', function() {
 
   describe('receivedOrgUserRoles()', function() {
     it('should dispatch a view event of type org user roles fetch', function() {
-      var expectedOrgGuid = 'zknxvzmnxjkafakdlsxcv',
+      let expectedOrgGuid = 'zknxvzmnxjkafakdlsxcv',
         expectedOrgRoles = [{ metadata: { guid: 'zxcvz' }, entity: {} }],
         expectedParams = {
           orgUserRoles: expectedOrgRoles,
           orgGuid: expectedOrgGuid
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.receivedOrgUserRoles(expectedOrgRoles, expectedOrgGuid);
 
@@ -147,12 +147,12 @@ describe('userActions', function() {
   describe('receivedSpaceUserRoles()', function() {
     it(`should dispatch a server event of type space users received with received
         data`, function() {
-      var expected = [{ entity: {}, metadata: { guid: 'adf' } }],
+      let expected = [{ entity: {}, metadata: { guid: 'adf' } }],
         expectedParams = {
           users: expected
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.receivedSpaceUserRoles(expected);
 
@@ -183,6 +183,7 @@ describe('userActions', function() {
       userActions
         .receivedOrgSpacesToExtractSpaceUsers(orgSpaces)
         .then(done, done.fail);
+
       expect(cfApi.fetchSpaceUserRoles).toHaveBeenCalledOnce();
     });
 
@@ -193,6 +194,7 @@ describe('userActions', function() {
       userActions
         .receivedOrgSpacesToExtractSpaceUsers(orgSpaces)
         .then(done, done.fail);
+
       expect(cfApi.fetchSpaceUserRoles).toHaveBeenCalledThrice();
     });
   });
@@ -225,11 +227,11 @@ describe('userActions', function() {
         .then(done, done.fail);
     });
 
-    it(`should call cfApi.fetchAllOrgSpaces`, function() {
+    it('should call cfApi.fetchAllOrgSpaces', function() {
       expect(cfApi.fetchAllOrgSpaces).toHaveBeenCalledOnce();
     });
 
-    it(`should call userActions.receivedOrgSpacesToExtractSpaceUsers`, function() {
+    it('should call userActions.receivedOrgSpacesToExtractSpaceUsers', function() {
       expect(
         userActions.receivedOrgSpacesToExtractSpaceUsers
       ).toHaveBeenCalledOnce();
@@ -269,11 +271,11 @@ describe('userActions', function() {
       );
     });
 
-    it(`should call cfApi.deleteSpaceUserPermissions`, function() {
+    it('should call cfApi.deleteSpaceUserPermissions', function() {
       expect(cfApi.deleteSpaceUserPermissions).toHaveBeenCalledThrice();
     });
 
-    it(`should call userActions.handleSpaceRolesRemoved`, function() {
+    it('should call userActions.handleSpaceRolesRemoved', function() {
       expect(userActions.handleSpaceRolesRemoved).toHaveBeenCalledOnce();
     });
   });
@@ -296,7 +298,7 @@ describe('userActions', function() {
       sandbox.spy(userActions, 'createUserSpaceAssociationNotification');
       sandbox.spy(cfApi, 'deleteUser');
       moxios.wait(() => {
-        let request = moxios.requests.mostRecent();
+        const request = moxios.requests.mostRecent();
         request
           .respondWith({
             status: 200
@@ -332,7 +334,7 @@ describe('userActions', function() {
     let spy;
     let expectedParams;
     beforeEach(function(done) {
-      var expectedUserGuid = 'adsklfjanmxcv',
+      let expectedUserGuid = 'adsklfjanmxcv',
         expectedOrgGuid = 'sdkjfcmxxzcxvzz';
       expectedParams = {
         userGuid: expectedUserGuid,
@@ -344,7 +346,7 @@ describe('userActions', function() {
       sandbox.spy(userActions, 'errorRemoveUser');
       sandbox.spy(cfApi, 'deleteUser');
       moxios.wait(function() {
-        let request = moxios.requests.mostRecent();
+        const request = moxios.requests.mostRecent();
         request
           .respondWith({
             status: 500
@@ -358,6 +360,7 @@ describe('userActions', function() {
         .deleteUser(expectedUserGuid, expectedOrgGuid)
         .then(done, done.fail);
     });
+
     it('should dispatch a view event of type user delete with user guid', () => {
       assertAction(spy, userActionTypes.USER_DELETE, expectedParams);
     });
@@ -374,14 +377,14 @@ describe('userActions', function() {
 
   describe('deletedUser()', function() {
     it('should dispatch a server event of type user deleted with user guid', function() {
-      var expectedUserGuid = 'klfjanmxcvasfzcv',
+      let expectedUserGuid = 'klfjanmxcvasfzcv',
         expectedOrgGuid = '0909uasdifhnmzxcv',
         expectedParams = {
           userGuid: expectedUserGuid,
           orgGuid: expectedOrgGuid
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.deletedUser(expectedUserGuid, expectedOrgGuid);
 
@@ -391,14 +394,14 @@ describe('userActions', function() {
 
   describe('errorRemoveUser()', function() {
     it('should call a server action for remove error', function() {
-      var expectedUserGuid = 'klfjanmxcvasfzcv',
+      let expectedUserGuid = 'klfjanmxcvasfzcv',
         expectedError = { code: 10006, message: 'something bad' },
         expectedParams = {
           userGuid: expectedUserGuid,
           error: expectedError
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.errorRemoveUser(expectedUserGuid, expectedError);
 
@@ -407,12 +410,12 @@ describe('userActions', function() {
   });
 
   describe('createUserInvite()', function() {
-    it(`should dispatch a view event to process a email invite request`, function() {
-      var email = 'this@there.com';
-      var expected = { email: email };
-      var user = { userGuid: 'user-guid' };
+    it('should dispatch a view event to process a email invite request', function() {
+      const email = 'this@there.com';
+      const expected = { email };
+      const user = { userGuid: 'user-guid' };
 
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
       sandbox.stub(uaaApi, 'inviteUaaUser').returns(Promise.resolve(user));
       sandbox.spy(userActions, 'receivedInviteStatus');
       userActions.createUserInvite(email);
@@ -423,11 +426,11 @@ describe('userActions', function() {
 
   describe('receivedInviteStatus()', function() {
     it('should', function() {
-      var userGuid = 'user-guid';
-      var invite = { userGuid };
-      var email = 'this@there.com';
-      var verified = true;
-      var expected = { email, verified };
+      const userGuid = 'user-guid';
+      const invite = { userGuid };
+      const email = 'this@there.com';
+      const verified = true;
+      const expected = { email, verified };
 
       sandbox.spy(userActions, 'receivedInviteStatus');
       sandbox
@@ -435,7 +438,7 @@ describe('userActions', function() {
         .returns(Promise.resolve(invite));
       sandbox.stub(userActions, 'createInviteNotification');
       sandbox.stub(uaaApi, 'inviteUaaUser').returns(Promise.resolve(invite));
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       userActions.receivedInviteStatus(invite, email);
 
@@ -445,7 +448,7 @@ describe('userActions', function() {
 
   describe('clearUserListNotifications()', function() {
     it('should dispatch a view event of type clear invite notification', function() {
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       userActions.clearUserListNotifications();
 
@@ -472,11 +475,11 @@ describe('userActions', function() {
     ) {
       description =
         'An email invite was sent to this@that.com. Their account has been associated to this space, and their space roles can be controlled below.';
-      var expected = {
+      const expected = {
         noticeType,
         description
       };
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
       sandbox.spy(userActions, 'receivedInviteStatus');
       userActions.createInviteNotification(false, email);
       assertAction(spy, userActionTypes.USER_LIST_NOTICE_CREATED, expected);
@@ -488,11 +491,11 @@ describe('userActions', function() {
     ) {
       description =
         'The cloud.gov account for this@that.com is now associated to this space. Control their space roles below.';
-      var expected = {
+      const expected = {
         noticeType,
         description
       };
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
       sandbox.spy(userActions, 'receivedInviteStatus');
       userActions.createInviteNotification(true, email);
       assertAction(spy, userActionTypes.USER_LIST_NOTICE_CREATED, expected);
@@ -559,7 +562,7 @@ describe('userActions', function() {
   describe('addUserRoles()', function() {
     it(`should call a view action to add user roles with current roles
         user guid and guid and type`, function() {
-      var expectedRole = 'org_manager',
+      let expectedRole = 'org_manager',
         expectedApiKey = 'managers',
         expectedUserGuid = 'akdfjadzxcvzxcvzxvzx',
         expectedGuid = '2eve2v2vadsfa',
@@ -567,14 +570,14 @@ describe('userActions', function() {
 
       // expectedParams for the params dispatched with userActionTypes.USER_ROLES_ADD.
       // the apiKey is not sent with it.
-      let expectedParams = {
+      const expectedParams = {
         role: expectedRole,
         userGuid: expectedUserGuid,
         entityGuid: expectedGuid,
         entityType: expectedType
       };
 
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       userActions.addUserRoles(
         expectedRole,
@@ -601,7 +604,7 @@ describe('userActions', function() {
         userGuid = 'user-123';
         orgGuid = 'org-123';
         moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
+          const request = moxios.requests.mostRecent();
           request
             .respondWith({
               status: 200
@@ -646,7 +649,7 @@ describe('userActions', function() {
         userGuid = 'user-123';
         orgGuid = 'org-123';
         moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
+          const request = moxios.requests.mostRecent();
           request
             .respondWith({
               status: 400,
@@ -692,7 +695,7 @@ describe('userActions', function() {
         userGuid = 'user-123';
         spaceGuid = 'space-123';
         moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
+          const request = moxios.requests.mostRecent();
           request
             .respondWith({
               status: 200
@@ -730,7 +733,7 @@ describe('userActions', function() {
       userGuid = 'user-123';
       spaceGuid = 'space-123';
       moxios.wait(function() {
-        let request = moxios.requests.mostRecent();
+        const request = moxios.requests.mostRecent();
         request
           .respondWith({
             status: 400,
@@ -754,19 +757,19 @@ describe('userActions', function() {
   describe('addedUserRoles()', function() {
     it(`should call a server action to add user roles with roles user guid and
         resource type`, function() {
-      var expectedRole = 'org_manager',
+      let expectedRole = 'org_manager',
         expectedUserGuid = 'azxcvoiuzxcvzxcvzxvzx',
         expectedGuid = 'org-guid-asdf',
         expectedType = 'organization';
 
-      let expectedParams = {
+      const expectedParams = {
         roles: expectedRole,
         userGuid: expectedUserGuid,
         entityGuid: expectedGuid,
         entityType: expectedType
       };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.addedUserRoles(
         expectedRole,
@@ -782,7 +785,7 @@ describe('userActions', function() {
   describe('deleteUserRoles()', function() {
     it(`should call a view action to remove user roles with current roles
         user guid and org guid and type`, function() {
-      var expectedRole = 'org_manager',
+      let expectedRole = 'org_manager',
         expecctedApiKey = 'managers',
         expectedUserGuid = 'akdfjasdfjasdfadzxcvzxcvzxvzx',
         expectedGuid = '2eve2dsfa',
@@ -790,14 +793,14 @@ describe('userActions', function() {
 
       // expectedParams for the params dispatched with userActionTypes.USER_ROLES_DELETE.
       // the apiKey is not sent with it.
-      let expectedParams = {
+      const expectedParams = {
         roles: expectedRole,
         userGuid: expectedUserGuid,
         entityGuid: expectedGuid,
         entityType: expectedType
       };
 
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       userActions.deleteUserRoles(
         expectedRole,
@@ -827,7 +830,7 @@ describe('userActions', function() {
         userGuid = 'user-123';
         orgGuid = 'org-123';
         moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
+          const request = moxios.requests.mostRecent();
           request
             .respondWith({
               status: 200
@@ -876,7 +879,7 @@ describe('userActions', function() {
         userGuid = 'user-123';
         orgGuid = 'org-123';
         moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
+          const request = moxios.requests.mostRecent();
           request
             .respondWith({
               status: 400,
@@ -928,7 +931,7 @@ describe('userActions', function() {
         userGuid = 'user-123';
         spaceGuid = 'space-123';
         moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
+          const request = moxios.requests.mostRecent();
           request
             .respondWith({
               status: 200
@@ -978,7 +981,7 @@ describe('userActions', function() {
       userGuid = 'user-123';
       spaceGuid = 'space-123';
       moxios.wait(function() {
-        let request = moxios.requests.mostRecent();
+        const request = moxios.requests.mostRecent();
         request
           .respondWith({
             status: 400,
@@ -1027,19 +1030,19 @@ describe('userActions', function() {
   describe('deletedUserRoles()', function() {
     it(`should call a server action to add user roles with roles user guid and
         resource type`, function() {
-      var expectedRole = 'org_manager',
+      let expectedRole = 'org_manager',
         expectedUserGuid = 'azxcvoiuzxcvzxcvzxvzx',
         expectedGuid = 'org-asdf',
         expectedType = 'organization';
 
-      let expectedParams = {
+      const expectedParams = {
         roles: expectedRole,
         userGuid: expectedUserGuid,
         entityGuid: expectedGuid,
         entityType: expectedType
       };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.deletedUserRoles(
         expectedRole,
@@ -1054,12 +1057,12 @@ describe('userActions', function() {
 
   describe('changeCurrentlyViewedType()', function() {
     it('should call a ui action for changing currently viewed type', function() {
-      var expectedUserType = 'space',
+      let expectedUserType = 'space',
         expectedParams = {
           userType: expectedUserType
         };
 
-      let spy = setupUISpy(sandbox);
+      const spy = setupUISpy(sandbox);
 
       userActions.changeCurrentlyViewedType(expectedUserType);
 
@@ -1077,7 +1080,7 @@ describe('userActions', function() {
       const expectedParams = {
         currentUser: user
       };
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.receivedCurrentUserInfo(user);
 
@@ -1168,7 +1171,7 @@ describe('userActions', function() {
     it('should call a server action with user object passed in', function() {
       const uaaStub = { uaaInfo: {} };
       const expectedParams = {};
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       userActions.receivedCurrentUserUaaInfo(uaaStub);
 

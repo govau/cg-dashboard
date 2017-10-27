@@ -25,19 +25,19 @@ const user = {
 };
 
 describe('<Users />', () => {
-  let wrapper;
-
   SpaceStore._currentSpaceGuid = spaceGuid;
   UserStore._currentUserGuid = userGuid;
 
   describe('with a user', () => {
     beforeEach(() => {
       UserStore._data = Immutable.fromJS([user]);
-      wrapper = shallow(<Users />);
     });
 
     describe('when at org level', () => {
+      let wrapper;
+
       beforeEach(() => {
+        wrapper = shallow(<Users />);
         wrapper.setState({ currentType: 'org_users' });
       });
 
@@ -59,7 +59,7 @@ describe('<Users />', () => {
         });
 
         afterEach(() => {
-          sinon.restore(UserStore);
+          UserStore.hasRole.restore();
         });
 
         it('renders a <UsersInvite /> component', () => {
@@ -95,7 +95,7 @@ describe('<Users />', () => {
         });
 
         afterEach(() => {
-          sinon.restore(UserStore);
+          UserStore.hasRole.restore();
         });
 
         it('renders message telling user to ask an org manager to add users', () => {
@@ -118,7 +118,10 @@ describe('<Users />', () => {
     });
 
     describe('when at space level', () => {
+      let wrapper;
+
       beforeEach(() => {
+        wrapper = shallow(<Users />);
         wrapper.setState({ currentType: 'space_users' });
       });
 
@@ -139,7 +142,7 @@ describe('<Users />', () => {
         });
 
         afterEach(() => {
-          sinon.restore(UserStore);
+          UserStore.hasRole.restore();
         });
 
         it('renders a <UsersInvite /> component', () => {
@@ -173,7 +176,7 @@ describe('<Users />', () => {
         });
 
         afterEach(() => {
-          sinon.restore(UserStore);
+          UserStore.hasRole.restore();
         });
 
         it('should not render a <UsersInvite /> component', () => {
@@ -209,7 +212,7 @@ describe('<Users />', () => {
         });
 
         afterEach(() => {
-          sinon.restore(UserStore);
+          UserStore.hasRole.restore();
         });
 
         it('should not render a <UsersInvite /> component', () => {
@@ -223,9 +226,7 @@ describe('<Users />', () => {
         it('should show a <PanelDocumentation />', () => {
           expect(wrapper.find(PanelDocumentation).length).toBe(1);
           expect(wrapper.find(PanelDocumentation).prop('children')).toEqual(
-            'As an Space Manager, you can invite existing organization ' +
-              'users into your space. If you wish to invite a person who is not in ' +
-              'the organization into your space, please ask an Org Manager'
+            'As an Space Manager, you can invite existing organization users into your space. If you wish to invite a person who is not in the organization into your space, please ask an Org Manager'
           );
         });
       });

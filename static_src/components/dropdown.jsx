@@ -24,7 +24,7 @@ export default class Dropdown extends React.Component {
   }
 
   render() {
-    var id = 'dropdown-' + this.props.title,
+    let id = `dropdown-${this.props.title}`,
       classes = classNames(style.dropdown, this.props.classes, {
         open: !!this.state.open
       });
@@ -32,7 +32,7 @@ export default class Dropdown extends React.Component {
     return (
       <div className={classes}>
         <a
-          id={'dropdown-' + this.props.title}
+          id={`dropdown-${this.props.title}`}
           role="button"
           aria-haspopup="true"
           aria-expanded={id}
@@ -41,9 +41,7 @@ export default class Dropdown extends React.Component {
           {this.props.title}
         </a>
         <ul aria-labelledby={id}>
-          {this.props.items.map(item => {
-            return <li key={item.key}>{item.element}</li>;
-          })}
+          {this.props.items.map(item => <li key={item.key}>{item.element}</li>)}
         </ul>
       </div>
     );

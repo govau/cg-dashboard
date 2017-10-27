@@ -1,7 +1,7 @@
 import AppDispatcher from '../../dispatcher';
 
 export function wrapInRes(responses) {
-  var n = 0;
+  let n = 0;
   return responses.map(res => {
     return {
       metadata: { guid: res.guid || n },
@@ -12,9 +12,7 @@ export function wrapInRes(responses) {
 }
 
 export function unwrapOfRes(entities) {
-  return entities.map(entity => {
-    return Object.assign(entity.entity, entity.metadata);
-  });
+  return entities.map(entity => Object.assign(entity.entity, entity.metadata));
 }
 
 export function assertAction(spy, type, params = {}) {
@@ -24,10 +22,10 @@ export function assertAction(spy, type, params = {}) {
   if (!call) {
     return;
   }
-  let actionInfo = call.args[0];
+  const actionInfo = call.args[0];
   expect(actionInfo.type).toEqual(type);
 
-  for (let param in params) {
+  for (const param in params) {
     const datum =
       'data' in actionInfo ? actionInfo.data[param] : actionInfo[param];
     expect(datum).toEqual(params[param]);

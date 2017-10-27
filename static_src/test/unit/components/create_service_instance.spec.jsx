@@ -1,8 +1,9 @@
 import React from 'react';
+import { mount } from 'enzyme';
+
 import CreateServiceInstance from '../../../components/create_service_instance.jsx';
 import FormError from '../../../components/form/form_error.jsx';
 import serviceActions from '../../../actions/service_actions';
-import { shallow } from 'enzyme';
 
 describe('<CreateServiceInstance />', () => {
   const serviceBaseProps = {
@@ -14,7 +15,7 @@ describe('<CreateServiceInstance />', () => {
 
   it('displays an error message when ServiceInstanceStore has one', () => {
     const error = { description: 'Bad stuff everyone' };
-    const wrapper = shallow(
+    const wrapper = mount(
       <CreateServiceInstance servicePlan={{}} error={error} />
     );
 
@@ -25,7 +26,7 @@ describe('<CreateServiceInstance />', () => {
     it('calls serviceActions.createInstance with the proper arguments', () => {
       const plan = { guid: '123abc' };
       const spy = sinon.spy(serviceActions, 'createInstance');
-      const wrapper = shallow(<CreateServiceInstance servicePlan={plan} />);
+      const wrapper = mount(<CreateServiceInstance servicePlan={plan} />);
       const form = {
         name: {
           value: 'test'
@@ -52,7 +53,7 @@ describe('<CreateServiceInstance />', () => {
       const serviceProps = Object.assign({}, serviceBaseProps, {
         service: { label: 'cdn-route' }
       });
-      const wrapper = shallow(<CreateServiceInstance {...serviceProps} />);
+      const wrapper = mount(<CreateServiceInstance {...serviceProps} />);
 
       expect(wrapper.html()).toEqual(serviceInstanceHTML);
     });
@@ -69,7 +70,7 @@ describe('<CreateServiceInstance />', () => {
       const serviceProps = Object.assign({}, serviceBaseProps, {
         service: { label: 'cloud-gov-identity-provider' }
       });
-      const wrapper = shallow(<CreateServiceInstance {...serviceProps} />);
+      const wrapper = mount(<CreateServiceInstance {...serviceProps} />);
 
       expect(wrapper.html()).toEqual(serviceInstanceHTML);
     });
@@ -86,7 +87,7 @@ describe('<CreateServiceInstance />', () => {
       const serviceProps = Object.assign({}, serviceBaseProps, {
         service: { label: 'cloud-gov-service-account' }
       });
-      const wrapper = shallow(<CreateServiceInstance {...serviceProps} />);
+      const wrapper = mount(<CreateServiceInstance {...serviceProps} />);
 
       expect(wrapper.html()).toEqual(serviceInstanceHTML);
     });

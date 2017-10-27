@@ -4,11 +4,7 @@
  */
 import AppDispatcher from '../dispatcher';
 import BaseStore from './base_store';
-import {
-  appStates,
-  serviceActionTypes,
-  errorActionTypes
-} from '../constants';
+import { appStates, serviceActionTypes, errorActionTypes } from '../constants';
 import ServiceStore from './service_store';
 import ServicePlanStore from './service_plan_store';
 

@@ -2,7 +2,7 @@ const appStats = [
   {
     guid: '2f684200-b9da-4ea6-a3c8-01a1df5ef2d3', // Fake
 
-    '0': {
+    0: {
       state: 'RUNNING',
       stats: {
         name: 'fake-adfake-node',
@@ -21,7 +21,7 @@ const appStats = [
         }
       }
     },
-    '1': {
+    1: {
       state: 'RUNNING',
       stats: {
         name: 'fake-adfake-node',

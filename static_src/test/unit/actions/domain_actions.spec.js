@@ -4,7 +4,7 @@ import domainActions from '../../../actions/domain_actions';
 import { domainActionTypes } from '../../../constants';
 
 describe('domainActions', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -16,12 +16,12 @@ describe('domainActions', function() {
 
   describe('fetch()', function() {
     it('should dispatch a view event of type domain fetch', function() {
-      var expectedDomainGuid = 'xzzzasdflkjz',
+      let expectedDomainGuid = 'xzzzasdflkjz',
         expectedParams = {
           domainGuid: expectedDomainGuid
         };
 
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       domainActions.fetch(expectedDomainGuid);
 
@@ -31,12 +31,12 @@ describe('domainActions', function() {
 
   describe('receivedDomain()', function() {
     it('should dispatch a view event of type domain resceived', function() {
-      var expected = { guid: 'asdfavcx1z13c5', name: 'al.gov' },
+      let expected = { guid: 'asdfavcx1z13c5', name: 'al.gov' },
         expectedParams = {
           domain: expected
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       domainActions.receivedDomain(expected);
 

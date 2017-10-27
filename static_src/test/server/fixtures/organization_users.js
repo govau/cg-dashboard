@@ -1,4 +1,4 @@
-let organizationUsers = [];
+const organizationUsers = [];
 const userGuids = [
   {
     guid: 'bb60f6e1-b495-45be-8bc4-7db4e8f3ed46',
@@ -116,31 +116,29 @@ const userGuids = [
   }
 ];
 
-for (var i = userGuids.length - 1; i >= 0; i--) {
+for (let i = userGuids.length - 1; i >= 0; i--) {
   organizationUsers.push({
     metadata: {
-      guid: userGuids[i]['guid'],
-      url: '/v2/users/' + userGuids[i]['guid'],
+      guid: userGuids[i].guid,
+      url: `/v2/users/${userGuids[i].guid}`,
       created_at: '2016-11-07T18:13:49Z',
       updated_at: '2016-11-07T18:13:49Z'
     },
     entity: {
-      admin: userGuids[i]['admin'],
-      active: userGuids[i]['active'],
+      admin: userGuids[i].admin,
+      active: userGuids[i].active,
       default_space_guid: null,
-      username: userGuids[i]['username'],
-      spaces_url: '/v2/users/' + userGuids[i]['guid'] + '/spaces',
-      organizations_url: '/v2/users/' + userGuids[i]['guid'] + '/organizations',
-      managed_organizations_url:
-        '/v2/users/' + userGuids[i]['guid'] + '/managed_organizations',
-      billing_managed_organizations_url:
-        '/v2/users/' + userGuids[i]['guid'] + '/billing_managed_organizations',
-      audited_organizations_url:
-        '/v2/users/' + userGuids[i]['guid'] + '/audited_organizations',
-      managed_spaces_url:
-        '/v2/users/' + userGuids[i]['guid'] + '/managed_spaces',
-      audited_spaces_url:
-        '/v2/users/' + userGuids[i]['guid'] + '/audited_spaces'
+      username: userGuids[i].username,
+      spaces_url: `/v2/users/${userGuids[i].guid}/spaces`,
+      organizations_url: `/v2/users/${userGuids[i].guid}/organizations`,
+      managed_organizations_url: `/v2/users/${userGuids[i]
+        .guid}/managed_organizations`,
+      billing_managed_organizations_url: `/v2/users/${userGuids[i]
+        .guid}/billing_managed_organizations`,
+      audited_organizations_url: `/v2/users/${userGuids[i]
+        .guid}/audited_organizations`,
+      managed_spaces_url: `/v2/users/${userGuids[i].guid}/managed_spaces`,
+      audited_spaces_url: `/v2/users/${userGuids[i].guid}/audited_spaces`
     }
   });
 }

@@ -10,7 +10,7 @@ import quotaActions from '../../../actions/quota_actions';
 import { quotaActionTypes } from '../../../constants';
 
 describe('quotaActions', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -22,7 +22,7 @@ describe('quotaActions', function() {
 
   describe('fetchQuotasForAllOrgs()', function() {
     it('should dispatch a view event to get all organization quotas', function() {
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       quotaActions.fetchQuotasForAllOrgs();
 
@@ -32,8 +32,8 @@ describe('quotaActions', function() {
 
   describe('receivedQuotasForAllOrgs()', function() {
     it('should dispatch a server event to process recieved organizations quotas', function() {
-      let spy = setupServerSpy(sandbox);
-      let quotas = [{ guid: 'fake-quota-one' }];
+      const spy = setupServerSpy(sandbox);
+      const quotas = [{ guid: 'fake-quota-one' }];
 
       quotaActions.receivedQuotasForAllOrgs(quotas);
 
@@ -43,7 +43,7 @@ describe('quotaActions', function() {
 
   describe('fetchQuotasForAllSpaces()', function() {
     it('should dispatch a view event to get all space quotas', function() {
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       quotaActions.fetchQuotasForAllSpaces();
 
@@ -53,8 +53,8 @@ describe('quotaActions', function() {
 
   describe('receivedQuotasForAllSpaces()', function() {
     it('should dispatch a server event to process recieved spaces quotas', function() {
-      let spy = setupServerSpy(sandbox);
-      let quotas = [{ guid: 'fake-quota-one' }];
+      const spy = setupServerSpy(sandbox);
+      const quotas = [{ guid: 'fake-quota-one' }];
 
       quotaActions.receivedQuotasForAllSpaces(quotas);
 

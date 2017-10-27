@@ -1,7 +1,5 @@
 import moment from 'moment-timezone';
 
-const invalidMsg = 'Invalid datetimes cannot be formatted.';
-
 /**
  * Returns a formated datetime string
  * @params {String} datetime as a string
@@ -12,7 +10,8 @@ const invalidMsg = 'Invalid datetimes cannot be formatted.';
 */
 export default function formatDateTime(dateString, timezone = 'Etc/UTC') {
   const d = moment(dateString);
-
-  if (!d.isValid()) throw new Error(invalidMsg);
+  if (!d.isValid()) {
+    throw new Error('Invalid datetimes cannot be formatted.');
+  }
   return d.tz(timezone).format('MM/DD/YYYY hh:mma z');
 }

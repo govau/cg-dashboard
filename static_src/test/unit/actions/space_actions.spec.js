@@ -11,7 +11,7 @@ import spaceActions from '../../../actions/space_actions';
 import { spaceActionTypes } from '../../../constants';
 
 describe('spaceActions', () => {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -41,6 +41,7 @@ describe('spaceActions', () => {
 
     it('dispatches SPACE_FETCH action', function() {
       const [action] = dispatcherSpy.getCall(0).args;
+
       expect(dispatcherSpy).toHaveBeenCalledOnce();
       expect(action.type).toBe(spaceActionTypes.SPACE_FETCH);
     });
@@ -60,31 +61,33 @@ describe('spaceActions', () => {
 
   describe('fetchAll()', () => {
     it('should dispatch a view event to fetch all spaces', () => {
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
       const receivedSpaceStub = sandbox.stub(spaceActions, 'receivedSpace');
 
       spaceActions.fetchAll();
 
-      let arg = spy.getCall(0).args[0];
+      const arg = spy.getCall(0).args[0];
+
       expect(arg.type).toEqual(spaceActionTypes.SPACES_FETCH);
     });
   });
 
   describe('fetchAllForOrg()', () => {
     it('should dispatch a view event to fetch all spaces for org', () => {
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       spaceActions.fetchAllForOrg('sdf');
 
       expect(spy).toHaveBeenCalledOnce();
-      let arg = spy.getCall(0).args[0];
+      const arg = spy.getCall(0).args[0];
+
       expect(arg.type).toEqual(spaceActionTypes.SPACES_FOR_ORG_FETCH);
     });
   });
 
   describe('receivedSpace()', () => {
     it('should dispatch server event of type space received', () => {
-      var expected = { guid: 'asdf' },
+      let expected = { guid: 'asdf' },
         spy = setupServerSpy(sandbox),
         expectedParams = {
           space: expected
@@ -104,8 +107,8 @@ describe('spaceActions', () => {
 
       spaceActions.receivedSpaces(expected);
 
-      let args = spy.getCall(0).args[0];
-      let { type, spaces } = args;
+      const args = spy.getCall(0).args[0];
+      const { type, spaces } = args;
 
       expect(type).toEqual(spaceActionTypes.SPACES_RECEIVED);
       expect(spaces).toEqual(expected);

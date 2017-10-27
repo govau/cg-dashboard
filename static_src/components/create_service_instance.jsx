@@ -3,7 +3,6 @@
  */
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Action from './action.jsx';
 import { Form, FormText, FormSelect, FormElement, FormError } from './form';
 import FormStore from '../stores/form_store';
@@ -65,6 +64,7 @@ export default class CreateServiceInstance extends React.Component {
     FormStore.create(CREATE_SERVICE_INSTANCE_FORM_GUID);
     SpaceStore.addChangeListener(this._onChange);
     ServiceInstanceStore.addChangeListener(this._onChange);
+
     this.scrollIntoView();
   }
 
@@ -74,11 +74,12 @@ export default class CreateServiceInstance extends React.Component {
   }
 
   scrollIntoView() {
-    ReactDOM.findDOMNode(this).scrollIntoView(true);
+    this.node.scrollIntoView();
   }
 
   _onChange() {
     this.setState(stateSetter());
+
     this.scrollIntoView();
   }
 
@@ -124,52 +125,51 @@ export default class CreateServiceInstance extends React.Component {
           </legend>
         </Form>
       );
-    } else {
-      return (
-        <Form
-          guid={CREATE_SERVICE_INSTANCE_FORM_GUID}
-          classes={['test-create_service_instance_form']}
-          ref="form"
-          onSubmit={this._onValidForm}
-        >
-          <legend>
-            Create a service instance for
-            <strong className="actions-callout-inline-block">
-              {this.serviceName}
-            </strong>{' '}
-            using
-            <strong className="actions-callout-inline-block">
-              {this.servicePlanName}
-            </strong>{' '}
-            plan.
-          </legend>
-          <FormText
-            formGuid={CREATE_SERVICE_INSTANCE_FORM_GUID}
-            classes={['test-create_service_instance_name']}
-            label="Choose a name for the service instance"
-            name="name"
-            validator={this.validateString}
-          />
-          <FormSelect
-            formGuid={CREATE_SERVICE_INSTANCE_FORM_GUID}
-            classes={['test-create_service_instance_space']}
-            label="Select the space for the service instance"
-            name="space"
-            options={this.validSpaceTargets}
-            validator={this.validateString}
-          />
-          {this.contextualAction}
-          <Action
-            label="cancel"
-            style="base"
-            type="outline"
-            clickHandler={this._onCancelForm}
-          >
-            Cancel
-          </Action>
-        </Form>
-      );
     }
+    return (
+      <Form
+        guid={CREATE_SERVICE_INSTANCE_FORM_GUID}
+        classes={['test-create_service_instance_form']}
+        ref="form"
+        onSubmit={this._onValidForm}
+      >
+        <legend>
+          Create a service instance for
+          <strong className="actions-callout-inline-block">
+            {this.serviceName}
+          </strong>{' '}
+          using
+          <strong className="actions-callout-inline-block">
+            {this.servicePlanName}
+          </strong>{' '}
+          plan.
+        </legend>
+        <FormText
+          formGuid={CREATE_SERVICE_INSTANCE_FORM_GUID}
+          classes={['test-create_service_instance_name']}
+          label="Choose a name for the service instance"
+          name="name"
+          validator={this.validateString}
+        />
+        <FormSelect
+          formGuid={CREATE_SERVICE_INSTANCE_FORM_GUID}
+          classes={['test-create_service_instance_space']}
+          label="Select the space for the service instance"
+          name="space"
+          options={this.validSpaceTargets}
+          validator={this.validateString}
+        />
+        {this.contextualAction}
+        <Action
+          label="cancel"
+          style="base"
+          type="outline"
+          clickHandler={this._onCancelForm}
+        >
+          Cancel
+        </Action>
+      </Form>
+    );
   }
 
   get serviceName() {
@@ -185,12 +185,8 @@ export default class CreateServiceInstance extends React.Component {
     const { spaces } = this.state;
 
     return spaces
-      .filter(space => {
-        return space.org === currentOrgGuid;
-      })
-      .map(space => {
-        return { value: space.guid, label: space.name };
-      });
+      .filter(space => space.org === currentOrgGuid)
+      .map(space => ({ value: space.guid, label: space.name }));
   }
 
   get contextualAction() {
@@ -224,7 +220,12 @@ export default class CreateServiceInstance extends React.Component {
     }
 
     return (
-      <div className="actions-large">
+      <div
+        ref={node => {
+          this.node = node;
+        }}
+        className="actions-large"
+      >
         {createError}
         {this.formContent}
       </div>

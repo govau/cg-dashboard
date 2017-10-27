@@ -1,4 +1,3 @@
-
 import formatBytes from '../../../util/format_bytes';
 
 describe('format_bytes util', function() {

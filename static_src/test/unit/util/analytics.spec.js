@@ -2,14 +2,12 @@ import { trackAction, trackPageView } from '../../../util/analytics';
 
 describe('analytics helpers', function() {
   describe('with GA loaded and on production', function() {
-    var sandbox;
-    var window = window ? window : global;
+    let sandbox;
+    var window = window || global;
 
     beforeEach(() => {
       sandbox = sinon.sandbox.create();
-      window.ga = function() {
-        return;
-      };
+      window.ga = function() {};
     });
 
     afterEach(() => {
@@ -18,16 +16,16 @@ describe('analytics helpers', function() {
     });
 
     it('should track action with event', function() {
-      var action = {
+      const action = {
         source: 'test-source',
         type: 'test-type'
       };
-      var expected = {
+      const expected = {
         hitType: 'event',
         eventCategory: action.source,
         eventAction: action.type
       };
-      var spy = sandbox.spy(window, 'ga');
+      const spy = sandbox.spy(window, 'ga');
 
       trackAction(action);
 
@@ -35,12 +33,12 @@ describe('analytics helpers', function() {
     });
 
     it('should track page view with event', function() {
-      var url = 'fake/url/for/testing';
-      var expected = {
+      const url = 'fake/url/for/testing';
+      const expected = {
         hitType: 'pageview',
         page: url
       };
-      var spy = sandbox.spy(window, 'ga');
+      const spy = sandbox.spy(window, 'ga');
 
       trackPageView(url);
 

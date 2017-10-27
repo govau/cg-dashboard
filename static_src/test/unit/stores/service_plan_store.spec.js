@@ -26,17 +26,17 @@ describe('ServicePlanStore', function() {
 
   describe('getAllFromService()', function() {
     it('should only return servicePlans with the correct service guid', function() {
-      var expectedServiceGuid = 'alkdsfjxcvzmcnvqsdxf';
-      let expectedServices = [
+      const expectedServiceGuid = 'alkdsfjxcvzmcnvqsdxf';
+      const expectedServices = [
         { service_guid: expectedServiceGuid, guid: 'zvcxklz' },
         { service_guid: expectedServiceGuid, guid: 'zcvzcxvzzv' }
       ];
-      let unexpectedService = { service_guid: 'zxklcjv', guid: 'qwpoerui' };
+      const unexpectedService = { service_guid: 'zxklcjv', guid: 'qwpoerui' };
 
       ServicePlanStore._data = Immutable.fromJS(expectedServices);
       ServicePlanStore.push(unexpectedService);
 
-      let actual = ServicePlanStore.getAllFromService(expectedServiceGuid);
+      const actual = ServicePlanStore.getAllFromService(expectedServiceGuid);
 
       expect(actual.length).toEqual(2);
       expect(actual).toEqual(expectedServices);
@@ -47,27 +47,31 @@ describe('ServicePlanStore', function() {
     it('should return 0 if any part of data is missing', function() {
       let serviceInstance = {};
       let actual = ServicePlanStore.getCost(serviceInstance);
+
       expect(actual).toEqual(0);
 
       serviceInstance = {
         extra: {}
       };
       actual = ServicePlanStore.getCost(serviceInstance);
+
       expect(actual).toEqual(0);
 
       serviceInstance = {
         extra: { costs: [{}] }
       };
       actual = ServicePlanStore.getCost(serviceInstance);
+
       expect(actual).toEqual(0);
     });
 
     it('should return number if found', function() {
       const cost = 10.23343;
-      let serviceInstance = {
+      const serviceInstance = {
         extra: { costs: [{ amount: { usd: cost } }] }
       };
-      let actual = ServicePlanStore.getCost(serviceInstance);
+      const actual = ServicePlanStore.getCost(serviceInstance);
+
       expect(actual).toEqual(cost);
     });
   });
@@ -93,26 +97,27 @@ describe('ServicePlanStore', function() {
 
   describe('on service plans fetch', function() {
     it('should call the cf api for all service plans belonging to the service', function() {
-      var spy = sandbox.spy(cfApi, 'fetchAllServicePlans'),
+      let spy = sandbox.spy(cfApi, 'fetchAllServicePlans'),
         expectedServiceGuid = 'zxncvz8xcvhn32';
 
       serviceActions.fetchAllPlans(expectedServiceGuid);
 
       expect(spy).toHaveBeenCalledOnce();
-      let arg = spy.getCall(0).args[0];
+      const arg = spy.getCall(0).args[0];
+
       expect(arg).toEqual(expectedServiceGuid);
     });
   });
 
   describe('on service plans received', function() {
     it('should merge the passed in service plans to current data', function() {
-      var expected = [
+      const expected = [
         { guid: 'zxvcjz', name: 'zxkjv' },
         { guid: '3981f', name: 'adlfskzxcv' }
       ];
-      let existing = { guid: 'alkdjsfzxcv' };
+      const existing = { guid: 'alkdjsfzxcv' };
 
-      let testRes = expected;
+      const testRes = expected;
       ServicePlanStore.push(existing);
 
       serviceActions.receivedPlans(testRes);
@@ -121,6 +126,7 @@ describe('ServicePlanStore', function() {
 
       expect(actual.length).toEqual(3);
       actual = ServicePlanStore.get(expected[0].guid);
+
       expect(actual).toEqual(expected[0]);
     });
 

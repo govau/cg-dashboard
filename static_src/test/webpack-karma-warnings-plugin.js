@@ -18,13 +18,13 @@
  * Setting the module._source to a javascript error is copied from:
  * https://github.com/webpack/webpack/blob/v1.12.14/lib/NormalModule.js#L127
  */
-var WebpackKarmaWarningsPlugin = function() {};
-var RawSource = require('webpack/lib/RawSource');
+const WebpackKarmaWarningsPlugin = function() {};
+const RawSource = require('webpack/lib/RawSource');
 
 WebpackKarmaWarningsPlugin.prototype.apply = function(compiler) {
   compiler.plugin('compilation', function(compilation) {
     compilation.plugin('failed-module', function(module) {
-      var moduleErrorMessage = module.error.error.toString();
+      const moduleErrorMessage = module.error.error.toString();
       module._source = new RawSource(
         `throw new Error(${JSON.stringify(moduleErrorMessage)});`
       );

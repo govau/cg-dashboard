@@ -24,21 +24,11 @@ beforeEach(function() {
 });
 
 beforeEach(() => {
-  // Any call to console.warn or console.error should fail the test. If
-  // console.warn or console.error is expected, they should be stubbed
-  // appropriately.
-  sinon
-    .stub(console, 'warn')
-    .throws(
-      new Error(
-        'Unexpected call to console.warn during a test. Please add an expectation or fix the test.'
-      )
+  console.warn = msg => {
+    fail(
+      `Unexpected call to console.warn during a test. Please add an expectation or fix the test. The logged message was: ${msg}`
     );
-  // TODO enable the same for console.error
-});
-
-afterEach(function() {
-  console.warn.restore();
+  };
 });
 
 // TODO Stub out axios.{get,delete,patch,post,put}, all async calls should be

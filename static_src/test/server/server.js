@@ -6,13 +6,15 @@
 //
 // [1] http://techblog.netflix.com/2014/11/prana-sidecar-for-your-netflix-paas.html
 
-var child_process = require('child_process');
+const childProcess = require('child_process');
 
 require('babel-register');
 
-var start = require('./index').start;
+const { start } = require('./index');
 
-var port = process.env.PORT;
+const port = process.env.PORT;
+
+let server;
 
 function stopServer(cb) {
   if (!server) {
@@ -23,8 +25,14 @@ function stopServer(cb) {
   server.stop(cb);
 }
 
+function cleanup() {
+  stopServer(function(error) {
+    process.exit(!!error);
+  });
+}
+
 function spawnChildCb(command, args) {
-  function __cb(err) {
+  function cb(err) {
     if (err) {
       throw err;
     }
@@ -35,20 +43,15 @@ function spawnChildCb(command, args) {
     );
 
     if (!command) {
-      // No arguments passed, just leave the test server running for manual testing
-      function cleanup() {
-        stopServer(function(error) {
-          process.exit(!!error);
-        });
-      }
-
+      // No arguments passed, just leave the test server running for manual
+      // testing
       process.on('SIGINT', cleanup);
       process.on('SIGTERM', cleanup);
       return;
     }
 
     // Kick off the main process
-    var main = child_process.spawn(command, args, {
+    const main = childProcess.spawn(command, args, {
       stdio: 'inherit',
       env: Object.assign({}, process.env, {
         PORT: server.info.port
@@ -77,9 +80,10 @@ function spawnChildCb(command, args) {
     connectSignal('SIGTERM');
   }
 
-  return __cb;
+  return cb;
 }
 
-var args = process.argv.slice(2); // Drop the first to arguments (node path and exec path)
-var command = args.shift();
-var server = start(port, spawnChildCb(command, args));
+const args = process.argv.slice(2); // Drop the first to arguments (node path and exec path)
+const command = args.shift();
+
+server = start(port, spawnChildCb(command, args));

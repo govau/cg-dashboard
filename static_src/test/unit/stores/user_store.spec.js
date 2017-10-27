@@ -925,6 +925,7 @@ describe('UserStore', function() {
       expect(instance.getUserListNotification().description).toEqual(
         notice.description
       );
+
       expect(instance.getUserListNotification().noticeType).toEqual(
         notice.noticeType
       );
@@ -951,6 +952,7 @@ describe('UserStore', function() {
       expect(instance.getUserListNotification().description).not.toEqual(
         notice.description
       );
+
       expect(instance.getUserListNotification().noticeType).not.toEqual(
         notice.noticeType
       );
@@ -979,6 +981,7 @@ describe('UserStore', function() {
       expect(instance.getUserListNotificationError().contextualMessage).toEqual(
         message
       );
+
       expect(instance.getUserListNotificationError().message).toEqual(
         error.message
       );
@@ -1011,6 +1014,7 @@ describe('UserStore', function() {
       it('returns notice when _userListNotification has content', function() {
         instance._userListNotification = notice;
         actual = instance.getUserListNotification();
+
         expect(actual).toBe(notice);
       });
     });

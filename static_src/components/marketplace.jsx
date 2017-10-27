@@ -21,7 +21,7 @@ function stateSetter() {
 
   return {
     currentOrgGuid,
-    loading: loading,
+    loading,
     currentOrg: OrgStore.get(currentOrgGuid),
     createInstanceForm: ServiceInstanceStore.createInstanceForm,
     services: ServiceStore.getAll().map(service => {

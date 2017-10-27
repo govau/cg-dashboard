@@ -1,9 +1,9 @@
 import Immutable from 'immutable';
 
-import BaseStore from '../../../stores/base_store';
+import BaseStore, { MAX_LISTENERS_THRESHOLD } from '../../../stores/base_store';
 
 describe('BaseStore', () => {
-  var sandbox, store;
+  let sandbox, store;
 
   beforeEach(() => {
     store = new BaseStore();
@@ -26,7 +26,7 @@ describe('BaseStore', () => {
 
   describe('get dispatchToken()', function() {
     it('should return the hidden dispatch token', function() {
-      var expected = {};
+      const expected = {};
 
       store._dispatchToken = expected;
 
@@ -36,7 +36,7 @@ describe('BaseStore', () => {
 
   describe('emitChange()', function() {
     it('should emit an event with string CHANGE', function() {
-      var spy = sandbox.spy();
+      const spy = sandbox.spy();
 
       store.on('CHANGE', spy);
 
@@ -48,7 +48,7 @@ describe('BaseStore', () => {
 
   describe('addChangeListener()', function() {
     it('should add a listener on CHANGE with the callback passed', function() {
-      var spy = sandbox.spy();
+      const spy = sandbox.spy();
 
       store.addChangeListener(spy);
 
@@ -58,18 +58,21 @@ describe('BaseStore', () => {
     });
 
     it('warns if called more than MAX_LISTENERS_THRESHOLD', function() {
-      console.warn.returns();
-      for (let i = 1; i <= 11; i++) {
+      sinon.stub(console, 'warn');
+
+      for (let i = 1; i <= MAX_LISTENERS_THRESHOLD + 1; i++) {
         store.addChangeListener(() => {});
       }
 
       expect(console.warn).toHaveBeenCalledOnce();
+
+      console.warn.restore();
     });
   });
 
   describe('removeChangeListener()', function() {
     it('should remove a listener of type CHANGE with callback passed', function() {
-      var spy = sandbox.spy();
+      const spy = sandbox.spy();
 
       store.addChangeListener(spy);
       store.removeChangeListener(spy);
@@ -82,18 +85,18 @@ describe('BaseStore', () => {
 
   describe('get()', function() {
     it('should get an entity by guid if it exists', function() {
-      var expectedGuid = 'adkfjlzcxv',
+      const expectedGuid = 'adkfjlzcxv',
         expected = { guid: expectedGuid };
 
       store.push(expected);
 
-      let actual = store.get(expectedGuid);
+      const actual = store.get(expectedGuid);
 
       expect(actual).toEqual(expected);
     });
 
     it("should returned undefined if entity with guid it doesn't exist", function() {
-      let actual = store.get('adjlfk');
+      const actual = store.get('adjlfk');
 
       expect(actual).toBe(undefined);
     });
@@ -101,7 +104,7 @@ describe('BaseStore', () => {
     it('should return undefined if not guid is passed in', function() {
       store.push({ guid: 'adsf' });
 
-      let actual = store.get();
+      const actual = store.get();
 
       expect(actual).toBe(undefined);
     });
@@ -109,11 +112,11 @@ describe('BaseStore', () => {
 
   describe('getAll()', function() {
     it('should get all entities if there are some', function() {
-      var expected = [{ guid: 'adf' }, { guid: 'adsfjk' }];
+      const expected = [{ guid: 'adf' }, { guid: 'adsfjk' }];
 
       expected.forEach(e => store.push(e));
 
-      let actual = store.getAll();
+      const actual = store.getAll();
 
       expect(actual).toBeTruthy();
       expect(actual.length).toEqual(2);
@@ -121,7 +124,7 @@ describe('BaseStore', () => {
     });
 
     it('should return an empty array if there are no entities', function() {
-      let actual = store.getAll();
+      const actual = store.getAll();
 
       expect(actual).toBeEmptyArray();
     });
@@ -129,16 +132,16 @@ describe('BaseStore', () => {
 
   describe('push()', function() {
     it('should increment the count when an item is added', function() {
-      let initialCount = store.getAll().length;
+      const initialCount = store.getAll().length;
       store.push({ guid: 'pushtest' });
-      let pushedCount = store.getAll().length;
+      const pushedCount = store.getAll().length;
 
       expect(pushedCount).toEqual(initialCount + 1);
     });
 
     it('should convert any pushed data to immutable types', function() {
       store.push({ guid: 'pushtest' });
-      let pushed = store._data.get(0);
+      const pushed = store._data.get(0);
 
       expect(pushed.asImmutable).toBeDefined();
     });
@@ -147,8 +150,8 @@ describe('BaseStore', () => {
   describe('dataHasChanged()', function() {
     describe('passed regular JS objects', function() {
       it('should return true if new data is different from _data', function() {
-        let oldData = { guid: 'pushtest' };
-        let newData = { guid: 'pushtestyetagain' };
+        const oldData = { guid: 'pushtest' };
+        const newData = { guid: 'pushtestyetagain' };
 
         store.push(oldData);
 
@@ -156,8 +159,8 @@ describe('BaseStore', () => {
       });
 
       it('should return false if the data is the same as _data', function() {
-        let oldData = { guid: 'pushtest' };
-        let newData = Immutable.fromJS([oldData]);
+        const oldData = { guid: 'pushtest' };
+        const newData = Immutable.fromJS([oldData]);
 
         store.push(oldData);
 
@@ -167,8 +170,8 @@ describe('BaseStore', () => {
 
     describe('passed ImmutableJS objects', function() {
       it('should return true if new data is different from _data', function() {
-        let oldData = { guid: 'pushtest' };
-        let newData = { guid: 'pushtestyetagain' };
+        const oldData = { guid: 'pushtest' };
+        const newData = { guid: 'pushtestyetagain' };
 
         store.push(oldData);
 
@@ -179,8 +182,8 @@ describe('BaseStore', () => {
 
   describe('delete()', function() {
     it('should remove items that match the guid and call .emitChange()', function() {
-      var spy = sandbox.spy(store, 'emitChange');
-      var guid = 'deleteFakeGuid';
+      const spy = sandbox.spy(store, 'emitChange');
+      const guid = 'deleteFakeGuid';
       store._data = Immutable.fromJS([{ guid }]);
 
       expect(store.getAll().length).toEqual(1);
@@ -192,8 +195,8 @@ describe('BaseStore', () => {
     });
 
     it('should do nothing if the guid does not match', function() {
-      var spy = sandbox.spy(store, 'emitChange');
-      var guid = 'deleteFakeGuid';
+      const spy = sandbox.spy(store, 'emitChange');
+      const guid = 'deleteFakeGuid';
       store._data = Immutable.fromJS([{ guid }]);
 
       expect(store.getAll().length).toEqual(1);
@@ -223,9 +226,9 @@ describe('BaseStore', () => {
     });
 
     it('should remove the property that match the guid and prop and call .emitChange()', function() {
-      var spy = sandbox.spy(store, 'emitChange');
-      var guidA = existingEntityA.guid;
-      var guidB = existingEntityB.guid;
+      const spy = sandbox.spy(store, 'emitChange');
+      const guidA = existingEntityA.guid;
+      const guidB = existingEntityB.guid;
 
       expect(store.getAll().length).toEqual(2);
       expect(store.get(guidB)).toEqual(existingEntityB);
@@ -242,9 +245,9 @@ describe('BaseStore', () => {
     });
 
     it('should do nothing if the guid does not match', function() {
-      var spy = sandbox.spy(store, 'emitChange');
-      var guidA = existingEntityA.guid;
-      var guidB = existingEntityB.guid;
+      const spy = sandbox.spy(store, 'emitChange');
+      const guidA = existingEntityA.guid;
+      const guidB = existingEntityB.guid;
 
       expect(store.getAll().length).toEqual(2);
       expect(store.get(guidB)).toEqual(existingEntityB);
@@ -262,9 +265,9 @@ describe('BaseStore', () => {
       // Currently there's no way to detect in a thread safe way that the deleteIn
       // was successful, so emitChange will be called.
       // There will still be no change though.
-      var spy = sandbox.spy(store, 'emitChange');
-      var guidA = existingEntityA.guid;
-      var guidB = existingEntityB.guid;
+      const spy = sandbox.spy(store, 'emitChange');
+      const guidA = existingEntityA.guid;
+      const guidB = existingEntityB.guid;
 
       expect(store.getAll().length).toEqual(2);
       expect(store.get(guidB)).toEqual(existingEntityB);
@@ -280,12 +283,12 @@ describe('BaseStore', () => {
   });
 
   describe('merge()', function() {
-    var existingEntityA = {
+    const existingEntityA = {
       guid: 'zznbmbz',
       name: 'ea',
       cpu: 34
     };
-    var existingEntityB = {
+    const existingEntityB = {
       guid: 'zzlkcxv',
       name: 'eb'
     };
@@ -296,7 +299,7 @@ describe('BaseStore', () => {
     });
 
     it('should call cb with true when data is updated', function() {
-      var updateA = {
+      const updateA = {
         guid: existingEntityA.guid,
         name: 'zzz',
         memory: 1024
@@ -317,14 +320,15 @@ describe('BaseStore', () => {
     it('should update a single existing entity with the same guid ', function(
       done
     ) {
-      var updateA = {
+      const updateA = {
         guid: existingEntityA.guid,
         name: 'zzz',
         memory: 1024
       };
 
-      store.merge('guid', updateA, changed => {
-        let updated = store.get(updateA.guid);
+      store.merge('guid', updateA, () => {
+        const updated = store.get(updateA.guid);
+
         expect(updated).toEqual(Object.assign({}, existingEntityA, updateA));
         expect(store.get(existingEntityB.guid)).toEqual(existingEntityB);
 
@@ -333,12 +337,12 @@ describe('BaseStore', () => {
     });
 
     it('should update a multiple existing entities with the same guids ', function() {
-      var toUpdateA = {
+      const toUpdateA = {
         guid: existingEntityA.guid,
         name: 'ea',
         memory: 1024
       };
-      var toUpdateB = {
+      const toUpdateB = {
         guid: existingEntityB.guid,
         name: 'eb',
         memory: 1024
@@ -347,26 +351,28 @@ describe('BaseStore', () => {
       store.mergeMany('guid', [toUpdateA, toUpdateB], changed => {
         expect(changed).toBeTruthy();
 
-        let updatedA = store.get(toUpdateA.guid);
+        const updatedA = store.get(toUpdateA.guid);
+
         expect(updatedA).toEqual(Object.assign({}, existingEntityA, toUpdateA));
 
-        let updatedB = store.get(toUpdateB.guid);
+        const updatedB = store.get(toUpdateB.guid);
+
         expect(updatedB).toEqual(Object.assign({}, existingEntityB, toUpdateB));
       });
     });
   });
 
   describe('mergeAll()', function() {
-    var existingEntityA = {
+    const existingEntityA = {
       guid: 'fakeguidone',
       name: 'ea',
       cpu: 34
     };
-    var existingEntityB = {
+    const existingEntityB = {
       guid: 'fakeguidtwo',
       name: 'eb'
     };
-    var existingEntityC = {
+    const existingEntityC = {
       guid: 'fakeguidthree',
       name: 'eb'
     };
@@ -395,7 +401,6 @@ describe('BaseStore', () => {
     });
 
     it('should merge into all matching entities based on the merge key', function() {
-      const oldData = Immutable.fromJS(store.getAll());
       const toMerge = {
         name: 'eb',
         green: true

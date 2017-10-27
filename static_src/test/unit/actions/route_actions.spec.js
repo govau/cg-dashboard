@@ -10,7 +10,7 @@ import routeActions from '../../../actions/route_actions';
 import { routeActionTypes } from '../../../constants';
 
 describe('routeActions', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -176,12 +176,12 @@ describe('routeActions', function() {
 
   describe('fetchRoutesForApp()', function() {
     it('should dispatch ROUTES_FOR_APP_FETCH view event with params', function() {
-      var expectedAppGuid = 'asdflkjzzxcv',
+      let expectedAppGuid = 'asdflkjzzxcv',
         expectedParams = {
           appGuid: expectedAppGuid
         };
 
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       routeActions.fetchRoutesForApp(expectedAppGuid);
 
@@ -225,10 +225,10 @@ describe('routeActions', function() {
       };
       const expectedParams = {
         routes: expected,
-        appGuid: appGuid
+        appGuid
       };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       routeActions.receivedRoutesForApp(expected, appGuid);
 
@@ -250,7 +250,7 @@ describe('routeActions', function() {
         routes: expected
       };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       routeActions.receivedRoutes(expected);
 
@@ -269,12 +269,12 @@ describe('routeActions', function() {
 
   describe('toggleEdit()', function() {
     it('should dispatch a UI action with a route guid', function() {
-      var expectedRouteGuid = 'route-guid',
+      let expectedRouteGuid = 'route-guid',
         expectedParams = {
           routeGuid: expectedRouteGuid
         };
 
-      let spy = setupUISpy(sandbox);
+      const spy = setupUISpy(sandbox);
 
       routeActions.toggleEdit(expectedRouteGuid);
 
@@ -289,7 +289,7 @@ describe('routeActions', function() {
         routeGuid: expectedRouteGuid
       };
 
-      let spy = setupUISpy(sandbox);
+      const spy = setupUISpy(sandbox);
 
       routeActions.toggleRemove(expectedRouteGuid);
 
@@ -338,7 +338,7 @@ describe('routeActions', function() {
       const routeGuid = 'adfzcvb2cvb435n';
       const err = { status: 500, data: {} };
       const params = {
-        routeGuid: routeGuid,
+        routeGuid,
         error: err
       };
       const spy = setupServerSpy(sandbox);

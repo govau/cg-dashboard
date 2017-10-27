@@ -6,7 +6,7 @@ import QuotaStore from '../../../stores/quota_store';
 import { quotaActionTypes } from '../../../constants';
 
 describe('QuotaStore', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     QuotaStore._data = Immutable.List();
@@ -25,18 +25,19 @@ describe('QuotaStore', function() {
 
   describe('on ORGS_QUOTAS_FETCH', function() {
     it('should fetch quotas for all organizations', function() {
-      var spy = sandbox.spy(cfApi, 'fetchOrgsQuotas');
+      const spy = sandbox.spy(cfApi, 'fetchOrgsQuotas');
       AppDispatcher.handleViewAction({
         type: quotaActionTypes.ORGS_QUOTAS_FETCH
       });
+
       expect(spy).toHaveBeenCalledOnce();
     });
   });
 
   describe('on ORGS_QUOTAS_RECEIVED', function() {
     it('should call mergeMany with new quotas', function() {
-      var spy = sandbox.spy(QuotaStore, 'mergeMany');
-      var quotas = [
+      const spy = sandbox.spy(QuotaStore, 'mergeMany');
+      const quotas = [
         {
           metadata: {
             guid: 'fake-guid'
@@ -48,24 +49,26 @@ describe('QuotaStore', function() {
         type: quotaActionTypes.ORGS_QUOTAS_RECEIVED,
         quotas
       });
+
       expect(spy).toHaveBeenCalledOnce();
     });
   });
 
   describe('on SPACES_QUOTAS_FETCH', function() {
     it('should fetch quotas for all organizations', function() {
-      var spy = sandbox.spy(cfApi, 'fetchSpacesQuotas');
+      const spy = sandbox.spy(cfApi, 'fetchSpacesQuotas');
       AppDispatcher.handleViewAction({
         type: quotaActionTypes.SPACES_QUOTAS_FETCH
       });
+
       expect(spy).toHaveBeenCalledOnce();
     });
   });
 
   describe('on SPACES_QUOTAS_RECEIVED', function() {
     it('should call mergeMany with new quotas', function() {
-      var spy = sandbox.spy(QuotaStore, 'mergeMany');
-      var quotas = [
+      const spy = sandbox.spy(QuotaStore, 'mergeMany');
+      const quotas = [
         {
           metadata: {
             guid: 'fake-guid'
@@ -77,6 +80,7 @@ describe('QuotaStore', function() {
         type: quotaActionTypes.SPACES_QUOTAS_RECEIVED,
         quotas
       });
+
       expect(spy).toHaveBeenCalledOnce();
     });
   });

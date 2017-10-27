@@ -8,7 +8,7 @@ import orgActions from '../../../actions/org_actions';
 import spaceActions from '../../../actions/space_actions';
 
 describe('SpaceStore', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -27,13 +27,13 @@ describe('SpaceStore', function() {
 
   describe('on org actions org received', function() {
     it('should include the org guid in the space', function() {
-      var spaceGuid = 'spaceGuid';
-      var orgGuid = 'orgGuid';
-      var org = {
+      const spaceGuid = 'spaceGuid';
+      const orgGuid = 'orgGuid';
+      const org = {
         guid: orgGuid,
         spaces: [{ guid: spaceGuid }]
       };
-      var expected = {
+      const expected = {
         guid: spaceGuid,
         org: orgGuid
       };
@@ -44,10 +44,10 @@ describe('SpaceStore', function() {
     });
 
     it('should merge the org spaces data in with any current spaces', function() {
-      var orgGuid = 'adsfadzcxvzdfaew';
-      var expectedSpace = { guid: 'adfadsbcvbqwrsdfadsf32' };
-      var existingSpace = { guid: 'xczczxczczxcv2' };
-      var org = {
+      const orgGuid = 'adsfadzcxvzdfaew';
+      const expectedSpace = { guid: 'adfadsbcvbqwrsdfadsf32' };
+      const existingSpace = { guid: 'xczczxczczxcv2' };
+      const org = {
         guid: orgGuid,
         spaces: [expectedSpace]
       };
@@ -60,7 +60,7 @@ describe('SpaceStore', function() {
     });
 
     it('should emit a change event if there are spaces', function() {
-      var spy = sandbox.spy(SpaceStore, 'emitChange');
+      const spy = sandbox.spy(SpaceStore, 'emitChange');
       const testGuid = 'adfadsafdacxvx';
 
       orgActions.receivedOrg({ guid: testGuid, spaces: [{}] });
@@ -125,14 +125,16 @@ describe('SpaceStore', function() {
       const space = {
         guid: spaceGuid
       };
-      let spy = sandbox.spy(SpaceStore, 'emitChange');
+      const spy = sandbox.spy(SpaceStore, 'emitChange');
 
       spaceActions.changeCurrentSpace(spaceGuid);
+
       expect(spy).toHaveBeenCalledOnce();
 
       SpaceStore.push(space);
       spy.reset();
       spaceActions.changeCurrentSpace(spaceGuid);
+
       expect(spy).toHaveBeenCalledOnce();
     });
 
@@ -159,7 +161,7 @@ describe('SpaceStore', function() {
     it('should return space name if space', function() {
       const guid = 'zmn,vweiqodnjt7';
       const expected = 'spacename';
-      const space = { guid: guid, name: expected };
+      const space = { guid, name: expected };
 
       SpaceStore.push(space);
       SpaceStore._currentSpaceGuid = guid;

@@ -15,7 +15,7 @@ describe('ServiceInstanceStore', function() {
   let sandbox;
 
   const addServiceInstanceToStore = (guid, store) => {
-    const instance = { guid: guid, url: '/' + guid };
+    const instance = { guid, url: `/${guid}` };
     store._data = Immutable.fromJS([instance]);
 
     return instance;
@@ -47,18 +47,20 @@ describe('ServiceInstanceStore', function() {
     it('should return the value of the _updating property', () => {
       expect(ServiceInstanceStore.updating).toBe(false);
       ServiceInstanceStore._updating = true;
+
       expect(ServiceInstanceStore._updating).toBe(true);
     });
   });
 
   describe('get createError()', function() {
     it('should return createError', function() {
-      var expected = { msg: 'adsf' };
+      const expected = { msg: 'adsf' };
       let actual = ServiceInstanceStore.createError;
 
       expect(actual).toBeFalsy();
       ServiceInstanceStore._createError = expected;
       actual = ServiceInstanceStore.createError;
+
       expect(actual).toEqual(expected);
     });
   });
@@ -182,8 +184,9 @@ describe('ServiceInstanceStore', function() {
       serviceActions.receivedInstance(instance);
 
       expect(spy).toHaveBeenCalledOnce();
-      let arg1 = spy.getCall(0).args[0];
-      let arg2 = spy.getCall(0).args[1];
+      const arg1 = spy.getCall(0).args[0];
+      const arg2 = spy.getCall(0).args[1];
+
       expect(arg1).toEqual('guid');
       expect(arg2).toEqual(expected);
     });
@@ -204,13 +207,13 @@ describe('ServiceInstanceStore', function() {
 
   describe('on service instances received', function() {
     it('should set data  passed in instances', function() {
-      var expected = [
+      const expected = [
         {
           guid: 'adfa',
           type: 'postgres'
         }
       ];
-      let testRes = expected;
+      const testRes = expected;
       AppDispatcher.handleServerAction({
         type: serviceActionTypes.SERVICE_INSTANCES_RECEIVED,
         serviceInstances: testRes
@@ -223,7 +226,7 @@ describe('ServiceInstanceStore', function() {
 
   describe('on service instance create form cancel', function() {
     it('should emit a change event', function() {
-      var spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
+      const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
 
       serviceActions.createInstanceFormCancel();
 
@@ -264,7 +267,7 @@ describe('ServiceInstanceStore', function() {
     });
 
     it('should emit a change event', function() {
-      var spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
+      const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
 
       serviceActions.createInstanceForm('adfkjvnzxczv', 'aldsfjalqwe');
 
@@ -274,7 +277,7 @@ describe('ServiceInstanceStore', function() {
 
   describe('on service instance create', function() {
     it('should call an api method to create a service instance', function() {
-      var spy = sandbox.spy(cfApi, 'createServiceInstance'),
+      let spy = sandbox.spy(cfApi, 'createServiceInstance'),
         expectedName = 'blah',
         expectedSpaceGuid = 'q9208fhdasl',
         expectedServicePlanGuid = 'a098fduadshf2';
@@ -295,9 +298,9 @@ describe('ServiceInstanceStore', function() {
   });
 
   describe('on SERVICE_INSTANCE_CREATE_ERROR', () => {
-    const serviceInstanceError = code => {
-      return { response: { data: { error_code: code } } };
-    };
+    const serviceInstanceError = code => ({
+      response: { data: { error_code: code } }
+    });
 
     it('should set error props of instance form based on error received', () => {
       const serverError = { code: 500 };
@@ -350,7 +353,7 @@ describe('ServiceInstanceStore', function() {
     });
 
     it('should emit a change event', function() {
-      var spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
+      const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
 
       serviceActions.errorCreateInstance({ status: 500 });
 
@@ -417,6 +420,7 @@ describe('ServiceInstanceStore', function() {
       serviceActions.deleteInstanceConfirm(instanceGuid);
 
       const actual = ServiceInstanceStore.get(instanceGuid);
+
       expect(actual.confirmDelete).toBeTruthy();
     });
   });
@@ -441,6 +445,7 @@ describe('ServiceInstanceStore', function() {
 
       serviceActions.deleteInstanceConfirm(instanceGuid);
       let actual = ServiceInstanceStore.get(instanceGuid);
+
       expect(actual.confirmDelete).toBeTruthy();
 
       serviceActions.deleteInstanceCancel(instanceGuid);
@@ -479,7 +484,7 @@ describe('ServiceInstanceStore', function() {
     });
 
     it('should emit a change event if found locally', function() {
-      var spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
+      const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
 
       AppDispatcher.handleServerAction({
         type: serviceActionTypes.SERVICE_INSTANCE_DELETED,
@@ -490,7 +495,7 @@ describe('ServiceInstanceStore', function() {
     });
 
     it('should not emit a change event if not found locally', function() {
-      var spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
+      const spy = sandbox.spy(ServiceInstanceStore, 'emitChange');
 
       AppDispatcher.handleServerAction({
         type: serviceActionTypes.SERVICE_INSTANCE_DELETED,
@@ -553,6 +558,7 @@ describe('ServiceInstanceStore', function() {
       serviceActions.boundService(binding);
 
       const actual = ServiceInstanceStore.get(testGuid);
+
       expect(actual.loading).toBeFalsy();
     });
   });
@@ -597,6 +603,7 @@ describe('ServiceInstanceStore', function() {
       serviceActions.changeServiceInstanceCancel(testGuid);
 
       const actual = ServiceInstanceStore.get(testGuid);
+
       expect(actual).toBeDefined();
       expect(actual.changing).toBeFalsy();
     });

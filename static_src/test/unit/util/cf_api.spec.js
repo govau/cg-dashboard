@@ -1,4 +1,3 @@
-
 import http from 'axios';
 import Immutable from 'immutable';
 import moxios from 'moxios';
@@ -10,27 +9,24 @@ import cfApi, {
 } from '../../../util/cf_api';
 import domainActions from '../../../actions/domain_actions';
 import errorActions from '../../../actions/error_actions';
-import loginActions from '../../../actions/login_actions';
 import orgActions from '../../../actions/org_actions';
 import OrgStore from '../../../stores/org_store';
 import quotaActions from '../../../actions/quota_actions';
 import routeActions from '../../../actions/route_actions';
-import userActions from '../../../actions/user_actions';
 import { wrapInRes } from '../helpers';
 
 function createPromise(res, err) {
   // TODO figure out how to do this with actual Promise object.
   if (!err) {
     return Promise.resolve(res);
-  } else {
-    return Promise.reject(err);
   }
+  return Promise.reject(err);
 }
 
 describe('cfApi', function() {
   let sandbox;
-  let errorFetchRes = { message: 'error', status: 404, data: {} };
-  let fakeCFErrorRes = {
+  const errorFetchRes = { message: 'error', status: 404, data: {} };
+  const fakeCFErrorRes = {
     message: 'Request returned an error state',
     response: {
       status: 500,
@@ -57,19 +53,14 @@ describe('cfApi', function() {
     const spy = sandbox.stub(errorActions, 'errorFetch').returns();
     const expected = fakeCFErrorRes;
 
-    let testPromise = createPromise(true, expected);
+    const testPromise = createPromise(true, expected);
     stub.returns(testPromise);
 
     return spy;
   }
 
-  function assertFetchError(spy) {
-    expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith(errorFetchRes);
-  }
-
   describe('formatSplitResponse()', function() {
-    it('should combine sepaarate entity and metadata to one object', function() {
+    it('should combine separate entity and metadata to one object', function() {
       const resource = {
         metadata: { guid: 'xzcvzc' },
         entity: { name: 'blah' }
@@ -96,7 +87,8 @@ describe('cfApi', function() {
       spy.returns(createPromise({ data: {} }));
 
       cfApi.postCreateNewUserWithGuid(userGuid).then(() => {
-        const args = spy.getCall(0).args;
+        const { args } = spy.getCall(0);
+
         expect(spy).toHaveBeenCalledOnce();
         expect(args[0]).toMatch('/users');
         expect(args[1]).toEqual(expectedPayload);
@@ -113,7 +105,8 @@ describe('cfApi', function() {
       spy.returns(createPromise({ data: {} }));
 
       cfApi.putAssociateUserToOrganization(userGuid, orgGuid).then(() => {
-        const args = spy.getCall(0).args;
+        const { args } = spy.getCall(0);
+
         expect(spy).toHaveBeenCalledOnce();
         expect(args[0]).toMatch(`/organizations/${orgGuid}/users/${userGuid}`);
         done();
@@ -136,7 +129,8 @@ describe('cfApi', function() {
       putUserToOrgSpy.returns(createPromise());
 
       cfApi.putAssociateUserToSpace(userGuid, orgGuid, entityGuid).then(() => {
-        const args = spy.getCall(0).args;
+        const { args } = spy.getCall(0);
+
         expect(putUserToOrgSpy).toHaveBeenCalledOnce();
         expect(spy).toHaveBeenCalledOnce();
         expect(args[0]).toMatch(`/spaces/${entityGuid}/auditors/${userGuid}`);
@@ -146,7 +140,7 @@ describe('cfApi', function() {
   });
 
   describe('formatSplitResponse()', function() {
-    var testRezs;
+    let testRezs;
 
     beforeEach(function() {
       testRezs = [
@@ -156,13 +150,13 @@ describe('cfApi', function() {
     });
 
     it('should merge entity with metadata for each resource', function() {
-      var actual = cfApi.formatSplitResponses(testRezs);
+      const actual = cfApi.formatSplitResponses(testRezs);
 
       expect(actual[0]).toEqual({ name: 'e1', guid: 'mmmmmn' });
     });
 
     it('should not modify the original data', function() {
-      var clone = testRezs.slice(0);
+      const clone = testRezs.slice(0);
 
       cfApi.formatSplitResponses(testRezs);
 
@@ -223,7 +217,8 @@ describe('cfApi', function() {
       cfApi
         .createRoute(domainGuid, spaceGuid, host, path)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch('/routes');
           expect(args[1]).toEqual(expectedPayload);
@@ -254,6 +249,7 @@ describe('cfApi', function() {
         .createRoute(domainGuid, spaceGuid, host, path)
         .then(() => {
           const arg = actionSpy.getCall(0).args[0];
+
           expect(actionSpy).toHaveBeenCalledOnce();
           expect(arg).toEqual(cfApi.formatSplitResponse(data));
           done();
@@ -286,7 +282,8 @@ describe('cfApi', function() {
       cfApi
         .deleteRoute(routeGuid)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch(`/routes/${routeGuid}`);
           done();
@@ -306,6 +303,7 @@ describe('cfApi', function() {
         .deleteRoute(routeGuid)
         .then(() => {
           const arg = spy.getCall(0).args[0];
+
           expect(spy).toHaveBeenCalledOnce();
           expect(arg).toEqual(routeGuid);
           done();
@@ -326,8 +324,10 @@ describe('cfApi', function() {
         .catch(() => {
           expect(spy).toHaveBeenCalledOnce();
           let arg = spy.getCall(0).args[0];
+
           expect(arg).toEqual(routeGuid);
           arg = spy.getCall(0).args[1];
+
           expect(arg).toEqual(fakeCFErrorRes.response.data);
           done();
         })
@@ -342,12 +342,13 @@ describe('cfApi', function() {
       const stub = sandbox.stub(http, 'get');
       const expectedUrl = '/org/asldfkj';
 
-      let testPromise = createPromise({ data: {} });
+      const testPromise = createPromise({ data: {} });
       stub.returns(testPromise);
 
       cfApi.fetchOne(expectedUrl, function() {}).then(() => {
         expect(stub).toHaveBeenCalledOnce();
-        let actual = stub.getCall(0).args[0];
+        const actual = stub.getCall(0).args[0];
+
         expect(actual).toEqual(cfApi.version + expectedUrl);
         done();
       });
@@ -360,12 +361,13 @@ describe('cfApi', function() {
       const stub = sandbox.stub(http, 'get');
       const spy = sandbox.spy();
 
-      let testPromise = createPromise(expected);
+      const testPromise = createPromise(expected);
       stub.returns(testPromise);
 
       cfApi.fetchOne('/thing/adjfk', spy).then(() => {
         expect(spy).toHaveBeenCalledOnce();
-        let actual = spy.getCall(0).args[0];
+        const actual = spy.getCall(0).args[0];
+
         expect(actual).toEqual(expected.data.metadata);
         done();
       });
@@ -386,15 +388,19 @@ describe('cfApi', function() {
       const expectedArgA = 'arga';
       const expectedArgB = 'argb';
 
-      let testPromise = createPromise({ data: { metadata: { guid: 'adf' } } });
+      const testPromise = createPromise({
+        data: { metadata: { guid: 'adf' } }
+      });
       stub.returns(testPromise);
 
       cfApi
         .fetchOne('/thing/asdfz', spy, expectedArgA, expectedArgB)
         .then(() => {
           let actual = spy.getCall(0).args[1];
+
           expect(actual).toEqual(expectedArgA);
           actual = spy.getCall(0).args[2];
+
           expect(actual).toEqual(expectedArgB);
           done();
         });
@@ -403,9 +409,9 @@ describe('cfApi', function() {
 
   describe('fetchAllPages()', function() {
     it('should call the action if there is only one page', function(done) {
-      var stub = sandbox.stub(http, 'get');
-      var expectedUrl = '/org/asldfkj';
-      var data = {
+      const stub = sandbox.stub(http, 'get');
+      const expectedUrl = '/org/asldfkj';
+      const data = {
         data: {
           next_url: false,
           total_pages: 1,
@@ -423,9 +429,9 @@ describe('cfApi', function() {
     });
 
     it('should call http.get once for every page', function(done) {
-      var stub = sandbox.stub(http, 'get');
-      var expectedUrl = '/org/asldfkj';
-      var response = {
+      const stub = sandbox.stub(http, 'get');
+      const expectedUrl = '/org/asldfkj';
+      const response = {
         data: {
           next_url: true,
           total_pages: 20,
@@ -437,7 +443,8 @@ describe('cfApi', function() {
 
       cfApi
         .fetchAllPages(expectedUrl, function() {
-          var callCount = stub.callCount;
+          const { callCount } = stub;
+
           expect(callCount).toEqual(response.data.total_pages);
           done();
         })
@@ -445,16 +452,16 @@ describe('cfApi', function() {
     });
 
     it('should combine the responses from all the requests', function(done) {
-      var stub = sandbox.stub(http, 'get');
-      var expectedUrl = '/org/asldfkj';
-      var dataOne = {
+      const stub = sandbox.stub(http, 'get');
+      const expectedUrl = '/org/asldfkj';
+      const dataOne = {
         data: {
           next_url: true,
           total_pages: 3,
           resources: [{ metadata: { guid: 'higw' } }]
         }
       };
-      var dataTwo = {
+      const dataTwo = {
         data: {
           next_url: true,
           resources: [
@@ -483,6 +490,7 @@ describe('cfApi', function() {
             .concat(dataTwo.data.resources)
             .concat(dataThree.data.resources)
             .map(r => Object.assign({}, r.metadata, r.entity));
+
           expect(stub).toHaveBeenCalledThrice();
           expect(responses).toEqual(combined);
           done();
@@ -554,6 +562,7 @@ describe('cfApi', function() {
 
       it('calls the url first with data', function() {
         const call = http.get.firstCall;
+
         expect(call).toHaveBeenCalledWith(
           expectedUrl,
           sinon.match({ params: data })
@@ -562,6 +571,7 @@ describe('cfApi', function() {
 
       it('appends the page to existing parameters on second call', function() {
         const call = http.get.secondCall;
+
         expect(call).toHaveBeenCalledWith(
           expectedUrl,
           sinon.match({ params: { ...data, page: 2 } })
@@ -570,6 +580,7 @@ describe('cfApi', function() {
 
       it('appends the page to existing parameters on third call', function() {
         const call = http.get.thirdCall;
+
         expect(call).toHaveBeenCalledWith(
           expectedUrl,
           sinon.match({ params: { ...data, page: 3 } })
@@ -590,6 +601,7 @@ describe('cfApi', function() {
     it('calls http get request for auth status', () => {
       expect(http.get).toHaveBeenCalledOnce();
       const actual = http.get.getCall(0).args[0];
+
       expect(actual).toMatch('authstatus');
     });
 
@@ -658,7 +670,7 @@ describe('cfApi', function() {
   describe('fetchOrgs()', function() {
     it('calls http get request for orgs', function(done) {
       const spy = sandbox.stub(http, 'get');
-      let testPromise = createPromise({
+      const testPromise = createPromise({
         data: { resources: [{ metadata: { guid: 'sdf' } }] }
       });
       spy.returns(testPromise);
@@ -666,7 +678,8 @@ describe('cfApi', function() {
 
       cfApi.fetchOrgs().then(() => {
         expect(spy).toHaveBeenCalledOnce();
-        let actual = spy.getCall(0).args[0];
+        const actual = spy.getCall(0).args[0];
+
         expect(actual).toMatch('organizations');
         done();
       });
@@ -678,11 +691,12 @@ describe('cfApi', function() {
       const spy = sandbox.stub(http, 'get');
       const expectedGuid = 'asdfad';
 
-      let testPromise = createPromise({ data: {} });
+      const testPromise = createPromise({ data: {} });
       spy.returns(testPromise);
       cfApi.fetchOrgMemoryUsage(expectedGuid).then(() => {
         expect(spy).toHaveBeenCalledOnce();
-        let actual = spy.getCall(0).args[0];
+        const actual = spy.getCall(0).args[0];
+
         expect(actual).toMatch('memory_usage');
         expect(actual).toMatch(expectedGuid);
         done();
@@ -696,15 +710,16 @@ describe('cfApi', function() {
       const expectedGuid = 'asdfad';
       const expectedOrg = {
         guid: expectedGuid,
-        quota_definition_url: 'http://api.gov/quota_definitions/' + expectedGuid
+        quota_definition_url: `http://api.gov/quota_definitions/${expectedGuid}`
       };
 
-      let testPromise = createPromise({ data: {} });
+      const testPromise = createPromise({ data: {} });
       spy.returns(testPromise);
 
       cfApi.fetchOrgMemoryLimit(expectedOrg).then(() => {
         expect(spy).toHaveBeenCalledOnce();
-        let actual = spy.getCall(0).args[0];
+        const actual = spy.getCall(0).args[0];
+
         expect(actual).toMatch('quota_definitions');
         expect(actual).toMatch(expectedGuid);
         done();
@@ -714,13 +729,14 @@ describe('cfApi', function() {
 
   describe('fetchSpace()', () => {
     it('calls fetch one for space with guid and received space', function() {
-      var expected = 'yyyybba1',
+      const expected = 'yyyybba1',
         spy = sandbox.stub(cfApi, 'fetchOne');
 
       cfApi.fetchSpace(expected);
 
       expect(spy).toHaveBeenCalledOnce();
-      let actual = spy.getCall(0).args[0];
+      const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('space'));
     });
@@ -730,13 +746,14 @@ describe('cfApi', function() {
     it('calls fetch for the spaces endpoint', function() {
       const stub = sandbox.stub(http, 'get');
       const expected = [{ guid: 'fake-guid-one' }];
-      let testPromise = createPromise(wrapInRes(expected));
+      const testPromise = createPromise(wrapInRes(expected));
       stub.returns(testPromise);
 
       cfApi.fetchSpaces();
 
       expect(stub).toHaveBeenCalledOnce();
-      let actual = stub.getCall(0).args[0];
+      const actual = stub.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('spaces'));
     });
   });
@@ -787,6 +804,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('service_instances'));
     });
@@ -801,6 +819,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('spaces'));
       expect(actual).toMatch(new RegExp('service_instances'));
@@ -808,17 +827,13 @@ describe('cfApi', function() {
   });
 
   describe('createServiceInstance()', function() {
-    var expectedName = 'name',
-      expectedSpaceGuid = 'vzjck8zv9czjck',
-      expectedServicePlanGuid = 'vcmn234adf';
-
     it('should call an http create for service_instance url and payload', function() {
-      var expectedName = 'nameA',
+      const expectedName = 'nameA',
         expectedSpaceGuid = 'adjszc98bv7zxcf',
         expectedServicePlanGuid = 'aldkfjbnzx1231',
         spy = sandbox.spy(http, 'post');
 
-      let expected = {
+      const expected = {
         name: expectedName,
         space_guid: expectedSpaceGuid,
         service_plan_guid: expectedServicePlanGuid
@@ -832,13 +847,19 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('service_instances'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(expected);
     });
 
     it('should add an accepts_incomplete param in the request', function() {
-      var spy = sandbox.spy(http, 'post');
+      const expectedName = 'name',
+        expectedSpaceGuid = 'vzjck8zv9czjck',
+        expectedServicePlanGuid = 'vcmn234adf';
+
+      const spy = sandbox.spy(http, 'post');
 
       cfApi.createServiceInstance(
         expectedName,
@@ -847,7 +868,8 @@ describe('cfApi', function() {
       );
 
       expect(spy).toHaveBeenCalledOnce();
-      let actual = spy.getCall(0).args[0];
+      const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('accepts_incomplete'));
     });
   });
@@ -856,15 +878,16 @@ describe('cfApi', function() {
     it('should call http delete request on service route with service guid', function(
       done
     ) {
-      var spy = sandbox.stub(http, 'delete').returns(Promise.resolve()),
+      const spy = sandbox.stub(http, 'delete').returns(Promise.resolve()),
         expectedGuid = 'yyasdflkjayybbaal1',
-        expected = { guid: expectedGuid, url: '/' + expectedGuid };
+        expected = { guid: expectedGuid, url: `/${expectedGuid}` };
 
       cfApi
         .deleteUnboundServiceInstance(expected)
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
-          let actual = spy.getCall(0).args[0];
+          const actual = spy.getCall(0).args[0];
+
           expect(actual).toMatch(new RegExp(expectedGuid));
           done();
         })
@@ -881,6 +904,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const url = spy.getCall(0).args[0];
+
       expect(url).toMatch(new RegExp(expected));
       expect(url).toMatch(new RegExp('apps'));
     });
@@ -895,6 +919,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const url = spy.getCall(0).args[0];
+
       expect(url).toMatch(new RegExp(expected));
       expect(url).toMatch(new RegExp('apps'));
       expect(url).toMatch(new RegExp('stats'));
@@ -916,13 +941,14 @@ describe('cfApi', function() {
 
   describe('fetchAppLogs()', function() {
     it('calls the recent log endpoint with the app guid', function() {
-      var appGuid = 'fakeAppGuid';
-      var spy = sandbox.spy(http, 'get');
-      var expected = `log/recent?app=${appGuid}`;
+      const appGuid = 'fakeAppGuid';
+      const spy = sandbox.spy(http, 'get');
+      const expected = `log/recent?app=${appGuid}`;
 
       cfApi.fetchAppLogs(appGuid);
 
-      let calledUrl = spy.getCall(0).args[0];
+      const calledUrl = spy.getCall(0).args[0];
+
       expect(calledUrl).toEqual(expected);
     });
   });
@@ -937,7 +963,8 @@ describe('cfApi', function() {
         .postAppRestart(appGuid)
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(args[0]).toMatch('apps');
           expect(args[0]).toMatch(appGuid);
         })
@@ -947,15 +974,16 @@ describe('cfApi', function() {
 
   describe('putApp()', function() {
     it('returns mapped app from the response', function(done) {
-      const put = sandbox.stub(http, 'put', (url, app) => {
-        return createPromise({ data: { entity: app } });
-      });
+      const put = sandbox
+        .stub(http, 'put')
+        .callsFake((url, app) => createPromise({ data: { entity: app } }));
       const expectedApp = { guid: '123' };
 
       cfApi
         .putApp(expectedApp.guid, expectedApp)
         .then(function() {
-          let [url, app] = put.args[0];
+          const [url, app] = put.args[0];
+
           expect(url).toMatch(new RegExp('/v2/apps/123$'));
           expect(app).toEqual(expectedApp);
           done();
@@ -969,17 +997,19 @@ describe('cfApi', function() {
       'should call fetch with spaces user roles url with space guid and the' +
         ' received space users action',
       function() {
-        var expected = 'yyyybba1',
+        const expected = 'yyyybba1',
           spy = sandbox.spy(cfApi, 'fetchAllPages');
 
         cfApi.fetchSpaceUserRoles(expected);
 
         expect(spy).toHaveBeenCalledOnce();
         let actual = spy.getCall(0).args[0];
+
         expect(actual).toMatch(new RegExp(expected));
         expect(actual).toMatch(new RegExp('spaces'));
         expect(actual).toMatch(new RegExp('user_roles'));
         actual = spy.getCall(0).args[1];
+
         expect(actual).toEqual(jasmine.any(Function));
       }
     );
@@ -987,17 +1017,19 @@ describe('cfApi', function() {
 
   describe('fetchOrgUsers()', function() {
     it('should call fetch org users with org guid and received org users action', function() {
-      var expected = 'yyyybba1',
+      const expected = 'yyyybba1',
         spy = sandbox.spy(cfApi, 'fetchAllPages');
 
       cfApi.fetchOrgUsers(expected);
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('organizations'));
       expect(actual).toMatch(new RegExp('users'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(jasmine.any(Function));
     });
   });
@@ -1005,23 +1037,26 @@ describe('cfApi', function() {
   describe('fetchOrgUserRoles()', function() {
     it(`should call fetch org user roles with org guid and received org user
         roles action and org guid`, function() {
-      var expectedOrgGuid = 'zkjvczcvzwexdvzdfa',
+      const expectedOrgGuid = 'zkjvczcvzwexdvzdfa',
         spy = sandbox.spy(cfApi, 'fetchAllPages');
 
       cfApi.fetchOrgUserRoles(expectedOrgGuid);
+
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expectedOrgGuid));
       expect(actual).toMatch(new RegExp('organizations'));
       expect(actual).toMatch(new RegExp('roles'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(jasmine.any(Function));
     });
   });
 
   describe('deleteUser()', function() {
     it('should call a http delete request on the org and user', function(done) {
-      var spy = sandbox
+      const spy = sandbox
           .stub(http, 'delete')
           .returns(Promise.resolve({ status: 500 })),
         expectedUserGuid = 'zvmxncznv-9u8qwphu',
@@ -1031,7 +1066,8 @@ describe('cfApi', function() {
         .deleteUser(expectedUserGuid, expectedOrgGuid)
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
-          let actual = spy.getCall(0).args[0];
+          const actual = spy.getCall(0).args[0];
+
           expect(actual).toMatch(new RegExp(expectedUserGuid));
           expect(actual).toMatch(new RegExp(expectedOrgGuid));
           done();
@@ -1044,7 +1080,7 @@ describe('cfApi', function() {
     it('should call a http delete request on the org user with category ', function(
       done
     ) {
-      var spy = sandbox.stub(http, 'delete').returns(Promise.resolve({})),
+      const spy = sandbox.stub(http, 'delete').returns(Promise.resolve({})),
         expectedUserGuid = 'zvmxncznv-9u8qwphu',
         expectedOrgGuid = '0291kdvakjbdfvhp',
         expectedCategory = 'some_role';
@@ -1057,7 +1093,8 @@ describe('cfApi', function() {
         )
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
-          let actual = spy.getCall(0).args[0];
+          const actual = spy.getCall(0).args[0];
+
           expect(actual).toMatch(new RegExp(expectedUserGuid));
           expect(actual).toMatch(new RegExp(expectedOrgGuid));
           expect(actual).toMatch(new RegExp(expectedCategory));
@@ -1071,7 +1108,7 @@ describe('cfApi', function() {
     it('should call an http delete request on org user with permissions', function(
       done
     ) {
-      var spy = sandbox.stub(http, 'delete').returns(Promise.resolve({})),
+      const spy = sandbox.stub(http, 'delete').returns(Promise.resolve({})),
         expectedUserGuid = 'zvmxncznv-9u8qwphu',
         expectedOrgGuid = '0291kdvakjbdfvhp',
         expectedApiKey = 'managers';
@@ -1084,7 +1121,8 @@ describe('cfApi', function() {
         )
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
-          let actual = spy.getCall(0).args[0];
+          const actual = spy.getCall(0).args[0];
+
           expect(actual).toMatch(new RegExp(expectedUserGuid));
           expect(actual).toMatch(new RegExp(expectedOrgGuid));
           expect(actual).toMatch(new RegExp(expectedApiKey));
@@ -1095,7 +1133,7 @@ describe('cfApi', function() {
 
     it(`should call user action on a 400 response that has code 10006 with
         message about the error from cf`, function(done) {
-      var spy = sandbox.spy(http, 'delete'),
+      const spy = sandbox.spy(http, 'delete'),
         expectedUserGuid = 'zcvmzxncbvpafd',
         expectedOrgGuid = '0291kdvakjbdfvhp',
         expectedApiKey = 'managers',
@@ -1118,8 +1156,10 @@ describe('cfApi', function() {
         expectedOrgGuid,
         expectedApiKey
       );
+
       expect(spy).toHaveBeenCalledOnce();
-      let actual = spy.getCall(0).args[0];
+      const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expectedUserGuid));
       expect(actual).toMatch(new RegExp(expectedOrgGuid));
       expect(actual).toMatch(new RegExp(expectedApiKey));
@@ -1129,7 +1169,7 @@ describe('cfApi', function() {
 
   describe('putOrgUserPermissions()', function() {
     it('should call an http put request on org user with permissions', function() {
-      var spy = sandbox.spy(http, 'put'),
+      const spy = sandbox.spy(http, 'put'),
         expectedUserGuid = 'zvmxncznv-9u8qwphu',
         expectedOrgGuid = '0291kdvakjbdfvhp',
         expectedPermission = 'managers';
@@ -1141,7 +1181,8 @@ describe('cfApi', function() {
       );
 
       expect(spy).toHaveBeenCalledOnce();
-      let actual = spy.getCall(0).args[0];
+      const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expectedUserGuid));
       expect(actual).toMatch(new RegExp(expectedOrgGuid));
       expect(actual).toMatch(new RegExp(expectedPermission));
@@ -1157,6 +1198,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('services'));
     });
@@ -1171,6 +1213,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('service_plans'));
     });
@@ -1185,6 +1228,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('service_plans'));
     });
@@ -1199,10 +1243,12 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('apps'));
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('routes'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(routeActions.receivedRoutesForApp);
     });
   });
@@ -1216,70 +1262,84 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('spaces'));
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('routes'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(routeActions.receivedRoutes);
     });
   });
 
   describe('fetchPrivateDomain()', function() {
     it('should fetch domain with the domain guid', function() {
-      var expected = 'xcvxyyb1',
+      const expected = 'xcvxyyb1',
         spy = sandbox.stub(cfApi, 'fetchOne');
 
       cfApi.fetchPrivateDomain(expected);
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('private_domains'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(domainActions.receivedDomain);
     });
   });
 
   describe('fetchSharedDomain()', function() {
     it('should fetch domain with the domain guid', function() {
-      var expected = 'xcvxyyb1',
+      const expected = 'xcvxyyb1',
         spy = sandbox.stub(cfApi, 'fetchOne');
 
       cfApi.fetchSharedDomain(expected);
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('shared_domains'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(domainActions.receivedDomain);
     });
   });
 
   describe('fetchOrgsQuotas()', function() {
     it('should call receivedQuotasForAllOrgs action after fetchAllPages', function() {
-      var spy = sandbox.stub(cfApi, 'fetchAllPages').returns(Promise.resolve());
+      const spy = sandbox
+        .stub(cfApi, 'fetchAllPages')
+        .returns(Promise.resolve());
 
       cfApi.fetchOrgsQuotas();
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('quota_definitions'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(quotaActions.receivedQuotasForAllOrgs);
     });
   });
 
   describe('fetchSpacesQuotas()', function() {
     it('should call receivedQuotasForAllSpaces action after fetchAllPages', function() {
-      var spy = sandbox.stub(cfApi, 'fetchAllPages').returns(Promise.resolve());
+      const spy = sandbox
+        .stub(cfApi, 'fetchAllPages')
+        .returns(Promise.resolve());
 
       cfApi.fetchSpacesQuotas();
 
       expect(spy).toHaveBeenCalledOnce();
       let actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('space_quota_definitions'));
       actual = spy.getCall(0).args[1];
+
       expect(actual).toEqual(quotaActions.receivedQuotasForAllSpaces);
     });
   });
@@ -1293,6 +1353,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp(expected));
       expect(actual).toMatch(new RegExp('apps'));
       expect(actual).toMatch(new RegExp('service_bindings'));
@@ -1305,6 +1366,7 @@ describe('cfApi', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const actual = spy.getCall(0).args[0];
+
       expect(actual).toMatch(new RegExp('service_bindings'));
     });
   });
@@ -1323,7 +1385,8 @@ describe('cfApi', function() {
       cfApi
         .putAppRouteAssociation(appGuid, routeGuid)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch(`/routes/${routeGuid}/apps/${appGuid}`);
           done();
@@ -1345,7 +1408,8 @@ describe('cfApi', function() {
       cfApi
         .putAppRouteAssociation(appGuid, routeGuid)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toEqual(routeGuid);
           expect(args[1]).toEqual(appGuid);
@@ -1365,8 +1429,10 @@ describe('cfApi', function() {
       cfApi.putAppRouteAssociation('adfads', routeGuid).catch(() => {
         expect(spy).toHaveBeenCalledOnce();
         let arg = spy.getCall(0).args[0];
+
         expect(arg).toEqual(routeGuid);
         arg = spy.getCall(0).args[1];
+
         expect(arg).toEqual(fakeCFErrorRes.response.data);
         done();
       });
@@ -1385,7 +1451,8 @@ describe('cfApi', function() {
       cfApi
         .deleteAppRouteAssociation(appGuid, routeGuid)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch(`/apps/${appGuid}/routes/${routeGuid}`);
           done();
@@ -1407,7 +1474,8 @@ describe('cfApi', function() {
       cfApi
         .deleteAppRouteAssociation(appGuid, routeGuid)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toEqual(routeGuid);
           expect(args[1]).toEqual(appGuid);
@@ -1429,8 +1497,10 @@ describe('cfApi', function() {
         .catch(() => {
           expect(spy).toHaveBeenCalledOnce();
           let arg = spy.getCall(0).args[0];
+
           expect(arg).toEqual(routeGuid);
           arg = spy.getCall(0).args[1];
+
           expect(arg).toEqual(fakeCFErrorRes.response.data);
           done();
         })
@@ -1451,12 +1521,6 @@ describe('cfApi', function() {
         host,
         path
       };
-      const expected = {
-        domain_guid: domainGuid,
-        space_guid: spaceGuid,
-        host,
-        path
-      };
 
       const stub = sandbox.stub(http, 'put');
       const spy = sandbox.spy(routeActions, 'updatedRoute');
@@ -1465,7 +1529,8 @@ describe('cfApi', function() {
       cfApi
         .putRouteUpdate(routeGuid, domainGuid, spaceGuid, route)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toEqual(routeGuid);
           expect(args[1]).toEqual(route);
@@ -1489,8 +1554,10 @@ describe('cfApi', function() {
       cfApi.putRouteUpdate(routeGuid, 'a', 'b', route).catch(() => {
         expect(spy).toHaveBeenCalledOnce();
         let arg = spy.getCall(0).args[0];
+
         expect(arg).toEqual(routeGuid);
         arg = spy.getCall(0).args[1];
+
         expect(arg).toEqual(fakeCFErrorRes.response.data);
         done();
       });
@@ -1513,12 +1580,14 @@ describe('cfApi', function() {
         .createServiceBinding(appGuid, serviceInstanceGuid)
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
+
           expect(args[0]).toMatch('service_bindings');
           const expected = {
             app_guid: appGuid,
             service_instance_guid: serviceInstanceGuid
           };
+
           expect(args[1]).toEqual(expected);
           done();
         })
@@ -1540,6 +1609,7 @@ describe('cfApi', function() {
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
           const arg = spy.getCall(0).args[0];
+
           expect(arg).toMatch('service_bindings');
           done();
         })

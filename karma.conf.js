@@ -26,7 +26,10 @@ module.exports = function(config) {
       'static_src/tests.bundle.js': ['webpack']
     },
 
-    webpack: webpackConfig,
+    webpack: {
+      ...webpackConfig,
+      devtool: 'inline-source-map'
+    },
 
     reporters: ['progress'],
 

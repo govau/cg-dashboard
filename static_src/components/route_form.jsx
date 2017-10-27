@@ -49,9 +49,9 @@ export default class RouteForm extends React.Component {
     newValue[event.target.name] = event.target.value;
 
     if (event.target.name === 'domain_guid') {
-      newValue.domain_name = this.props.domains.find(domain => {
-        return domain.guid === event.target.value;
-      }).name;
+      newValue.domain_name = this.props.domains.find(
+        domain => domain.guid === event.target.value
+      ).name;
     }
 
     this.setState(newValue);
@@ -136,13 +136,11 @@ export default class RouteForm extends React.Component {
                 value={this.props.route.domain_guid}
               >
                 <option key="none">---</option>
-                {domains.map(domain => {
-                  return (
-                    <option key={domain.guid} value={domain.guid}>
-                      {domain.name}
-                    </option>
-                  );
-                })}
+                {domains.map(domain => (
+                  <option key={domain.guid} value={domain.guid}>
+                    {domain.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="route-field-path">

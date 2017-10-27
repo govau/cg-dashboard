@@ -102,6 +102,7 @@ describe('ServiceBindingStore', function() {
       });
 
       const actualBinding = ServiceBindingStore.get(binding.guid);
+
       expect(actualBinding.unbinding).toBe(true);
     });
   });

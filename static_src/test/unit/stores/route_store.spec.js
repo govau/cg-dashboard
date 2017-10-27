@@ -8,7 +8,7 @@ import RouteStore from '../../../stores/route_store';
 import { domainActionTypes, routeActionTypes } from '../../../constants';
 
 describe('RouteStore', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     RouteStore._data = Immutable.List();
@@ -71,6 +71,7 @@ describe('RouteStore', function() {
 
       expect(spy).toHaveBeenCalledOnce();
       const args = spy.getCall(0).args;
+
       expect(args[0]).toEqual(appGuid);
       expect(args[1]).toEqual(routeGuid);
     });
@@ -83,6 +84,7 @@ describe('RouteStore', function() {
       routeActions.associateApp(routeGuid, 'alsdkjf');
 
       const actual = RouteStore.get(routeGuid);
+
       expect(actual.loading).toEqual('Binding');
     });
 
@@ -113,6 +115,7 @@ describe('RouteStore', function() {
       });
 
       const actual = RouteStore.get(routeGuid);
+
       expect(actual.app_guid).toEqual(appGuid);
       expect(actual.editing).toEqual(false);
       expect(actual.error).toBeFalsy();
@@ -143,6 +146,7 @@ describe('RouteStore', function() {
       routeActions.associatedApp(routeGuid, 'alsdkjf');
 
       const actual = RouteStore.get(routeGuid);
+
       expect(actual.loading).toBeFalsy();
     });
   });
@@ -157,7 +161,8 @@ describe('RouteStore', function() {
       routeActions.unassociateApp(routeGuid, appGuid);
 
       expect(spy).toHaveBeenCalledOnce();
-      let args = spy.getCall(0).args;
+      const args = spy.getCall(0).args;
+
       expect(args[0]).toEqual(appGuid);
       expect(args[1]).toEqual(routeGuid);
     });
@@ -170,6 +175,7 @@ describe('RouteStore', function() {
       routeActions.unassociateApp(routeGuid, 'alsdkjf');
 
       const actual = RouteStore.get(routeGuid);
+
       expect(actual.loading).toEqual('Unbinding');
     });
 
@@ -191,9 +197,7 @@ describe('RouteStore', function() {
     const appGuid = 'zcxv98xcv234';
 
     it('should remove the app guid route if found', function() {
-      RouteStore._data = Immutable.fromJS([
-        { guid: routeGuid, appGuid: appGuid }
-      ]);
+      RouteStore._data = Immutable.fromJS([{ guid: routeGuid, appGuid }]);
 
       routeActions.unassociatedApp(routeGuid, appGuid);
 
@@ -203,9 +207,7 @@ describe('RouteStore', function() {
     });
 
     it('should emit a change', function() {
-      RouteStore._data = Immutable.fromJS([
-        { guid: routeGuid, appGuid: appGuid }
-      ]);
+      RouteStore._data = Immutable.fromJS([{ guid: routeGuid, appGuid }]);
 
       const spy = sandbox.spy(RouteStore, 'emitChange');
 
@@ -222,6 +224,7 @@ describe('RouteStore', function() {
       routeActions.unassociatedApp(routeGuid, 'alsdkjf');
 
       const actual = RouteStore.get(routeGuid);
+
       expect(actual.loading).toBeFalsy();
     });
   });
@@ -243,6 +246,7 @@ describe('RouteStore', function() {
       });
 
       const args = spy.getCall(0).args;
+
       expect(spy).toHaveBeenCalledOnce();
       expect(args).toEqual([domainGuid, spaceGuid, host, path]);
     });
@@ -381,6 +385,7 @@ describe('RouteStore', function() {
       });
 
       const arg = spy.getCall(0).args[0];
+
       expect(spy).toHaveBeenCalledOnce();
       expect(arg).toEqual(routeGuid);
     });
@@ -405,7 +410,7 @@ describe('RouteStore', function() {
 
   describe('routeActionTypes.ROUTES_FOR_APP_FETCH', function() {
     it('should fetch routes for app with app guid from api', function() {
-      var spy = sandbox.spy(cfApi, 'fetchRoutesForApp'),
+      let spy = sandbox.spy(cfApi, 'fetchRoutesForApp'),
         expectedGuid = 'adfasdzcvzxcvb23r';
 
       AppDispatcher.handleViewAction({
@@ -414,7 +419,8 @@ describe('RouteStore', function() {
       });
 
       expect(spy).toHaveBeenCalledOnce();
-      let arg = spy.getCall(0).args[0];
+      const arg = spy.getCall(0).args[0];
+
       expect(arg).toEqual(expectedGuid);
     });
   });
@@ -427,7 +433,8 @@ describe('RouteStore', function() {
       routeActions.fetchRoutesForSpace(expectedGuid);
 
       expect(spy).toHaveBeenCalledOnce();
-      let arg = spy.getCall(0).args[0];
+      const arg = spy.getCall(0).args[0];
+
       expect(arg).toEqual(expectedGuid);
     });
   });
@@ -457,7 +464,7 @@ describe('RouteStore', function() {
 
       AppDispatcher.handleViewAction({
         type: routeActionTypes.ROUTES_FOR_APP_RECEIVED,
-        appGuid: appGuid,
+        appGuid,
         routes: [{ guid: 'adsfa' }]
       });
 
@@ -467,7 +474,7 @@ describe('RouteStore', function() {
     it('should add the appGuid to each route', function() {
       const sharedGuid = 'zxcb234xcvb4567';
 
-      let routeA = { guid: 'zxcb1234adfg098', host: 'tim' };
+      const routeA = { guid: 'zxcb1234adfg098', host: 'tim' };
 
       AppDispatcher.handleServerAction({
         type: routeActionTypes.ROUTES_FOR_APP_RECEIVED,
@@ -475,7 +482,7 @@ describe('RouteStore', function() {
         routes: [routeA]
       });
 
-      let actual = RouteStore.get(routeA.guid);
+      const actual = RouteStore.get(routeA.guid);
 
       expect(actual).toEqual(
         Object.assign({}, routeA, { app_guid: sharedGuid })
@@ -587,6 +594,7 @@ describe('RouteStore', function() {
       });
 
       const args = spy.getCall(0).args;
+
       expect(spy).toHaveBeenCalledWith();
       expect(args).toEqual([routeGuid, domainGuid, spaceGuid, route]);
     });
@@ -599,6 +607,7 @@ describe('RouteStore', function() {
       routeActions.updateRoute(routeGuid, 'sdfaz', 'dsfbvc', route);
 
       const actual = RouteStore.get(routeGuid);
+
       expect(actual.loading).toEqual('Editing');
     });
 
@@ -641,6 +650,7 @@ describe('RouteStore', function() {
       routeActions.updatedRoute(routeGuid, route);
 
       const actual = RouteStore.get(routeGuid);
+
       expect(actual.loading).toBeFalsy();
     });
 

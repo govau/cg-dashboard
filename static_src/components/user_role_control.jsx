@@ -73,5 +73,5 @@ UserRoleControl.propTypes = propTypes;
 UserRoleControl.defaultProps = {
   value: false,
   enableControl: false,
-  onChange: function() {}
+  onChange() {}
 };

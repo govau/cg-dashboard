@@ -122,11 +122,7 @@ npm run prettier
 Note: it's highly recommended to format on save, so the package script should generally not need to be used.
 
 ### Linting
-The code base includes linting configurations and tools, but is currently not fully linted. This means that there's an "opt-in" policy to linting: you decide when to add a file to linting.
-- Theres a lint ignore file, `.eslintignore` with all non-linted files.
-- If you touch another file that isn't linted yet, you should generally fix it and remove it from the lint ignore.
-  - Unless under strict time constraints.
-- No new files should be added to the lint ignore. Consequently, all new files should be linted.
+
 - Linting will be run before tests run, so will fail the tests if files are not linted.
 - Additionally, linting should always
   - fail on CI

@@ -9,9 +9,8 @@ function createPromise(res, err) {
   // TODO figure out how to do this with actual Promise object.
   if (!err) {
     return Promise.resolve(res);
-  } else {
-    return Promise.reject(err);
   }
+  return Promise.reject(err);
 }
 
 describe('uaaApi', function() {
@@ -68,6 +67,7 @@ describe('uaaApi', function() {
         .inviteUaaUser(email)
         .then(() => {
           const args = spy.getCall(0).args;
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch('/uaa/invite/users');
           expect(args[1]).toEqual(expectedPayload);
@@ -92,6 +92,7 @@ describe('uaaApi', function() {
         .sendInviteEmail(inviteResponse)
         .then(() => {
           const args = spy.getCall(0).args;
+
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch('/uaa/invite/email');
           expect(args[1]).toEqual(expectedPayload);

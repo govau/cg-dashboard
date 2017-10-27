@@ -13,7 +13,7 @@ import ServiceInstanceStore from '../../../stores/service_instance_store';
 import { wrapInRes, unwrapOfRes } from '../helpers';
 
 describe('serviceActions', function() {
-  var sandbox;
+  let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -67,11 +67,11 @@ describe('serviceActions', function() {
 
   describe('receivedServices()', function() {
     it('should dispatch a view event of type service fetch', function() {
-      var expected = [{ guid: 'adfzxcvz' }];
-      let expectedParams = {
+      const expected = [{ guid: 'adfzxcvz' }];
+      const expectedParams = {
         services: wrapInRes(expected)
       };
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       serviceActions.receivedServices(wrapInRes(expected));
 
@@ -117,7 +117,7 @@ describe('serviceActions', function() {
         servicePlan
       };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       serviceActions.receivedPlan(servicePlan);
 
@@ -169,12 +169,12 @@ describe('serviceActions', function() {
 
   describe('receivedPlans()', function() {
     it('should dispatch a server event for received service plans with the plans', function() {
-      var expectedServices = [{ guid: 'asdf', name: 'plan' }],
+      let expectedServices = [{ guid: 'asdf', name: 'plan' }],
         expectedParams = {
           servicePlans: wrapInRes(expectedServices)
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       serviceActions.receivedPlans(wrapInRes(expectedServices));
 
@@ -273,13 +273,13 @@ describe('serviceActions', function() {
 
   describe('fetchInstance()', function() {
     it('should dispatch a view event of type service instance fetch', function() {
-      var expectedSpaceGuid = 'aksfdsaaa8899';
+      const expectedSpaceGuid = 'aksfdsaaa8899';
 
-      let expectedParams = {
+      const expectedParams = {
         spaceGuid: expectedSpaceGuid
       };
 
-      let spy = setupViewSpy(sandbox);
+      const spy = setupViewSpy(sandbox);
 
       serviceActions.fetchAllInstances(expectedSpaceGuid);
 
@@ -301,7 +301,7 @@ describe('serviceActions', function() {
     };
 
     it('should dispatch a form cancel action', done => {
-      let uiSpy = setupUISpy(sandbox);
+      const uiSpy = setupUISpy(sandbox);
 
       serviceActions
         .createInstanceForm(expectedServiceGuid, expectedServicePlanGuid)
@@ -315,7 +315,7 @@ describe('serviceActions', function() {
     });
 
     it('should dispatch a form create action', done => {
-      let viewSpy = setupViewSpy(sandbox);
+      const viewSpy = setupViewSpy(sandbox);
 
       sandbox
         .stub(serviceActions, 'createInstanceFormCancel')
@@ -336,7 +336,7 @@ describe('serviceActions', function() {
 
   describe('createInstanceFormCancel', function() {
     it('should dispatch a ui event of type create service instance form cancel', function() {
-      let spy = setupUISpy(sandbox);
+      const spy = setupUISpy(sandbox);
 
       serviceActions.createInstanceFormCancel();
 
@@ -429,6 +429,7 @@ describe('serviceActions', function() {
         expect(serviceActions.errorCreateInstance).toHaveBeenCalledOnce();
 
         const error = serviceActions.errorCreateInstance.getCall(0).args[0];
+
         expect(error).toMatch(/a fake error/);
       });
     });
@@ -436,12 +437,12 @@ describe('serviceActions', function() {
 
   describe('createdInstance()', function() {
     it('dispatchs a server event of type instance created with service', () => {
-      var expectedInstance = { guid: 'asdfas' };
+      const expectedInstance = { guid: 'asdfas' };
 
-      let expectedParams = {
+      const expectedParams = {
         serviceInstance: expectedInstance
       };
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       serviceActions.createdInstance(expectedInstance);
 
@@ -511,11 +512,11 @@ describe('serviceActions', function() {
           }
         };
 
-        let expectedParams = {
+        const expectedParams = {
           serviceInstance: expected
         };
 
-        let spy = setupServerSpy(sandbox);
+        const spy = setupServerSpy(sandbox);
 
         serviceActions.receivedInstance(expected);
 
@@ -533,7 +534,7 @@ describe('serviceActions', function() {
       'should dispatch a server event of type service instance resv with ' +
         'the service instances',
       function() {
-        var expected = [
+        const expected = [
           {
             metadata: {
               guid: 'afds'
@@ -544,11 +545,11 @@ describe('serviceActions', function() {
           }
         ];
 
-        let expectedParams = {
+        const expectedParams = {
           serviceInstances: expected
         };
 
-        let spy = setupServerSpy(sandbox);
+        const spy = setupServerSpy(sandbox);
 
         serviceActions.receivedInstances(expected);
 
@@ -563,12 +564,12 @@ describe('serviceActions', function() {
 
   describe('deleteInstanceConfirm()', function() {
     it('should dispatch a instance delete confirm ui event with instance guid', () => {
-      var expectedInstanceGuid = '09zxcn1dsf';
-      var expectedParams = {
+      const expectedInstanceGuid = '09zxcn1dsf';
+      const expectedParams = {
         serviceInstanceGuid: expectedInstanceGuid
       };
 
-      let spy = setupUISpy(sandbox);
+      const spy = setupUISpy(sandbox);
       serviceActions.deleteInstanceConfirm(expectedInstanceGuid);
 
       assertAction(
@@ -581,12 +582,12 @@ describe('serviceActions', function() {
 
   describe('deleteInstanceCancel()', function() {
     it('should dispatch a instance delete cancel ui event with instance guid', () => {
-      var expectedInstanceGuid = '23098znxb';
-      var expectedParams = {
+      const expectedInstanceGuid = '23098znxb';
+      const expectedParams = {
         serviceInstanceGuid: expectedInstanceGuid
       };
 
-      let spy = setupUISpy(sandbox);
+      const spy = setupUISpy(sandbox);
       serviceActions.deleteInstanceCancel(expectedInstanceGuid);
 
       assertAction(
@@ -652,6 +653,7 @@ describe('serviceActions', function() {
         it("should do nothing if the service isn't in data", function() {
           cfApi.deleteUnboundServiceInstance.reset();
           serviceActions.deleteInstance('1234');
+
           expect(cfApi.deleteUnboundServiceInstance).not.toHaveBeenCalled();
         });
       });
@@ -670,12 +672,12 @@ describe('serviceActions', function() {
   describe('deletedInstance()', function() {
     // TODO create test case to simulate failed delete attempt.
     it('should dispatch a instance deleted server event with guid', function() {
-      var expectedGuid = 'admxzcg',
+      let expectedGuid = 'admxzcg',
         expectedParams = {
           serviceInstanceGuid: expectedGuid
         };
 
-      let spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
       serviceActions.deletedInstance(expectedGuid);
 
@@ -825,6 +827,7 @@ describe('serviceActions', function() {
       it('should call instance error if request fails with err', function() {
         expect(serviceActions.instanceError).toHaveBeenCalledOnce();
         const [guid, err] = serviceActions.instanceError.getCall(0).args;
+
         expect(err).toMatch(/a fake error/);
         expect(guid).toBe(serviceInstanceGuid);
       });

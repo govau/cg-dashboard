@@ -8,22 +8,25 @@ import Immutable from 'immutable';
 import AppDispatcher from '../dispatcher';
 import LoadingStatus from '../util/loading_status';
 
-// TODO clean up the listeners and reduce the MAX_LISTENERS to 15
-const MAX_LISTENERS = 20;
-const MAX_LISTENERS_THRESHOLD = 10;
+const MAX_LISTENERS = 35;
+export const MAX_LISTENERS_THRESHOLD = 35;
 
 function defaultChangedCallback(changed) {
-  if (changed) this.emitChange();
+  if (changed) {
+    this.emitChange();
+  }
 }
 
 export default class BaseStore extends EventEmitter {
   constructor() {
     super();
+
     this._loadingStatus = new LoadingStatus();
     this._loadingStatus.on('loading', () => this.emitChange());
     this._loadingStatus.on('loaded', () => this.emitChange());
     this._data = new Immutable.List();
-    this._listenerCount = 0;
+    this.listenerCount = 0;
+
     this.setMaxListeners(MAX_LISTENERS);
   }
 
@@ -44,8 +47,7 @@ export default class BaseStore extends EventEmitter {
   }
 
   isEmpty() {
-    if (this._data.count() === 0) return true;
-    return false;
+    return this._data.count() === 0;
   }
 
   push(val) {
@@ -60,7 +62,9 @@ export default class BaseStore extends EventEmitter {
     if (guid && !this.isEmpty()) {
       const item = this._data.find(space => space.get('guid') === guid);
 
-      if (item) return item.toJS();
+      if (item) {
+        return item.toJS();
+      }
     }
     return undefined;
   }
@@ -77,7 +81,9 @@ export default class BaseStore extends EventEmitter {
   deleteProp(guid, prop, cb = defaultChangedCallback.bind(this)) {
     const index = this._data.findIndex(d => d.get('guid') === guid);
 
-    if (index === -1) return cb(false);
+    if (index === -1) {
+      return cb(false);
+    }
 
     this._data = this._data.deleteIn([index, prop]);
     return cb(true);
@@ -86,7 +92,9 @@ export default class BaseStore extends EventEmitter {
   delete(guid, cb = defaultChangedCallback.bind(this)) {
     const index = this._data.findIndex(d => d.get('guid') === guid);
 
-    if (index === -1) return cb(false);
+    if (index === -1) {
+      return cb(false);
+    }
 
     this._data = this._data.delete(index);
     return cb(true);
@@ -107,12 +115,16 @@ export default class BaseStore extends EventEmitter {
   }
 
   addChangeListener(cb) {
-    if (++this._listenerCount > MAX_LISTENERS_THRESHOLD) {
+    if (++this.listenerCount > MAX_LISTENERS_THRESHOLD) {
       /* eslint-disable no-console */
-      console.warn('listener count is above threshold', {
-        store: this.constructor.name,
-        count: this._listenerCount
-      });
+      console.warn(
+        `${this.constructor
+          .name}: listener count is above threshold of ${MAX_LISTENERS_THRESHOLD}`,
+        {
+          store: this.constructor.name,
+          count: this.listenerCount
+        }
+      );
       console.trace();
       /* eslint-enable no-console */
     }
@@ -122,7 +134,7 @@ export default class BaseStore extends EventEmitter {
 
   removeChangeListener(cb) {
     this.removeListener('CHANGE', cb);
-    this._listenerCount--;
+    this.listenerCount--;
   }
 
   load(promises) {

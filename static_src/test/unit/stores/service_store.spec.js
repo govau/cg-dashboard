@@ -48,6 +48,7 @@ describe('ServiceStore', function() {
 
     it('should merge in services to current data', function() {
       const services = ServiceStore.getAll();
+
       expect(services.length).toEqual(2);
     });
 
