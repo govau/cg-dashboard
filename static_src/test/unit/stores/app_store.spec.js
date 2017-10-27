@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import appActions from '../../../actions/app_actions.js';
 import AppDispatcher from '../../../dispatcher.js';
 import cfApi from '../../../util/cf_api.js';

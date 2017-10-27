@@ -1,4 +1,3 @@
-import '../../../global_setup';
 import React from 'react';
 import RouteEventItem from '../../../../components/app_activity/route_event_item.jsx';
 import { shallow } from 'enzyme';

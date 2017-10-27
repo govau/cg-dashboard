@@ -1,9 +1,8 @@
-import '../../global_setup.js';
-
 import React from 'react';
 import Immutable from 'immutable';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
+
 import Users from '../../../components/users.jsx';
 import PanelDocumentation from '../../../components/panel_documentation.jsx';
 import UsersSelector from '../../../components/users_selector.jsx';
@@ -18,15 +17,15 @@ const buildRoles = (spaceGuid, roles = []) => {
   return obj;
 };
 
-describe('<Users />', () => {
-  const userGuid = 'a-user-guid';
-  const spaceGuid = 'space-guid';
-  const user = {
-    guid: userGuid,
-    roles: buildRoles(spaceGuid, ['org_manager'])
-  };
+const userGuid = 'a-user-guid';
+const spaceGuid = 'space-guid';
+const user = {
+  guid: userGuid,
+  roles: buildRoles(spaceGuid, ['org_manager'])
+};
 
-  let users;
+describe('<Users />', () => {
+  let wrapper;
 
   SpaceStore._currentSpaceGuid = spaceGuid;
   UserStore._currentUserGuid = userGuid;
@@ -34,16 +33,16 @@ describe('<Users />', () => {
   describe('with a user', () => {
     beforeEach(() => {
       UserStore._data = Immutable.fromJS([user]);
-      users = shallow(<Users />);
+      wrapper = shallow(<Users />);
     });
 
     describe('when at org level', () => {
       beforeEach(() => {
-        users.setState({ currentType: 'org_users' });
+        wrapper.setState({ currentType: 'org_users' });
       });
 
       it('has an `entityType` of organization', () => {
-        const actual = users.instance().entityType;
+        const actual = wrapper.instance().entityType;
 
         expect(actual).toEqual('organization');
       });
@@ -55,8 +54,8 @@ describe('<Users />', () => {
           stub
             .withArgs(userGuid, sinon.match.any, 'space_manager')
             .returns(false);
-          users = shallow(<Users />);
-          users.setState({ currentType: 'org_users' });
+          wrapper = shallow(<Users />);
+          wrapper.setState({ currentType: 'org_users' });
         });
 
         afterEach(() => {
@@ -64,19 +63,19 @@ describe('<Users />', () => {
         });
 
         it('renders a <UsersInvite /> component', () => {
-          expect(users.find(UsersInvite).length).toBe(1);
+          expect(wrapper.find(UsersInvite).length).toBe(1);
         });
 
         it('should not render a <UsersSelector />', () => {
-          expect(users.find(UsersSelector).length).toBe(0);
+          expect(wrapper.find(UsersSelector).length).toBe(0);
         });
 
         it('should render a <UsersInvite />', () => {
-          expect(users.find(UsersInvite).length).toBe(1);
+          expect(wrapper.find(UsersInvite).length).toBe(1);
         });
 
         it('should not render a <PanelDocumentation />', () => {
-          expect(users.find(PanelDocumentation).length).toBe(0);
+          expect(wrapper.find(PanelDocumentation).length).toBe(0);
         });
       });
 
@@ -87,8 +86,8 @@ describe('<Users />', () => {
 
         beforeEach(() => {
           UserStore._data = Immutable.fromJS([spaceUser]);
-          users = shallow(<Users />);
-          users.setState({ currentType: 'org_users' });
+          wrapper = shallow(<Users />);
+          wrapper.setState({ currentType: 'org_users' });
           const stub = sinon.stub(UserStore, 'hasRole');
           stub
             .withArgs(userGuid, sinon.match.any, sinon.match.any)
@@ -100,8 +99,8 @@ describe('<Users />', () => {
         });
 
         it('renders message telling user to ask an org manager to add users', () => {
-          expect(users.find(PanelDocumentation).length).toBe(1);
-          expect(users.find(PanelDocumentation).prop('children')).toEqual(
+          expect(wrapper.find(PanelDocumentation).length).toBe(1);
+          expect(wrapper.find(PanelDocumentation).prop('children')).toEqual(
             'Only an Org Manager can new invite users to this ' +
               'organization via the dashboard. Speak to your Org Manager if ' +
               'you need to add a user to this organization'
@@ -109,22 +108,22 @@ describe('<Users />', () => {
         });
 
         it('should not render a <UsersSelector />', () => {
-          expect(users.find(UsersSelector).length).toBe(0);
+          expect(wrapper.find(UsersSelector).length).toBe(0);
         });
 
         it('should not render a <UsersInvite /> component', () => {
-          expect(users.find(UsersInvite).length).toBe(0);
+          expect(wrapper.find(UsersInvite).length).toBe(0);
         });
       });
     });
 
     describe('when at space level', () => {
       beforeEach(() => {
-        users.setState({ currentType: 'space_users' });
+        wrapper.setState({ currentType: 'space_users' });
       });
 
       it('has an `entityType` of space', () => {
-        const actual = users.instance().entityType;
+        const actual = wrapper.instance().entityType;
 
         expect(actual).toEqual('space');
       });
@@ -136,7 +135,7 @@ describe('<Users />', () => {
           stub
             .withArgs(userGuid, sinon.match.any, 'space_manager')
             .returns(false);
-          users = shallow(<Users />);
+          wrapper = shallow(<Users />);
         });
 
         afterEach(() => {
@@ -144,15 +143,15 @@ describe('<Users />', () => {
         });
 
         it('renders a <UsersInvite /> component', () => {
-          expect(users.find(UsersInvite).length).toBe(1);
+          expect(wrapper.find(UsersInvite).length).toBe(1);
         });
 
         it('should render a <UsersSelector />', () => {
-          expect(users.find(UsersSelector).length).toBe(1);
+          expect(wrapper.find(UsersSelector).length).toBe(1);
         });
 
         it('should not show a <PanelDocumentation />', () => {
-          expect(users.find(PanelDocumentation).length).toBe(0);
+          expect(wrapper.find(PanelDocumentation).length).toBe(0);
         });
       });
 
@@ -163,7 +162,7 @@ describe('<Users />', () => {
 
         beforeEach(() => {
           UserStore._data = Immutable.fromJS([spaceUser]);
-          users = shallow(<Users />);
+          wrapper = shallow(<Users />);
           const stub = sinon.stub(UserStore, 'hasRole');
           stub
             .withArgs(userGuid, sinon.match.any, 'org_manager')
@@ -178,16 +177,16 @@ describe('<Users />', () => {
         });
 
         it('should not render a <UsersInvite /> component', () => {
-          expect(users.find(UsersInvite).length).toBe(0);
+          expect(wrapper.find(UsersInvite).length).toBe(0);
         });
 
         it('should not show a <UsersSelector />', () => {
-          expect(users.find(UsersSelector).length).toBe(0);
+          expect(wrapper.find(UsersSelector).length).toBe(0);
         });
 
         it('should render a <PanelDocumentation />', () => {
-          expect(users.find(PanelDocumentation).length).toBe(1);
-          expect(users.find(PanelDocumentation).prop('children')).toEqual(
+          expect(wrapper.find(PanelDocumentation).length).toBe(1);
+          expect(wrapper.find(PanelDocumentation).prop('children')).toEqual(
             'If you wish to invite users into this space, please ask ' +
               'an Org Manager or a Space Manager'
           );
@@ -201,7 +200,7 @@ describe('<Users />', () => {
 
         beforeEach(() => {
           UserStore._data = Immutable.fromJS([spaceUser]);
-          users = shallow(<Users />);
+          wrapper = shallow(<Users />);
           const stub = sinon.stub(UserStore, 'hasRole');
           stub.withArgs(userGuid, sinon.match.any, 'org_manager').returns(true);
           stub
@@ -214,16 +213,16 @@ describe('<Users />', () => {
         });
 
         it('should not render a <UsersInvite /> component', () => {
-          expect(users.find(UsersInvite).length).toBe(0);
+          expect(wrapper.find(UsersInvite).length).toBe(0);
         });
 
         it('should render a <UsersSelector />', () => {
-          expect(users.find(UsersSelector).length).toBe(1);
+          expect(wrapper.find(UsersSelector).length).toBe(1);
         });
 
         it('should show a <PanelDocumentation />', () => {
-          expect(users.find(PanelDocumentation).length).toBe(1);
-          expect(users.find(PanelDocumentation).prop('children')).toEqual(
+          expect(wrapper.find(PanelDocumentation).length).toBe(1);
+          expect(wrapper.find(PanelDocumentation).prop('children')).toEqual(
             'As an Space Manager, you can invite existing organization ' +
               'users into your space. If you wish to invite a person who is not in ' +
               'the organization into your space, please ask an Org Manager'

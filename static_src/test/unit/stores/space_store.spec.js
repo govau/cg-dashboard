@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import Immutable from 'immutable';
 
 import AppDispatcher from '../../../dispatcher.js';

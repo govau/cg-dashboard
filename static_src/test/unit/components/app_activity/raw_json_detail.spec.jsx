@@ -1,4 +1,3 @@
-import '../../../global_setup';
 import React from 'react';
 import RawJSONDetail from '../../../../components/app_activity/raw_json_detail.jsx';
 import { shallow } from 'enzyme';

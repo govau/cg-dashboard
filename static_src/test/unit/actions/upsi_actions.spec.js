@@ -1,5 +1,3 @@
-import '../../global_setup';
-
 import { assertAction, setupViewSpy, setupServerSpy } from '../helpers';
 import cfApi from '../../../util/cf_api';
 import upsiActions, {

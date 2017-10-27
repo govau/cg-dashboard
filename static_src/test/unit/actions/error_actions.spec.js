@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import { setupUISpy, setupServerSpy } from '../helpers.js';
 import errorActions from '../../../actions/error_actions.js';
 import { errorActionTypes } from '../../../constants.js';

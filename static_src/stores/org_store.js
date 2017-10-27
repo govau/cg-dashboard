@@ -167,8 +167,4 @@ export class OrgStore extends BaseStore {
   }
 }
 
-const _OrgStore = new OrgStore();
-
-window.orgstore = _OrgStore;
-
-export default _OrgStore;
+export default new OrgStore();

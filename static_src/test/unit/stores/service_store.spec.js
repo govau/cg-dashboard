@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
 
-import '../../global_setup.js';
-
 import AppDispatcher from '../../../dispatcher.js';
 import { ServiceStore as ServiceStoreClass } from '../../../stores/service_store.js';
 import { serviceActionTypes } from '../../../constants.js';

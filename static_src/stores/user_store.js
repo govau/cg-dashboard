@@ -493,6 +493,4 @@ export class UserStore extends BaseStore {
   }
 }
 
-const _UserStore = new UserStore();
-
-export default _UserStore;
+export default new UserStore();

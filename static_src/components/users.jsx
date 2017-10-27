@@ -5,14 +5,14 @@
 
 import React from 'react';
 
-import userActions from '../actions/user_actions.js';
-import OrgStore from '../stores/org_store.js';
-import SpaceStore from '../stores/space_store.js';
+import userActions from '../actions/user_actions';
+import OrgStore from '../stores/org_store';
+import SpaceStore from '../stores/space_store';
 import UserList from './user_list.jsx';
 import UsersInvite from './users_invite.jsx';
 import UsersSelector from './users_selector.jsx';
 import Notification from './notification.jsx';
-import UserStore from '../stores/user_store.js';
+import UserStore from '../stores/user_store';
 import SystemErrorMessage from './system_error_message.jsx';
 import PanelDocumentation from './panel_documentation.jsx';
 
@@ -35,12 +35,11 @@ const SPACE_INVITE_HELP =
   'If you wish to invite users into this space, please ' +
   'ask an Org Manager or a Space Manager';
 
-function stateSetter() {
-  const currentOrgGuid = OrgStore.currentOrgGuid;
-  const currentSpaceGuid = SpaceStore.currentSpaceGuid;
+function mapStoreToState() {
+  const { currentOrgGuid } = OrgStore;
+  const { currentSpaceGuid } = SpaceStore;
   const currentType = UserStore.currentlyViewedType;
-  const currentUser = UserStore.currentUser;
-  const isSaving = UserStore.isSaving;
+  const { currentUser, isSaving } = UserStore;
 
   let users = [];
   let parentEntityUsers;
@@ -96,7 +95,7 @@ export default class Users extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = stateSetter();
+    this.state = mapStoreToState();
 
     this._onChange = this._onChange.bind(this);
     this.handleRemoveUser = this.handleRemoveUser.bind(this);
@@ -257,7 +256,7 @@ export default class Users extends React.Component {
   }
 
   _onChange() {
-    this.setState(stateSetter());
+    this.setState(() => mapStoreToState());
   }
 
   render() {

@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import AppDispatcher from '../../../dispatcher.js';
 import { loginActionTypes } from '../../../constants';
 import {

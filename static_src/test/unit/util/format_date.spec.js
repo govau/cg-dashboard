@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import formatDateTime from '../../../util/format_date';
 
 describe('format_date util', function() {

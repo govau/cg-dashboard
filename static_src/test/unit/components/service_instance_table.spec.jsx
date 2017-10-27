@@ -1,4 +1,3 @@
-import '../../global_setup';
 import React from 'react';
 import ServiceInstanceTable from '../../../components/service_instance_table.jsx';
 import ServiceInstanceTableRow from '../../../components/service_instance_table_row.jsx';

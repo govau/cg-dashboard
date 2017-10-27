@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import formatRoute from '../../../util/format_route';
 
 describe('format_route util', () => {

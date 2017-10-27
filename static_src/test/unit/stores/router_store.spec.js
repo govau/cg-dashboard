@@ -1,4 +1,3 @@
-import '../../global_setup';
 import React from 'react';
 import sinon from 'sinon';
 import AppDispatcher from '../../../dispatcher';

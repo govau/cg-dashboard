@@ -1,6 +1,3 @@
-// Action to fetch a single service plan for the server.
-import '../../global_setup.js';
-
 import AppDispatcher from '../../../dispatcher.js';
 import {
   assertAction,

@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import { trackAction, trackPageView } from '../../../util/analytics';
 
 describe('analytics helpers', function() {

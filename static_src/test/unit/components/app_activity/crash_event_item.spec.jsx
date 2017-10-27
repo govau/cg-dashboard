@@ -1,4 +1,3 @@
-import '../../../global_setup';
 import React from 'react';
 import CrashEventItem from '../../../../components/app_activity/crash_event_item.jsx';
 import { shallow } from 'enzyme';

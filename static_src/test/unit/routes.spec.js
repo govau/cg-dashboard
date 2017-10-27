@@ -1,4 +1,3 @@
-import '../global_setup.js';
 import routerActions from '../../actions/router_actions';
 import errorActions from '../../actions/error_actions';
 import loginActions from '../../actions/login_actions';

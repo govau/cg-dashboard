@@ -120,6 +120,4 @@ class SpaceStore extends BaseStore {
   }
 }
 
-const _SpaceStore = new SpaceStore();
-
-export default _SpaceStore;
+export default new SpaceStore();

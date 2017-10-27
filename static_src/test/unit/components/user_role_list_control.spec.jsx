@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import React from 'react';
 import { shallow } from 'enzyme';
 import UserRoleListControl from '../../../components/user_role_list_control.jsx';

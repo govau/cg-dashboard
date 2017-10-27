@@ -1,4 +1,3 @@
-import '../../global_setup';
 import React from 'react';
 import { shallow } from 'enzyme';
 import ServiceListItem from '../../../components/service_list_item.jsx';

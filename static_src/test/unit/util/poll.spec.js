@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import poll from '../../../util/poll';
 
 describe('poll()', function() {

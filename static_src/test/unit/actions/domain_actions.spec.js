@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import AppDispatcher from '../../../dispatcher.js';
 import { assertAction, setupViewSpy, setupServerSpy } from '../helpers.js';
 import domainActions from '../../../actions/domain_actions.js';

@@ -1,4 +1,3 @@
-import '../../global_setup.js';
 
 import formatBytes from '../../../util/format_bytes';
 

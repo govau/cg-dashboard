@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
 
-import '../../global_setup.js';
-
 import AppDispatcher from '../../../dispatcher.js';
 import { OrgStore as OrgStoreClass } from '../../../stores/org_store.js';
 import { orgActionTypes } from '../../../constants';

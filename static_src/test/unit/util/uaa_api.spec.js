@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import http from 'axios';
 
 import errorActions from '../../../actions/error_actions.js';

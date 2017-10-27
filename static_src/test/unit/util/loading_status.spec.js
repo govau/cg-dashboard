@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import LoadingStatus from '../../../util/loading_status';
 
 describe('LoadingStatus', function() {

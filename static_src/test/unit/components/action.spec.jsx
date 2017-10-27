@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import Action from '../../../components/action.jsx';

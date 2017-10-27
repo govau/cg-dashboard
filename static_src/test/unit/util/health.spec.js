@@ -1,4 +1,3 @@
-import '../../global_setup';
 import { appHealth, isHealthyApp } from '../../../util/health';
 
 describe('appHealth()', function() {

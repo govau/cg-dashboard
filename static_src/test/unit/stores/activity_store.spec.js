@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
 
-import '../../global_setup.js';
-
 import AppDispatcher from '../../../dispatcher.js';
 import ActivityStore from '../../../stores/activity_store.js';
 import { activityActionTypes } from '../../../constants';

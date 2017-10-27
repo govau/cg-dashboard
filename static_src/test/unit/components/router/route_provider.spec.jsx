@@ -1,4 +1,3 @@
-import '../../../global_setup';
 import React from 'react';
 import RouteProvider from '../../../../components/router/route_provider.jsx';
 import Loading from '../../../../components/loading.jsx';

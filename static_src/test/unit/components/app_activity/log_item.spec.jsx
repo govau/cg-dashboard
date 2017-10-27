@@ -1,4 +1,3 @@
-import '../../../global_setup';
 import React from 'react';
 import LogItem from '../../../../components/app_activity/log_item.jsx';
 import { shallow } from 'enzyme';

@@ -49,7 +49,6 @@ static_src/test/server/fixtures/
 /static_src/test/unit/stores/service_plan_store.spec.js
 /static_src/test/unit/stores/service_store.spec.js
 /static_src/test/unit/stores/space_store.spec.js
-/static_src/test/unit/stores/user_store.spec.js
 /static_src/test/unit/util/analytics.spec.js
 /static_src/test/unit/util/cf_api.spec.js
 /static_src/test/unit/util/format_bytes.spec.js

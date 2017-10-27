@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
 
-import '../../global_setup.js';
-
 import BaseStore from '../../../stores/base_store.js';
 
 describe('BaseStore', () => {

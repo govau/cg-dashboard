@@ -1,4 +1,3 @@
-import '../../global_setup.js';
 
 import http from 'axios';
 import Immutable from 'immutable';

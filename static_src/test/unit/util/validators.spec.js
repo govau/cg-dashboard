@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import { validateInteger, validateEmail } from '../../../util/validators';
 
 describe('validateEmail', function() {

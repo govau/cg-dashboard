@@ -1,5 +1,3 @@
-import '../../global_setup';
-
 import React from 'react';
 import CreateServiceInstance from '../../../components/create_service_instance.jsx';
 import FormError from '../../../components/form/form_error.jsx';

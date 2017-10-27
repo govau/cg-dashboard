@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
 
-import '../../global_setup.js';
-
 import AppDispatcher from '../../../dispatcher.js';
 import cfApi from '../../../util/cf_api.js';
 import { wrapInRes, unwrapOfRes } from '../helpers.js';

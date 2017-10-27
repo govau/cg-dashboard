@@ -1,5 +1,3 @@
-import '../../global_setup';
-
 import React from 'react';
 import ServiceInstance from '../../../components/service_instance.jsx';
 import Action from '../../../components/action.jsx';

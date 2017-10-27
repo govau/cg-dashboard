@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import { assertAction, setupViewSpy, setupServerSpy } from '../helpers.js';
 import cfApi from '../../../util/cf_api.js';
 import activityActions from '../../../actions/activity_actions.js';

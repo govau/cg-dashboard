@@ -1,4 +1,3 @@
-import '../../global_setup.js';
 import * as url from '../../../util/url.js';
 
 describe('url', function() {

@@ -1,4 +1,3 @@
-import '../../global_setup';
 import React from 'react';
 import { assertAction, setupViewSpy } from '../helpers';
 import routerActions from '../../../actions/router_actions';

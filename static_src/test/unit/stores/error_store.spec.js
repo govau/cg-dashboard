@@ -1,5 +1,3 @@
-import '../../global_setup.js';
-
 import errorActions from '../../../actions/error_actions.js';
 import { ErrorStore as ErrorStoreClass } from '../../../stores/error_store.js';
 
