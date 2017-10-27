@@ -48,6 +48,7 @@ describe('orgActions', () => {
     it('should call the api org fetch function', function() {
       expect(cfApi.fetchOrg).toHaveBeenCalledOnce();
       const [guid] = cfApi.fetchOrg.getCall(0).args;
+
       expect(guid).toBe(expectedGuid);
     });
 
@@ -90,6 +91,7 @@ describe('orgActions', () => {
     it('merges summary data with org', function() {
       const [orgs] = orgActions.receivedOrgs.getCall(0).args;
       const [org] = orgs;
+
       expect(org).toEqual({ guid: '1234', spaces });
     });
   });

@@ -8,6 +8,7 @@ describe('format_route util', () => {
       domain: 'fake-domain.com'
     };
     const actual = formatRoute(route.domain, route.host, route.path);
+
     expect(actual).toEqual(route.domain);
   });
 
@@ -17,6 +18,7 @@ describe('format_route util', () => {
       host: 'gopher'
     };
     const actual = formatRoute(route.domain, route.host, route.path);
+
     expect(actual).toEqual(`${route.host}.${route.domain}`);
   });
 
@@ -27,6 +29,7 @@ describe('format_route util', () => {
       path: 'about.html'
     };
     const actual = formatRoute(route.domain, route.host, route.path);
+
     expect(actual).toEqual(`${route.host}.${route.domain}/${route.path}`);
   });
 

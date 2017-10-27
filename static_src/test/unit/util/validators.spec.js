@@ -15,6 +15,7 @@ describe('validateEmail', function() {
 
     it('fails for empty', function() {
       const result = validator();
+
       expect(result).toEqual({
         message: 'The value entered is not a valid e-mail address'
       });
@@ -29,6 +30,7 @@ describe('validateEmail', function() {
 
     it('fails for none emails string', function() {
       const result = validator('domain');
+
       expect(result).toEqual({
         message: 'The value entered is not a valid e-mail address'
       });
@@ -36,6 +38,7 @@ describe('validateEmail', function() {
 
     it('fails for none emails string@', function() {
       const result = validator('domain@');
+
       expect(result).toEqual({
         message: 'The value entered is not a valid e-mail address'
       });
@@ -43,6 +46,7 @@ describe('validateEmail', function() {
 
     it('fails for none emails string@domain.', function() {
       const result = validator('domain@domain.');
+
       expect(result).toEqual({
         message: 'The value entered is not a valid e-mail address'
       });
@@ -50,16 +54,19 @@ describe('validateEmail', function() {
 
     it('fails for none emails string@string', function() {
       const result = validator('domain@place');
+
       expect(result).toEqual(null);
     });
 
     it('fails for none emails string@string.com.co', function() {
       const result = validator('domain@place');
+
       expect(result).toEqual(null);
     });
 
     it('succeeds for email', function() {
       const result = validator('domain@place.com');
+
       expect(result).toEqual(null);
     });
   });
@@ -78,6 +85,7 @@ describe('vaidateNumber', function() {
 
     it('fails for empty', function() {
       const result = validator();
+
       expect(result).toEqual({
         message: 'Invalid number',
         type: 'NUMBER_INVALID'
@@ -86,6 +94,7 @@ describe('vaidateNumber', function() {
 
     it('fails for 1234asdf', function() {
       const result = validator('1234asdf');
+
       expect(result).toEqual({
         message: 'Invalid number',
         type: 'NUMBER_INVALID'
@@ -94,6 +103,7 @@ describe('vaidateNumber', function() {
 
     it('fails for NaN', function() {
       const result = validator('Not a number');
+
       expect(result).toEqual({
         message: 'Invalid number',
         type: 'NUMBER_INVALID'
@@ -102,6 +112,7 @@ describe('vaidateNumber', function() {
 
     it('fails for float string', function() {
       const result = validator('13.37');
+
       expect(result).toEqual({
         message: 'Invalid number',
         type: 'NUMBER_INVALID'
@@ -110,16 +121,19 @@ describe('vaidateNumber', function() {
 
     it('passes for number string', function() {
       const result = validator('137');
+
       expect(result).toBe(null);
     });
 
     it('passes for negative number string', function() {
       const result = validator('-137');
+
       expect(result).toBe(null);
     });
 
     it('passes for zero', function() {
       const result = validator('0');
+
       expect(result).toBe(null);
     });
   });
@@ -133,6 +147,7 @@ describe('vaidateNumber', function() {
 
     it('fails for above max', function() {
       const result = validator('1025');
+
       expect(result).toEqual({
         message: 'Total exceeds 1024',
         type: 'NUMBER_MAX'
@@ -141,11 +156,13 @@ describe('vaidateNumber', function() {
 
     it('accepts max', function() {
       const result = validator('1024');
+
       expect(result).toBe(null);
     });
 
     it('accepts below max', function() {
       const result = validator('1023');
+
       expect(result).toBe(null);
     });
   });
@@ -159,6 +176,7 @@ describe('vaidateNumber', function() {
 
     it('fails for below min', function() {
       const result = validator('0');
+
       expect(result).toEqual({
         message: 'Total must be 1 or greater',
         type: 'NUMBER_MIN'
@@ -167,11 +185,13 @@ describe('vaidateNumber', function() {
 
     it('accepts min', function() {
       const result = validator('1');
+
       expect(result).toBe(null);
     });
 
     it('accepts above min', function() {
       const result = validator('2');
+
       expect(result).toBe(null);
     });
   });
@@ -185,6 +205,7 @@ describe('vaidateNumber', function() {
 
     it('fails invalid', function() {
       const result = validator('None');
+
       expect(result).toEqual({
         message: 'Invalid number',
         type: 'NUMBER_INVALID'
@@ -193,6 +214,7 @@ describe('vaidateNumber', function() {
 
     it('fails below min', function() {
       const result = validator('0');
+
       expect(result).toEqual({
         message: 'Total must be 1 or greater',
         type: 'NUMBER_MIN'
@@ -201,6 +223,7 @@ describe('vaidateNumber', function() {
 
     it('fails above max', function() {
       const result = validator('1025');
+
       expect(result).toEqual({
         message: 'Total exceeds 1024',
         type: 'NUMBER_MAX'
@@ -209,16 +232,19 @@ describe('vaidateNumber', function() {
 
     it('accepts between max and min', function() {
       const result = validator('1000');
+
       expect(result).toBe(null);
     });
 
     it('accepts min', function() {
       const result = validator('1');
+
       expect(result).toBe(null);
     });
 
     it('accepts max', function() {
       const result = validator('1024');
+
       expect(result).toBe(null);
     });
   });

@@ -125,6 +125,7 @@ describe('<Users />', () => {
 
       it('has an `entityType` of space', () => {
         const actual = users.instance().entityType;
+
         expect(actual).toEqual('space');
       });
 

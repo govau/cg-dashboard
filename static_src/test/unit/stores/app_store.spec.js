@@ -72,6 +72,7 @@ describe('AppStore', function() {
   describe('on app received', function() {
     it('should update the fetch state to not loading', function() {
       AppStore._fetchApp = true;
+
       expect(AppStore.loading).toBe(true);
       AppDispatcher.handleViewAction({
         type: appActionTypes.APP_RECEIVED,
@@ -124,6 +125,7 @@ describe('AppStore', function() {
       });
 
       const actual = AppStore.get(sharedGuid);
+
       expect(actual).toEqual({
         guid: sharedGuid,
         name: 'adsfa',
@@ -141,6 +143,7 @@ describe('AppStore', function() {
       });
 
       const actual = AppStore.get(expectedGuid);
+
       expect(actual).toEqual(expected);
     });
   });
@@ -150,6 +153,7 @@ describe('AppStore', function() {
       const spy = sandbox.spy(AppStore, 'emitChange');
 
       AppStore._fetchAll = true;
+
       expect(AppStore.loading).toBe(true);
       AppDispatcher.handleViewAction({
         type: appActionTypes.APP_ALL_RECEIVED,
@@ -197,6 +201,7 @@ describe('AppStore', function() {
       const newApp = { app_instances: [{ stats: { mem_quota: 123543 } }] };
 
       AppStore.push(existingApp);
+
       expect(AppStore.get(sharedGuid)).toEqual(existingApp);
 
       AppDispatcher.handleServerAction({
@@ -206,6 +211,7 @@ describe('AppStore', function() {
       });
 
       const actual = AppStore.get(sharedGuid);
+
       expect(actual).toEqual({
         guid: sharedGuid,
         name: 'adsfa',
@@ -228,6 +234,7 @@ describe('AppStore', function() {
       });
 
       const actual = AppStore.get(expectedGuid);
+
       expect(actual).toEqual({
         guid: expectedGuid,
         app_instances: [{ stats: { mem_quota: 12 } }]
@@ -265,6 +272,7 @@ describe('AppStore', function() {
       appActions.start(appGuid);
 
       const actual = AppStore.get(appGuid);
+
       expect(actual.state).toEqual('STARTING');
     });
 
@@ -289,6 +297,7 @@ describe('AppStore', function() {
       appActions.restart(appGuid);
 
       const actual = AppStore.get(appGuid);
+
       expect(actual.state).toEqual('RESTARTING');
     });
 

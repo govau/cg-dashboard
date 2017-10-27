@@ -42,6 +42,7 @@ describe('Global error', function() {
 
       it('has at least one that exists', function() {
         notificationElement = globalErrorsElement.firstNotification();
+
         expect(notificationElement.exists()).toBe(true);
         notificationAmount = globalErrorsElement.notifications().length;
       });
@@ -52,6 +53,7 @@ describe('Global error', function() {
 
       it('has refresh action which refreshes the page', function() {
         const refreshAction = notificationElement.refreshAction();
+
         expect(refreshAction.isVisible()).toBe(true);
         expect(refreshAction.getText()).toEqual('Refresh');
         // TODO test refresh
@@ -59,6 +61,7 @@ describe('Global error', function() {
 
       it('has dismiss action that removes it from the page', function() {
         const dismissAction = notificationElement.dismissAction();
+
         expect(dismissAction.isVisible()).toBe(true);
         notificationElement.dismiss();
 

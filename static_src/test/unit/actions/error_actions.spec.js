@@ -24,6 +24,7 @@ describe('errorActions', function() {
 
       expect(dispatchSpy).toHaveBeenCalledOnce();
       const dispatch = dispatchSpy.getCall(0).args[0];
+
       expect(dispatch.type).toEqual(errorActionTypes.DISMISS);
       expect(dispatch.err).toEqual(err);
     });

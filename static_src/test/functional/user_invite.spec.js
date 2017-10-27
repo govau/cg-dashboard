@@ -39,10 +39,12 @@ describe('User roles', function() {
     it('should be able to submit an email address and see on user list', function() {
       const existingUserCount = userInviteElement.countNumberOfUsers();
       let user = userInviteElement.getUserByIndex(existingUserCount - 1);
+
       expect(user.getText()).not.toMatch(/fake-new-user@domain.com/);
       userInviteElement.inputToInviteForm(email);
       userInviteElement.submitInviteForm();
       const currentUserCount = userInviteElement.countNumberOfUsers();
+
       expect(currentUserCount).toEqual(existingUserCount + 1);
       user = userInviteElement.getUserByIndex(currentUserCount - 1);
       // TODO disabling test due to changing functionality
@@ -56,6 +58,7 @@ describe('User roles', function() {
       const topError = 'There were errors submitting the form.';
       const bottomError =
         'The value entered in email is not a valid e-mail address';
+
       expect(userInviteElement.getErrorMessage()).toMatch(topError);
       expect(userInviteElement.getValidatorMessage()).toMatch(bottomError);
     });

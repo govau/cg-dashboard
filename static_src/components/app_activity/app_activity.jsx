@@ -62,7 +62,12 @@ export default class ActivityLogItem extends React.Component {
   }
 
   routeEventItem(actor, domain, route, unmapped) {
-    const props = { actor, domain, route, unmapped };
+    const props = {
+      actor,
+      domain,
+      route,
+      unmapped
+    };
     return <RouteEventItem {...props} />;
   }
 

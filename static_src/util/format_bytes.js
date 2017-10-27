@@ -4,7 +4,7 @@
  * @params {Number} bytes
  * @params {Number} decimals number of decimal places to format
  * @returns {String} Formatted byte value with unit eg. 1.3 MB
- **/
+ * */
 export default function formatBytes(bytes, decimals = 0) {
   if (!bytes) return `${Number(0).toFixed(decimals)} B`;
   const k = 1024;

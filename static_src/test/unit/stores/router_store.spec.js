@@ -25,6 +25,7 @@ describe('RouterStore', () => {
 
     it('sets the current route information passed by `NAVIGATE` action', () => {
       dispatchNavigationAction(component);
+
       expect(RouterStore.component.component).toEqual(component);
     });
 

@@ -11,6 +11,7 @@ describe('<Link />', () => {
 
   it('sets a default href', () => {
     const link = shallow(<Link />);
+
     expect(link.find('a').prop('href')).toBe('#');
   });
 
@@ -25,6 +26,7 @@ describe('<Link />', () => {
   it('renders its children', () => {
     const child = 'hi';
     const link = shallow(<Link>{child}</Link>);
+
     expect(link.find('a').prop('children')).toBe(child);
   });
 });

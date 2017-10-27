@@ -11,6 +11,7 @@ describe('Overview page', function() {
 
   it('has a page header', function() {
     const pageHeader = browser.element('.test-page-header-title');
+
     expect(pageHeader.getText()).toBe('Overview');
   });
 
@@ -22,11 +23,13 @@ describe('Overview page', function() {
         browser,
         browser.element('.test-panel-row-organizations')
       );
+
       expect(quicklookElement.isVisible()).toBe(true);
     });
 
     it('has org name', function() {
       const orgName = quicklookElement.title();
+
       expect(orgName).toBe('fake-cf');
     });
 

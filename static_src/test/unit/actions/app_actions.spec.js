@@ -158,6 +158,7 @@ describe('appActions', function() {
       expect(cfApi.putApp).toHaveBeenCalledOnce();
 
       const [guid, partial] = cfApi.putApp.getCall(0).args;
+
       expect(guid).toEqual(appGuid);
       expect(partial).toEqual(appPartial);
     });
@@ -166,6 +167,7 @@ describe('appActions', function() {
       expect(appActions.updatedApp).toHaveBeenCalledOnce();
 
       const app = appActions.updatedApp.getCall(0).args[0];
+
       expect(app).toEqual(appUpdated);
     });
   });
@@ -197,6 +199,7 @@ describe('appActions', function() {
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
           const arg = spy.getCall(0).args[0];
+
           expect(arg).toEqual(expectedGuid);
         })
         .then(done, done.fail);
@@ -214,6 +217,7 @@ describe('appActions', function() {
         .then(() => {
           expect(spy).toHaveBeenCalledOnce();
           const arg = spy.getCall(0).args[0];
+
           expect(arg).toEqual(expectedGuid);
         })
         .then(done, done.fail);
@@ -252,6 +256,7 @@ describe('appActions', function() {
       expect(cfApi.postAppRestart).toHaveBeenCalledOnce();
 
       const guid = cfApi.postAppRestart.getCall(0).args[0];
+
       expect(guid).toEqual(appGuid);
     });
 

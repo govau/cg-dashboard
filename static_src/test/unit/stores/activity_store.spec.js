@@ -160,13 +160,16 @@ describe('ActivityStore', function() {
       expect(ActivityStore.fetching).toEqual(false);
 
       ActivityStore._logsFetching = true;
+
       expect(ActivityStore.fetching).toEqual(true);
 
       ActivityStore._logsFetching = false;
       ActivityStore._eventsFetching = true;
+
       expect(ActivityStore.fetching).toEqual(true);
 
       ActivityStore._logsFetching = true;
+
       expect(ActivityStore.fetching).toEqual(true);
     });
   });
@@ -176,13 +179,16 @@ describe('ActivityStore', function() {
       expect(ActivityStore.fetched).toEqual(false);
 
       ActivityStore._logsFetched = true;
+
       expect(ActivityStore.fetched).toEqual(false);
 
       ActivityStore._logsFetched = false;
       ActivityStore._eventsFetched = true;
+
       expect(ActivityStore.fetched).toEqual(false);
 
       ActivityStore._logsFetched = true;
+
       expect(ActivityStore.fetched).toEqual(true);
     });
   });

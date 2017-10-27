@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
  * A controlled Form component. The form listens to DOM events that bubble up
  * in order to update FormFields in the FormStore and handle form submit
  * actions.
- **/
+ * */
 
 import React from 'react';
 import classNames from 'classnames';

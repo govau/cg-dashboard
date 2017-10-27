@@ -7,7 +7,7 @@
  * protocol methods](http://webdriver.io/api.html). This implements
  * (incomplete) some of the helper methods from webdriverio to make it easier
  * to deal with a single component.
- **/
+ * */
 
 import assert from 'assert';
 

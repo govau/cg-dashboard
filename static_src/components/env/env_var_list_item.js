@@ -129,7 +129,7 @@ export default class EnvVarListItem extends Component {
           <ConfirmationBox
             style="over"
             message={`Delete environment variable "${name}" from ${app.name}?`}
-            confirmationText={'Yes, delete'}
+            confirmationText="Yes, delete"
             confirmHandler={this.handleDeleteConfirm}
             cancelHandler={this.handleDeleteDismiss}
             disabled={updating}

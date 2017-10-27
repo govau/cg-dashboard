@@ -33,6 +33,7 @@ describe('OrgStore', () => {
     it('should return the current org its on', function() {
       const expected = 'asdlfkja;';
       OrgStore._currentOrgGuid = expected;
+
       expect(OrgStore.currentOrgGuid).toEqual(expected);
     });
   });
@@ -41,6 +42,7 @@ describe('OrgStore', () => {
     it('should return an array', function() {
       const guid = 'orgguid';
       const actual = OrgStore.updateOpenOrgs(guid);
+
       expect(actual.length).toEqual(0);
     });
 
@@ -63,6 +65,7 @@ describe('OrgStore', () => {
       ];
       OrgStore._data = Immutable.fromJS(initial);
       const actual = OrgStore.updateOpenOrgs(guid);
+
       expect(actual).toEqual(expected);
     });
   });
@@ -70,6 +73,7 @@ describe('OrgStore', () => {
   describe('on orgs received', () => {
     it('should set data to passed in orgs', () => {
       const expected = [{ guid: '1as' }, { guid: '2as' }];
+
       expect(OrgStore.getAll()).toBeArray();
 
       AppDispatcher.handleViewAction({
@@ -96,6 +100,7 @@ describe('OrgStore', () => {
 
       expect(OrgStore.getAll().length).toEqual(2);
       const actual = OrgStore.get('aaa1');
+
       expect(actual).toBeTruthy();
       expect(actual.name).toEqual('sue');
       expect(actual.memory).toEqual(1024);
@@ -137,6 +142,7 @@ describe('OrgStore', () => {
         };
 
       OrgStore.push({ guid: testGuid, spaceUrl: 'https://space' });
+
       expect(OrgStore.get(testGuid)).toBeObject();
 
       AppDispatcher.handleViewAction({
@@ -210,6 +216,7 @@ describe('OrgStore', () => {
 
     it('should set quicklook.open to true for the org', function() {
       const org = OrgStore.get(guid);
+
       expect(org.quicklook.open).toBeTruthy();
     });
 

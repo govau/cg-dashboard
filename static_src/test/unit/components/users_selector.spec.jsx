@@ -27,6 +27,7 @@ describe('<UsersSelector />', function() {
 
     it('displays proper message', () => {
       const doc = 'Invite an existing organization user to this space.';
+
       expect(
         wrapper
           .find(PanelDocumentation)
@@ -45,13 +46,16 @@ describe('<UsersSelector />', function() {
       const usersProps = Object.assign({}, props, { parentEntityUsers });
       wrapper = shallow(<UsersSelector {...usersProps} />);
       const formSelect = wrapper.find(Form).find(FormSelect);
+
       expect(formSelect.length).toEqual(1);
       expect(formSelect.props().options.length).toEqual(3);
     });
+
     it('renders without users', () => {
       const usersProps = Object.assign({}, props, { parentEntityUsers: [] });
       wrapper = shallow(<UsersSelector {...usersProps} />);
       const formSelect = wrapper.find(Form).find(FormSelect);
+
       expect(formSelect.length).toEqual(1);
       expect(formSelect.props().options.length).toEqual(0);
     });

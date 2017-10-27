@@ -88,11 +88,13 @@ describe('User roles', function() {
 
         it('verifies that the current user is a user with only permissions to org Y', function() {
           cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
           expect(cookieResult).toBe(cookieManagerOrgY);
         });
 
         it('verify org Y manager cannot modify org X page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(false);
         });
       });
@@ -104,11 +106,13 @@ describe('User roles', function() {
 
         it('verifies that the current user is a user with only permissions to org Y', function() {
           cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
           expect(cookieResult).toBe(cookieManagerOrgY);
         });
 
         it('verify org Y manager can modify org Y page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(true);
         });
 
@@ -116,9 +120,11 @@ describe('User roles', function() {
           expect(
             userRoleElement.toggleOrgManagerAccess(guidManagerOrgX, true)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleBillingManagerAccess(guidManagerOrgX, true)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleOrgAuditorAccess(guidManagerOrgX, true)
           ).toBe(true);
@@ -128,9 +134,11 @@ describe('User roles', function() {
           expect(
             userRoleElement.toggleOrgManagerAccess(guidManagerOrgX, false)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleBillingManagerAccess(guidManagerOrgX, false)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleOrgAuditorAccess(guidManagerOrgX, false)
           ).toBe(true);
@@ -151,11 +159,13 @@ describe('User roles', function() {
 
         it('verifies that the current user is a user with only permissions to org X', function() {
           cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
           expect(cookieResult).toBe(cookieManagerOrgX);
         });
 
         it('verify org X manager cannot modify org Y page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(false);
         });
       });
@@ -167,11 +177,13 @@ describe('User roles', function() {
 
         it('verifies that the current user is a user with only permissions to org X', function() {
           cookieResult = userRoleElement.getUserRole(cookieManagerOrgX);
+
           expect(cookieResult).toBe(cookieManagerOrgX);
         });
 
         it('verify org X manager can modify org X page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(true);
         });
 
@@ -179,9 +191,11 @@ describe('User roles', function() {
           expect(
             userRoleElement.toggleOrgManagerAccess(guidManagerOrgY, true)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleBillingManagerAccess(guidManagerOrgY, true)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleOrgAuditorAccess(guidManagerOrgY, true)
           ).toBe(true);
@@ -191,9 +205,11 @@ describe('User roles', function() {
           expect(
             userRoleElement.toggleOrgManagerAccess(guidManagerOrgY, false)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleBillingManagerAccess(guidManagerOrgY, false)
           ).toBe(true);
+
           expect(
             userRoleElement.toggleOrgAuditorAccess(guidManagerOrgY, false)
           ).toBe(true);
@@ -290,11 +306,13 @@ describe('User roles', function() {
 
         it('verifies that the current user is a user with only permissions to org X', function() {
           cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
           expect(cookieResult).toBe(cookieManagerOrgX);
         });
 
         it('verify org X manager can modify space XX page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(true);
         });
       });
@@ -327,12 +345,14 @@ describe('User roles', function() {
             'permissions to org X space YY',
           function() {
             cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
             expect(cookieResult).toBe(cookieManagerOrgXSpaceXX);
           }
         );
 
         it('verify space manager org X space XX cannot modify space YY org X page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(false);
         });
       });
@@ -344,11 +364,13 @@ describe('User roles', function() {
 
         it('verifies that the current user is a user with only permissions to org Y', function() {
           cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
           expect(cookieResult).toBe(cookieManagerOrgXSpaceXX);
         });
 
         it('verify space manager org X space XX can modify space XX org X page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(true);
         });
 
@@ -362,12 +384,14 @@ describe('User roles', function() {
                 true
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceDeveloperAccess(
                 guidManagerOrgXSpaceYY,
                 true
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceAuditorAccess(
                 guidManagerOrgXSpaceYY,
@@ -387,12 +411,14 @@ describe('User roles', function() {
                 false
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceDeveloperAccess(
                 guidManagerOrgXSpaceYY,
                 false
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceAuditorAccess(
                 guidManagerOrgXSpaceYY,
@@ -417,11 +443,13 @@ describe('User roles', function() {
 
         it('verifies that the current user is a user with only permissions to org X', function() {
           cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
           expect(cookieResult).toBe(cookieManagerOrgXSpaceYY);
         });
 
         it('verify org X manager cannot modify org Y page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(false);
         });
       });
@@ -436,12 +464,14 @@ describe('User roles', function() {
             ' org X space YY',
           function() {
             cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+
             expect(cookieResult).toBe(cookieManagerOrgXSpaceYY);
           }
         );
 
         it('verify space manager org X space YY can modify space YY org X page', function() {
           browser.waitForExist('.test-user-role-control');
+
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(true);
         });
 
@@ -455,12 +485,14 @@ describe('User roles', function() {
                 true
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceDeveloperAccess(
                 guidManagerOrgXSpaceXX,
                 true
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceAuditorAccess(
                 guidManagerOrgXSpaceXX,
@@ -480,12 +512,14 @@ describe('User roles', function() {
                 false
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceDeveloperAccess(
                 guidManagerOrgXSpaceXX,
                 false
               )
             ).toBe(true);
+
             expect(
               userRoleElement.toggleSpaceAuditorAccess(
                 guidManagerOrgXSpaceXX,
@@ -513,6 +547,7 @@ describe('User roles', function() {
     it("navigates to a org's space page", function() {
       browser.waitForExist('.test-page-header-title', 2000);
       const pageHeader = browser.element('.test-page-header-title');
+
       expect(pageHeader.getText()).toBe('user_role-org_x-space_xx');
     });
 
@@ -524,6 +559,7 @@ describe('User roles', function() {
         });
         browser.url('/uaa/userinfo');
         cookieResult = browser.getCookie('testing_user_role').value;
+
         expect(cookieResult).toBe('space_manager_space_xx');
 
         browser.deleteCookie('testing_user_role');

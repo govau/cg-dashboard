@@ -30,11 +30,13 @@ describe('<UserRoleListControl />', function() {
     describe('that has no roles', function() {
       it('returns an empty list of roles', function() {
         const actual = userRoleListControl.instance().roles();
+
         expect(actual).toEqual([]);
       });
 
       it('returns false for all org roles', function() {
         const actual = userRoleListControl.instance().checkRole('org_manager');
+
         expect(actual).toEqual(false);
       });
     });
@@ -53,11 +55,13 @@ describe('<UserRoleListControl />', function() {
 
       it('returns true for org manager', function() {
         const actual = userRoleListControl.instance().checkRole('org_manager');
+
         expect(actual).toEqual(true);
       });
 
       it('returns false for org auditor, space manager', function() {
         const actual = userRoleListControl.instance().checkRole('org_auditor');
+
         expect(actual).toEqual(false);
         expect(
           userRoleListControl.instance().checkRole('space_manager')
@@ -89,6 +93,7 @@ describe('<UserRoleListControl />', function() {
     describe('that has no roles', function() {
       it('returns an empty list of roles', function() {
         const actual = userRoleListControl.instance().roles();
+
         expect(actual).toEqual([]);
       });
 
@@ -96,6 +101,7 @@ describe('<UserRoleListControl />', function() {
         const actual = userRoleListControl
           .instance()
           .checkRole('space_manager');
+
         expect(actual).toEqual(false);
       });
     });
@@ -116,6 +122,7 @@ describe('<UserRoleListControl />', function() {
         const actual = userRoleListControl
           .instance()
           .checkRole('space_manager');
+
         expect(actual).toEqual(true);
       });
 
@@ -123,6 +130,7 @@ describe('<UserRoleListControl />', function() {
         const actual = userRoleListControl
           .instance()
           .checkRole('space_auditor');
+
         expect(actual).toEqual(false);
         expect(userRoleListControl.instance().checkRole('org_manager')).toEqual(
           false

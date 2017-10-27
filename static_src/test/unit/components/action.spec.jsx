@@ -47,8 +47,10 @@ describe('<Action />', function() {
     describe('given any other kind of type', () => {
       it('renders a button', () => {
         action = shallow(<Action type="submit" />);
+
         expect(action.find(Button).length).toBe(1);
         action = shallow(<Action type="outline" />);
+
         expect(action.find(Button).length).toBe(1);
       });
     });
@@ -66,6 +68,7 @@ describe('<Action />', function() {
         expect(actionButton.prop('className')).toMatch(
           new RegExp(buttonProps.classes[0])
         );
+
         expect(typeof actionButton.prop('clickHandler')).toBe('function');
 
         const linkProps = {
@@ -79,6 +82,7 @@ describe('<Action />', function() {
         expect(actionLink.prop('className')).toMatch(
           new RegExp(linkProps.classes[0])
         );
+
         expect(typeof actionLink.prop('clickHandler')).toBe('function');
       });
     });
@@ -93,6 +97,7 @@ describe('<Action />', function() {
 
     it('triggers clickHandler', () => {
       action.find(Button).simulate('click');
+
       expect(clickHandlerSpy).toHaveBeenCalledOnce();
     });
   });

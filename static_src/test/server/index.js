@@ -17,7 +17,7 @@ api(smocks);
  *
  * @param port (optional) the system will choose a port automatically
  * @param cb (optional) callback to notify when server starts
- **/
+ * */
 export function start(...args) {
   const cb = args.pop();
   const port = args[0];
