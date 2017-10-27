@@ -8,9 +8,7 @@
     },
     "sourceType": "module"
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
     "comma-dangle": [2, "never"],
     "react/no-deprecated": 0,

@@ -13,9 +13,7 @@
     },
     "sourceType": "module"
   },
-  "plugins": [
-    "jasmine"
-  ],
+  "plugins": ["jasmine"],
   "rules": {
     "comma-dangle": [2, "never"],
     "func-names": [0, "always"],
