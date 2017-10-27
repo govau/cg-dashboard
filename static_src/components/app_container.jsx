@@ -32,7 +32,7 @@ function appReady(app) {
 
 function mapStoreToState() {
   let route;
-  const currentAppGuid = AppStore.currentAppGuid;
+  const { currentAppGuid } = AppStore;
   const app = AppStore.get(currentAppGuid);
   const envRequest = EnvStore.getEnvRequest(currentAppGuid);
   const envUpdateError = EnvStore.getUpdateError(currentAppGuid);
@@ -62,7 +62,11 @@ function mapStoreToState() {
     empty: !AppStore.loading && !appReady(app) && !QuotaStore.loading,
     envRequest,
     envUpdateError,
-    loading: AppStore.loading || QuotaStore.loading,
+    loading:
+      OrgStore.loading ||
+      SpaceStore.loading ||
+      AppStore.loading ||
+      QuotaStore.loading,
     org,
     route,
     quota,
