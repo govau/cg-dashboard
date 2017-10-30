@@ -1,9 +1,6 @@
 import http from 'axios';
 
-import errorActions from '../../../actions/error_actions';
 import uaaApi from '../../../util/uaa_api';
-import userActions from '../../../actions/user_actions';
-import { wrapInRes, unwrapOfRes } from '../helpers';
 
 function createPromise(res, err) {
   // TODO figure out how to do this with actual Promise object.
@@ -66,7 +63,7 @@ describe('uaaApi', function() {
       uaaApi
         .inviteUaaUser(email)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
 
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch('/uaa/invite/users');
@@ -91,7 +88,7 @@ describe('uaaApi', function() {
       uaaApi
         .sendInviteEmail(inviteResponse)
         .then(() => {
-          const args = spy.getCall(0).args;
+          const { args } = spy.getCall(0);
 
           expect(spy).toHaveBeenCalledOnce();
           expect(args[0]).toMatch('/uaa/invite/email');
