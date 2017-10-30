@@ -122,9 +122,7 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/apps/{guid}/summary`,
     handler(req, reply) {
       const { guid } = req.params;
-      const app = appSummaries.find(function(a) {
-        return a.guid === guid;
-      });
+      const app = appSummaries.find(a => a.guid === guid);
       reply(SingleResponse(app));
     }
   });
@@ -135,9 +133,7 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/apps/{guid}/stats`,
     handler(req, reply) {
       const { guid } = req.params;
-      const appStat = appStats.find(function(app) {
-        return app.guid === guid;
-      });
+      const appStat = appStats.find(app => app.guid === guid);
       if (guid === '3c37ff32-d954-4f9f-b730-15e22442fd82') {
         reply({ message: 'There is a problem with the server' }).code(503);
       } else {
@@ -165,9 +161,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/organizations/{guid}`,
     handler(req, reply) {
       const { guid } = req.params;
-      const org = organizations.find(function(organization) {
-        return organization.metadata.guid === guid;
-      });
+      const org = organizations.find(
+        organization => organization.metadata.guid === guid
+      );
       reply(SingleResponse(org));
     }
   });
@@ -187,11 +183,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/organizations/{guid}/summary`,
     handler(req, reply) {
       const { guid } = req.params;
-      const organization = organizationSummaries.find(function(
-        organizationSummary
-      ) {
-        return organizationSummary.guid === guid;
-      });
+      const organization = organizationSummaries.find(
+        organizationSummary => organizationSummary.guid === guid
+      );
       reply(SingleResponse(organization));
     }
   });
@@ -211,9 +205,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/quota_definitions/{guid}`,
     handler(req, reply) {
       const { guid } = req.params;
-      const quota = organizationQuotaDefinitions.find(function(orgQuota) {
-        return orgQuota.metadata.guid === guid;
-      });
+      const quota = organizationQuotaDefinitions.find(
+        orgQuota => orgQuota.metadata.guid === guid
+      );
       reply(SingleResponse(quota));
     }
   });
@@ -387,9 +381,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/spaces/{guid}/events`,
     handler(req, reply) {
       const { guid } = req.params;
-      const spaceEvents = anyEvents.filter(function(event) {
-        return event.entity.space_guid === guid;
-      });
+      const spaceEvents = anyEvents.filter(
+        event => event.entity.space_guid === guid
+      );
       reply(MultiResponse(spaceEvents));
     }
   });
@@ -400,9 +394,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/spaces/{guid}/service_instances`,
     handler(req, reply) {
       const { guid } = req.params;
-      const instances = serviceInstances.filter(function(serviceInstance) {
-        return serviceInstance.entity.space_guid === guid;
-      });
+      const instances = serviceInstances.filter(
+        serviceInstance => serviceInstance.entity.space_guid === guid
+      );
       reply(MultiResponse(instances));
     }
   });
@@ -413,9 +407,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/spaces/{guid}/routes`,
     handler(req, reply) {
       const { guid } = req.params;
-      const routes = spaceRoutes.filter(function(spaceRoute) {
-        return spaceRoute.entity.space_guid === guid;
-      });
+      const routes = spaceRoutes.filter(
+        spaceRoute => spaceRoute.entity.space_guid === guid
+      );
       reply(MultiResponse(routes));
     }
   });
@@ -426,9 +420,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/spaces/{guid}/summary`,
     handler(req, reply) {
       const { guid } = req.params;
-      const space = spaceSummaries.find(function(spaceSummary) {
-        return spaceSummary.guid === guid;
-      });
+      const space = spaceSummaries.find(
+        spaceSummary => spaceSummary.guid === guid
+      );
       if (ENV_NO_APPS) {
         space.apps = [];
       }
@@ -514,9 +508,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/service_plans/{guid}`,
     handler(req, reply) {
       const { guid } = req.params;
-      const plan = servicePlans.find(function(servicePlan) {
-        return servicePlan.metadata.guid === guid;
-      });
+      const plan = servicePlans.find(
+        servicePlan => servicePlan.metadata.guid === guid
+      );
       reply(MultiResponse(plan));
     }
   });
@@ -527,9 +521,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/services/{guid}/service_plans`,
     handler(req, reply) {
       const serviceGuid = req.params.guid;
-      const plans = servicePlans.filter(function(servicePlan) {
-        return servicePlan.entity.service_guid === serviceGuid;
-      });
+      const plans = servicePlans.filter(
+        servicePlan => servicePlan.entity.service_guid === serviceGuid
+      );
       reply(MultiResponse(plans));
     }
   });
@@ -550,9 +544,9 @@ module.exports = function api(smocks) {
     path: `${BASE_URL}/shared_domains/{guid}`,
     handler(req, reply) {
       const { guid } = req.params;
-      const domain = sharedDomains.find(function(sharedDomain) {
-        return sharedDomain.metadata.guid === guid;
-      });
+      const domain = sharedDomains.find(
+        sharedDomain => sharedDomain.metadata.guid === guid
+      );
       reply(SingleResponse(domain));
     }
   });

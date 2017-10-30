@@ -14,9 +14,7 @@ Function.prototype.bind =
   function(thisp) {
     // eslint-disable-line
     const fn = this;
-    return function(...args) {
-      return fn.apply(thisp, args);
-    };
+    return (...args) => fn.apply(thisp, args);
   };
 
 beforeEach(function() {

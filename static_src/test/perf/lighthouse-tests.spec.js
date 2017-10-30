@@ -73,9 +73,7 @@ describe('Lighthouse speed test', function() {
     launchChromeRunLighthouse(testUrl, {}, lighthouseOptions)
       .then(res => {
         result = res.audits;
-        pullResult = function(name) {
-          return result[name].rawValue;
-        };
+        pullResult = name => result[name].rawValue;
         const toWrite = res;
         toWrite.artifacts = undefined; // Causes problems when writing.
         const htmlWrite = Printer.write(toWrite, 'html', htmlOut);

@@ -1,18 +1,15 @@
 import poll from '../../../util/poll';
 
 describe('poll()', function() {
-  const condition = function condition(x) {
-    return !!x;
-  };
+  const condition = x => !!x;
   let promise;
   let request;
 
   beforeEach(function() {
-    request = function() {
-      return new Promise(function(resolve, reject) {
+    request = () =>
+      new Promise(function(resolve, reject) {
         promise = { resolve, reject };
       });
-    };
   });
 
   it('should resolve returned promise when condition is true', function(done) {
