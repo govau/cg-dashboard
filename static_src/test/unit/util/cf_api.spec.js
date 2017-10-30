@@ -489,7 +489,10 @@ describe('cfApi', function() {
           const combined = dataOne.data.resources
             .concat(dataTwo.data.resources)
             .concat(dataThree.data.resources)
-            .map(r => Object.assign({}, r.metadata, r.entity));
+            .map(r => ({
+              ...r.metadata,
+              ...r.entity
+            }));
 
           expect(stub).toHaveBeenCalledThrice();
           expect(responses).toEqual(combined);

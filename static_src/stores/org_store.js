@@ -159,9 +159,15 @@ export class OrgStore extends BaseStore {
     const allOrgs = this.getAll();
     const updates = allOrgs.map(org => {
       if (org.guid === openOrgGuid) {
-        return Object.assign({}, org, { space_menu_open: true });
+        return {
+          ...org,
+          space_menu_open: true
+        };
       }
-      return Object.assign({}, org, { space_menu_open: false });
+      return {
+        ...org,
+        space_menu_open: false
+      };
     });
     return updates;
   }

@@ -328,7 +328,10 @@ describe('UserStore', function() {
         orgGuid: 'adsfa'
       });
       const actual = instance.get('wpqoifesadkzcvn');
-      const expected = Object.assign({}, existingUser, newUser);
+      const expected = {
+        ...existingUser,
+        ...newUser
+      };
 
       expect(actual).not.toEqual(expected);
     });
@@ -401,7 +404,10 @@ describe('UserStore', function() {
         spaceGuid: 'adsfa'
       });
       const actual = instance.get('wpqoifesadkzcvn');
-      const expected = Object.assign({}, existingUser, newUser);
+      const expected = {
+        ...existingUser,
+        ...newUser
+      };
 
       expect(actual).not.toEqual(expected);
     });

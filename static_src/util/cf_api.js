@@ -117,7 +117,10 @@ export default {
   version: APIV,
 
   formatSplitResponse(resource) {
-    return Object.assign({}, resource.entity, resource.metadata);
+    return {
+      ...resource.entity,
+      ...resource.metadata
+    };
   },
 
   formatSplitResponses(resources) {
@@ -178,7 +181,12 @@ export default {
       for (let i = 2; i <= res.data.total_pages; i++) {
         pages.push(
           http
-            .get(path, { params: Object.assign({}, data, { page: i }) })
+            .get(path, {
+              params: {
+                ...data,
+                page: i
+              }
+            })
             .then(page => page.data.resources)
         );
       }
@@ -241,13 +249,21 @@ export default {
       this.fetchOrgDetails(guid),
       this.fetchOrgMemoryUsage(guid)
     ])
-      .then(([org, orgDetails, quota]) =>
-        Object.assign({}, org, orgDetails, { quota })
-      )
+      .then(([org, orgDetails, quota]) => ({
+        ...org,
+        ...orgDetails,
+        quota
+      }))
       .then(org =>
         this.fetchOrgMemoryLimit(org).then(limit => {
-          const quota = Object.assign({}, org.quota, limit);
-          return Object.assign({}, org, { quota });
+          const quota = {
+            ...org.quota,
+            ...limit
+          };
+          return {
+            ...org,
+            quota
+          };
         })
       )
       .catch(errorActions.errorFetch);
@@ -379,7 +395,10 @@ export default {
   putApp(appGuid, app) {
     return http
       .put(`${APIV}/apps/${appGuid}`, app)
-      .then(res => Object.assign({}, res.data.entity, { guid: appGuid }))
+      .then(res => ({
+        ...res.data.entity,
+        guid: appGuid
+      }))
       .catch(err => handleError(err, e => Promise.reject(e)));
   },
 

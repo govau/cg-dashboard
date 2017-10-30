@@ -329,7 +329,10 @@ describe('BaseStore', () => {
       store.merge('guid', updateA, () => {
         const updated = store.get(updateA.guid);
 
-        expect(updated).toEqual(Object.assign({}, existingEntityA, updateA));
+        expect(updated).toEqual({
+          ...existingEntityA,
+          ...updateA
+        });
         expect(store.get(existingEntityB.guid)).toEqual(existingEntityB);
 
         done();
@@ -353,11 +356,17 @@ describe('BaseStore', () => {
 
         const updatedA = store.get(toUpdateA.guid);
 
-        expect(updatedA).toEqual(Object.assign({}, existingEntityA, toUpdateA));
+        expect(updatedA).toEqual({
+          ...existingEntityA,
+          ...toUpdateA
+        });
 
         const updatedB = store.get(toUpdateB.guid);
 
-        expect(updatedB).toEqual(Object.assign({}, existingEntityB, toUpdateB));
+        expect(updatedB).toEqual({
+          ...existingEntityB,
+          ...toUpdateB
+        });
       });
     });
   });

@@ -23,18 +23,20 @@ describe('<ServiceInstanceTableRow/>', () => {
   });
 
   it('does not render a <ConfirmationBox/> when not deleting an instance', () => {
-    const instance = Object.assign({}, baseInstance, {
+    const instance = {
+      ...baseInstance,
       confirmDelete: false
-    });
+    };
     const wrapper = shallow(<ServiceInstanceTableRow instance={instance} />);
 
     expect(wrapper.find(ConfirmationBox).length).toBe(0);
   });
 
   it('renders a <ConfirmationBox /> when deleting an instance', () => {
-    const instance = Object.assign({}, baseInstance, {
+    const instance = {
+      ...baseInstance,
       confirmDelete: true
-    });
+    };
     const wrapper = shallow(<ServiceInstanceTableRow instance={instance} />);
 
     expect(wrapper.find(ConfirmationBox).length).toBe(1);
@@ -53,10 +55,11 @@ describe('<ServiceInstanceTableRow/>', () => {
 
   it('supplies correct props to <ConfirmationBox/>', () => {
     const props = {
-      instance: Object.assign({}, baseInstance, {
+      instance: {
+        ...baseInstance,
         deleting: false,
         confirmDelete: true
-      })
+      }
     };
     const wrapper = shallow(<ServiceInstanceTableRow {...props} />);
     const box = wrapper.find(ConfirmationBox);

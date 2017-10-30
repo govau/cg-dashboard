@@ -484,9 +484,10 @@ describe('RouteStore', function() {
 
       const actual = RouteStore.get(routeA.guid);
 
-      expect(actual).toEqual(
-        Object.assign({}, routeA, { app_guid: sharedGuid })
-      );
+      expect(actual).toEqual({
+        ...routeA,
+        app_guid: sharedGuid
+      });
     });
 
     it('should merge all the routes in', function() {
@@ -544,10 +545,11 @@ describe('RouteStore', function() {
       });
 
       const actual = RouteStore.get(routeGuid);
-      const expected = Object.assign({}, route, {
+      const expected = {
+        ...route,
         editing: true,
         error: null
-      });
+      };
 
       expect(actual).toEqual(expected);
     });
@@ -566,9 +568,10 @@ describe('RouteStore', function() {
       });
 
       const actual = RouteStore.get(routeGuid);
-      const expected = Object.assign({}, route, {
+      const expected = {
+        ...route,
         removing: true
-      });
+      };
 
       expect(actual).toEqual(expected);
     });
@@ -686,10 +689,11 @@ describe('RouteStore', function() {
       routeActions.error(routeGuid, err);
 
       const actual = RouteStore.get(routeGuid);
-      const expected = Object.assign({}, route, {
+      const expected = {
+        ...route,
         error: err,
         loading: null
-      });
+      };
 
       expect(actual).toEqual(expected);
     });

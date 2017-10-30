@@ -645,10 +645,11 @@ describe('ServiceInstanceStore', function() {
         serviceActions.instanceError(instanceGuid, testCFError);
 
         const actual = ServiceInstanceStore.get(instanceGuid);
-        const expected = Object.assign({}, instance, {
+        const expected = {
+          ...instance,
           error: { description: 'Cannot bind service instance.' },
           loading: false
-        });
+        };
 
         expect(actual).toEqual(expected);
       });

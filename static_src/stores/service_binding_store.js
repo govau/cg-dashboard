@@ -44,9 +44,10 @@ export class ServiceBindingStore extends BaseStore {
 
       case serviceActionTypes.SERVICE_UNBIND: {
         const binding = this.get(action.serviceBinding.guid);
-        const unbindingService = Object.assign({}, binding, {
+        const unbindingService = {
+          ...binding,
           unbinding: true
-        });
+        };
         this.merge('guid', unbindingService);
         break;
       }

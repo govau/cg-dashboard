@@ -14,7 +14,9 @@ class RouterStore extends BaseStore {
 
     switch (type) {
       case routerActionTypes.NAVIGATE:
-        this.routeComponent = Object.assign({}, { ...data });
+        this.routeComponent = {
+          ...data
+        };
         this.emitChange();
         break;
       default:

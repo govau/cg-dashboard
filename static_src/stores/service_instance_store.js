@@ -226,18 +226,16 @@ export class ServiceInstanceStore extends BaseStore {
       }
 
       case serviceActionTypes.SERVICE_INSTANCE_CREATE_ERROR: {
-        this._createInstanceForm = Object.assign(
-          {},
-          this._createInstanceForm || {},
-          {
-            error: {
-              description: getFriendlyError(
-                action.error,
-                SERVICE_INSTANCE_CREATE_ERROR_MAP
-              )
-            }
+        this._createInstanceForm = {
+          ...(this._createInstanceForm || {}),
+
+          error: {
+            description: getFriendlyError(
+              action.error,
+              SERVICE_INSTANCE_CREATE_ERROR_MAP
+            )
           }
-        );
+        };
         this._createLoading = false;
 
         this.emitChange();
@@ -277,7 +275,10 @@ export class ServiceInstanceStore extends BaseStore {
       case serviceActionTypes.SERVICE_INSTANCE_DELETE: {
         this._updating = true;
         const serviceInstance = this.get(action.serviceInstanceGuid);
-        const toDelete = Object.assign({}, serviceInstance, { deleting: true });
+        const toDelete = {
+          ...serviceInstance,
+          deleting: true
+        };
         this.merge('guid', toDelete);
         break;
       }
@@ -291,9 +292,10 @@ export class ServiceInstanceStore extends BaseStore {
       case serviceActionTypes.SERVICE_BIND: {
         const instance = this.get(action.serviceInstanceGuid);
         if (instance) {
-          const newInstance = Object.assign({}, instance, {
+          const newInstance = {
+            ...instance,
             loading: 'Binding'
-          });
+          };
           this.merge('guid', newInstance, () => this.emitChange());
         }
         break;
@@ -302,9 +304,10 @@ export class ServiceInstanceStore extends BaseStore {
       case serviceActionTypes.SERVICE_UNBIND: {
         const instance = this.get(action.serviceBinding.service_instance_guid);
         if (instance) {
-          const newInstance = Object.assign({}, instance, {
+          const newInstance = {
+            ...instance,
             loading: 'Unbinding'
-          });
+          };
           this.merge('guid', newInstance, () => this.emitChange());
         }
         break;
@@ -320,11 +323,12 @@ export class ServiceInstanceStore extends BaseStore {
         }
         const instance = this.get(binding.service_instance_guid);
         if (!instance) break; // TODO throw error
-        const updatedInstance = Object.assign({}, instance, {
+        const updatedInstance = {
+          ...instance,
           changing: false,
           error: false,
           loading: false
-        });
+        };
         this.merge('guid', updatedInstance, () => this.emitChange());
         break;
       }
@@ -332,9 +336,10 @@ export class ServiceInstanceStore extends BaseStore {
       case serviceActionTypes.SERVICE_INSTANCE_CHANGE_CHECK: {
         const instance = this.get(action.serviceInstanceGuid);
         if (!instance) break; // TODO throw error?
-        const updatedInstance = Object.assign({}, instance, {
+        const updatedInstance = {
+          ...instance,
           changing: true
-        });
+        };
         this.merge('guid', updatedInstance, () => this.emitChange());
         break;
       }
@@ -342,9 +347,10 @@ export class ServiceInstanceStore extends BaseStore {
       case serviceActionTypes.SERVICE_INSTANCE_CHANGE_CANCEL: {
         const instance = this.get(action.serviceInstanceGuid);
         if (!instance) break; // TODO throw error?
-        const updatedInstance = Object.assign({}, instance, {
+        const updatedInstance = {
+          ...instance,
           changing: false
-        });
+        };
         this.merge('guid', updatedInstance, () => this.emitChange());
         break;
       }
@@ -356,12 +362,15 @@ export class ServiceInstanceStore extends BaseStore {
           break;
         }
 
-        const newInstance = Object.assign({}, instance, {
+        const newInstance = {
+          ...instance,
+
           error: {
             description: getFriendlyError(action.error, BINDING_ERROR_MAP)
           },
+
           loading: false
-        });
+        };
 
         this.merge('guid', newInstance, changed => {
           if (changed) this.emitChange();

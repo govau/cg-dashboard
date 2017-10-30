@@ -47,10 +47,15 @@ class RouteStore extends BaseStore {
     let url;
     if (boundRoutes.length) {
       const route = boundRoutes[0];
-      let mainRoute = Object.assign({}, route);
+      let mainRoute = {
+        ...route
+      };
       const domain = DomainStore.get(route.domain_guid);
       if (domain) {
-        mainRoute = Object.assign({}, mainRoute, { domain_name: domain.name });
+        mainRoute = {
+          ...mainRoute,
+          domain_name: domain.name
+        };
       }
       if (route.path && route.path[0] === '/') {
         mainRoute.path = route.path.replace('/', '');
@@ -73,7 +78,10 @@ class RouteStore extends BaseStore {
         cfApi.putAppRouteAssociation(action.appGuid, action.routeGuid);
         const route = this.get(action.routeGuid);
         if (route) {
-          const newRoute = Object.assign({}, route, { loading: 'Binding' });
+          const newRoute = {
+            ...route,
+            loading: 'Binding'
+          };
           this.merge('guid', newRoute, () => this.emitChange());
         }
         break;
@@ -81,12 +89,13 @@ class RouteStore extends BaseStore {
 
       case routeActionTypes.ROUTE_APP_ASSOCIATED: {
         const route = this.get(action.routeGuid);
-        const newRoute = Object.assign({}, route, {
+        const newRoute = {
+          ...route,
           app_guid: action.appGuid,
           editing: false,
           loading: false,
           error: null
-        });
+        };
         this.merge('guid', newRoute, () => {
           this.showCreateRouteForm = false;
           this.error = null;
@@ -99,7 +108,10 @@ class RouteStore extends BaseStore {
         cfApi.deleteAppRouteAssociation(action.appGuid, action.routeGuid);
         const route = this.get(action.routeGuid);
         if (route) {
-          const newRoute = Object.assign({}, route, { loading: 'Unbinding' });
+          const newRoute = {
+            ...route,
+            loading: 'Unbinding'
+          };
           this.merge('guid', newRoute, () => this.emitChange());
         }
         break;
@@ -108,11 +120,12 @@ class RouteStore extends BaseStore {
       case routeActionTypes.ROUTE_APP_UNASSOCIATED: {
         const route = this.get(action.routeGuid);
         if (route) {
-          const newRoute = Object.assign({}, route, {
+          const newRoute = {
+            ...route,
             app_guid: null,
             loading: false,
             removing: false
-          });
+          };
           this.merge('guid', newRoute, () => this.emitChange());
         }
         break;
@@ -187,19 +200,21 @@ class RouteStore extends BaseStore {
         break;
 
       case routeActionTypes.ROUTES_FOR_APP_RECEIVED: {
-        const routes = action.routes.map(route =>
-          Object.assign({}, route, { app_guid: action.appGuid })
-        );
+        const routes = action.routes.map(route => ({
+          ...route,
+          app_guid: action.appGuid
+        }));
         this.mergeRoutes(routes);
         break;
       }
 
       case routeActionTypes.ROUTE_TOGGLE_EDIT: {
         const route = this.get(action.routeGuid);
-        const newRoute = Object.assign({}, route, {
+        const newRoute = {
+          ...route,
           editing: !route.editing,
           error: null
-        });
+        };
         this.merge('guid', newRoute, changed => {
           if (changed) this.emitChange();
         });
@@ -208,9 +223,10 @@ class RouteStore extends BaseStore {
 
       case routeActionTypes.ROUTE_TOGGLE_REMOVE: {
         const route = this.get(action.routeGuid);
-        const newRoute = Object.assign({}, route, {
+        const newRoute = {
+          ...route,
           removing: !route.removing
-        });
+        };
         this.merge('guid', newRoute, changed => {
           if (changed) this.emitChange();
         });
@@ -222,20 +238,22 @@ class RouteStore extends BaseStore {
         cfApi.putRouteUpdate(routeGuid, domainGuid, spaceGuid, route);
         const currentRoute = this.get(routeGuid);
         if (currentRoute) {
-          const newRoute = Object.assign({}, currentRoute, {
+          const newRoute = {
+            ...currentRoute,
             loading: 'Editing'
-          });
+          };
           this.merge('guid', newRoute, () => this.emitChange());
         }
         break;
       }
 
       case routeActionTypes.ROUTE_UPDATED: {
-        const route = Object.assign({}, action.route, {
+        const route = {
+          ...action.route,
           editing: false,
           error: null,
           loading: false
-        });
+        };
         this.merge('guid', route, () => {
           this.emitChange();
         });
@@ -245,10 +263,11 @@ class RouteStore extends BaseStore {
       case routeActionTypes.ROUTE_ERROR: {
         const route = this.get(action.routeGuid);
         if (!route) break;
-        const newRoute = Object.assign({}, route, {
+        const newRoute = {
+          ...route,
           error: action.error,
           loading: null
-        });
+        };
         this.merge('guid', newRoute, changed => {
           if (changed) this.emitChange();
         });

@@ -46,9 +46,10 @@ const orgActions = {
       .then(orgs =>
         Promise.all(
           orgs.map(org =>
-            cfApi
-              .fetchOrgSummary(org.guid)
-              .then(summary => Object.assign({}, org, summary))
+            cfApi.fetchOrgSummary(org.guid).then(summary => ({
+              ...org,
+              ...summary
+            }))
           )
         )
       )

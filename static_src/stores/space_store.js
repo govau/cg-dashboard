@@ -53,7 +53,10 @@ class SpaceStore extends BaseStore {
         const spaces = action.org.spaces || [];
         const spacesWithOrgGuid = spaces.map(space => {
           const org = { org: action.org.guid };
-          return Object.assign({}, space, org);
+          return {
+            ...space,
+            ...org
+          };
         });
         if (spacesWithOrgGuid.length > 0) {
           this.mergeMany('guid', spacesWithOrgGuid, changed => {

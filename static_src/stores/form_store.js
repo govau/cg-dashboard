@@ -35,11 +35,10 @@ export class FormStore extends BaseStore {
       case formActionTypes.FORM_FIELD_CHANGE: {
         // Update the form field value
         const form = this.get(action.formGuid);
-        const changedFormField = Object.assign(
-          {},
-          form.fields[action.fieldName],
-          { value: action.fieldValue }
-        );
+        const changedFormField = {
+          ...form.fields[action.fieldName],
+          value: action.fieldValue
+        };
 
         form.fields[action.fieldName] = changedFormField;
         this.merge('guid', form);
@@ -49,11 +48,10 @@ export class FormStore extends BaseStore {
       case formActionTypes.FORM_FIELD_CHANGE_SUCCESS: {
         // Clear any error
         const form = this.get(action.formGuid);
-        const changedFormField = Object.assign(
-          {},
-          form.fields[action.fieldName],
-          { error: null }
-        );
+        const changedFormField = {
+          ...form.fields[action.fieldName],
+          error: null
+        };
 
         form.fields[action.fieldName] = changedFormField;
         this.merge('guid', form);
@@ -63,11 +61,10 @@ export class FormStore extends BaseStore {
       case formActionTypes.FORM_FIELD_CHANGE_ERROR: {
         // Set the error
         const form = this.get(action.formGuid);
-        const changedFormField = Object.assign(
-          {},
-          form.fields[action.fieldName],
-          { error: action.error }
-        );
+        const changedFormField = {
+          ...form.fields[action.fieldName],
+          error: action.error
+        };
 
         form.fields[action.fieldName] = changedFormField;
         this.merge('guid', form);

@@ -41,9 +41,10 @@ export class ServicePlanStore extends BaseStore {
     switch (action.type) {
       case serviceActionTypes.SERVICE_PLAN_FETCH: {
         const servicePlan = this.get(action.servicePlanGuid) || {};
-        const servicePlanFetching = Object.assign({}, servicePlan, {
+        const servicePlanFetching = {
+          ...servicePlan,
           fetching: true
-        });
+        };
         this.merge('guid', servicePlanFetching);
         break;
       }
@@ -57,9 +58,10 @@ export class ServicePlanStore extends BaseStore {
 
       case serviceActionTypes.SERVICE_PLAN_RECEIVED: {
         const servicePlan = action.servicePlan;
-        const servicePlanReceived = Object.assign({}, servicePlan, {
+        const servicePlanReceived = {
+          ...servicePlan,
           fetching: false
-        });
+        };
         this.merge('guid', servicePlanReceived);
         break;
       }

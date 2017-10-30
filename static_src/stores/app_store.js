@@ -60,18 +60,20 @@ export class AppStore extends BaseStore {
 
       case appActionTypes.APP_UPDATE: {
         const existingApp = this.get(action.appGuid);
-        const updatedApp = Object.assign({}, existingApp, {
+        const updatedApp = {
+          ...existingApp,
           updating: true,
           ...action.appPartial
-        });
+        };
         this.merge('guid', updatedApp);
         break;
       }
 
       case appActionTypes.APP_UPDATED: {
-        const app = Object.assign({}, action.app, {
+        const app = {
+          ...action.app,
           updating: false
-        });
+        };
 
         this.merge('guid', app);
         break;
@@ -92,7 +94,10 @@ export class AppStore extends BaseStore {
 
       case appActionTypes.APP_STATS_RECEIVED: {
         this._fetchAppStats = false;
-        const app = Object.assign({}, action.app, { guid: action.appGuid });
+        const app = {
+          ...action.app,
+          guid: action.appGuid
+        };
         this.merge('guid', app, () => {
           // Emit change regardless of app because loading state changed
           this.emitChange();
@@ -121,9 +126,10 @@ export class AppStore extends BaseStore {
       case appActionTypes.APP_START: {
         const app = this.get(action.appGuid);
         if (app) {
-          const startingApp = Object.assign({}, app, {
+          const startingApp = {
+            ...app,
             state: appStates.starting
-          });
+          };
           this.merge('guid', startingApp, changed => {
             if (changed) this.emitChange();
           });
@@ -134,9 +140,10 @@ export class AppStore extends BaseStore {
       case appActionTypes.APP_RESTART: {
         const app = this.get(action.appGuid);
         if (app) {
-          const restartingApp = Object.assign({}, app, {
+          const restartingApp = {
+            ...app,
             state: appStates.restarting
-          });
+          };
           this.merge('guid', restartingApp, changed => {
             if (changed) this.emitChange();
           });
@@ -159,11 +166,12 @@ export class AppStore extends BaseStore {
       case appActionTypes.APP_ERROR: {
         const app = this.get(action.appGuid);
         if (app) {
-          const erroredApp = Object.assign({}, app, {
+          const erroredApp = {
+            ...app,
             error: action.error,
             updating: false,
             restarting: false
-          });
+          };
           this.merge('guid', erroredApp);
         }
         break;

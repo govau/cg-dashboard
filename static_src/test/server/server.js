@@ -53,9 +53,10 @@ function spawnChildCb(command, args) {
     // Kick off the main process
     const main = childProcess.spawn(command, args, {
       stdio: 'inherit',
-      env: Object.assign({}, process.env, {
+      env: {
+        ...process.env,
         PORT: server.info.port
-      })
+      }
     });
 
     main.on('close', function(exitCode) {

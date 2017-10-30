@@ -277,11 +277,10 @@ const userActions = {
     let description;
     const noticeType = 'finish';
     const currentViewedType = UserStore.currentlyViewedType;
-    const viewTypeNouns = Object.assign(
-      {},
-      { space_users: { singular: SPACE_ENTITY } },
-      { org_users: { singular: ORG_ENTITY } }
-    );
+    const viewTypeNouns = {
+      space_users: { singular: SPACE_ENTITY },
+      org_users: { singular: ORG_ENTITY }
+    };
     const entity = viewTypeNouns[currentViewedType].singular;
 
     if (verified) {

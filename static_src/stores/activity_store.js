@@ -89,9 +89,10 @@ class ActivityStore extends BaseStore {
         this._eventsFetching = false;
         this._eventsFetched = true;
         activity = action.events.map(event => {
-          const item = Object.assign({}, event, {
+          const item = {
+            ...event,
             activity_type: 'event'
-          });
+          };
           return item;
         });
         this.mergeMany('guid', activity, () => {});
@@ -109,9 +110,10 @@ class ActivityStore extends BaseStore {
         this._logsFetching = false;
         this._logsFetched = true;
         activity = action.logs.map(log => {
-          const parsed = Object.assign({}, parseLogItem(log), {
+          const parsed = {
+            ...parseLogItem(log),
             activity_type: 'log'
-          });
+          };
           return parsed;
         });
         this.mergeMany('guid', activity, () => {});

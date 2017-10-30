@@ -94,13 +94,10 @@ export class UserStore extends BaseStore {
 
       case userActionTypes.USER_ORG_ASSOCIATED: {
         this._inviteInputActive = true;
-        const user = Object.assign(
-          {},
-          {
-            guid: action.userGuid
-          },
-          action.user
-        );
+        const user = {
+          guid: action.userGuid,
+          ...action.user
+        };
         this.associateUsersAndRolesToEntity(
           [user],
           action.entityGuid,
@@ -112,9 +109,10 @@ export class UserStore extends BaseStore {
 
       case userActionTypes.USER_SPACE_ASSOCIATED: {
         this._inviteInputActive = true;
-        const user = Object.assign({}, action.user, {
+        const user = {
+          ...action.user,
           guid: action.userGuid
-        });
+        };
         this.associateUsersAndRolesToEntity(
           [user],
           action.entityGuid,
@@ -147,7 +145,10 @@ export class UserStore extends BaseStore {
         this._saving = true;
         const user = this.get(action.userGuid);
         if (user) {
-          const savingUser = Object.assign({}, user, { saving: true });
+          const savingUser = {
+            ...user,
+            saving: true
+          };
           this.merge('guid', savingUser);
         }
         this.emitChange();
@@ -172,9 +173,10 @@ export class UserStore extends BaseStore {
         const orgGuid = action.orgGuid;
         const orgUsers = action.users;
 
-        const updatedUsers = orgUsers.map(orgUser =>
-          Object.assign({}, orgUser, { orgGuid })
-        );
+        const updatedUsers = orgUsers.map(orgUser => ({
+          ...orgUser,
+          orgGuid
+        }));
 
         this.mergeMany('guid', updatedUsers, changed => {
           if (changed) {
@@ -215,9 +217,10 @@ export class UserStore extends BaseStore {
       }
 
       case userActionTypes.USER_INVITE_ERROR: {
-        this._userListNotificationError = Object.assign({}, action.err, {
+        this._userListNotificationError = {
+          ...action.err,
           contextualMessage: action.contextualMessage
-        });
+        };
         this._usersSelectorDisabled = false;
         this.emitChange();
         break;
@@ -225,9 +228,10 @@ export class UserStore extends BaseStore {
 
       case userActionTypes.USER_ROLE_CHANGE_ERROR: {
         this._saving = false;
-        this._error = Object.assign({}, action.error, {
+        this._error = {
+          ...action.error,
           description: action.message
-        });
+        };
 
         this.emitChange();
         break;
@@ -237,7 +241,10 @@ export class UserStore extends BaseStore {
         this._inviteDisabled = false;
         const noticeType = action.noticeType;
         const description = action.description;
-        const notice = Object.assign({}, { noticeType }, { description });
+        const notice = {
+          noticeType,
+          description
+        };
         this._userListNotification = notice;
         this.emitChange();
         break;
@@ -251,7 +258,10 @@ export class UserStore extends BaseStore {
 
       case userActionTypes.CURRENT_USER_INFO_RECEIVED: {
         const guid = action.currentUser.user_id;
-        const userInfo = Object.assign({}, action.currentUser, { guid });
+        const userInfo = {
+          ...action.currentUser,
+          guid
+        };
         this.merge('guid', userInfo, () => {
           this._currentUserGuid = guid;
 
@@ -287,9 +297,10 @@ export class UserStore extends BaseStore {
       }
 
       case userActionTypes.USER_RECEIVED: {
-        const receivedUser = Object.assign({}, action.user, {
+        const receivedUser = {
+          ...action.user,
           fetching: false
-        });
+        };
         if (action.user) {
           this.merge('guid', receivedUser, () => this.emitChange());
         }
@@ -414,10 +425,9 @@ export class UserStore extends BaseStore {
 
   mergeRoles(roles, entityGuid, entityType) {
     return roles.map(role => {
-      const user = Object.assign(
-        {},
-        this.get(role.guid) || this.getDefaultUserInfo(role)
-      );
+      const user = {
+        ...(this.get(role.guid) || this.getDefaultUserInfo(role))
+      };
       const updatingRoles = role[entityType] || [];
 
       if (entityType === 'space_roles') {

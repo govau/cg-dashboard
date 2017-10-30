@@ -9,9 +9,10 @@ function logAction(action) {
 /* eslint-enable no-alert, no-console */
 
 function addSourceType(srcObj, srcType) {
-  return Object.assign({}, srcObj, {
+  return {
+    ...srcObj,
     source: srcType
-  });
+  };
 }
 
 class AppDispatcher extends Dispatcher {
