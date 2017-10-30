@@ -3,7 +3,7 @@ import { trackAction, trackPageView } from '../../../util/analytics';
 describe('analytics helpers', function() {
   describe('with GA loaded and on production', function() {
     let sandbox;
-    var window = window || global;
+    const window = window || global;
 
     beforeEach(() => {
       sandbox = sinon.sandbox.create();
