@@ -3,11 +3,11 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import { appActionTypes } from '../constants';
-import errorActions from './error_actions';
-import cfApi from '../util/cf_api';
-import poll from '../util/poll';
+import AppDispatcher from "../dispatcher";
+import { appActionTypes } from "../constants";
+import errorActions from "./error_actions";
+import cfApi from "../util/cf_api";
+import poll from "../util/poll";
 
 const appActions = {
   fetch(appGuid) {
@@ -20,7 +20,7 @@ const appActions = {
       .fetchApp(appGuid)
       .then(appActions.receivedApp)
       .catch(err => {
-        errorActions.importantDataFetchError(err, 'unable to fetch app');
+        errorActions.importantDataFetchError(err, "unable to fetch app");
       });
   },
 
@@ -76,7 +76,7 @@ const appActions = {
         appActions.fetchError(appGuid);
         return errorActions.importantDataFetchError(
           err,
-          'app usage data may be incomplete'
+          "app usage data may be incomplete"
         );
       });
   },
@@ -127,7 +127,7 @@ const appActions = {
     });
 
     return cfApi
-      .putApp(appGuid, { state: 'STARTED' })
+      .putApp(appGuid, { state: "STARTED" })
       .then(() => appActions.restarted(appGuid))
       .catch(err => appActions.error(appGuid, err));
   },

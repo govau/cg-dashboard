@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
 const propTypes = {
   userId: PropTypes.string.isRequired,
@@ -10,10 +10,10 @@ const propTypes = {
   onChange: PropTypes.func
 };
 
-const dangerousRole = 'org_manager';
+const dangerousRole = "org_manager";
 
 const warningMessage =
-  'Performing this action will remove your ability to adjust user roles! Are you sure you want to continue?';
+  "Performing this action will remove your ability to adjust user roles! Are you sure you want to continue?";
 
 export default class UserRoleControl extends React.Component {
   constructor(props, context) {

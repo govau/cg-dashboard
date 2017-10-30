@@ -1,5 +1,5 @@
-import BaseStore from './base_store';
-import { pageActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import { pageActionTypes } from "../constants";
 
 class PageStore extends BaseStore {
   constructor() {

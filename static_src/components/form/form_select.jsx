@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import FormElement from './form_element.jsx';
-import FormError from './form_error.jsx';
+import FormElement from "./form_element.jsx";
+import FormError from "./form_error.jsx";
 
 export default class FormSelect extends FormElement {
   constructor(props) {
     super(props);
 
     this.state = this.state || {};
-    this.state.value = '';
+    this.state.value = "";
     this.state.err = null;
   }
 

@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
-import { FormError } from './form';
-import PanelActions from './panel_actions.jsx';
-import formatRoute from '../util/format_route';
-import routeFormCss from '../css/route_form.css';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
+import { FormError } from "./form";
+import PanelActions from "./panel_actions.jsx";
+import formatRoute from "../util/format_route";
+import routeFormCss from "../css/route_form.css";
 
 const propTypes = {
   domains: PropTypes.array.isRequired,
@@ -48,7 +48,7 @@ export default class RouteForm extends React.Component {
     const newValue = {};
     newValue[event.target.name] = event.target.value;
 
-    if (event.target.name === 'domain_guid') {
+    if (event.target.name === "domain_guid") {
       newValue.domain_name = this.props.domains.find(
         domain => domain.guid === event.target.value
       ).name;
@@ -63,9 +63,9 @@ export default class RouteForm extends React.Component {
     Object.keys(this.state).forEach(key => {
       let value = this.state[key];
       // path needs to start with a / per the cf api docs
-      if (key === 'path' && !value) {
-        value = '';
-      } else if (key === 'path' && value[0] !== '/' && value !== '') {
+      if (key === "path" && !value) {
+        value = "";
+      } else if (key === "path" && value[0] !== "/" && value !== "") {
         value = `/${value}`;
       }
       payload[key] = value;
@@ -93,8 +93,8 @@ export default class RouteForm extends React.Component {
   }
 
   get submitActionText() {
-    if (this.props.route.guid) return 'OK';
-    return 'Create';
+    if (this.props.route.guid) return "OK";
+    return "Create";
   }
 
   render() {

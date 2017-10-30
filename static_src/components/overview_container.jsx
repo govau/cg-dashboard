@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { config, homePage } from 'skin';
-import EntityEmpty from './entity_empty.jsx';
-import Icon from './icon.jsx';
-import Loading from './loading.jsx';
-import OrgQuicklook from './org_quicklook.jsx';
-import OrgStore from '../stores/org_store';
-import PageHeader from './page_header.jsx';
-import PageStore from '../stores/page_store';
-import Panel from './panel.jsx';
-import SpaceStore from '../stores/space_store';
+import { config, homePage } from "skin";
+import EntityEmpty from "./entity_empty.jsx";
+import Icon from "./icon.jsx";
+import Loading from "./loading.jsx";
+import OrgQuicklook from "./org_quicklook.jsx";
+import OrgStore from "../stores/org_store";
+import PageHeader from "./page_header.jsx";
+import PageStore from "../stores/page_store";
+import Panel from "./panel.jsx";
+import SpaceStore from "../stores/space_store";
 
 function stateSetter() {
   const orgs = OrgStore.getAll() || [];

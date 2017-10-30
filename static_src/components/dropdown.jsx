@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import style from 'cloudgov-style/css/cloudgov-style.css';
+import style from "cloudgov-style/css/cloudgov-style.css";
 
-import classNames from 'classnames';
+import classNames from "classnames";
 
 const propTypes = {
   title: PropTypes.string.isRequired,

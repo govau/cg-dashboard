@@ -1,21 +1,21 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 /**
  * Renders a list of users.
  */
 
-import React from 'react';
+import React from "react";
 
-import Action from './action.jsx';
-import ComplexList from './complex_list.jsx';
-import ComplexListItem from './complex_list_item.jsx';
-import ElasticLine from './elastic_line.jsx';
-import ElasticLineItem from './elastic_line_item.jsx';
-import EntityEmpty from './entity_empty.jsx';
-import Loading from './loading.jsx';
-import PanelDocumentation from './panel_documentation.jsx';
-import UserRoleListControl from './user_role_list_control.jsx';
-import { config } from 'skin';
-import formatDateTime from '../util/format_date';
+import Action from "./action.jsx";
+import ComplexList from "./complex_list.jsx";
+import ComplexListItem from "./complex_list_item.jsx";
+import ElasticLine from "./elastic_line.jsx";
+import ElasticLineItem from "./elastic_line_item.jsx";
+import EntityEmpty from "./entity_empty.jsx";
+import Loading from "./loading.jsx";
+import PanelDocumentation from "./panel_documentation.jsx";
+import UserRoleListControl from "./user_role_list_control.jsx";
+import { config } from "skin";
+import formatDateTime from "../util/format_date";
 
 const propTypes = {
   users: PropTypes.array,
@@ -34,10 +34,10 @@ const propTypes = {
 
 const defaultProps = {
   users: [],
-  userType: 'space_users',
+  userType: "space_users",
   currentUserAccess: false,
   saving: false,
-  savingText: '',
+  savingText: "",
   empty: false,
   loading: false
 };
@@ -55,20 +55,20 @@ export default class UserList extends React.Component {
 
   get columns() {
     const columns = [
-      { label: 'User Name', key: 'username' },
-      { label: 'Roles', key: 'permissions' },
-      { label: 'Date Created', key: 'created_at' }
+      { label: "User Name", key: "username" },
+      { label: "Roles", key: "permissions" },
+      { label: "Date Created", key: "created_at" }
     ];
 
     if (this.props.onRemove) {
-      columns.push({ label: 'Actions', key: 'actions' });
+      columns.push({ label: "Actions", key: "actions" });
     }
 
     return columns;
   }
 
   get userTypePretty() {
-    return this.props.userType === 'org_users' ? 'Organization' : 'Space';
+    return this.props.userType === "org_users" ? "Organization" : "Space";
   }
 
   get inviteDocumentation() {
@@ -76,7 +76,7 @@ export default class UserList extends React.Component {
 
     return (
       <span>
-        To invite a user and give them roles, see{' '}
+        To invite a user and give them roles, see{" "}
         <a href={config.docs.invite_user}>Managing Teammates</a>.&nbsp;
         <b>
           Removing all roles does not remove a user from an organization. Users
@@ -92,7 +92,7 @@ export default class UserList extends React.Component {
       <PanelDocumentation description>
         <p>
           {this.userTypePretty} Managers can change these roles. For details
-          about these roles, see{' '}
+          about these roles, see{" "}
           <a href="https://docs.cloudfoundry.org/concepts/roles.html#roles">
             Cloud Foundry roles and permissions
           </a>.
@@ -139,10 +139,10 @@ export default class UserList extends React.Component {
               if (this.props.onRemove) {
                 let button = <span />;
                 if (this.props.currentUserAccess) {
-                  if (this.props.userType === 'org_users') {
-                    buttonText = 'Remove User From Org';
-                  } else if (this.props.userType === 'space_users') {
-                    buttonText = 'Remove All Space Roles';
+                  if (this.props.userType === "org_users") {
+                    buttonText = "Remove User From Org";
+                  } else if (this.props.userType === "space_users") {
+                    buttonText = "Remove All Space Roles";
                   }
                   button = (
                     <Action

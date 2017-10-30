@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import PanelDocumentation from './panel_documentation.jsx';
+import PropTypes from "prop-types";
+import React from "react";
+import PanelDocumentation from "./panel_documentation.jsx";
 
 const propTypes = {
   callout: PropTypes.node,

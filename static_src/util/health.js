@@ -1,4 +1,4 @@
-import { appStates, entityHealth } from '../constants';
+import { appStates, entityHealth } from "../constants";
 
 const HEALTHY_STATES = [entityHealth.inactive, entityHealth.ok];
 
@@ -21,7 +21,7 @@ const APP_INSTANCE_STATE_RANKED = [
 
 export function appHealth(app) {
   if (!app) {
-    throw new Error('`app` must be provided.');
+    throw new Error("`app` must be provided.");
   }
 
   if (

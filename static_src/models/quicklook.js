@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
 const defaults = {
   error: null,
@@ -7,6 +7,6 @@ const defaults = {
 };
 
 /* eslint-disable new-cap */
-export default class Quicklook extends Immutable.Record(defaults, 'Quicklook') {
+export default class Quicklook extends Immutable.Record(defaults, "Quicklook") {
   /* eslint-enable new-cap */
 }

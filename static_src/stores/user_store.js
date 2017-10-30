@@ -3,17 +3,17 @@
  * server.
  */
 
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import BaseStore from './base_store';
-import { userActionTypes, errorActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import { userActionTypes, errorActionTypes } from "../constants";
 
 export class UserStore extends BaseStore {
   constructor() {
     super();
     this.subscribe(() => this._registerToActions.bind(this));
     this._data = new Immutable.List();
-    this._currentViewedType = 'space_users';
+    this._currentViewedType = "space_users";
     this._currentUserGuid = null;
     this._currentUserIsAdmin = false;
     this._error = null;
@@ -55,7 +55,7 @@ export class UserStore extends BaseStore {
         this.associateUsersAndRolesToEntity(
           action.orgUserRoles,
           action.orgGuid,
-          'organization_roles'
+          "organization_roles"
         );
         this.emitChange();
         break;
@@ -68,7 +68,7 @@ export class UserStore extends BaseStore {
         this._loading.entityRoles = false;
 
         const { users, spaceGuid } = action;
-        this.associateUsersAndRolesToEntity(users, spaceGuid, 'space_roles');
+        this.associateUsersAndRolesToEntity(users, spaceGuid, "space_roles");
         this.emitChange();
         break;
       }
@@ -101,7 +101,7 @@ export class UserStore extends BaseStore {
         this.associateUsersAndRolesToEntity(
           [user],
           action.entityGuid,
-          'organization_roles'
+          "organization_roles"
         );
         this.emitChange();
         break;
@@ -116,7 +116,7 @@ export class UserStore extends BaseStore {
         this.associateUsersAndRolesToEntity(
           [user],
           action.entityGuid,
-          'space_roles'
+          "space_roles"
         );
         this.emitChange();
         break;
@@ -149,7 +149,7 @@ export class UserStore extends BaseStore {
             ...user,
             saving: true
           };
-          this.merge('guid', savingUser);
+          this.merge("guid", savingUser);
         }
         this.emitChange();
         break;
@@ -178,7 +178,7 @@ export class UserStore extends BaseStore {
           orgGuid
         }));
 
-        this.mergeMany('guid', updatedUsers, changed => {
+        this.mergeMany("guid", updatedUsers, changed => {
           if (changed) {
             this._error = null;
           }
@@ -203,7 +203,7 @@ export class UserStore extends BaseStore {
       case userActionTypes.USER_REMOVED_ALL_SPACE_ROLES: {
         const user = this.get(action.userGuid);
         if (user) {
-          this.deleteProp(action.userGuid, 'space_roles', () =>
+          this.deleteProp(action.userGuid, "space_roles", () =>
             this.emitChange()
           );
         }
@@ -262,7 +262,7 @@ export class UserStore extends BaseStore {
           ...action.currentUser,
           guid
         };
-        this.merge('guid', userInfo, () => {
+        this.merge("guid", userInfo, () => {
           this._currentUserGuid = guid;
 
           // Always emit change
@@ -282,7 +282,7 @@ export class UserStore extends BaseStore {
           // then return is false.
           // If there is a proper response, then the return is true.
           this._currentUserIsAdmin = !!uaaInfo.groups.find(
-            group => group.display === 'cloud_controller.admin'
+            group => group.display === "cloud_controller.admin"
           );
         }
 
@@ -292,7 +292,7 @@ export class UserStore extends BaseStore {
       }
 
       case userActionTypes.USER_FETCH: {
-        this.merge('guid', { guid: action.userGuid, fetching: true });
+        this.merge("guid", { guid: action.userGuid, fetching: true });
         break;
       }
 
@@ -302,7 +302,7 @@ export class UserStore extends BaseStore {
           fetching: false
         };
         if (action.user) {
-          this.merge('guid', receivedUser, () => this.emitChange());
+          this.merge("guid", receivedUser, () => this.emitChange());
         }
         break;
       }
@@ -344,13 +344,13 @@ export class UserStore extends BaseStore {
 
   associateUsersAndRolesToEntity(users, entityGuid, roleType) {
     const updatedUsers = this.mergeRoles(users, entityGuid, roleType);
-    this.mergeMany('guid', updatedUsers, () => {});
+    this.mergeMany("guid", updatedUsers, () => {});
   }
 
   addUserRole(user, entityType, entityGuid, addedRole, cb) {
     const updatedUser = user;
     if (updatedUser) {
-      if (entityType === 'space') {
+      if (entityType === "space") {
         if (!updatedUser.space_roles) updatedUser.space_roles = {};
         const updatedRoles = new Set(user.space_roles[entityGuid] || []);
         updatedRoles.add(addedRole);
@@ -361,7 +361,7 @@ export class UserStore extends BaseStore {
         updatedRoles.add(addedRole);
         updatedUser.roles[entityGuid] = Array.from(updatedRoles);
       }
-      this.merge('guid', updatedUser, () => {});
+      this.merge("guid", updatedUser, () => {});
       cb();
     }
   }
@@ -370,7 +370,7 @@ export class UserStore extends BaseStore {
     const updatedUser = user;
     if (updatedUser) {
       let roles;
-      if (entityType === 'space') {
+      if (entityType === "space") {
         roles = updatedUser.space_roles && updatedUser.space_roles[entityGuid];
       } else {
         roles = updatedUser.roles && updatedUser.roles[entityGuid];
@@ -381,7 +381,7 @@ export class UserStore extends BaseStore {
           roles.splice(idx, 1);
         }
       }
-      this.merge('guid', updatedUser, () => {});
+      this.merge("guid", updatedUser, () => {});
       cb();
     }
   }
@@ -392,14 +392,14 @@ export class UserStore extends BaseStore {
   getAllInSpace(spaceGuid) {
     const usersInSpace = this._data.filter(
       user =>
-        !!user.get('space_roles') && !!user.get('space_roles').get(spaceGuid)
+        !!user.get("space_roles") && !!user.get("space_roles").get(spaceGuid)
     );
     return usersInSpace.toJS();
   }
 
   getAllInOrg(orgGuid) {
     const usersInOrg = this._data.filter(
-      user => !!user.get('roles') && !!user.get('roles').get(orgGuid)
+      user => !!user.get("roles") && !!user.get("roles").get(orgGuid)
     );
 
     return usersInOrg.toJS();
@@ -430,7 +430,7 @@ export class UserStore extends BaseStore {
       };
       const updatingRoles = role[entityType] || [];
 
-      if (entityType === 'space_roles') {
+      if (entityType === "space_roles") {
         if (!user.space_roles) user.space_roles = {};
         user.space_roles[entityGuid] = updatingRoles;
       } else {

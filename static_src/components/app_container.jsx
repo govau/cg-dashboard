@@ -1,30 +1,30 @@
-import React from 'react';
+import React from "react";
 
-import Action from './action.jsx';
-import ActivityLog from './activity_log.jsx';
-import { appHealth, worstAppInstanceState } from '../util/health';
-import { appStates } from '../constants';
-import { config } from 'skin';
-import AppStore from '../stores/app_store';
-import Breadcrumbs from './breadcrumbs';
-import DomainStore from '../stores/domain_store';
-import EnvStore from '../stores/env_store';
-import RouteStore from '../stores/route_store';
-import EntityIcon from './entity_icon.jsx';
-import SystemErrorMessage from './system_error_message.jsx';
-import Loading from './loading.jsx';
-import OrgStore from '../stores/org_store';
-import QuotaStore from '../stores/quota_store';
-import RoutesPanel from './routes_panel.jsx';
-import EnvPanel from './env/env_panel';
-import PageHeader from './page_header.jsx';
-import Panel from './panel.jsx';
-import ServiceInstancePanel from './service_instance_panel.jsx';
-import UPSIPanel from './upsi/upsi_panel';
-import SpaceStore from '../stores/space_store';
-import UPSIStore from '../stores/upsi_store';
-import UsageLimits from './usage_and_limits.jsx';
-import appActions from '../actions/app_actions';
+import Action from "./action.jsx";
+import ActivityLog from "./activity_log.jsx";
+import { appHealth, worstAppInstanceState } from "../util/health";
+import { appStates } from "../constants";
+import { config } from "skin";
+import AppStore from "../stores/app_store";
+import Breadcrumbs from "./breadcrumbs";
+import DomainStore from "../stores/domain_store";
+import EnvStore from "../stores/env_store";
+import RouteStore from "../stores/route_store";
+import EntityIcon from "./entity_icon.jsx";
+import SystemErrorMessage from "./system_error_message.jsx";
+import Loading from "./loading.jsx";
+import OrgStore from "../stores/org_store";
+import QuotaStore from "../stores/quota_store";
+import RoutesPanel from "./routes_panel.jsx";
+import EnvPanel from "./env/env_panel";
+import PageHeader from "./page_header.jsx";
+import Panel from "./panel.jsx";
+import ServiceInstancePanel from "./service_instance_panel.jsx";
+import UPSIPanel from "./upsi/upsi_panel";
+import SpaceStore from "../stores/space_store";
+import UPSIStore from "../stores/upsi_store";
+import UsageLimits from "./usage_and_limits.jsx";
+import appActions from "../actions/app_actions";
 
 function appReady(app) {
   return !!app && !!app.name;
@@ -156,10 +156,10 @@ export default class AppContainer extends React.Component {
     let loading;
 
     let handler = this._onRestart;
-    let actionText = 'Restart app';
+    let actionText = "Restart app";
     if (!AppStore.isRunning(this.state.app)) {
       handler = this._onStart;
-      actionText = 'Start app';
+      actionText = "Start app";
     }
 
     if (AppStore.isStarting(this.state.app)) {

@@ -2,13 +2,13 @@
  * Store for org data. Will store and update org data on changes from UI and
  * server.
  */
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import AppDispatcher from '../dispatcher';
-import BaseStore from './base_store';
-import LoginStore from './login_store';
-import { orgActionTypes } from '../constants';
-import Quicklook from '../models/quicklook';
+import AppDispatcher from "../dispatcher";
+import BaseStore from "./base_store";
+import LoginStore from "./login_store";
+import { orgActionTypes } from "../constants";
+import Quicklook from "../models/quicklook";
 
 export const orgPropType = PropTypes.shape({
   guid: PropTypes.string.isRequired,
@@ -22,7 +22,7 @@ export class OrgStore extends BaseStore {
     this._currentOrgGuid = null;
     this._fetchOrg = false;
     this._fetchAll = false;
-    this._cfName = 'org_users';
+    this._cfName = "org_users";
   }
 
   get loading() {
@@ -46,7 +46,7 @@ export class OrgStore extends BaseStore {
 
       case orgActionTypes.ORG_RECEIVED: {
         this._fetchOrg = false;
-        this.merge('guid', action.org || {}, () => {
+        this.merge("guid", action.org || {}, () => {
           // Emit change regardless because loading state is updated
           this.emitChange();
         });
@@ -63,15 +63,15 @@ export class OrgStore extends BaseStore {
           const org = this.get(d.guid);
           return Object.assign(d, { spaces: (org && org.spaces) || [] });
         });
-        this.mergeMany('guid', updates);
+        this.mergeMany("guid", updates);
         break;
       }
 
       case orgActionTypes.ORGS_SUMMARIES_RECEIVED: {
-        this.mergeMany('guid', action.orgs, changed => {
+        this.mergeMany("guid", action.orgs, changed => {
           if (changed) {
             const orgUpdates = this.updateOpenOrgs(this._currentOrgGuid);
-            this.mergeMany('guid', orgUpdates, () => {});
+            this.mergeMany("guid", orgUpdates, () => {});
           }
         });
         this.emitChange();
@@ -81,7 +81,7 @@ export class OrgStore extends BaseStore {
       case orgActionTypes.ORG_TOGGLE_SPACE_MENU: {
         this._currentOrgGuid = action.orgGuid;
         const updates = this.updateOpenOrgs(action.orgGuid);
-        this.mergeMany('guid', updates, changed => {
+        this.mergeMany("guid", updates, changed => {
           if (changed) this.emitChange();
         });
         break;
@@ -98,7 +98,7 @@ export class OrgStore extends BaseStore {
           ...org,
           quicklook: orgQuicklook.merge({ open: !orgQuicklook.open })
         };
-        this.merge('guid', toggledOrg);
+        this.merge("guid", toggledOrg);
         break;
       }
 
@@ -113,7 +113,7 @@ export class OrgStore extends BaseStore {
           ...org,
           quicklook: orgQuicklook.merge({ isLoaded: true, error: null })
         };
-        this.merge('guid', toggledOrg);
+        this.merge("guid", toggledOrg);
         break;
       }
 
@@ -128,7 +128,7 @@ export class OrgStore extends BaseStore {
           ...org,
           quicklook: orgQuicklook.merge({ isLoaded: true, error: action.error })
         };
-        this.merge('guid', toggledOrg);
+        this.merge("guid", toggledOrg);
         break;
       }
 
@@ -151,7 +151,7 @@ export class OrgStore extends BaseStore {
 
   get currentOrgName() {
     const org = this.get(this._currentOrgGuid);
-    if (!org) return '';
+    if (!org) return "";
     return org.name;
   }
 

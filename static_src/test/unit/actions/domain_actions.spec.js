@@ -1,9 +1,9 @@
-import AppDispatcher from '../../../dispatcher';
-import { assertAction, setupViewSpy, setupServerSpy } from '../helpers';
-import domainActions from '../../../actions/domain_actions';
-import { domainActionTypes } from '../../../constants';
+import AppDispatcher from "../../../dispatcher";
+import { assertAction, setupViewSpy, setupServerSpy } from "../helpers";
+import domainActions from "../../../actions/domain_actions";
+import { domainActionTypes } from "../../../constants";
 
-describe('domainActions', function() {
+describe("domainActions", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -14,9 +14,9 @@ describe('domainActions', function() {
     sandbox.restore();
   });
 
-  describe('fetch()', function() {
-    it('should dispatch a view event of type domain fetch', function() {
-      let expectedDomainGuid = 'xzzzasdflkjz',
+  describe("fetch()", function() {
+    it("should dispatch a view event of type domain fetch", function() {
+      let expectedDomainGuid = "xzzzasdflkjz",
         expectedParams = {
           domainGuid: expectedDomainGuid
         };
@@ -29,9 +29,9 @@ describe('domainActions', function() {
     });
   });
 
-  describe('receivedDomain()', function() {
-    it('should dispatch a view event of type domain resceived', function() {
-      let expected = { guid: 'asdfavcx1z13c5', name: 'al.gov' },
+  describe("receivedDomain()", function() {
+    it("should dispatch a view event of type domain resceived", function() {
+      let expected = { guid: "asdfavcx1z13c5", name: "al.gov" },
         expectedParams = {
           domain: expected
         };

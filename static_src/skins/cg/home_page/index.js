@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import Panel from 'dashboard/components/panel.jsx';
-import PanelGroup from 'dashboard/components/panel_group.jsx';
-import InfoActivities from './info_activities.jsx';
-import InfoEnvironments from './info_environments.jsx';
-import InfoSandbox from './info_sandbox.jsx';
-import InfoStructure from './info_structure.jsx';
+import Panel from "dashboard/components/panel.jsx";
+import PanelGroup from "dashboard/components/panel_group.jsx";
+import InfoActivities from "./info_activities.jsx";
+import InfoEnvironments from "./info_environments.jsx";
+import InfoSandbox from "./info_sandbox.jsx";
+import InfoStructure from "./info_structure.jsx";
 
 export const panels = [
   () => (

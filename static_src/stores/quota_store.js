@@ -2,11 +2,11 @@
  * Store for quota data.
  */
 
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import BaseStore from './base_store';
-import cfApi from '../util/cf_api';
-import { quotaActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import cfApi from "../util/cf_api";
+import { quotaActionTypes } from "../constants";
 
 class QuotaStore extends BaseStore {
   constructor() {
@@ -25,7 +25,7 @@ class QuotaStore extends BaseStore {
 
       case quotaActionTypes.ORGS_QUOTAS_RECEIVED: {
         const quotas = action.quotas;
-        this.mergeMany('guid', quotas, changed => {
+        this.mergeMany("guid", quotas, changed => {
           if (changed) this.emitChange();
         });
         break;
@@ -39,7 +39,7 @@ class QuotaStore extends BaseStore {
 
       case quotaActionTypes.SPACES_QUOTAS_RECEIVED: {
         const quotas = action.quotas;
-        this.mergeMany('guid', quotas, changed => {
+        this.mergeMany("guid", quotas, changed => {
           if (changed) this.emitChange();
         });
         break;

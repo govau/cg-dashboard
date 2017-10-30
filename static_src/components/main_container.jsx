@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import userProvider from './user_provider.jsx';
-import Disclaimer from './header/disclaimer';
-import Footer from './footer.jsx';
-import GlobalErrorContainer from './global_error_container.jsx';
-import Header from './header';
-import LoginStore from '../stores/login_store';
-import OrgStore from '../stores/org_store';
-import SpaceStore from '../stores/space_store';
-import { Nav } from './navbar.jsx';
+import React from "react";
+import PropTypes from "prop-types";
+import userProvider from "./user_provider.jsx";
+import Disclaimer from "./header/disclaimer";
+import Footer from "./footer.jsx";
+import GlobalErrorContainer from "./global_error_container.jsx";
+import Header from "./header";
+import LoginStore from "../stores/login_store";
+import OrgStore from "../stores/org_store";
+import SpaceStore from "../stores/space_store";
+import { Nav } from "./navbar.jsx";
 
 const propTypes = {
   children: PropTypes.any

@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import CountStatus from './count_status.jsx';
-import ServiceInstanceStore from '../stores/service_instance_store';
-import { entityHealth } from '../constants';
-import { appInstanceHealth, worstAppInstanceState } from '../util/health';
+import PropTypes from "prop-types";
+import React from "react";
+import CountStatus from "./count_status.jsx";
+import ServiceInstanceStore from "../stores/service_instance_store";
+import { entityHealth } from "../constants";
+import { appInstanceHealth, worstAppInstanceState } from "../util/health";
 
 const propTypes = {
   serviceCount: PropTypes.number,

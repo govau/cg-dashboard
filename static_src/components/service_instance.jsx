@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
-import ConfirmationBox from './confirmation_box.jsx';
-import ElasticLine from './elastic_line.jsx';
-import ElasticLineItem from './elastic_line_item.jsx';
-import FormError from './form/form_error.jsx';
-import Loading from './loading.jsx';
-import ServicePlanStore from '../stores/service_plan_store';
-import ServiceInstanceStore from '../stores/service_instance_store';
-import serviceActions from '../actions/service_actions';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
+import ConfirmationBox from "./confirmation_box.jsx";
+import ElasticLine from "./elastic_line.jsx";
+import ElasticLineItem from "./elastic_line_item.jsx";
+import FormError from "./form/form_error.jsx";
+import Loading from "./loading.jsx";
+import ServicePlanStore from "../stores/service_plan_store";
+import ServiceInstanceStore from "../stores/service_instance_store";
+import serviceActions from "../actions/service_actions";
 
-import { OPERATION_FAILED } from '../stores/service_instance_store';
+import { OPERATION_FAILED } from "../stores/service_instance_store";
 
 const propTypes = {
   currentAppGuid: PropTypes.string.isRequired,
@@ -72,7 +72,7 @@ export default class ServiceInstance extends React.Component {
     if (instanceState === OPERATION_FAILED) {
       content = (
         <span
-          style={{ marginLeft: '0.5rem', display: 'inline' }}
+          style={{ marginLeft: "0.5rem", display: "inline" }}
           className="error_message"
         >
           {ServiceInstanceStore.getInstanceReadableState(
@@ -86,11 +86,11 @@ export default class ServiceInstance extends React.Component {
   }
 
   get cost() {
-    if (!this.props.serviceInstance.servicePlan) return '';
+    if (!this.props.serviceInstance.servicePlan) return "";
     const cost = ServicePlanStore.getCost(
       this.props.serviceInstance.servicePlan
     );
-    if (cost === 0) return 'Free';
+    if (cost === 0) return "Free";
     return `$${cost.toFixed(2)} monthly`;
   }
 
@@ -129,7 +129,7 @@ export default class ServiceInstance extends React.Component {
 
   get confirmation() {
     if (this.props.serviceInstance.changing) {
-      const style = { color: '#595959' };
+      const style = { color: "#595959" };
       const message = (
         <div>
           <h3 style={style}>
@@ -174,7 +174,7 @@ export default class ServiceInstance extends React.Component {
       const statusClass =
         ServiceInstanceStore.getInstanceState(this.props.serviceInstance) ===
         OPERATION_FAILED
-          ? 'form-error'
+          ? "form-error"
           : null;
 
       if (confirmation) {

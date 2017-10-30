@@ -1,9 +1,9 @@
-import { assertAction, setupViewSpy, setupServerSpy } from '../helpers';
-import cfApi from '../../../util/cf_api';
-import activityActions from '../../../actions/activity_actions';
-import { activityActionTypes } from '../../../constants';
+import { assertAction, setupViewSpy, setupServerSpy } from "../helpers";
+import cfApi from "../../../util/cf_api";
+import activityActions from "../../../actions/activity_actions";
+import { activityActionTypes } from "../../../constants";
 
-describe('activityActions', () => {
+describe("activityActions", () => {
   let sandbox;
 
   beforeEach(() => {
@@ -14,8 +14,8 @@ describe('activityActions', () => {
     sandbox.restore();
   });
 
-  describe('space events', () => {
-    describe('.fetchSpaceEvents()', () => {
+  describe("space events", () => {
+    describe(".fetchSpaceEvents()", () => {
       let viewSpy,
         fetchSpaceEventsStub,
         expectedParams,
@@ -23,7 +23,7 @@ describe('activityActions', () => {
         receivedSpaceEventsStub;
 
       beforeEach(function(done) {
-        const spaceGuid = 'adsfa';
+        const spaceGuid = "adsfa";
         expectedParams = {
           spaceGuid
         };
@@ -32,30 +32,30 @@ describe('activityActions', () => {
 
         viewSpy = setupViewSpy(sandbox);
         fetchSpaceEventsStub = sandbox
-          .stub(cfApi, 'fetchSpaceEvents')
+          .stub(cfApi, "fetchSpaceEvents")
           .returns(Promise.resolve(expectedEvents));
         receivedSpaceEventsStub = sandbox
-          .stub(activityActions, 'receivedSpaceEvents')
+          .stub(activityActions, "receivedSpaceEvents")
           .returns(Promise.resolve());
 
         activityActions.fetchSpaceEvents(spaceGuid).then(done, done.fail);
       });
 
-      it('should dispatch a EVENTS_FETCH view action', () => {
+      it("should dispatch a EVENTS_FETCH view action", () => {
         assertAction(viewSpy, activityActionTypes.EVENTS_FETCH, expectedParams);
       });
 
-      it('should call cfApi.fetchSpaceEvents', function() {
+      it("should call cfApi.fetchSpaceEvents", function() {
         expect(fetchSpaceEventsStub).toHaveBeenCalledOnce();
       });
 
-      it('should call receivedSpaceEvents', function() {
+      it("should call receivedSpaceEvents", function() {
         expect(receivedSpaceEventsStub).toHaveBeenCalledWith(expectedEvents);
       });
     });
 
-    it('should dispatch a EVENTS_RECEIVED server action', () => {
-      const events = ['event-one', 'event-two', 'event-three'],
+    it("should dispatch a EVENTS_RECEIVED server action", () => {
+      const events = ["event-one", "event-two", "event-three"],
         expectedParams = {
           events
         };
@@ -67,8 +67,8 @@ describe('activityActions', () => {
     });
   });
 
-  describe('app logs', () => {
-    describe('.fetchAppLogs()', () => {
+  describe("app logs", () => {
+    describe(".fetchAppLogs()", () => {
       let appGuid,
         viewSpy,
         fetchAppLogsStub,
@@ -77,7 +77,7 @@ describe('activityActions', () => {
         expectedLogs;
 
       beforeEach(done => {
-        appGuid = 'adsfa';
+        appGuid = "adsfa";
         expectedParams = {
           appGuid
         };
@@ -85,31 +85,31 @@ describe('activityActions', () => {
 
         viewSpy = setupViewSpy(sandbox);
         fetchAppLogsStub = sandbox
-          .stub(cfApi, 'fetchAppLogs')
+          .stub(cfApi, "fetchAppLogs")
           .returns(Promise.resolve(expectedLogs));
         receivedAppLogsStub = sandbox
-          .stub(activityActions, 'receivedAppLogs')
+          .stub(activityActions, "receivedAppLogs")
           .returns(Promise.resolve());
 
         activityActions.fetchAppLogs(appGuid).then(done, done.fail);
       });
 
-      it('should dispatch a LOGS_FETCH view action', () => {
+      it("should dispatch a LOGS_FETCH view action", () => {
         assertAction(viewSpy, activityActionTypes.LOGS_FETCH, expectedParams);
       });
 
-      it('should call cfApi.fetchAppLogs', function() {
+      it("should call cfApi.fetchAppLogs", function() {
         expect(fetchAppLogsStub).toHaveBeenCalledOnce();
       });
 
-      it('should call receivedAppLogs', () => {
+      it("should call receivedAppLogs", () => {
         expect(receivedAppLogsStub).toHaveBeenCalledWith(appGuid, expectedLogs);
       });
     });
 
-    it('should dispatch a LOGS_RECEIVED server action', () => {
-      const appGuid = 'app-one',
-        logs = ['logs-one', 'logs-two', 'logs-three'],
+    it("should dispatch a LOGS_RECEIVED server action", () => {
+      const appGuid = "app-one",
+        logs = ["logs-one", "logs-two", "logs-three"],
         expectedParams = {
           appGuid,
           logs

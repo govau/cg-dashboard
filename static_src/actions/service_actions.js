@@ -6,11 +6,11 @@
 // TODO consider splitting this up into separate files for bind, instance, and
 // plan actions similar to how stores are divided
 
-import AppDispatcher from '../dispatcher';
-import cfApi from '../util/cf_api';
-import errorActions from './error_actions';
-import { serviceActionTypes } from '../constants';
-import ServiceInstanceStore from '../stores/service_instance_store';
+import AppDispatcher from "../dispatcher";
+import cfApi from "../util/cf_api";
+import errorActions from "./error_actions";
+import { serviceActionTypes } from "../constants";
+import ServiceInstanceStore from "../stores/service_instance_store";
 
 const formatError = error => {
   const { response } = error;
@@ -35,7 +35,7 @@ const serviceActions = {
         ).then(() => services);
       })
       .catch(err =>
-        errorActions.importantDataFetchError(err, 'unable to fetch marketplace')
+        errorActions.importantDataFetchError(err, "unable to fetch marketplace")
       );
   },
 
@@ -80,7 +80,7 @@ const serviceActions = {
       .catch(err =>
         errorActions.importantDataFetchError(
           err,
-          'unable to fetch service plans'
+          "unable to fetch service plans"
         )
       );
   },
@@ -113,7 +113,7 @@ const serviceActions = {
           .catch(err => {
             errorActions.importantDataFetchError(
               err,
-              'unable to fetch service plans'
+              "unable to fetch service plans"
             );
             // Still return completed service instances
             return serviceInstances;
@@ -122,7 +122,7 @@ const serviceActions = {
       .catch(err =>
         errorActions.importantDataFetchError(
           err,
-          'unable to fetch service instances'
+          "unable to fetch service instances"
         )
       );
   },
@@ -288,7 +288,7 @@ const serviceActions = {
       .fetchServiceBindings(appGuid)
       .then(serviceActions.receivedServiceBindings)
       .catch(err =>
-        errorActions.importantDataFetchError(err, 'unable to fetch services')
+        errorActions.importantDataFetchError(err, "unable to fetch services")
       );
   },
 

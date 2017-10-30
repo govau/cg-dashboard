@@ -2,11 +2,11 @@
  * Includes basic functionality that all stores need.
  */
 
-import { EventEmitter } from 'events';
-import Immutable from 'immutable';
+import { EventEmitter } from "events";
+import Immutable from "immutable";
 
-import AppDispatcher from '../dispatcher';
-import LoadingStatus from '../util/loading_status';
+import AppDispatcher from "../dispatcher";
+import LoadingStatus from "../util/loading_status";
 
 const MAX_LISTENERS = 35;
 export const MAX_LISTENERS_THRESHOLD = 35;
@@ -22,8 +22,8 @@ export default class BaseStore extends EventEmitter {
     super();
 
     this._loadingStatus = new LoadingStatus();
-    this._loadingStatus.on('loading', () => this.emitChange());
-    this._loadingStatus.on('loaded', () => this.emitChange());
+    this._loadingStatus.on("loading", () => this.emitChange());
+    this._loadingStatus.on("loaded", () => this.emitChange());
     this._data = new Immutable.List();
     this.listenerCount = 0;
 
@@ -60,7 +60,7 @@ export default class BaseStore extends EventEmitter {
 
   get(guid) {
     if (guid && !this.isEmpty()) {
-      const item = this._data.find(space => space.get('guid') === guid);
+      const item = this._data.find(space => space.get("guid") === guid);
 
       if (item) {
         return item.toJS();
@@ -79,7 +79,7 @@ export default class BaseStore extends EventEmitter {
   }
 
   deleteProp(guid, prop, cb = defaultChangedCallback.bind(this)) {
-    const index = this._data.findIndex(d => d.get('guid') === guid);
+    const index = this._data.findIndex(d => d.get("guid") === guid);
 
     if (index === -1) {
       return cb(false);
@@ -90,7 +90,7 @@ export default class BaseStore extends EventEmitter {
   }
 
   delete(guid, cb = defaultChangedCallback.bind(this)) {
-    const index = this._data.findIndex(d => d.get('guid') === guid);
+    const index = this._data.findIndex(d => d.get("guid") === guid);
 
     if (index === -1) {
       return cb(false);
@@ -111,7 +111,7 @@ export default class BaseStore extends EventEmitter {
   }
 
   emitChange() {
-    this.emit('CHANGE');
+    this.emit("CHANGE");
   }
 
   addChangeListener(cb) {
@@ -129,11 +129,11 @@ export default class BaseStore extends EventEmitter {
       /* eslint-enable no-console */
     }
 
-    this.on('CHANGE', cb);
+    this.on("CHANGE", cb);
   }
 
   removeChangeListener(cb) {
-    this.removeListener('CHANGE', cb);
+    this.removeListener("CHANGE", cb);
     this.listenerCount--;
   }
 

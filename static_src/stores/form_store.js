@@ -1,5 +1,5 @@
-import BaseStore from './base_store';
-import { formActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import { formActionTypes } from "../constants";
 
 export class FormStore extends BaseStore {
   constructor() {
@@ -41,7 +41,7 @@ export class FormStore extends BaseStore {
         };
 
         form.fields[action.fieldName] = changedFormField;
-        this.merge('guid', form);
+        this.merge("guid", form);
         break;
       }
 
@@ -54,7 +54,7 @@ export class FormStore extends BaseStore {
         };
 
         form.fields[action.fieldName] = changedFormField;
-        this.merge('guid', form);
+        this.merge("guid", form);
         break;
       }
 
@@ -67,7 +67,7 @@ export class FormStore extends BaseStore {
         };
 
         form.fields[action.fieldName] = changedFormField;
-        this.merge('guid', form);
+        this.merge("guid", form);
         break;
       }
 

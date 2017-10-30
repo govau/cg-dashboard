@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { config } from 'skin';
+import { config } from "skin";
 
 export default class Header extends React.Component {
   render() {

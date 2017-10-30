@@ -3,13 +3,13 @@
  * server.
  */
 
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import BaseStore from './base_store';
-import DomainStore from './domain_store';
-import cfApi from '../util/cf_api';
-import formatRoute from '../util/format_route';
-import { routeActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import DomainStore from "./domain_store";
+import cfApi from "../util/cf_api";
+import formatRoute from "../util/format_route";
+import { routeActionTypes } from "../constants";
 
 class RouteStore extends BaseStore {
   constructor() {
@@ -25,7 +25,7 @@ class RouteStore extends BaseStore {
   }
 
   mergeRoutes(routes) {
-    this.mergeMany('guid', routes, changed => {
+    this.mergeMany("guid", routes, changed => {
       if (changed) this.emitChange();
       routes.forEach(route => {
         if (/shared_domains/.test(route.domain_url)) {
@@ -57,8 +57,8 @@ class RouteStore extends BaseStore {
           domain_name: domain.name
         };
       }
-      if (route.path && route.path[0] === '/') {
-        mainRoute.path = route.path.replace('/', '');
+      if (route.path && route.path[0] === "/") {
+        mainRoute.path = route.path.replace("/", "");
       }
       const { domain_name, host, path } = mainRoute;
       url = formatRoute(domain_name, host, path);
@@ -80,9 +80,9 @@ class RouteStore extends BaseStore {
         if (route) {
           const newRoute = {
             ...route,
-            loading: 'Binding'
+            loading: "Binding"
           };
-          this.merge('guid', newRoute, () => this.emitChange());
+          this.merge("guid", newRoute, () => this.emitChange());
         }
         break;
       }
@@ -96,7 +96,7 @@ class RouteStore extends BaseStore {
           loading: false,
           error: null
         };
-        this.merge('guid', newRoute, () => {
+        this.merge("guid", newRoute, () => {
           this.showCreateRouteForm = false;
           this.error = null;
           this.emitChange();
@@ -110,9 +110,9 @@ class RouteStore extends BaseStore {
         if (route) {
           const newRoute = {
             ...route,
-            loading: 'Unbinding'
+            loading: "Unbinding"
           };
-          this.merge('guid', newRoute, () => this.emitChange());
+          this.merge("guid", newRoute, () => this.emitChange());
         }
         break;
       }
@@ -126,7 +126,7 @@ class RouteStore extends BaseStore {
             loading: false,
             removing: false
           };
-          this.merge('guid', newRoute, () => this.emitChange());
+          this.merge("guid", newRoute, () => this.emitChange());
         }
         break;
       }
@@ -175,7 +175,7 @@ class RouteStore extends BaseStore {
 
       case routeActionTypes.ROUTE_CREATED: {
         const route = action.route;
-        this.merge('guid', route, () => this.emitChange());
+        this.merge("guid", route, () => this.emitChange());
         break;
       }
 
@@ -215,7 +215,7 @@ class RouteStore extends BaseStore {
           editing: !route.editing,
           error: null
         };
-        this.merge('guid', newRoute, changed => {
+        this.merge("guid", newRoute, changed => {
           if (changed) this.emitChange();
         });
         break;
@@ -227,7 +227,7 @@ class RouteStore extends BaseStore {
           ...route,
           removing: !route.removing
         };
-        this.merge('guid', newRoute, changed => {
+        this.merge("guid", newRoute, changed => {
           if (changed) this.emitChange();
         });
         break;
@@ -240,9 +240,9 @@ class RouteStore extends BaseStore {
         if (currentRoute) {
           const newRoute = {
             ...currentRoute,
-            loading: 'Editing'
+            loading: "Editing"
           };
-          this.merge('guid', newRoute, () => this.emitChange());
+          this.merge("guid", newRoute, () => this.emitChange());
         }
         break;
       }
@@ -254,7 +254,7 @@ class RouteStore extends BaseStore {
           error: null,
           loading: false
         };
-        this.merge('guid', route, () => {
+        this.merge("guid", route, () => {
           this.emitChange();
         });
         break;
@@ -268,7 +268,7 @@ class RouteStore extends BaseStore {
           error: action.error,
           loading: null
         };
-        this.merge('guid', newRoute, changed => {
+        this.merge("guid", newRoute, changed => {
           if (changed) this.emitChange();
         });
         break;

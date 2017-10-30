@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
-import ConfirmationBox from './confirmation_box.jsx';
-import formatDateTime from '../util/format_date';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
+import ConfirmationBox from "./confirmation_box.jsx";
+import formatDateTime from "../util/format_date";
 
 const propTypes = {
   instance: PropTypes.object,
@@ -51,8 +51,8 @@ class ServiceInstanceTableRow extends React.Component {
     const { last_operation: lastOp } = instance;
     const lastOpTime = lastOp.updated_at || lastOp.created_at;
     const specialtdStyles = {
-      whiteSpace: 'nowrap',
-      width: '25%'
+      whiteSpace: "nowrap",
+      width: "25%"
     };
 
     return (
@@ -64,7 +64,7 @@ class ServiceInstanceTableRow extends React.Component {
           <div>
             <Action
               style="base"
-              classes={['test-delete_instance']}
+              classes={["test-delete_instance"]}
               disabled={instance.confirmDelete}
               clickHandler={this.handleBeginDelete}
               label="delete"

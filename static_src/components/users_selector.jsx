@@ -3,18 +3,18 @@
  * to cloud.gov
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
-import FormStore from '../stores/form_store';
-import { Form, FormSelect } from './form';
-import PanelDocumentation from './panel_documentation.jsx';
-import userActions from '../actions/user_actions';
-import { validateString } from '../util/validators';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
+import FormStore from "../stores/form_store";
+import { Form, FormSelect } from "./form";
+import PanelDocumentation from "./panel_documentation.jsx";
+import userActions from "../actions/user_actions";
+import { validateString } from "../util/validators";
 
-const AUDITOR_NAME = 'auditors';
-const SPACE_AUDITOR_NAME = 'space_auditor';
-const USERS_SELECTOR_GUID = 'users-selector';
+const AUDITOR_NAME = "auditors";
+const SPACE_AUDITOR_NAME = "space_auditor";
+const USERS_SELECTOR_GUID = "users-selector";
 
 const propTypes = {
   usersSelectorDisabled: PropTypes.bool,
@@ -81,7 +81,7 @@ export default class UsersSelector extends React.Component {
     return (
       <FormSelect
         formGuid={USERS_SELECTOR_GUID}
-        classes={['test-users-selector-field']}
+        classes={["test-users-selector-field"]}
         label="Username"
         name="userGuid"
         options={orgUsers}
@@ -105,7 +105,7 @@ export default class UsersSelector extends React.Component {
         </PanelDocumentation>
         <Form
           guid={USERS_SELECTOR_GUID}
-          classes={['users_selector']}
+          classes={["users_selector"]}
           ref="form"
           onSubmit={this._onSubmitForm}
         >

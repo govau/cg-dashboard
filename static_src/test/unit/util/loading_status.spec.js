@@ -1,27 +1,27 @@
-import LoadingStatus from '../../../util/loading_status';
+import LoadingStatus from "../../../util/loading_status";
 
-describe('LoadingStatus', function() {
+describe("LoadingStatus", function() {
   let loadingStatus;
 
-  describe('initial state', function() {
+  describe("initial state", function() {
     beforeEach(function() {
       loadingStatus = new LoadingStatus();
     });
 
-    it('is not initialized', function() {
+    it("is not initialized", function() {
       expect(loadingStatus._initialized).toBe(false);
     });
 
-    it('has zero requests in flight', function() {
+    it("has zero requests in flight", function() {
       expect(loadingStatus._requests).toBe(0);
     });
 
-    it('is not loaded', function() {
+    it("is not loaded", function() {
       expect(loadingStatus.isLoaded).toBe(false);
     });
   });
 
-  describe('given some requests', function() {
+  describe("given some requests", function() {
     let first, second;
 
     beforeEach(function() {
@@ -41,15 +41,15 @@ describe('LoadingStatus', function() {
       loadingStatus.load(promises);
     });
 
-    it('is initialized', function() {
+    it("is initialized", function() {
       expect(loadingStatus._initialized).toBe(true);
     });
 
-    it('has two requests in flight', function() {
+    it("has two requests in flight", function() {
       expect(loadingStatus._requests).toBe(2);
     });
 
-    it('is not loaded after the first promise', function(done) {
+    it("is not loaded after the first promise", function(done) {
       first.resolve();
 
       setImmediate(function() {
@@ -58,7 +58,7 @@ describe('LoadingStatus', function() {
       });
     });
 
-    it('is loaded after the second promise', function(done) {
+    it("is loaded after the second promise", function(done) {
       first.resolve();
       second.resolve();
 
@@ -68,7 +68,7 @@ describe('LoadingStatus', function() {
       });
     });
 
-    it('is independent of order', function(done) {
+    it("is independent of order", function(done) {
       second.resolve();
       first.resolve();
 
@@ -78,7 +78,7 @@ describe('LoadingStatus', function() {
       });
     });
 
-    it('is loaded even on failed requests', function(done) {
+    it("is loaded even on failed requests", function(done) {
       first.resolve();
       second.reject();
 
@@ -88,7 +88,7 @@ describe('LoadingStatus', function() {
       });
     });
 
-    it('only counts a promise once', function(done) {
+    it("only counts a promise once", function(done) {
       first.resolve();
       first.resolve();
 
@@ -99,8 +99,8 @@ describe('LoadingStatus', function() {
     });
   });
 
-  describe('events', function() {
-    describe('with no requests', function() {
+  describe("events", function() {
+    describe("with no requests", function() {
       let loading, loaded;
 
       beforeEach(function(done) {
@@ -109,20 +109,20 @@ describe('LoadingStatus', function() {
         loading = sinon.spy();
         loaded = sinon.spy();
 
-        loadingStatus.on('loading', loading);
-        loadingStatus.on('loaded', loaded);
+        loadingStatus.on("loading", loading);
+        loadingStatus.on("loaded", loaded);
 
         loadingStatus.load([]);
         setImmediate(done);
       });
 
-      it('does not emit any events', function() {
+      it("does not emit any events", function() {
         expect(loading).not.toHaveBeenCalled();
         expect(loaded).not.toHaveBeenCalled();
       });
     });
 
-    describe('with a request', function() {
+    describe("with a request", function() {
       let request, promise, loading, loaded;
 
       beforeEach(function(done) {
@@ -134,48 +134,48 @@ describe('LoadingStatus', function() {
         loading = sinon.spy();
         loaded = sinon.spy();
 
-        loadingStatus.on('loading', loading);
-        loadingStatus.on('loaded', loaded);
+        loadingStatus.on("loading", loading);
+        loadingStatus.on("loaded", loaded);
 
         loadingStatus.load([promise]);
         setImmediate(done);
       });
 
-      describe('load function', function() {
-        it('emits `loading`', function() {
+      describe("load function", function() {
+        it("emits `loading`", function() {
           expect(loading).toHaveBeenCalledOnce();
         });
 
-        it('has not emitted `loaded`', function() {
+        it("has not emitted `loaded`", function() {
           expect(loaded).not.toHaveBeenCalled();
         });
       });
 
-      describe('when the request resolves', function() {
+      describe("when the request resolves", function() {
         beforeEach(function(done) {
           promise.then(done);
           request.resolve();
         });
 
-        it('emits `loaded`', function() {
+        it("emits `loaded`", function() {
           expect(loaded).toHaveBeenCalledOnce();
         });
       });
 
-      describe('when the request is rejected', function() {
+      describe("when the request is rejected", function() {
         beforeEach(function(done) {
           promise.catch(() => done());
           request.reject();
         });
 
-        it('emits `loaded`', function() {
+        it("emits `loaded`", function() {
           expect(loaded).toHaveBeenCalledOnce();
         });
       });
     });
   });
 
-  describe('chaining promises', function() {
+  describe("chaining promises", function() {
     let request, promise;
 
     beforeEach(function() {
@@ -187,7 +187,7 @@ describe('LoadingStatus', function() {
       loadingStatus.load([promise]);
     });
 
-    describe('given request is resolved', function() {
+    describe("given request is resolved", function() {
       let sentinel, fulfillment;
 
       beforeEach(function(done) {
@@ -199,16 +199,16 @@ describe('LoadingStatus', function() {
         request.resolve(sentinel);
       });
 
-      it('is loaded', function() {
+      it("is loaded", function() {
         expect(loadingStatus.isLoaded).toBe(true);
       });
 
-      it('calls fulfillment with result of the request', function() {
+      it("calls fulfillment with result of the request", function() {
         expect(fulfillment).toHaveBeenCalledWithExactly(sentinel);
       });
     });
 
-    describe('given request is rejected', function() {
+    describe("given request is rejected", function() {
       let sentinel, rejection;
 
       beforeEach(function(done) {
@@ -220,11 +220,11 @@ describe('LoadingStatus', function() {
         request.reject(sentinel);
       });
 
-      it('is loaded', function() {
+      it("is loaded", function() {
         expect(loadingStatus.isLoaded).toBe(true);
       });
 
-      it('calls rejection with result of the request', function() {
+      it("calls rejection with result of the request", function() {
         expect(rejection).toHaveBeenCalledWithExactly(sentinel);
       });
     });

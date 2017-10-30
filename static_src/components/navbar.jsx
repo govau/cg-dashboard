@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import spaceActions from '../actions/space_actions';
-import orgActions from '../actions/org_actions';
-import OrgStore from '../stores/org_store';
-import SpaceStore from '../stores/space_store';
-import * as url from '../util/url';
+import spaceActions from "../actions/space_actions";
+import orgActions from "../actions/org_actions";
+import OrgStore from "../stores/org_store";
+import SpaceStore from "../stores/space_store";
+import * as url from "../util/url";
 
 const propTypes = {
   subLinks: PropTypes.array
@@ -49,8 +49,8 @@ export class Nav extends React.Component {
   }
 
   _handleOverviewClick() {
-    orgActions.toggleSpaceMenu('0');
-    spaceActions.changeCurrentSpace('0');
+    orgActions.toggleSpaceMenu("0");
+    spaceActions.changeCurrentSpace("0");
   }
 
   _handleOrgClick(orgGuid) {
@@ -77,12 +77,12 @@ export class Nav extends React.Component {
   }
 
   render() {
-    const mainList = 'usa-sidenav-list sidenav-list sidenav-level-one';
-    const secondList = 'usa-sidenav-sub_list sidenav-list sidenav-level-two';
-    const thirdList = 'sidenav-list sidenav-level-three';
-    const downArrow = 'menu-arrow sidenav-arrow sidenav-arrow-down';
-    const rightArrow = 'menu-arrow sidenav-arrow sidenav-arrow-right';
-    const header = 'sidenav-header';
+    const mainList = "usa-sidenav-list sidenav-list sidenav-level-one";
+    const secondList = "usa-sidenav-sub_list sidenav-list sidenav-level-two";
+    const thirdList = "sidenav-list sidenav-level-three";
+    const downArrow = "menu-arrow sidenav-arrow sidenav-arrow-down";
+    const rightArrow = "menu-arrow sidenav-arrow sidenav-arrow-right";
+    const header = "sidenav-header";
     const sortedOrgs = this.state.orgs.sort(
       (a, b) => (a.name < b.name ? -1 : 1)
     );
@@ -105,8 +105,8 @@ export class Nav extends React.Component {
             );
             const arrowClasses = org.space_menu_open ? downArrow : rightArrow;
             const activeOrgClasses = org.space_menu_open
-              ? 'sidenav-active'
-              : '';
+              ? "sidenav-active"
+              : "";
             let subList = <div />;
             const sortedSpaces = org.spaces.sort(
               (a, b) => (a.name < b.name ? -1 : 1)
@@ -122,8 +122,8 @@ export class Nav extends React.Component {
                         const activeSpaceClasses = this.isCurrentSpace(
                           space.guid
                         )
-                          ? 'sidenav-active'
-                          : '';
+                          ? "sidenav-active"
+                          : "";
                         return (
                           <li key={space.guid} className={activeSpaceClasses}>
                             <a href={this.spaceHref(org, space.guid)}>

@@ -1,6 +1,6 @@
-import http from 'axios';
+import http from "axios";
 
-import uaaApi from '../../../util/uaa_api';
+import uaaApi from "../../../util/uaa_api";
 
 function createPromise(res, err) {
   // TODO figure out how to do this with actual Promise object.
@@ -10,7 +10,7 @@ function createPromise(res, err) {
   return Promise.reject(err);
 }
 
-describe('uaaApi', function() {
+describe("uaaApi", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -21,29 +21,29 @@ describe('uaaApi', function() {
     sandbox.restore();
   });
 
-  describe('fetchUserInfo()', function() {
+  describe("fetchUserInfo()", function() {
     beforeEach(function(done) {
       sandbox
-        .stub(http, 'get')
-        .returns(Promise.resolve({ data: { user_id: 'user123' } }));
+        .stub(http, "get")
+        .returns(Promise.resolve({ data: { user_id: "user123" } }));
 
       uaaApi.fetchUserInfo().then(done, done.fail);
     });
 
-    it('should call an http get request for uaa user info', function() {
+    it("should call an http get request for uaa user info", function() {
       expect(http.get).toHaveBeenCalledOnce();
       expect(http.get).toHaveBeenCalledWith(sinon.match(/\/userinfo$/));
     });
   });
 
-  describe('fetchUaaInfo()', function() {
+  describe("fetchUaaInfo()", function() {
     beforeEach(function(done) {
-      sandbox.stub(http, 'get').returns(Promise.resolve({ data: {} }));
+      sandbox.stub(http, "get").returns(Promise.resolve({ data: {} }));
 
-      uaaApi.fetchUaaInfo('user123').then(done, done.fail);
+      uaaApi.fetchUaaInfo("user123").then(done, done.fail);
     });
 
-    it('should call an http get request for uaa permission info', function() {
+    it("should call an http get request for uaa permission info", function() {
       expect(http.get).toHaveBeenCalledOnce();
 
       expect(http.get).toHaveBeenCalledWith(
@@ -52,21 +52,21 @@ describe('uaaApi', function() {
     });
   });
 
-  describe('inviteUaaUser()', function() {
-    it('should make invite uaa request and receive proper payload', function(
+  describe("inviteUaaUser()", function() {
+    it("should make invite uaa request and receive proper payload", function(
       done
     ) {
-      const email = 'email@domain.com';
-      const expectedPayload = { email: 'email@domain.com' };
-      const spy = sandbox.stub(http, 'post');
-      spy.returns(createPromise({ response: 'success' }));
+      const email = "email@domain.com";
+      const expectedPayload = { email: "email@domain.com" };
+      const spy = sandbox.stub(http, "post");
+      spy.returns(createPromise({ response: "success" }));
       uaaApi
         .inviteUaaUser(email)
         .then(() => {
           const { args } = spy.getCall(0);
 
           expect(spy).toHaveBeenCalledOnce();
-          expect(args[0]).toMatch('/uaa/invite/users');
+          expect(args[0]).toMatch("/uaa/invite/users");
           expect(args[1]).toEqual(expectedPayload);
           done();
         })
@@ -74,24 +74,24 @@ describe('uaaApi', function() {
     });
   });
 
-  describe('sendInviteEmail()', function() {
-    it('should make request to send an email invite', function(done) {
+  describe("sendInviteEmail()", function() {
+    it("should make request to send an email invite", function(done) {
       const inviteResponse = {
-        new_invites: [{ email: 'name@domain.com', inviteLink: 'www.place.com' }]
+        new_invites: [{ email: "name@domain.com", inviteLink: "www.place.com" }]
       };
       const expectedPayload = {
-        email: 'name@domain.com',
-        inviteUrl: 'www.place.com'
+        email: "name@domain.com",
+        inviteUrl: "www.place.com"
       };
-      const spy = sandbox.stub(http, 'post');
-      spy.returns(createPromise({ response: 'success' }));
+      const spy = sandbox.stub(http, "post");
+      spy.returns(createPromise({ response: "success" }));
       uaaApi
         .sendInviteEmail(inviteResponse)
         .then(() => {
           const { args } = spy.getCall(0);
 
           expect(spy).toHaveBeenCalledOnce();
-          expect(args[0]).toMatch('/uaa/invite/email');
+          expect(args[0]).toMatch("/uaa/invite/email");
           expect(args[1]).toEqual(expectedPayload);
           done();
         })

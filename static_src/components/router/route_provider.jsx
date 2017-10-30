@@ -1,6 +1,6 @@
-import React from 'react';
-import RouterStore from '../../stores/router_store';
-import Loading from '../loading.jsx';
+import React from "react";
+import RouterStore from "../../stores/router_store";
+import Loading from "../loading.jsx";
 
 class RouteProvider extends React.Component {
   constructor() {

@@ -19,11 +19,11 @@
  * https://github.com/webpack/webpack/blob/v1.12.14/lib/NormalModule.js#L127
  */
 const WebpackKarmaWarningsPlugin = function() {};
-const RawSource = require('webpack/lib/RawSource');
+const RawSource = require("webpack/lib/RawSource");
 
 WebpackKarmaWarningsPlugin.prototype.apply = function(compiler) {
-  compiler.plugin('compilation', function(compilation) {
-    compilation.plugin('failed-module', function(module) {
+  compiler.plugin("compilation", function(compilation) {
+    compilation.plugin("failed-module", function(module) {
       const moduleErrorMessage = module.error.error.toString();
       module._source = new RawSource(
         `throw new Error(${JSON.stringify(moduleErrorMessage)});`

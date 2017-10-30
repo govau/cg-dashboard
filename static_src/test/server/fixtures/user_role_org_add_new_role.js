@@ -2,18 +2,18 @@ const userRoleOrgAddNewRole = orgGuid => ({
   metadata: {
     guid: `${orgGuid}`,
     url: `/v2/organizations/${orgGuid}`,
-    created_at: '2016-06-09T17:52:26Z',
-    updated_at: '2016-06-09T17:52:26Z'
+    created_at: "2016-06-09T17:52:26Z",
+    updated_at: "2016-06-09T17:52:26Z"
   },
 
   entity: {
-    name: 'cf',
+    name: "cf",
     billing_enabled: false,
-    quota_definition_guid: '01817050-964e-4632-a9bd-fbcda5f8d14c',
-    status: 'active',
+    quota_definition_guid: "01817050-964e-4632-a9bd-fbcda5f8d14c",
+    status: "active",
     default_isolation_segment_guid: null,
     quota_definition_url:
-      '/v2/quota_definitions/01817050-964e-4632-a9bd-fbcda5f8d14c',
+      "/v2/quota_definitions/01817050-964e-4632-a9bd-fbcda5f8d14c",
     spaces_url: `/v2/organizations/${orgGuid}/spaces`,
     domains_url: `/v2/organizations/${orgGuid}/domains`,
     private_domains_url: `/v2/organizations/${orgGuid}/private_domains`,

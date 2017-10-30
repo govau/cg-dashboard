@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import CountStatus from './count_status.jsx';
-import { entityHealth } from '../constants';
-import { appHealth, worstHealth } from '../util/health';
+import CountStatus from "./count_status.jsx";
+import { entityHealth } from "../constants";
+import { appHealth, worstHealth } from "../util/health";
 
 const propTypes = {
   appCount: PropTypes.number,

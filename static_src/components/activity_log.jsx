@@ -1,30 +1,30 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
-import AppActivity from './app_activity/app_activity.jsx';
-import ActivityStore from '../stores/activity_store';
-import AppStore from '../stores/app_store';
-import DomainStore from '../stores/domain_store';
-import PanelActions from './panel_actions.jsx';
-import RouteStore from '../stores/route_store';
-import ServiceInstanceStore from '../stores/service_instance_store';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
+import AppActivity from "./app_activity/app_activity.jsx";
+import ActivityStore from "../stores/activity_store";
+import AppStore from "../stores/app_store";
+import DomainStore from "../stores/domain_store";
+import PanelActions from "./panel_actions.jsx";
+import RouteStore from "../stores/route_store";
+import ServiceInstanceStore from "../stores/service_instance_store";
 
 function stateSetter() {
   const appGuid = AppStore.currentAppGuid;
   const activity = ActivityStore.getAll()
     .filter(item => {
-      if (item.activity_type === 'log') {
+      if (item.activity_type === "log") {
         return item.app_guid === appGuid && item.status_code >= 400;
       }
 
       if (
-        item.activity_type === 'event' &&
-        item.type === 'audit.service_binding.create'
+        item.activity_type === "event" &&
+        item.type === "audit.service_binding.create"
       ) {
         return item.metadata.request.app_guid === appGuid;
       }
 
-      if (item.activity_type === 'event') {
+      if (item.activity_type === "event") {
         return item.actee === appGuid;
       }
 

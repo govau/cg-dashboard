@@ -1,8 +1,8 @@
-import { setupUISpy, setupServerSpy } from '../helpers';
-import errorActions from '../../../actions/error_actions';
-import { errorActionTypes } from '../../../constants';
+import { setupUISpy, setupServerSpy } from "../helpers";
+import errorActions from "../../../actions/error_actions";
+import { errorActionTypes } from "../../../constants";
 
-describe('errorActions', function() {
+describe("errorActions", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -13,9 +13,9 @@ describe('errorActions', function() {
     sandbox.restore();
   });
 
-  describe('dismissError()', function() {
-    it('should dispatch a server dismiss event with error object', () => {
-      const err = { description: 'error' };
+  describe("dismissError()", function() {
+    it("should dispatch a server dismiss event with error object", () => {
+      const err = { description: "error" };
       const dispatchSpy = setupUISpy(sandbox);
 
       errorActions.dismissError(err);
@@ -28,13 +28,13 @@ describe('errorActions', function() {
     });
   });
 
-  describe('importantDataFetchError()', function() {
+  describe("importantDataFetchError()", function() {
     let dispatchSpy;
     let dispatch;
-    const message = 'app broken';
+    const message = "app broken";
 
     beforeEach(() => {
-      const err = { description: 'Server error' };
+      const err = { description: "Server error" };
       dispatchSpy = setupServerSpy(sandbox);
 
       errorActions.importantDataFetchError(err, message);
@@ -42,12 +42,12 @@ describe('errorActions', function() {
       dispatch = dispatchSpy.getCall(0).args[0];
     });
 
-    it('should dispatch an important fetch error server event', () => {
+    it("should dispatch an important fetch error server event", () => {
       expect(dispatchSpy).toHaveBeenCalledOnce();
       expect(dispatch.type).toEqual(errorActionTypes.IMPORTANT_FETCH);
     });
 
-    it('should wrap the supplied error message with generic messaging', () => {
+    it("should wrap the supplied error message with generic messaging", () => {
       expect(dispatch.msg).toEqual(
         `There was an issue connecting to the dashboard, ${message}`
       );

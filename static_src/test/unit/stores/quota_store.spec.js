@@ -1,11 +1,11 @@
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import AppDispatcher from '../../../dispatcher';
-import cfApi from '../../../util/cf_api';
-import QuotaStore from '../../../stores/quota_store';
-import { quotaActionTypes } from '../../../constants';
+import AppDispatcher from "../../../dispatcher";
+import cfApi from "../../../util/cf_api";
+import QuotaStore from "../../../stores/quota_store";
+import { quotaActionTypes } from "../../../constants";
 
-describe('QuotaStore', function() {
+describe("QuotaStore", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -17,15 +17,15 @@ describe('QuotaStore', function() {
     sandbox.restore();
   });
 
-  describe('constructor()', function() {
-    it('should start data as empty array', function() {
+  describe("constructor()", function() {
+    it("should start data as empty array", function() {
       expect(QuotaStore.getAll()).toBeEmptyArray();
     });
   });
 
-  describe('on ORGS_QUOTAS_FETCH', function() {
-    it('should fetch quotas for all organizations', function() {
-      const spy = sandbox.spy(cfApi, 'fetchOrgsQuotas');
+  describe("on ORGS_QUOTAS_FETCH", function() {
+    it("should fetch quotas for all organizations", function() {
+      const spy = sandbox.spy(cfApi, "fetchOrgsQuotas");
       AppDispatcher.handleViewAction({
         type: quotaActionTypes.ORGS_QUOTAS_FETCH
       });
@@ -34,13 +34,13 @@ describe('QuotaStore', function() {
     });
   });
 
-  describe('on ORGS_QUOTAS_RECEIVED', function() {
-    it('should call mergeMany with new quotas', function() {
-      const spy = sandbox.spy(QuotaStore, 'mergeMany');
+  describe("on ORGS_QUOTAS_RECEIVED", function() {
+    it("should call mergeMany with new quotas", function() {
+      const spy = sandbox.spy(QuotaStore, "mergeMany");
       const quotas = [
         {
           metadata: {
-            guid: 'fake-guid'
+            guid: "fake-guid"
           },
           entity: {}
         }
@@ -54,9 +54,9 @@ describe('QuotaStore', function() {
     });
   });
 
-  describe('on SPACES_QUOTAS_FETCH', function() {
-    it('should fetch quotas for all organizations', function() {
-      const spy = sandbox.spy(cfApi, 'fetchSpacesQuotas');
+  describe("on SPACES_QUOTAS_FETCH", function() {
+    it("should fetch quotas for all organizations", function() {
+      const spy = sandbox.spy(cfApi, "fetchSpacesQuotas");
       AppDispatcher.handleViewAction({
         type: quotaActionTypes.SPACES_QUOTAS_FETCH
       });
@@ -65,13 +65,13 @@ describe('QuotaStore', function() {
     });
   });
 
-  describe('on SPACES_QUOTAS_RECEIVED', function() {
-    it('should call mergeMany with new quotas', function() {
-      const spy = sandbox.spy(QuotaStore, 'mergeMany');
+  describe("on SPACES_QUOTAS_RECEIVED", function() {
+    it("should call mergeMany with new quotas", function() {
+      const spy = sandbox.spy(QuotaStore, "mergeMany");
       const quotas = [
         {
           metadata: {
-            guid: 'fake-guid'
+            guid: "fake-guid"
           },
           entity: {}
         }

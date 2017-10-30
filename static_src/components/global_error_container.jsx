@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import ErrorStore from '../stores/error_store';
-import GlobalError from './global_error.jsx';
+import ErrorStore from "../stores/error_store";
+import GlobalError from "./global_error.jsx";
 
 const propTypes = {
   maxItems: PropTypes.number

@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import ComplexList from './complex_list.jsx';
-import ServiceInstance from './service_instance.jsx';
+import PropTypes from "prop-types";
+import React from "react";
+import ComplexList from "./complex_list.jsx";
+import ServiceInstance from "./service_instance.jsx";
 
 const propTypes = {
   currentAppGuid: PropTypes.string.isRequired,

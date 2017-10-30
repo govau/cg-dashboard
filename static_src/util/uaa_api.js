@@ -1,6 +1,6 @@
-import http from 'axios';
+import http from "axios";
 
-const URL = '/uaa';
+const URL = "/uaa";
 
 export default {
   fetchUserInfo() {

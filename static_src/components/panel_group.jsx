@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
 const propTypes = {
   columns: PropTypes.number,
@@ -12,7 +12,7 @@ const defaultProps = {
 
 export default class PanelGroup extends React.Component {
   render() {
-    let gridClass = '';
+    let gridClass = "";
     if (this.props.columns !== 0) {
       gridClass = `grid-width-${this.props.columns}`;
     }

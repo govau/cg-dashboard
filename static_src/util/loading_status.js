@@ -1,6 +1,6 @@
 // Use a semaphore to track requests in flight
 // https://en.wikipedia.org/wiki/Semaphore_(programming)
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 class LoadingStatus extends EventEmitter {
   constructor() {
@@ -23,7 +23,7 @@ class LoadingStatus extends EventEmitter {
       this._requests--;
 
       if (this.isLoaded) {
-        this.emit('loaded');
+        this.emit("loaded");
       }
 
       return result;
@@ -39,7 +39,7 @@ class LoadingStatus extends EventEmitter {
 
     this._initialized = true;
     if (promises.length) {
-      this.emit('loading');
+      this.emit("loading");
     }
   }
 }

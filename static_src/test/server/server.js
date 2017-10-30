@@ -6,11 +6,11 @@
 //
 // [1] http://techblog.netflix.com/2014/11/prana-sidecar-for-your-netflix-paas.html
 
-const childProcess = require('child_process');
+const childProcess = require("child_process");
 
-require('babel-register');
+require("babel-register");
 
-const { start } = require('./index');
+const { start } = require("./index");
 
 const port = process.env.PORT;
 
@@ -45,21 +45,21 @@ function spawnChildCb(command, args) {
     if (!command) {
       // No arguments passed, just leave the test server running for manual
       // testing
-      process.on('SIGINT', cleanup);
-      process.on('SIGTERM', cleanup);
+      process.on("SIGINT", cleanup);
+      process.on("SIGTERM", cleanup);
       return;
     }
 
     // Kick off the main process
     const main = childProcess.spawn(command, args, {
-      stdio: 'inherit',
+      stdio: "inherit",
       env: {
         ...process.env,
         PORT: server.info.port
       }
     });
 
-    main.on('close', function(exitCode) {
+    main.on("close", function(exitCode) {
       stopServer(function(error) {
         if (error) {
           console.error(error);
@@ -77,8 +77,8 @@ function spawnChildCb(command, args) {
     }
 
     // Forward signals to main
-    connectSignal('SIGINT');
-    connectSignal('SIGTERM');
+    connectSignal("SIGINT");
+    connectSignal("SIGTERM");
   }
 
   return cb;

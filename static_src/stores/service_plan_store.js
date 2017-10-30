@@ -3,10 +3,10 @@
  * separate functionality to get all plans under a particiular service.
  */
 
-import AppDispatcher from '../dispatcher';
-import BaseStore from './base_store';
-import { serviceActionTypes } from '../constants';
-import ServiceStore from './service_store';
+import AppDispatcher from "../dispatcher";
+import BaseStore from "./base_store";
+import { serviceActionTypes } from "../constants";
+import ServiceStore from "./service_store";
 
 export class ServicePlanStore extends BaseStore {
   constructor() {
@@ -21,7 +21,7 @@ export class ServicePlanStore extends BaseStore {
 
   getAllFromService(serviceGuid) {
     const fromService = this._data.filter(
-      servicePlan => servicePlan.get('service_guid') === serviceGuid
+      servicePlan => servicePlan.get("service_guid") === serviceGuid
     );
 
     return fromService.toJS();
@@ -45,7 +45,7 @@ export class ServicePlanStore extends BaseStore {
           ...servicePlan,
           fetching: true
         };
-        this.merge('guid', servicePlanFetching);
+        this.merge("guid", servicePlanFetching);
         break;
       }
 
@@ -62,7 +62,7 @@ export class ServicePlanStore extends BaseStore {
           ...servicePlan,
           fetching: false
         };
-        this.merge('guid', servicePlanReceived);
+        this.merge("guid", servicePlanReceived);
         break;
       }
 
@@ -70,7 +70,7 @@ export class ServicePlanStore extends BaseStore {
         this._fetchAll = false;
         if (action.servicePlans) {
           const servicePlans = action.servicePlans;
-          this.mergeMany('guid', servicePlans, () => {});
+          this.mergeMany("guid", servicePlans, () => {});
         }
         this.emitChange();
         break;

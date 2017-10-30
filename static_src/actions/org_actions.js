@@ -3,11 +3,11 @@
  * updating, etc should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import cfApi from '../util/cf_api';
-import errorActions from './error_actions';
-import { orgActionTypes } from '../constants';
-import spaceActions from './space_actions';
+import AppDispatcher from "../dispatcher";
+import cfApi from "../util/cf_api";
+import errorActions from "./error_actions";
+import { orgActionTypes } from "../constants";
+import spaceActions from "./space_actions";
 
 const orgActions = {
   changeCurrentOrg(orgGuid) {
@@ -31,7 +31,7 @@ const orgActions = {
       .catch(err =>
         errorActions.importantDataFetchError(
           err,
-          'organization data may be incomplete'
+          "organization data may be incomplete"
         )
       );
   },
@@ -57,7 +57,7 @@ const orgActions = {
       .catch(err =>
         errorActions.importantDataFetchError(
           err,
-          'unable to fetch organizations'
+          "unable to fetch organizations"
         )
       );
   },

@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import keymirror from 'keymirror';
-import Action from './action.jsx';
-import { entityHealth } from '../constants';
+import PropTypes from "prop-types";
+import React from "react";
+import keymirror from "keymirror";
+import Action from "./action.jsx";
+import { entityHealth } from "../constants";
 
 const STATUSES = Object.assign(
   {},
@@ -20,7 +20,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  message: 'There was a problem',
+  message: "There was a problem",
   status: entityHealth.warning,
   actions: [],
   onDismiss: () => {}
@@ -48,7 +48,7 @@ export default class Notification extends React.Component {
           type="outline"
           style="white"
           clickHandler={action.clickHandler}
-          classes={['notification-action', 'test-notification-action']}
+          classes={["notification-action", "test-notification-action"]}
         >
           {action.text}
         </Action>

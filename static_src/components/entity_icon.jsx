@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import Icon from './icon.jsx';
-import { entityHealth } from '../constants';
+import Icon from "./icon.jsx";
+import { entityHealth } from "../constants";
 
-const ENTITIES = ['app', 'service', 'space', 'org'];
+const ENTITIES = ["app", "service", "space", "org"];
 
 const propTypes = {
   children: PropTypes.node,
@@ -27,7 +27,7 @@ export default class EntityIcon extends React.Component {
         styleType={statusClass}
         iconSize={this.props.iconSize}
         iconType="fill"
-        bordered={['app', 'space', 'service'].includes(this.props.entity)}
+        bordered={["app", "space", "service"].includes(this.props.entity)}
       >
         {this.props.children}
       </Icon>

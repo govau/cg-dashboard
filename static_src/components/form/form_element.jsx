@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import classNames from 'classnames';
-import formActions from '../../actions/form_actions';
+import PropTypes from "prop-types";
+import React from "react";
+import classNames from "classnames";
+import formActions from "../../actions/form_actions";
 
 const propTypes = {
   classes: PropTypes.array,
@@ -17,7 +17,7 @@ const propTypes = {
 
 const defaultProps = {
   classes: [],
-  label: '',
+  label: "",
   onValidate: () => {},
   validator: () => {}
 };
@@ -33,7 +33,7 @@ export default class FormElement extends React.Component {
     super(props);
     this.state = {
       err: null, // Forms should all be initialized without errors
-      value: this.props.value || ''
+      value: this.props.value || ""
     };
 
     if (!this.props.key) {

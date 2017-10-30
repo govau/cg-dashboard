@@ -3,16 +3,16 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import cfApi from '../util/cf_api';
-import uaaApi from '../util/uaa_api';
-import { userActionTypes } from '../constants';
-import UserStore from '../stores/user_store';
-import OrgStore from '../stores/org_store';
-import SpaceStore from '../stores/space_store';
+import AppDispatcher from "../dispatcher";
+import cfApi from "../util/cf_api";
+import uaaApi from "../util/uaa_api";
+import { userActionTypes } from "../constants";
+import UserStore from "../stores/user_store";
+import OrgStore from "../stores/org_store";
+import SpaceStore from "../stores/space_store";
 
-const ORG_ENTITY = 'organization';
-const SPACE_ENTITY = 'space';
+const ORG_ENTITY = "organization";
+const SPACE_ENTITY = "space";
 const ORG_NAME = OrgStore.cfName;
 
 const userActions = {
@@ -93,7 +93,7 @@ const userActions = {
       spaceGuid
     });
 
-    const spaceRoles = ['auditors', 'developers', 'managers'];
+    const spaceRoles = ["auditors", "developers", "managers"];
     const spaceRemovalRequests = spaceRoles.map(role =>
       Promise.resolve(
         cfApi.deleteSpaceUserPermissions(userGuid, spaceGuid, role)
@@ -270,12 +270,12 @@ const userActions = {
   },
 
   createUserSpaceAssociationNotification(notification) {
-    userActions.createUserListNotification('error', notification);
+    userActions.createUserListNotification("error", notification);
   },
 
   createInviteNotification(verified, email) {
     let description;
-    const noticeType = 'finish';
+    const noticeType = "finish";
     const currentViewedType = UserStore.currentlyViewedType;
     const viewTypeNouns = {
       space_users: { singular: SPACE_ENTITY },
@@ -353,7 +353,7 @@ const userActions = {
 
   fetchEntityUsers(entityGuid, entityType) {
     return cfApi[
-      entityType === ORG_NAME ? 'fetchOrgUsers' : 'fetchSpaceUserRoles'
+      entityType === ORG_NAME ? "fetchOrgUsers" : "fetchSpaceUserRoles"
     ](entityGuid);
   },
 
@@ -363,7 +363,7 @@ const userActions = {
     )[0];
 
     if (!user) {
-      const err = new Error('User was not associated');
+      const err = new Error("User was not associated");
       const message = `The user ${userGuid} was not associated in ${entityGuid}.`;
       return Promise.resolve(userActions.userInviteCreateError(err, message));
     }
@@ -425,7 +425,7 @@ const userActions = {
 
   fetchCurrentUserUaaInfo(guid) {
     if (!guid) {
-      return Promise.reject(new Error('guid is required'));
+      return Promise.reject(new Error("guid is required"));
     }
 
     AppDispatcher.handleViewAction({
@@ -448,7 +448,7 @@ const userActions = {
 
   fetchUser(userGuid) {
     if (!userGuid) {
-      return Promise.reject(new Error('userGuid is required'));
+      return Promise.reject(new Error("userGuid is required"));
     }
 
     AppDispatcher.handleViewAction({

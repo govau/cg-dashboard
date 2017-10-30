@@ -3,37 +3,37 @@
  * and all users in the org.
  */
 
-import React from 'react';
+import React from "react";
 
-import userActions from '../actions/user_actions';
-import OrgStore from '../stores/org_store';
-import SpaceStore from '../stores/space_store';
-import UserList from './user_list.jsx';
-import UsersInvite from './users_invite.jsx';
-import UsersSelector from './users_selector.jsx';
-import Notification from './notification.jsx';
-import UserStore from '../stores/user_store';
-import SystemErrorMessage from './system_error_message.jsx';
-import PanelDocumentation from './panel_documentation.jsx';
+import userActions from "../actions/user_actions";
+import OrgStore from "../stores/org_store";
+import SpaceStore from "../stores/space_store";
+import UserList from "./user_list.jsx";
+import UsersInvite from "./users_invite.jsx";
+import UsersSelector from "./users_selector.jsx";
+import Notification from "./notification.jsx";
+import UserStore from "../stores/user_store";
+import SystemErrorMessage from "./system_error_message.jsx";
+import PanelDocumentation from "./panel_documentation.jsx";
 
 const propTypes = {};
 const SPACE_NAME = SpaceStore.cfName;
 const ORG_NAME = OrgStore.cfName;
-const ORG_MANAGER = 'org_manager';
-const SPACE_MANAGER = 'space_manager';
-const ORG_ENTITY = 'organization';
-const SPACE_ENTITY = 'space';
+const ORG_MANAGER = "org_manager";
+const SPACE_MANAGER = "space_manager";
+const ORG_ENTITY = "organization";
+const SPACE_ENTITY = "space";
 const ORG_INVITE_HELP =
-  'Only an Org Manager can new invite users to this ' +
-  'organization via the dashboard. Speak to your Org Manager if you need to ' +
-  'add a user to this organization';
+  "Only an Org Manager can new invite users to this " +
+  "organization via the dashboard. Speak to your Org Manager if you need to " +
+  "add a user to this organization";
 const SPACE_INVITE_SPACE_MANAGER_HELP =
-  'As an Space Manager, you can invite existing ' +
-  'organization users into your space. If you wish to invite a person who is ' +
-  'not in the organization into your space, please ask an Org Manager';
+  "As an Space Manager, you can invite existing " +
+  "organization users into your space. If you wish to invite a person who is " +
+  "not in the organization into your space, please ask an Org Manager";
 const SPACE_INVITE_HELP =
-  'If you wish to invite users into this space, please ' +
-  'ask an Org Manager or a Space Manager';
+  "If you wish to invite users into this space, please " +
+  "ask an Org Manager or a Space Manager";
 
 function mapStoreToState() {
   const { currentOrgGuid } = OrgStore;

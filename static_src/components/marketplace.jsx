@@ -2,16 +2,16 @@
  * Renders the marketplace page
  */
 
-import React from 'react';
-import CreateServiceInstance from './create_service_instance.jsx';
-import Loading from './loading.jsx';
-import OrgStore from '../stores/org_store';
-import PanelDocumentation from './panel_documentation.jsx';
-import ServiceInstanceStore from '../stores/service_instance_store';
-import ServiceList from './service_list.jsx';
-import ServicePlanStore from '../stores/service_plan_store';
-import ServiceStore from '../stores/service_store';
-import { config } from 'skin';
+import React from "react";
+import CreateServiceInstance from "./create_service_instance.jsx";
+import Loading from "./loading.jsx";
+import OrgStore from "../stores/org_store";
+import PanelDocumentation from "./panel_documentation.jsx";
+import ServiceInstanceStore from "../stores/service_instance_store";
+import ServiceList from "./service_list.jsx";
+import ServicePlanStore from "../stores/service_plan_store";
+import ServiceStore from "../stores/service_store";
+import { config } from "skin";
 
 const propTypes = {};
 
@@ -63,14 +63,14 @@ export default class Marketplace extends React.Component {
       <PanelDocumentation description>
         <p>
           Use this marketplace to create service instances for apps in this
-          space. Then bind service instances to apps. See{' '}
+          space. Then bind service instances to apps. See{" "}
           <a href="https://cloud.gov/docs/services/">
             docs for these services
           </a>, and
           {config.docs.managed_services && (
             <span>
               <a href={config.docs.managed_services}>
-                {' '}
+                {" "}
                 learn about using service instances
               </a>.
             </span>

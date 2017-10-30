@@ -1,19 +1,19 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import Action from './action.jsx';
-import { Form, FormNumber } from './form';
-import FormStore from '../stores/form_store';
-import Loading from './loading.jsx';
-import PanelActions from './panel_actions.jsx';
-import PanelGroup from './panel_group.jsx';
-import PanelBlock from './panel_block.jsx';
-import ResourceUsage from './resource_usage.jsx';
+import Action from "./action.jsx";
+import { Form, FormNumber } from "./form";
+import FormStore from "../stores/form_store";
+import Loading from "./loading.jsx";
+import PanelActions from "./panel_actions.jsx";
+import PanelGroup from "./panel_group.jsx";
+import PanelBlock from "./panel_block.jsx";
+import ResourceUsage from "./resource_usage.jsx";
 
-import { appHealth } from '../util/health';
-import { entityHealth } from '../constants';
-import appActions from '../actions/app_actions';
-import formatBytes from '../util/format_bytes';
+import { appHealth } from "../util/health";
+import { entityHealth } from "../constants";
+import appActions from "../actions/app_actions";
+import formatBytes from "../util/format_bytes";
 
 // Calculates the running average based on a fixed n number of items To average
 // across instances you can do something like `average.bind(null, // numberOfInstances)`
@@ -28,7 +28,7 @@ function sum(s, value) {
 
 function getStat(statName, props, accumulator) {
   const _accumulator = accumulator || sum;
-  if (statName.indexOf('quota') > -1) {
+  if (statName.indexOf("quota") > -1) {
     return (
       (props.app.app_instances &&
         props.app.app_instances.length &&
@@ -115,10 +115,10 @@ export default class UsageAndLimits extends React.Component {
         <ResourceUsage
           title="Instance disk used"
           amountUsed={this.getStat(
-            'disk',
+            "disk",
             average.bind(null, this.props.app.running_instances)
           )}
-          amountTotal={this.getStat('disk_quota')}
+          amountTotal={this.getStat("disk_quota")}
         />
         <ResourceUsage
           title="Instance disk allocation"
@@ -147,10 +147,10 @@ export default class UsageAndLimits extends React.Component {
         <ResourceUsage
           title="Instance memory used"
           amountUsed={this.getStat(
-            'mem',
+            "mem",
             average.bind(null, this.props.app.running_instances)
           )}
-          amountTotal={this.getStat('mem_quota')}
+          amountTotal={this.getStat("mem_quota")}
         />
         <ResourceUsage
           title="Instance memory allocation"
@@ -170,15 +170,15 @@ export default class UsageAndLimits extends React.Component {
     return (
       <ResourceUsage
         title="Total disk used"
-        amountTotal={this.getStat('disk', sum)}
+        amountTotal={this.getStat("disk", sum)}
       />
     );
   }
 
   get totalMemory() {
     const amountTotal = this.props.quota.memory_limit * 1024 * 1024;
-    const amountUsed = this.getStat('mem', sum);
-    const title = amountUsed ? 'Total memory used' : 'Total memory available';
+    const amountUsed = this.getStat("mem", sum);
+    const title = amountUsed ? "Total memory used" : "Total memory available";
     const secondaryInfo = `${formatBytes(amountTotal)} quota`;
 
     return (

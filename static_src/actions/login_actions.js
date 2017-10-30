@@ -3,9 +3,9 @@
  * modifying login information should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import cfApi from '../util/cf_api';
-import { loginActionTypes } from '../constants';
+import AppDispatcher from "../dispatcher";
+import cfApi from "../util/cf_api";
+import { loginActionTypes } from "../constants";
 
 const loginActions = {
   fetchStatus() {

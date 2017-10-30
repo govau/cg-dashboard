@@ -1,4 +1,4 @@
-import AppDispatcher from '../../dispatcher';
+import AppDispatcher from "../../dispatcher";
 
 export function wrapInRes(responses) {
   let n = 0;
@@ -27,19 +27,19 @@ export function assertAction(spy, type, params = {}) {
 
   for (const param in params) {
     const datum =
-      'data' in actionInfo ? actionInfo.data[param] : actionInfo[param];
+      "data" in actionInfo ? actionInfo.data[param] : actionInfo[param];
     expect(datum).toEqual(params[param]);
   }
 }
 
 export function setupUISpy(sandbox) {
-  return sandbox.stub(AppDispatcher, 'handleUIAction');
+  return sandbox.stub(AppDispatcher, "handleUIAction");
 }
 
 export function setupViewSpy(sandbox) {
-  return sandbox.stub(AppDispatcher, 'handleViewAction');
+  return sandbox.stub(AppDispatcher, "handleViewAction");
 }
 
 export function setupServerSpy(sandbox) {
-  return sandbox.stub(AppDispatcher, 'handleServerAction');
+  return sandbox.stub(AppDispatcher, "handleServerAction");
 }

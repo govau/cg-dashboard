@@ -1,12 +1,12 @@
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import AppDispatcher from '../../../dispatcher';
-import cfApi from '../../../util/cf_api';
-import { wrapInRes, unwrapOfRes } from '../helpers';
-import DomainStore from '../../../stores/domain_store';
-import { domainActionTypes, routeActionTypes } from '../../../constants';
+import AppDispatcher from "../../../dispatcher";
+import cfApi from "../../../util/cf_api";
+import { wrapInRes, unwrapOfRes } from "../helpers";
+import DomainStore from "../../../stores/domain_store";
+import { domainActionTypes, routeActionTypes } from "../../../constants";
 
-describe('DomainStore', function() {
+describe("DomainStore", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -18,16 +18,16 @@ describe('DomainStore', function() {
     sandbox.restore();
   });
 
-  describe('constructor()', function() {
-    it('should start data as empty array', function() {
+  describe("constructor()", function() {
+    it("should start data as empty array", function() {
       expect(DomainStore.getAll()).toBeEmptyArray();
     });
   });
 
-  describe('on domain fetch', function() {
-    it('should call call fetchDomain with the domain guid', function() {
-      const spy = sandbox.spy(cfApi, 'fetchPrivateDomain');
-      const domainGuid = 'fake-domain-guid';
+  describe("on domain fetch", function() {
+    it("should call call fetchDomain with the domain guid", function() {
+      const spy = sandbox.spy(cfApi, "fetchPrivateDomain");
+      const domainGuid = "fake-domain-guid";
 
       AppDispatcher.handleViewAction({
         type: domainActionTypes.DOMAIN_FETCH,
@@ -41,9 +41,9 @@ describe('DomainStore', function() {
     });
   });
 
-  describe('on domain received', function() {
-    it('should merge in the domain', function() {
-      const domain = { guid: 'fake-domain-guid', name: '.gov' };
+  describe("on domain received", function() {
+    it("should merge in the domain", function() {
+      const domain = { guid: "fake-domain-guid", name: ".gov" };
 
       AppDispatcher.handleServerAction({
         type: domainActionTypes.DOMAIN_RECEIVED,
@@ -55,9 +55,9 @@ describe('DomainStore', function() {
       expect(actual).toEqual(domain);
     });
 
-    it('should emit a change event', function() {
-      const spy = sandbox.spy(DomainStore, 'emitChange');
-      const domain = { guid: 'fake-domain-guid', name: '.gov' };
+    it("should emit a change event", function() {
+      const spy = sandbox.spy(DomainStore, "emitChange");
+      const domain = { guid: "fake-domain-guid", name: ".gov" };
 
       AppDispatcher.handleServerAction({
         type: domainActionTypes.DOMAIN_RECEIVED,

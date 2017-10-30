@@ -16,7 +16,7 @@ export default function poll(
       } else if (Date.now() < endTime) {
         setTimeout(check, interval, resolve, reject);
       } else {
-        reject(new Error('Timed out'));
+        reject(new Error("Timed out"));
       }
     });
   };

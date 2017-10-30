@@ -2,10 +2,10 @@
  * Store for generic error data.
  */
 
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import BaseStore from './base_store';
-import { errorActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import { errorActionTypes } from "../constants";
 
 export class ErrorStore extends BaseStore {
   constructor() {
@@ -20,7 +20,7 @@ export class ErrorStore extends BaseStore {
       // If too many errors, clear them and provide a generic fetch one.
       this._data = new Immutable.List();
       const genericFetchError = {
-        description: 'Connection issue, please try again'
+        description: "Connection issue, please try again"
       };
       this.push(genericFetchError);
     }

@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import FormText from './form_text.jsx';
-import { validateInteger } from '../../util/validators';
+import FormText from "./form_text.jsx";
+import { validateInteger } from "../../util/validators";
 
 const propTypes = {
   min: PropTypes.number,

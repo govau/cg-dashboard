@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { entityHealth } from '../constants';
-import EntityIcon from './entity_icon.jsx';
+import PropTypes from "prop-types";
+import React from "react";
+import { entityHealth } from "../constants";
+import EntityIcon from "./entity_icon.jsx";
 
-const ICON_TYPES = ['space', 'app', 'service'];
+const ICON_TYPES = ["space", "app", "service"];
 
 const propTypes = {
   count: PropTypes.number,
@@ -15,7 +15,7 @@ const propTypes = {
 const defaultProps = {
   count: 0,
   health: entityHealth.inactive,
-  iconType: 'space'
+  iconType: "space"
 };
 
 export default class CountStatus extends React.Component {

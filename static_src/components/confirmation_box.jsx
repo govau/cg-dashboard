@@ -1,15 +1,15 @@
 /**
  * A component that renders a box with a different style and background
  */
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
 
 const CONFIRM_STYLES = {
-  INLINE: 'inline',
-  NEXTO: 'nexto',
-  OVER: 'over',
-  BLOCK: 'block'
+  INLINE: "inline",
+  NEXTO: "nexto",
+  OVER: "over",
+  BLOCK: "block"
 };
 
 const propTypes = {
@@ -26,12 +26,12 @@ const propTypes = {
 const defaultProps = {
   style: CONFIRM_STYLES.INLINE,
   message: <div />,
-  confirmationText: 'Confirm delete',
+  confirmationText: "Confirm delete",
   confirmHandler: ev => {
-    console.log('confirm ev', ev);
+    console.log("confirm ev", ev);
   },
   cancelHandler: ev => {
-    console.log('cancel ev', ev);
+    console.log("cancel ev", ev);
   }
 };
 

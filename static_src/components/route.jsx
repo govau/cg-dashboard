@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
-import ConfirmationBox from './confirmation_box.jsx';
-import DomainStore from '../stores/domain_store';
-import ElasticLine from './elastic_line.jsx';
-import ElasticLineItem from './elastic_line_item.jsx';
-import Loading from './loading.jsx';
-import RouteForm from './route_form.jsx';
-import RouteStore from '../stores/route_store';
-import formatRoute from '../util/format_route';
-import routeActions from '../actions/route_actions';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
+import ConfirmationBox from "./confirmation_box.jsx";
+import DomainStore from "../stores/domain_store";
+import ElasticLine from "./elastic_line.jsx";
+import ElasticLineItem from "./elastic_line_item.jsx";
+import Loading from "./loading.jsx";
+import RouteForm from "./route_form.jsx";
+import RouteStore from "../stores/route_store";
+import formatRoute from "../util/format_route";
+import routeActions from "../actions/route_actions";
 
 const propTypes = {
   appGuid: PropTypes.string.isRequired,
@@ -90,7 +90,7 @@ export default class Route extends React.Component {
     const domainGuid = route.domain_guid;
     const spaceGuid = route.space_guid;
     let path = route.path;
-    if (route.path && route.path[0] !== '/') {
+    if (route.path && route.path[0] !== "/") {
       path = `/${route.path}`;
     }
     const updatedRoute = Object.assign({}, route, { path });
@@ -129,12 +129,12 @@ export default class Route extends React.Component {
     return (
       <Action
         key="unbind"
-        label={unbind ? 'Unbind' : 'Bind'}
-        style={unbind ? 'warning' : 'primary'}
-        type={unbind ? 'link' : 'button'}
+        label={unbind ? "Unbind" : "Bind"}
+        style={unbind ? "warning" : "primary"}
+        type={unbind ? "link" : "button"}
         clickHandler={unbind ? this._toggleRemove : this._bindHandler}
       >
-        {unbind ? 'Unbind' : 'Bind'}
+        {unbind ? "Unbind" : "Bind"}
       </Action>
     );
   }
@@ -202,8 +202,8 @@ export default class Route extends React.Component {
         );
       } else if (route.removing) {
         const currentAction = RouteStore.isRouteBoundToApp(route)
-          ? 'unbind'
-          : 'delete';
+          ? "unbind"
+          : "delete";
         const confirmHandler = RouteStore.isRouteBoundToApp(route)
           ? this._unbindHandler
           : this._deleteHandler;

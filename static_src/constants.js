@@ -1,16 +1,16 @@
-import keymirror from 'keymirror';
+import keymirror from "keymirror";
 
 const appStates = {
-  crashed: 'CRASHED',
-  down: 'DOWN',
-  flapping: 'FLAPPING',
-  unknown: 'UNKNOWN',
-  restarting: 'RESTARTING',
-  running: 'RUNNING',
-  started: 'STARTED',
-  starting: 'STARTING',
-  stopped: 'STOPPED',
-  default: 'STOPPED'
+  crashed: "CRASHED",
+  down: "DOWN",
+  flapping: "FLAPPING",
+  unknown: "UNKNOWN",
+  restarting: "RESTARTING",
+  running: "RUNNING",
+  started: "STARTED",
+  starting: "STARTING",
+  stopped: "STOPPED",
+  default: "STOPPED"
 };
 
 // Descriptive states to represent entity health

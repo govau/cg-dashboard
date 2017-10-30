@@ -1,5 +1,5 @@
-import AppDispatcher from '../dispatcher';
-import { pageActionTypes } from '../constants';
+import AppDispatcher from "../dispatcher";
+import { pageActionTypes } from "../constants";
 
 export default {
   load() {

@@ -3,8 +3,8 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import { routeActionTypes } from '../constants';
+import AppDispatcher from "../dispatcher";
+import { routeActionTypes } from "../constants";
 
 export default {
   associateApp(routeGuid, appGuid) {

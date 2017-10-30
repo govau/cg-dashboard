@@ -123,37 +123,37 @@ img.right-arrow {
 }
 
 @media screen and (min-width: 481px) {
-  .usa-banner-button[aria-expanded='true']:hover:after {
+  .usa-banner-button[aria-expanded="true"]:hover:after {
   }
 }
 @media screen and (min-width: 481px) {
-  .usa-banner-button[aria-expanded='true']:after {
+  .usa-banner-button[aria-expanded="true"]:after {
     position: static;
   }
 }
-.usa-banner-button[aria-expanded='true']:after {
+.usa-banner-button[aria-expanded="true"]:after {
   position: absolute;
   right: 1.5rem;
   top: 2.15rem;
 }
 @media screen and (min-width: 481px) {
-  .usa-banner-button[aria-expanded='true']:after {
+  .usa-banner-button[aria-expanded="true"]:after {
     background-position-y: 1px;
   }
 }
 @media screen and (min-width: 481px) {
-  .usa-banner-button[aria-expanded='true']:after {
+  .usa-banner-button[aria-expanded="true"]:after {
     background-size: 100%;
-    content: '';
+    content: "";
     display: inline-block;
     height: 1rem;
     width: 1rem;
     margin-left: 0;
   }
 }
-.usa-banner-button[aria-expanded='true']:after {
+.usa-banner-button[aria-expanded="true"]:after {
   background-size: 100%;
-  content: '';
+  content: "";
   display: inline-block;
   height: 1.3rem;
   width: 1.3rem;

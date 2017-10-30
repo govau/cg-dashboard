@@ -1,18 +1,18 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
 const propTypes = {
   title: PropTypes.string
 };
 
 const defaultProps = {
-  title: 'Default title'
+  title: "Default title"
 };
 
 export default class Panel extends React.Component {
   render() {
     let panelHed = null;
-    if (this.props.title != '') {
+    if (this.props.title != "") {
       panelHed = <h1 className="panel-title">{this.props.title}</h1>;
     }
 

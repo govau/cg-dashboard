@@ -1,13 +1,13 @@
-import http from 'axios';
-import queryString from 'query-string';
+import http from "axios";
+import queryString from "query-string";
 
-import { noticeError } from '../util/analytics';
-import domainActions from '../actions/domain_actions';
-import errorActions from '../actions/error_actions';
-import quotaActions from '../actions/quota_actions';
-import routeActions from '../actions/route_actions';
+import { noticeError } from "../util/analytics";
+import domainActions from "../actions/domain_actions";
+import errorActions from "../actions/error_actions";
+import quotaActions from "../actions/quota_actions";
+import routeActions from "../actions/route_actions";
 
-const APIV = '/v2';
+const APIV = "/v2";
 
 // An error from the CF v2 API
 function CfApiV2Error(response) {
@@ -15,7 +15,7 @@ function CfApiV2Error(response) {
 
   if (!code || !title || !description) {
     throw new Error(
-      'CfApiV2Error expected to have code, title, and description.'
+      "CfApiV2Error expected to have code, title, and description."
     );
   }
 
@@ -60,7 +60,7 @@ function parseError(resultOrError) {
   if (resultOrError.response) {
     // The request was successful but the server returned some kind of error.
     const response = resultOrError.response;
-    if (response.data && typeof response.data === 'object') {
+    if (response.data && typeof response.data === "object") {
       if (response.data.description) {
         // V2 api
         const error = new CfApiV2Error(response.data);
@@ -78,7 +78,7 @@ function parseError(resultOrError) {
     return error;
   }
 
-  const error = new Error('The API returned an unkown error.');
+  const error = new Error("The API returned an unkown error.");
   error.result = resultOrError;
   return error;
 }
@@ -87,7 +87,7 @@ function parseError(resultOrError) {
 // Logs the error, reports to NR, and rejects the error so error actions can
 // handle them appropriately.
 function promiseHandleError(err) {
-  console.warn('cf_api error', { err }); // eslint-disable-line no-console
+  console.warn("cf_api error", { err }); // eslint-disable-line no-console
   noticeError(err);
   return Promise.reject(err);
 }
@@ -109,7 +109,7 @@ export function tryParseJson(serialized) {
 }
 
 export const encodeFilter = ({ filter, op, value }) =>
-  [filter, op === 'IN' ? ` ${op} ` : op, value].join('');
+  [filter, op === "IN" ? ` ${op} ` : op, value].join("");
 
 export const encodeFilters = (filters = []) => filters.map(encodeFilter);
 
@@ -129,7 +129,7 @@ export default {
 
   fetch(url, _action, multiple, ...params) {
     // Set a default noop action handler
-    const action = typeof _action === 'function' ? _action : () => {};
+    const action = typeof _action === "function" ? _action : () => {};
     return http
       .get(APIV + url)
       .then(res => {
@@ -165,7 +165,7 @@ export default {
   // fetchAllPages(url, data = {}, action = () => {})
   fetchAllPages(url, ...args) {
     let [data, action] = args;
-    if (typeof data === 'function') {
+    if (typeof data === "function") {
       action = data;
       data = {};
     }
@@ -209,7 +209,7 @@ export default {
       .catch(res => {
         if (res && res.response && res.response.status === 401) {
           // The user is unauthenicated.
-          return Promise.resolve({ status: 'unauthorized' });
+          return Promise.resolve({ status: "unauthorized" });
         }
 
         // At this point we're not sure if the user is auth'd or not. Treat it
@@ -280,7 +280,7 @@ export default {
   },
 
   fetchOrgs() {
-    return this.fetchAllPages('/organizations', results =>
+    return this.fetchAllPages("/organizations", results =>
       Promise.resolve(results)
     ).catch(err => {
       handleError(err);
@@ -290,20 +290,20 @@ export default {
 
   fetchOrgsQuotas() {
     return this.fetchAllPages(
-      '/quota_definitions',
+      "/quota_definitions",
       quotaActions.receivedQuotasForAllOrgs
     ).catch(() => {}); // TODO handle error with error action
   },
 
   fetchSpacesQuotas() {
     return this.fetchAllPages(
-      '/space_quota_definitions',
+      "/space_quota_definitions",
       quotaActions.receivedQuotasForAllSpaces
     ).catch(() => {}); // TODO handle error with error action
   },
 
   fetchSpaces() {
-    return this.fetchAllPages('/spaces', results => Promise.resolve(results));
+    return this.fetchAllPages("/spaces", results => Promise.resolve(results));
   },
 
   fetchSpace(spaceGuid) {
@@ -478,7 +478,7 @@ export default {
       .then(res => this.formatSplitResponse(res.data))
       .catch(res => {
         if (res && res.response && res.response.status === 400) {
-          if (res.response.data.error_code === 'CF-UaaIdTaken') {
+          if (res.response.data.error_code === "CF-UaaIdTaken") {
             return Promise.resolve({ guid: userGuid });
           }
         }
@@ -513,7 +513,7 @@ export default {
       tryParseJson(servicePlan.extra)
         .then(extra => ({ ...servicePlan, extra }))
         .catch(err => {
-          const e = new Error('Failed to parse service plan extra data');
+          const e = new Error("Failed to parse service plan extra data");
           e.parseError = err;
           return Promise.reject(e);
         })
@@ -655,7 +655,7 @@ export default {
 
   fetchServiceBindings(appGuid) {
     if (!appGuid) {
-      return this.fetchMany('/service_bindings');
+      return this.fetchMany("/service_bindings");
     }
 
     return this.fetchMany(`/apps/${appGuid}/service_bindings`);

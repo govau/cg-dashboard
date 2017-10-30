@@ -1,30 +1,30 @@
 /**
  * Renders the form to create a service instance
  */
-import PropTypes from 'prop-types';
-import React from 'react';
-import Action from './action.jsx';
-import { Form, FormText, FormSelect, FormElement, FormError } from './form';
-import FormStore from '../stores/form_store';
-import Loading from './loading.jsx';
-import OrgStore from '../stores/org_store';
-import SpaceStore from '../stores/space_store';
-import ServiceInstanceStore from '../stores/service_instance_store';
-import serviceActions from '../actions/service_actions';
-import formActions from '../actions/form_actions';
-import { validateString } from '../util/validators';
+import PropTypes from "prop-types";
+import React from "react";
+import Action from "./action.jsx";
+import { Form, FormText, FormSelect, FormElement, FormError } from "./form";
+import FormStore from "../stores/form_store";
+import Loading from "./loading.jsx";
+import OrgStore from "../stores/org_store";
+import SpaceStore from "../stores/space_store";
+import ServiceInstanceStore from "../stores/service_instance_store";
+import serviceActions from "../actions/service_actions";
+import formActions from "../actions/form_actions";
+import { validateString } from "../util/validators";
 
-const CREATE_SERVICE_INSTANCE_FORM_GUID = 'create-service-form';
+const CREATE_SERVICE_INSTANCE_FORM_GUID = "create-service-form";
 
 // Note:
 // This is a temporary hardcoded solution to resolve the need
 // for multiple parameters when setting up service instances.
 const CF_CLI_SERVICE_DETAILS = {
-  'cdn-route': 'https://cloud.gov/docs/services/cdn-route/',
-  'cloud-gov-identity-provider':
-    'https://cloud.gov/docs/services/cloud-gov-identity-provider/',
-  'cloud-gov-service-account':
-    'https://cloud.gov/docs/services/cloud-gov-service-account/'
+  "cdn-route": "https://cloud.gov/docs/services/cdn-route/",
+  "cloud-gov-identity-provider":
+    "https://cloud.gov/docs/services/cloud-gov-identity-provider/",
+  "cloud-gov-service-account":
+    "https://cloud.gov/docs/services/cloud-gov-service-account/"
 };
 
 const propTypes = {
@@ -108,7 +108,7 @@ export default class CreateServiceInstance extends React.Component {
       return (
         <Form
           guid={CREATE_SERVICE_INSTANCE_FORM_GUID}
-          classes={['test-create_service_instance_form']}
+          classes={["test-create_service_instance_form"]}
           ref="form"
           onSubmit={this._onValidForm}
         >
@@ -116,11 +116,11 @@ export default class CreateServiceInstance extends React.Component {
             The
             <strong className="actions-callout-inline-block">
               {serviceName}
-            </strong>{' '}
-            service instance must be created using the CF CLI. Please refer to{' '}
+            </strong>{" "}
+            service instance must be created using the CF CLI. Please refer to{" "}
             <a href={CF_CLI_SERVICE_DETAILS[serviceName]} target="_blank">
               {CF_CLI_SERVICE_DETAILS[serviceName]}
-            </a>{' '}
+            </a>{" "}
             for more information.
           </legend>
         </Form>
@@ -129,7 +129,7 @@ export default class CreateServiceInstance extends React.Component {
     return (
       <Form
         guid={CREATE_SERVICE_INSTANCE_FORM_GUID}
-        classes={['test-create_service_instance_form']}
+        classes={["test-create_service_instance_form"]}
         ref="form"
         onSubmit={this._onValidForm}
       >
@@ -137,23 +137,23 @@ export default class CreateServiceInstance extends React.Component {
           Create a service instance for
           <strong className="actions-callout-inline-block">
             {this.serviceName}
-          </strong>{' '}
+          </strong>{" "}
           using
           <strong className="actions-callout-inline-block">
             {this.servicePlanName}
-          </strong>{' '}
+          </strong>{" "}
           plan.
         </legend>
         <FormText
           formGuid={CREATE_SERVICE_INSTANCE_FORM_GUID}
-          classes={['test-create_service_instance_name']}
+          classes={["test-create_service_instance_name"]}
           label="Choose a name for the service instance"
           name="name"
           validator={this.validateString}
         />
         <FormSelect
           formGuid={CREATE_SERVICE_INSTANCE_FORM_GUID}
-          classes={['test-create_service_instance_space']}
+          classes={["test-create_service_instance_space"]}
           label="Select the space for the service instance"
           name="space"
           options={this.validSpaceTargets}
@@ -173,11 +173,11 @@ export default class CreateServiceInstance extends React.Component {
   }
 
   get serviceName() {
-    return this.props.service.label || 'Unknown Service Name';
+    return this.props.service.label || "Unknown Service Name";
   }
 
   get servicePlanName() {
-    return this.props.servicePlan.name || 'Unknown Service Plan Name';
+    return this.props.servicePlan.name || "Unknown Service Plan Name";
   }
 
   get validSpaceTargets() {

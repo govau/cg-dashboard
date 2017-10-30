@@ -1,7 +1,7 @@
-import { trackAction, trackPageView } from '../../../util/analytics';
+import { trackAction, trackPageView } from "../../../util/analytics";
 
-describe('analytics helpers', function() {
-  describe('with GA loaded and on production', function() {
+describe("analytics helpers", function() {
+  describe("with GA loaded and on production", function() {
     let sandbox;
     const window = window || global;
 
@@ -15,34 +15,34 @@ describe('analytics helpers', function() {
       delete window.ga;
     });
 
-    it('should track action with event', function() {
+    it("should track action with event", function() {
       const action = {
-        source: 'test-source',
-        type: 'test-type'
+        source: "test-source",
+        type: "test-type"
       };
       const expected = {
-        hitType: 'event',
+        hitType: "event",
         eventCategory: action.source,
         eventAction: action.type
       };
-      const spy = sandbox.spy(window, 'ga');
+      const spy = sandbox.spy(window, "ga");
 
       trackAction(action);
 
-      expect(spy).toHaveBeenCalledWith('send', expected);
+      expect(spy).toHaveBeenCalledWith("send", expected);
     });
 
-    it('should track page view with event', function() {
-      const url = 'fake/url/for/testing';
+    it("should track page view with event", function() {
+      const url = "fake/url/for/testing";
       const expected = {
-        hitType: 'pageview',
+        hitType: "pageview",
         page: url
       };
-      const spy = sandbox.spy(window, 'ga');
+      const spy = sandbox.spy(window, "ga");
 
       trackPageView(url);
 
-      expect(spy).toHaveBeenCalledWith('send', expected);
+      expect(spy).toHaveBeenCalledWith("send", expected);
     });
   });
 });

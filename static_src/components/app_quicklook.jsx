@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import classNames from 'classnames';
-import ElasticLine from './elastic_line.jsx';
-import ElasticLineItem from './elastic_line_item.jsx';
-import EntityIcon from './entity_icon.jsx';
-import { appHref } from '../util/url';
-import { appHealth, isHealthyApp } from '../util/health';
+import PropTypes from "prop-types";
+import React from "react";
+import classNames from "classnames";
+import ElasticLine from "./elastic_line.jsx";
+import ElasticLineItem from "./elastic_line_item.jsx";
+import EntityIcon from "./entity_icon.jsx";
+import { appHref } from "../util/url";
+import { appHealth, isHealthyApp } from "../util/health";
 
-const EXTRA_INFO = ['state', 'memory', 'diskQuota'];
+const EXTRA_INFO = ["state", "memory", "diskQuota"];
 
 const propTypes = {
   app: PropTypes.object.isRequired,
@@ -18,7 +18,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  extraInfo: ['state']
+  extraInfo: ["state"]
 };
 
 export default class AppQuicklook extends React.Component {
@@ -43,7 +43,7 @@ export default class AppQuicklook extends React.Component {
 
     return (
       <a
-        className={classNames({ 'status-error': !isHealthyApp(app) })}
+        className={classNames({ "status-error": !isHealthyApp(app) })}
         href={this.appHref()}
       >
         {app.name}
@@ -55,7 +55,7 @@ export default class AppQuicklook extends React.Component {
     const app = this.props.app;
     const info = [];
 
-    if (this.props.extraInfo.includes('state')) {
+    if (this.props.extraInfo.includes("state")) {
       const oneInfo = this.props.extraInfo.length === 1;
 
       // Only show the state if app is crashed or theres only one extra col
@@ -65,7 +65,7 @@ export default class AppQuicklook extends React.Component {
         );
       }
     }
-    if (this.props.extraInfo.includes('memory')) {
+    if (this.props.extraInfo.includes("memory")) {
       info.push(
         <ElasticLineItem key="2" align="end">
           {app.memory} MB <br />
@@ -73,7 +73,7 @@ export default class AppQuicklook extends React.Component {
         </ElasticLineItem>
       );
     }
-    if (this.props.extraInfo.includes('diskQuota')) {
+    if (this.props.extraInfo.includes("diskQuota")) {
       info.push(
         <ElasticLineItem key="3" align="end">
           {app.disk_quota} MB <br />

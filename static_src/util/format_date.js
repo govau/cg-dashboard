@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import moment from "moment-timezone";
 
 /**
  * Returns a formated datetime string
@@ -8,10 +8,10 @@ import moment from 'moment-timezone';
  * @returns {String} A "MM/DD/YYYY H:mma z" formatted string
  *                    i.e. 03/21/2016 10:39am PDT
 */
-export default function formatDateTime(dateString, timezone = 'Etc/UTC') {
+export default function formatDateTime(dateString, timezone = "Etc/UTC") {
   const d = moment(dateString);
   if (!d.isValid()) {
-    throw new Error('Invalid datetimes cannot be formatted.');
+    throw new Error("Invalid datetimes cannot be formatted.");
   }
-  return d.tz(timezone).format('MM/DD/YYYY hh:mma z');
+  return d.tz(timezone).format("MM/DD/YYYY hh:mma z");
 }

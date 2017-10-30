@@ -3,8 +3,8 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import { formActionTypes } from '../constants';
+import AppDispatcher from "../dispatcher";
+import { formActionTypes } from "../constants";
 
 const formActions = {
   changeField(formGuid, fieldName, fieldValue) {

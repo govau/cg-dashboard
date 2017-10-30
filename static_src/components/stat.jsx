@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { FormNumber } from './form';
-import formatBytes from '../util/format_bytes';
+import PropTypes from "prop-types";
+import React from "react";
+import { FormNumber } from "./form";
+import formatBytes from "../util/format_bytes";
 
-const STATES = ['error', 'warning', 'info', 'success', 'none'];
+const STATES = ["error", "warning", "info", "success", "none"];
 
 const propTypes = {
   formGuid: PropTypes.string,
@@ -21,9 +21,9 @@ const propTypes = {
 const defaultProps = {
   editable: false,
   onChange: () => {},
-  statState: 'none',
+  statState: "none",
   secondaryInfo: <span />,
-  unit: 'MB'
+  unit: "MB"
 };
 
 function stateSetter(props) {

@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import loadingImg from 'cloudgov-style/img/loading.gif';
+import PropTypes from "prop-types";
+import React from "react";
+import loadingImg from "cloudgov-style/img/loading.gif";
 
 const LOADING_TIME = 300;
 const STYLES = [
   // globalSaving is applied to saving notifications inside panels
-  'globalSaving',
+  "globalSaving",
   // inline is applied when displaying an inline panel loading status
-  'inline',
+  "inline",
   // cover is used to show a full page loading status
-  'cover'
+  "cover"
 ];
 
 const propTypes = {
@@ -20,10 +20,10 @@ const propTypes = {
 };
 
 const defaultProps = {
-  text: 'Loading',
+  text: "Loading",
   active: true,
   loadingDelayMS: LOADING_TIME,
-  style: 'cover'
+  style: "cover"
 };
 
 class Loading extends React.Component {
@@ -57,14 +57,14 @@ class Loading extends React.Component {
 
   get containerClasses() {
     switch (this.props.style) {
-      case 'globalSaving': {
-        return 'saving saving-relative';
+      case "globalSaving": {
+        return "saving saving-relative";
       }
-      case 'cover': {
-        return 'loading loading-relative';
+      case "cover": {
+        return "loading loading-relative";
       }
       default: {
-        return 'loading-inline';
+        return "loading-inline";
       }
     }
   }
@@ -83,10 +83,10 @@ class Loading extends React.Component {
       >
         {(() => {
           switch (style) {
-            case 'globalSaving': {
+            case "globalSaving": {
               return <div>{this.props.text}</div>;
             }
-            case 'cover': {
+            case "cover": {
               return (
                 <img
                   className="loading-indicator"
@@ -95,7 +95,7 @@ class Loading extends React.Component {
                 />
               );
             }
-            case 'inline': {
+            case "inline": {
               return (
                 <div>
                   <span className="loading-inline-dot">•</span>

@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import AppQuicklook from './app_quicklook.jsx';
-import ComplexList from './complex_list.jsx';
-import EntityEmpty from './entity_empty.jsx';
-import EntityIcon from './entity_icon.jsx';
-import InfoAppCreate from './info_app_create.jsx';
-import OrgStore from '../stores/org_store';
-import { spaceHref } from '../util/url';
+import AppQuicklook from "./app_quicklook.jsx";
+import ComplexList from "./complex_list.jsx";
+import EntityEmpty from "./entity_empty.jsx";
+import EntityIcon from "./entity_icon.jsx";
+import InfoAppCreate from "./info_app_create.jsx";
+import OrgStore from "../stores/org_store";
+import { spaceHref } from "../util/url";
 
 const propTypes = {
   space: PropTypes.object.isRequired,
@@ -57,8 +57,8 @@ export default class SpaceQuicklook extends React.Component {
                 spaceName={space.name}
                 extraInfo={
                   this.props.showAppDetail
-                    ? ['state', 'memory', 'diskQuota']
-                    : ['state']
+                    ? ["state", "memory", "diskQuota"]
+                    : ["state"]
                 }
               />
             ))}

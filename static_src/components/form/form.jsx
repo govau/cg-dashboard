@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 /**
  * form.jsx
  *
@@ -7,11 +7,11 @@ import PropTypes from 'prop-types';
  * actions.
  * */
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import FormError from './form_error.jsx';
-import FormStore from '../../stores/form_store';
+import FormError from "./form_error.jsx";
+import FormStore from "../../stores/form_store";
 
 const propTypes = {
   action: PropTypes.string,
@@ -24,9 +24,9 @@ const propTypes = {
 };
 
 const defaultProps = {
-  action: '/',
+  action: "/",
   classes: [],
-  method: 'post'
+  method: "post"
 };
 
 function stateSetter(props) {

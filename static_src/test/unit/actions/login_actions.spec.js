@@ -1,9 +1,9 @@
-import AppDispatcher from '../../../dispatcher';
-import cfApi from '../../../util/cf_api';
-import loginActions from '../../../actions/login_actions';
-import { loginActionTypes } from '../../../constants';
+import AppDispatcher from "../../../dispatcher";
+import cfApi from "../../../util/cf_api";
+import loginActions from "../../../actions/login_actions";
+import { loginActionTypes } from "../../../constants";
 
-describe('loginActions', function() {
+describe("loginActions", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -14,17 +14,17 @@ describe('loginActions', function() {
     sandbox.restore();
   });
 
-  describe('fetchStatus()', function() {
+  describe("fetchStatus()", function() {
     beforeEach(function(done) {
-      sandbox.stub(cfApi, 'getAuthStatus').returns(Promise.resolve('success'));
-      sandbox.stub(AppDispatcher, 'handleViewAction');
-      sandbox.stub(loginActions, 'receivedStatus').returns(Promise.resolve());
-      sandbox.stub(loginActions, 'errorStatus').returns(Promise.resolve());
+      sandbox.stub(cfApi, "getAuthStatus").returns(Promise.resolve("success"));
+      sandbox.stub(AppDispatcher, "handleViewAction");
+      sandbox.stub(loginActions, "receivedStatus").returns(Promise.resolve());
+      sandbox.stub(loginActions, "errorStatus").returns(Promise.resolve());
 
       loginActions.fetchStatus().then(done, done.fail);
     });
 
-    it('dispatches event', function() {
+    it("dispatches event", function() {
       expect(AppDispatcher.handleViewAction).toHaveBeenCalledWith(
         sinon.match({
           type: loginActionTypes.FETCH_STATUS
@@ -32,13 +32,13 @@ describe('loginActions', function() {
       );
     });
 
-    it('resolves the api promise to receivedStatus', function() {
-      expect(loginActions.receivedStatus).toHaveBeenCalledWith('success');
+    it("resolves the api promise to receivedStatus", function() {
+      expect(loginActions.receivedStatus).toHaveBeenCalledWith("success");
     });
 
-    describe('on failure', () => {
-      it('calls errorStatus', done => {
-        const err = new Error('failure');
+    describe("on failure", () => {
+      it("calls errorStatus", done => {
+        const err = new Error("failure");
         cfApi.getAuthStatus.returns(Promise.reject(err));
 
         loginActions.fetchStatus().then(() => {
@@ -49,11 +49,11 @@ describe('loginActions', function() {
     });
   });
 
-  describe('receivedStatus()', function() {
+  describe("receivedStatus()", function() {
     let authStatus, result;
     beforeEach(function(done) {
-      authStatus = { status: 'authorized' };
-      sandbox.stub(AppDispatcher, 'handleServerAction');
+      authStatus = { status: "authorized" };
+      sandbox.stub(AppDispatcher, "handleServerAction");
 
       loginActions
         .receivedStatus(authStatus)
@@ -63,7 +63,7 @@ describe('loginActions', function() {
         .then(done, done.fail);
     });
 
-    it('dispatches event', function() {
+    it("dispatches event", function() {
       expect(AppDispatcher.handleServerAction).toHaveBeenCalledWith(
         sinon.match({
           type: loginActionTypes.RECEIVED_STATUS,
@@ -72,17 +72,17 @@ describe('loginActions', function() {
       );
     });
 
-    it('resolves authStatus', function() {
+    it("resolves authStatus", function() {
       expect(result).toBe(authStatus);
     });
   });
 
-  describe('errorStatus()', function() {
+  describe("errorStatus()", function() {
     let err, result;
 
     beforeEach(function(done) {
-      err = new Error('failure');
-      sandbox.stub(AppDispatcher, 'handleServerAction');
+      err = new Error("failure");
+      sandbox.stub(AppDispatcher, "handleServerAction");
 
       loginActions
         .errorStatus(err)
@@ -92,7 +92,7 @@ describe('loginActions', function() {
         .then(done, done.fail);
     });
 
-    it('dispatches event', function() {
+    it("dispatches event", function() {
       expect(AppDispatcher.handleServerAction).toHaveBeenCalledWith(
         sinon.match({
           type: loginActionTypes.ERROR_STATUS,
@@ -101,7 +101,7 @@ describe('loginActions', function() {
       );
     });
 
-    it('resolves falsey', function() {
+    it("resolves falsey", function() {
       expect(result).toBeFalsy();
     });
   });

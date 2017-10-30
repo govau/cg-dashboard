@@ -1,74 +1,74 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const PRODUCTION = process.env.NODE_ENV === 'prod';
-const TEST = process.env.NODE_ENV === 'test';
-const CF_SKIN = process.env.CF_SKIN || 'cg';
+const PRODUCTION = process.env.NODE_ENV === "prod";
+const TEST = process.env.NODE_ENV === "test";
+const CF_SKIN = process.env.CF_SKIN || "cg";
 
-const srcDir = './static_src';
-const compiledDir = './static/assets';
+const srcDir = "./static_src";
+const compiledDir = "./static/assets";
 
 const config = {
   bail: false,
 
-  entry: ['babel-polyfill', `${srcDir}/main.js`],
+  entry: ["babel-polyfill", `${srcDir}/main.js`],
 
   output: {
     path: path.resolve(compiledDir),
-    filename: 'bundle.js',
-    sourceMapFilename: 'bundle.js.map'
+    filename: "bundle.js",
+    sourceMapFilename: "bundle.js.map"
   },
 
-  devtool: PRODUCTION ? 'cheap-source-map' : 'eval-source-map',
+  devtool: PRODUCTION ? "cheap-source-map" : "eval-source-map",
 
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         options: {
-          presets: ['env', 'react'],
-          plugins: ['transform-object-rest-spread', 'transform-runtime']
+          presets: ["env", "react"],
+          plugins: ["transform-object-rest-spread", "transform-runtime"]
         },
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
+          fallback: "style-loader",
+          use: "css-loader"
         })
       },
       {
         test: /\.(svg|ico|png|gif|jpe?g)$/,
-        loader: 'url-loader?limit=1024&name=img/[name].[ext]'
+        loader: "url-loader?limit=1024&name=img/[name].[ext]"
       },
       {
         test: /\.(ttf|woff2?|eot)$/,
-        loader: 'url-loader?limit=1024&name=font/[name].[ext]'
+        loader: "url-loader?limit=1024&name=font/[name].[ext]"
       }
     ]
   },
 
   resolve: {
     alias: {
-      dashboard: path.resolve(__dirname, 'static_src'),
+      dashboard: path.resolve(__dirname, "static_src"),
       skin: path.resolve(__dirname, `static_src/skins/${CF_SKIN}`)
     },
 
-    modules: ['node_modules'],
+    modules: ["node_modules"],
     // Required for some module configs which use these fields
     // See https://github.com/flatiron/director/issues/349
-    mainFields: ['browserify', 'browser', 'module', 'main'],
+    mainFields: ["browserify", "browser", "module", "main"],
 
     symlinks: false
   },
 
   plugins: [
     new ExtractTextPlugin({
-      filename: 'style.css',
+      filename: "style.css",
       disable: false,
       allChunks: true
     }),
@@ -84,18 +84,18 @@ const config = {
 
 if (TEST) {
   config.externals = {
-    cheerio: 'window',
-    'react/addons': true,
-    'react/lib/ExecutionEnvironment': true,
-    'react/lib/ReactContext': true
+    cheerio: "window",
+    "react/addons": true,
+    "react/lib/ExecutionEnvironment": true,
+    "react/lib/ReactContext": true
   };
 }
 
 if (PRODUCTION) {
   config.plugins.push(
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
       }
     })
   );

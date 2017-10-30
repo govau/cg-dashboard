@@ -3,11 +3,11 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import cfApi from '../util/cf_api';
-import errorActions from './error_actions';
-import { spaceActionTypes } from '../constants';
-import SpaceStore from '../stores/space_store';
+import AppDispatcher from "../dispatcher";
+import cfApi from "../util/cf_api";
+import errorActions from "./error_actions";
+import { spaceActionTypes } from "../constants";
+import SpaceStore from "../stores/space_store";
 
 export default {
   fetch(spaceGuid) {
@@ -20,7 +20,7 @@ export default {
       .fetchSpace(spaceGuid)
       .then(this.receivedSpace)
       .catch(err =>
-        errorActions.importantDataFetchError(err, 'unable to fetch space')
+        errorActions.importantDataFetchError(err, "unable to fetch space")
       );
   },
 
@@ -35,7 +35,7 @@ export default {
       .catch(err =>
         errorActions.importantDataFetchError(
           err,
-          'space data may be incomplete'
+          "space data may be incomplete"
         )
       );
   },
@@ -51,7 +51,7 @@ export default {
         .filter(space => space.organization_guid === orgGuid)
         .map(space => this.fetch(space.guid))
     ).catch(err =>
-      errorActions.importantDataFetchError(err, 'space data may be incomplete')
+      errorActions.importantDataFetchError(err, "space data may be incomplete")
     );
   },
 

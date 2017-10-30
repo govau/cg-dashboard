@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import AppCountStatus from './app_count_status.jsx';
-import AppList from '../components/app_list.jsx';
-import Breadcrumbs from './breadcrumbs';
-import EntityIcon from './entity_icon.jsx';
-import Loading from './loading.jsx';
-import Marketplace from './marketplace.jsx';
-import OrgStore from '../stores/org_store';
-import PageHeader from './page_header.jsx';
-import Panel from './panel.jsx';
-import ServiceCountStatus from './service_count_status.jsx';
-import ServiceInstanceTable from './service_instance_table.jsx';
-import SpaceStore from '../stores/space_store';
-import Users from './users.jsx';
-import UserStore from '../stores/user_store';
+import AppCountStatus from "./app_count_status.jsx";
+import AppList from "../components/app_list.jsx";
+import Breadcrumbs from "./breadcrumbs";
+import EntityIcon from "./entity_icon.jsx";
+import Loading from "./loading.jsx";
+import Marketplace from "./marketplace.jsx";
+import OrgStore from "../stores/org_store";
+import PageHeader from "./page_header.jsx";
+import Panel from "./panel.jsx";
+import ServiceCountStatus from "./service_count_status.jsx";
+import ServiceInstanceTable from "./service_instance_table.jsx";
+import SpaceStore from "../stores/space_store";
+import Users from "./users.jsx";
+import UserStore from "../stores/user_store";
 
 function stateSetter() {
   return {
@@ -33,7 +33,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  currentPage: 'apps'
+  currentPage: "apps"
 };
 
 export default class SpaceContainer extends React.Component {
@@ -61,11 +61,11 @@ export default class SpaceContainer extends React.Component {
   }
 
   get currentOrgName() {
-    return this.state.currentOrg ? this.state.currentOrg.name : '';
+    return this.state.currentOrg ? this.state.currentOrg.name : "";
   }
 
   get currentOrgGuid() {
-    return this.state.currentOrg || '0';
+    return this.state.currentOrg || "0";
   }
 
   render() {

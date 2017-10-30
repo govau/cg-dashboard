@@ -3,8 +3,8 @@
  * instances.
  */
 
-import BaseStore from './base_store';
-import { serviceActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import { serviceActionTypes } from "../constants";
 
 export class ServiceBindingStore extends BaseStore {
   constructor() {
@@ -32,7 +32,7 @@ export class ServiceBindingStore extends BaseStore {
       case serviceActionTypes.SERVICE_BINDINGS_RECEIVED: {
         this._fetching = false;
         const bindings = action.serviceBindings;
-        this.mergeMany('guid', bindings, () => {});
+        this.mergeMany("guid", bindings, () => {});
         this.emitChange();
         break;
       }
@@ -48,13 +48,13 @@ export class ServiceBindingStore extends BaseStore {
           ...binding,
           unbinding: true
         };
-        this.merge('guid', unbindingService);
+        this.merge("guid", unbindingService);
         break;
       }
 
       case serviceActionTypes.SERVICE_BOUND: {
         const binding = action.serviceBinding;
-        this.merge('guid', binding);
+        this.merge("guid", binding);
         break;
       }
 

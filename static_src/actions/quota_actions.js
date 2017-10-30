@@ -3,8 +3,8 @@
  * etc should go here.
  */
 
-import AppDispatcher from '../dispatcher';
-import { quotaActionTypes } from '../constants';
+import AppDispatcher from "../dispatcher";
+import { quotaActionTypes } from "../constants";
 
 export default {
   fetchAll() {

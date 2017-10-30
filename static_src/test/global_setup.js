@@ -1,13 +1,13 @@
 /* eslint-disable jasmine/no-global-setup,no-console */
-import 'babel-polyfill';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import "babel-polyfill";
+import Enzyme from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-import jasmineEnzyme from 'jasmine-enzyme';
-import LoginStore from '../stores/login_store';
-import UserStore from '../stores/user_store';
+import jasmineEnzyme from "jasmine-enzyme";
+import LoginStore from "../stores/login_store";
+import UserStore from "../stores/user_store";
 
 Function.prototype.bind =
   Function.prototype.bind ||

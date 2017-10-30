@@ -3,11 +3,11 @@
  * server.
  */
 
-import Immutable from 'immutable';
-import PropTypes from 'prop-types';
+import Immutable from "immutable";
+import PropTypes from "prop-types";
 
-import BaseStore from './base_store';
-import { appStates, appActionTypes } from '../constants';
+import BaseStore from "./base_store";
+import { appStates, appActionTypes } from "../constants";
 
 export const appPropType = PropTypes.shape({
   guid: PropTypes.string.isRequired,
@@ -65,7 +65,7 @@ export class AppStore extends BaseStore {
           updating: true,
           ...action.appPartial
         };
-        this.merge('guid', updatedApp);
+        this.merge("guid", updatedApp);
         break;
       }
 
@@ -75,7 +75,7 @@ export class AppStore extends BaseStore {
           updating: false
         };
 
-        this.merge('guid', app);
+        this.merge("guid", app);
         break;
       }
 
@@ -86,7 +86,7 @@ export class AppStore extends BaseStore {
 
       case appActionTypes.APP_RECEIVED:
         this._fetchApp = false;
-        this.merge('guid', action.app || {}, () => {
+        this.merge("guid", action.app || {}, () => {
           // Emit regardless because the loading state has changed
           this.emitChange();
         });
@@ -98,7 +98,7 @@ export class AppStore extends BaseStore {
           ...action.app,
           guid: action.appGuid
         };
-        this.merge('guid', app, () => {
+        this.merge("guid", app, () => {
           // Emit change regardless of app because loading state changed
           this.emitChange();
         });
@@ -130,7 +130,7 @@ export class AppStore extends BaseStore {
             ...app,
             state: appStates.starting
           };
-          this.merge('guid', startingApp, changed => {
+          this.merge("guid", startingApp, changed => {
             if (changed) this.emitChange();
           });
         }
@@ -144,7 +144,7 @@ export class AppStore extends BaseStore {
             ...app,
             state: appStates.restarting
           };
-          this.merge('guid', restartingApp, changed => {
+          this.merge("guid", restartingApp, changed => {
             if (changed) this.emitChange();
           });
         }
@@ -172,7 +172,7 @@ export class AppStore extends BaseStore {
             updating: false,
             restarting: false
           };
-          this.merge('guid', erroredApp);
+          this.merge("guid", erroredApp);
         }
         break;
       }

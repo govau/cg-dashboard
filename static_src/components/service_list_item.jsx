@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import ElasticLine from './elastic_line.jsx';
-import ElasticLineItem from './elastic_line_item.jsx';
-import ServicePlanList from './service_plan_list.jsx';
-import formatDateTime from '../util/format_date';
+import PropTypes from "prop-types";
+import React from "react";
+import ElasticLine from "./elastic_line.jsx";
+import ElasticLineItem from "./elastic_line_item.jsx";
+import ServicePlanList from "./service_plan_list.jsx";
+import formatDateTime from "../util/format_date";
 
 const propTypes = {
   guid: PropTypes.string,

@@ -18,8 +18,8 @@
 /*
  * Override WDS fancy checkboxes/radios
  **/
-input[type='checkbox']:not(.fancy),
-input[type='radio']:not(.fancy) {
+input[type="checkbox"]:not(.fancy),
+input[type="radio"]:not(.fancy) {
   -webkit-appearance: checkbox;
   display: inline;
   left: 0;
@@ -30,11 +30,11 @@ input[type='radio']:not(.fancy) {
   width: auto;
 }
 
-input[type='checkbox']:checked + label::before {
+input[type="checkbox"]:checked + label::before {
   display: none;
 }
 
-input[type='checkbox'] + label::before,
-input[type='radio'] + label::before {
+input[type="checkbox"] + label::before,
+input[type="radio"] + label::before {
   display: none;
 }

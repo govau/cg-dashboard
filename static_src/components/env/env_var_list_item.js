@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import { appPropType } from '../../stores/app_store';
+import { appPropType } from "../../stores/app_store";
 import {
   updateErrorPropType,
   deleteErrorPropType
-} from '../../stores/env_store';
-import envActions from '../../actions/env_actions';
-import Action from '../action.jsx';
-import ConfirmationBox from '../confirmation_box.jsx';
-import ElasticLine from '../elastic_line.jsx';
-import ElasticLineItem from '../elastic_line_item.jsx';
-import Loading from '../loading.jsx';
-import ErrorMessage from '../error_message.jsx';
-import EnvVarForm from './env_var_form';
+} from "../../stores/env_store";
+import envActions from "../../actions/env_actions";
+import Action from "../action.jsx";
+import ConfirmationBox from "../confirmation_box.jsx";
+import ElasticLine from "../elastic_line.jsx";
+import ElasticLineItem from "../elastic_line_item.jsx";
+import Loading from "../loading.jsx";
+import ErrorMessage from "../error_message.jsx";
+import EnvVarForm from "./env_var_form";
 
 const propTypes = {
   name: PropTypes.string.isRequired,

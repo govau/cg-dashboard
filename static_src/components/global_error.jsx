@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import Notification from './notification.jsx';
-import { config } from 'skin';
-import errorActions from '../actions/error_actions';
+import Notification from "./notification.jsx";
+import { config } from "skin";
+import errorActions from "../actions/error_actions";
 
 const propTypes = {
   err: PropTypes.object
@@ -33,16 +33,16 @@ export default class GlobalError extends React.Component {
     const err = this.props.err;
     const link = config.docs.status && (
       <span>
-        {' '}
-        check{' '}
+        {" "}
+        check{" "}
         <a target="_blank" href={config.docs.status}>
           {config.platform.name}'s status
-        </a>{' '}
+        </a>{" "}
         or
       </span>
     );
 
-    const description = err.description || 'An unknown error occurred';
+    const description = err.description || "An unknown error occurred";
     const wrappedDescription = (
       <span>
         {description}. {description.length > 80 && <br />}
@@ -54,7 +54,7 @@ export default class GlobalError extends React.Component {
       <Notification
         message={wrappedDescription}
         actions={[
-          { text: 'Refresh', clickHandler: this.onNotificationRefresh }
+          { text: "Refresh", clickHandler: this.onNotificationRefresh }
         ]}
         onDismiss={this.onNotificationDismiss}
       />

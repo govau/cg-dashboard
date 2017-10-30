@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import classnames from 'classnames';
-import Link from './action/link.jsx';
-import Button from './action/button.jsx';
+import PropTypes from "prop-types";
+import React from "react";
+import classnames from "classnames";
+import Link from "./action/link.jsx";
+import Button from "./action/button.jsx";
 
 const BUTTON_TYPES = {
-  BUTTON: 'button',
-  OUTLINE: 'outline',
-  LINK: 'link',
-  SUBMIT: 'submit'
+  BUTTON: "button",
+  OUTLINE: "outline",
+  LINK: "link",
+  SUBMIT: "submit"
 };
-const BUTTON_STYLES = ['warning', 'primary', 'finish', 'base', 'white'];
+const BUTTON_STYLES = ["warning", "primary", "finish", "base", "white"];
 const propTypes = {
   children: PropTypes.any,
   classes: PropTypes.array,
@@ -22,10 +22,10 @@ const propTypes = {
   type: PropTypes.oneOf(Object.keys(BUTTON_TYPES).map(t => BUTTON_TYPES[t]))
 };
 const defaultProps = {
-  style: 'primary',
+  style: "primary",
   classes: [],
-  label: '',
-  type: 'button',
+  label: "",
+  type: "button",
   disabled: false,
   clickHandler: () => true
 };
@@ -36,7 +36,7 @@ export default class Action extends React.Component {
   }
 
   get classes() {
-    return this.props.classes.join(' ');
+    return this.props.classes.join(" ");
   }
 
   get buttonClasses() {
@@ -44,10 +44,10 @@ export default class Action extends React.Component {
 
     return classnames(
       {
-        'action-outline': this.props.type === BUTTON_TYPES.OUTLINE,
-        'usa-button-disabled': this.props.disabled
+        "action-outline": this.props.type === BUTTON_TYPES.OUTLINE,
+        "usa-button-disabled": this.props.disabled
       },
-      'usa-button',
+      "usa-button",
       `usa-button-${this.props.style}`
     );
   }

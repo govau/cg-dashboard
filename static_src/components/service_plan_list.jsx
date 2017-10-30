@@ -1,11 +1,11 @@
 /**
  * Renders a list of service plans
  */
-import PropTypes from 'prop-types';
-import React from 'react';
-import ServicePlan from './service_plan.jsx';
-import serviceActions from '../actions/service_actions';
-import ServicePlanStore from '../stores/service_plan_store';
+import PropTypes from "prop-types";
+import React from "react";
+import ServicePlan from "./service_plan.jsx";
+import serviceActions from "../actions/service_actions";
+import ServicePlanStore from "../stores/service_plan_store";
 
 const propTypes = {
   plans: PropTypes.array,
@@ -37,9 +37,9 @@ export default class ServicePlanList extends React.Component {
 
   get columns() {
     const columns = [
-      { label: 'Service Plan Name', key: 'label' },
-      { label: 'Description', key: 'description' },
-      { label: 'Actions', key: 'actions' }
+      { label: "Service Plan Name", key: "label" },
+      { label: "Description", key: "description" },
+      { label: "Actions", key: "actions" }
     ];
 
     return columns;
@@ -47,7 +47,7 @@ export default class ServicePlanList extends React.Component {
 
   cost(plan) {
     const cost = ServicePlanStore.getCost(plan);
-    if (plan.free || cost === 0) return 'Free';
+    if (plan.free || cost === 0) return "Free";
     return `$${cost.toFixed(2)} monthly`;
   }
 

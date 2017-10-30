@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import classNames from 'classnames';
-import ComplexListItem from './complex_list_item.jsx';
+import PropTypes from "prop-types";
+import React from "react";
+import classNames from "classnames";
+import ComplexListItem from "./complex_list_item.jsx";
 
 const propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
@@ -42,7 +42,7 @@ export default class ComplexList extends React.Component {
       );
     }
 
-    const classes = classNames('complex_list', {
+    const classes = classNames("complex_list", {
       [this.props.className]: this.props.className
     });
 

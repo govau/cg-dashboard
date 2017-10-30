@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import UserStore from '../stores/user_store';
+import PropTypes from "prop-types";
+import React from "react";
+import UserStore from "../stores/user_store";
 
 const userProvider = Component => {
   class UserProvider extends React.Component {

@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
-import AppQuicklook from './app_quicklook.jsx';
-import ComplexList from './complex_list.jsx';
-import EntityEmpty from './entity_empty.jsx';
-import EntityIcon from './entity_icon.jsx';
-import InfoAppCreate from './info_app_create.jsx';
-import Loading from './loading.jsx';
-import OrgStore from '../stores/org_store';
-import SpaceStore from '../stores/space_store';
-import UserStore from '../stores/user_store';
+import AppQuicklook from "./app_quicklook.jsx";
+import ComplexList from "./complex_list.jsx";
+import EntityEmpty from "./entity_empty.jsx";
+import EntityIcon from "./entity_icon.jsx";
+import InfoAppCreate from "./info_app_create.jsx";
+import Loading from "./loading.jsx";
+import OrgStore from "../stores/org_store";
+import SpaceStore from "../stores/space_store";
+import UserStore from "../stores/user_store";
 
 function stateSetter() {
   const currentOrgGuid = OrgStore.currentOrgGuid;
@@ -85,7 +85,7 @@ export default class AppList extends React.Component {
               orgGuid={this.state.currentOrgGuid}
               spaceGuid={this.state.currentSpaceGuid}
               spaceName={this.state.currentSpaceName}
-              extraInfo={['state', 'memory', 'diskQuota']}
+              extraInfo={["state", "memory", "diskQuota"]}
             />
           ))}
         </ComplexList>

@@ -1,18 +1,18 @@
-import React from 'react';
+import React from "react";
 
-import AppStore from '../stores/app_store';
-import Action from './action.jsx';
-import ComplexList from './complex_list.jsx';
-import DomainStore from '../stores/domain_store';
-import OrgStore from '../stores/org_store';
-import PanelActions from './panel_actions.jsx';
-import routeActions from '../actions/route_actions';
-import Route from './route.jsx';
-import RouteForm from './route_form.jsx';
-import RouteStore from '../stores/route_store';
-import QuotaStore from '../stores/quota_store';
-import SpaceStore from '../stores/space_store';
-import { spaceHref } from '../util/url';
+import AppStore from "../stores/app_store";
+import Action from "./action.jsx";
+import ComplexList from "./complex_list.jsx";
+import DomainStore from "../stores/domain_store";
+import OrgStore from "../stores/org_store";
+import PanelActions from "./panel_actions.jsx";
+import routeActions from "../actions/route_actions";
+import Route from "./route.jsx";
+import RouteForm from "./route_form.jsx";
+import RouteStore from "../stores/route_store";
+import QuotaStore from "../stores/quota_store";
+import SpaceStore from "../stores/space_store";
+import { spaceHref } from "../util/url";
 
 function stateSetter() {
   const appGuid = AppStore.currentAppGuid;
@@ -32,8 +32,8 @@ function stateSetter() {
     if (domain) {
       newRoute = Object.assign({}, newRoute, { domain_name: domain.name });
     }
-    if (route.path && route.path[0] === '/') {
-      newRoute.path = route.path.replace('/', '');
+    if (route.path && route.path[0] === "/") {
+      newRoute.path = route.path.replace("/", "");
     }
     return newRoute;
   });

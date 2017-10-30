@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { config } from 'skin';
-import UserStore from '../stores/user_store';
+import PropTypes from "prop-types";
+import React from "react";
+import { config } from "skin";
+import UserStore from "../stores/user_store";
 
 const propTypes = {
   org: PropTypes.object,
@@ -18,8 +18,8 @@ export default class InfoAppCreate extends React.Component {
   get noPermission() {
     return (
       <p>
-        <em>Space developers</em> can add apps to spaces. Read more about{' '}
-        <a href={config.docs.deploying_apps}>adding apps</a> and{' '}
+        <em>Space developers</em> can add apps to spaces. Read more about{" "}
+        <a href={config.docs.deploying_apps}>adding apps</a> and{" "}
         <a href={config.docs.roles}>permissions</a>.
       </p>
     );
@@ -45,7 +45,7 @@ export default class InfoAppCreate extends React.Component {
           <p>Add a new app to this space in the {cliLink}</p>
           <pre>
             <code>
-              $ cf target -o {org.name || '<org>'} -s {space.name || '<space>'}
+              $ cf target -o {org.name || "<org>"} -s {space.name || "<space>"}
             </code>
             <br />
             <code>$ cf push my-app</code>
@@ -57,13 +57,13 @@ export default class InfoAppCreate extends React.Component {
       content = (
         <div className="info info-app_create">
           <p>
-            Learn how to{' '}
+            Learn how to{" "}
             <a href={config.docs.deploying_apps}>deploy a new app</a>.
           </p>
 
           <h5 className="info-header">Set up the Cloud Foundry CLI</h5>
           <p>
-            Download and install the{' '}
+            Download and install the{" "}
             <a href={config.docs.cli}>Cloud Foundry command line interface</a>.
           </p>
           <pre>$ cf --version</pre>
@@ -76,7 +76,7 @@ export default class InfoAppCreate extends React.Component {
           <p>From your application directory:</p>
           <pre>
             <code>
-              $ cf target -o {org.name || '<org>'} -s {space.name || '<space>'}
+              $ cf target -o {org.name || "<org>"} -s {space.name || "<space>"}
             </code>
             <br />
             <code>$ cf push my-app</code>
@@ -92,7 +92,7 @@ export default class InfoAppCreate extends React.Component {
     const space = this.props.space || {};
     const user = this.props.user || {};
 
-    const content = UserStore.hasRole(user.guid, space.guid, 'space_developer')
+    const content = UserStore.hasRole(user.guid, space.guid, "space_developer")
       ? this.spaceDeveloper
       : this.noPermission;
 

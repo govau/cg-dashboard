@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import formatRoute from '../../util/format_route';
+import React from "react";
+import PropTypes from "prop-types";
+import formatRoute from "../../util/format_route";
 
-const urlPlaceholder = 'url';
+const urlPlaceholder = "url";
 const propTypes = {
   actor: PropTypes.string,
   domain: PropTypes.shape({ name: PropTypes.string }),
@@ -22,7 +22,7 @@ const appRouteLink = (domain, route) => {
 
 const RouteEventItem = ({ actor, domain, route, unmapped }) => (
   <span>
-    {actor} {unmapped || 'mapped'} {appRouteLink(domain, route)} to the app.
+    {actor} {unmapped || "mapped"} {appRouteLink(domain, route)} to the app.
   </span>
 );
 

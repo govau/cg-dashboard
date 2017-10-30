@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import eventLogTypes from '../../util/event_log_types';
-import ElasticLine from '../elastic_line.jsx';
-import ElasticLineItem from '../elastic_line_item.jsx';
-import Timestamp from './timestamp.jsx';
-import LogItem from './log_item.jsx';
-import CrashEventItem from './crash_event_item.jsx';
-import RouteEventItem from './route_event_item.jsx';
-import RawJSONDetail from './raw_json_detail.jsx';
+import React from "react";
+import PropTypes from "prop-types";
+import classnames from "classnames";
+import eventLogTypes from "../../util/event_log_types";
+import ElasticLine from "../elastic_line.jsx";
+import ElasticLineItem from "../elastic_line_item.jsx";
+import Timestamp from "./timestamp.jsx";
+import LogItem from "./log_item.jsx";
+import CrashEventItem from "./crash_event_item.jsx";
+import RouteEventItem from "./route_event_item.jsx";
+import RawJSONDetail from "./raw_json_detail.jsx";
 
 const propTypes = {
   domain: PropTypes.object,
@@ -18,8 +18,8 @@ const propTypes = {
 };
 
 const activityTypes = {
-  LOG: 'log',
-  EVENT: 'event'
+  LOG: "log",
+  EVENT: "event"
 };
 
 export default class ActivityLogItem extends React.Component {
@@ -72,20 +72,20 @@ export default class ActivityLogItem extends React.Component {
   }
 
   formatStorageUpdateMessage(actor, metadata) {
-    if ('memory' in metadata.request) {
+    if ("memory" in metadata.request) {
       // Updated one of memory, disk_quota, or instances
       return `${actor} modified resource allocation of the app.`;
     }
 
     const appState = metadata.request.state
       ? metadata.request.state.toLowerCase()
-      : 'updated';
+      : "updated";
 
     return `${actor} ${appState} the app.`;
   }
 
   formatBoundServiceMessage(actor, service) {
-    const serviceText = service ? service.guid : 'a service';
+    const serviceText = service ? service.guid : "a service";
     return `${actor} bound ${serviceText} to the app.`;
   }
 
@@ -103,7 +103,7 @@ export default class ActivityLogItem extends React.Component {
       case eventLogTypes.APP_MAP_ROUTE:
         return this.routeEventItem(item.actor_name, domain, route);
       case eventLogTypes.APP_UNMAP_ROUTE:
-        return this.routeEventItem(item.actor_name, domain, route, 'unmapped');
+        return this.routeEventItem(item.actor_name, domain, route, "unmapped");
       case eventLogTypes.APP_RESTAGE:
         return `${item.actor_name} restaged the app.`;
       case eventLogTypes.APP_UPDATE:
@@ -122,16 +122,16 @@ export default class ActivityLogItem extends React.Component {
     const { item } = this.props;
 
     if (item.activity_type === activityTypes.LOG) {
-      return 'activity_log-item-console';
+      return "activity_log-item-console";
     }
 
     return item.activity_type === activityTypes.EVENT
       ? {
-          'activity_log-item-error': item.type === eventLogTypes.APP_CRASH,
-          'activity_log-item-warning':
+          "activity_log-item-error": item.type === eventLogTypes.APP_CRASH,
+          "activity_log-item-warning":
             item.type === eventLogTypes.APP_UPDATE ||
             item.type === eventLogTypes.APP_RESTAGE,
-          'activity_log-item-success': item.type === eventLogTypes.APP_CREATE
+          "activity_log-item-success": item.type === eventLogTypes.APP_CREATE
         }
       : {};
   }
@@ -140,7 +140,7 @@ export default class ActivityLogItem extends React.Component {
     const { item } = this.props;
 
     return (
-      <li className={classnames('activity_log-item', this.cssClass)}>
+      <li className={classnames("activity_log-item", this.cssClass)}>
         <div className="activity_log-item_line" onClick={this.toggleRawJson}>
           <ElasticLine>
             <ElasticLineItem>{this.logItem}</ElasticLineItem>

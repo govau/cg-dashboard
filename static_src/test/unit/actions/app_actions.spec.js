@@ -3,12 +3,12 @@ import {
   setupUISpy,
   setupViewSpy,
   setupServerSpy
-} from '../helpers';
-import cfApi from '../../../util/cf_api';
-import appActions from '../../../actions/app_actions';
-import { appActionTypes } from '../../../constants';
+} from "../helpers";
+import cfApi from "../../../util/cf_api";
+import appActions from "../../../actions/app_actions";
+import { appActionTypes } from "../../../constants";
 
-describe('appActions', function() {
+describe("appActions", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -19,12 +19,12 @@ describe('appActions', function() {
     sandbox.restore();
   });
 
-  describe('fetch()', () => {
-    it('should dispatch a view event of type app fetch', done => {
-      const app = { guid: '1234' };
+  describe("fetch()", () => {
+    it("should dispatch a view event of type app fetch", done => {
+      const app = { guid: "1234" };
       const viewSpy = setupViewSpy(sandbox);
 
-      sandbox.stub(cfApi, 'fetchApp').returns(Promise.resolve(app));
+      sandbox.stub(cfApi, "fetchApp").returns(Promise.resolve(app));
 
       appActions.fetch(app.guid).then(() => {
         assertAction(viewSpy, appActionTypes.APP_FETCH, { appGuid: app.guid });
@@ -33,10 +33,10 @@ describe('appActions', function() {
     });
   });
 
-  describe('fetchAll()', function() {
-    it('should dispatch a view event of type app all fetch', function(done) {
-      sandbox.stub(cfApi, 'fetchAppAll').returns(Promise.resolve());
-      const expectedAppGuid = 'asdflkjzzz1';
+  describe("fetchAll()", function() {
+    it("should dispatch a view event of type app all fetch", function(done) {
+      sandbox.stub(cfApi, "fetchAppAll").returns(Promise.resolve());
+      const expectedAppGuid = "asdflkjzzz1";
       const expectedParams = {
         appGuid: expectedAppGuid
       };
@@ -49,9 +49,9 @@ describe('appActions', function() {
     });
   });
 
-  describe('fetchStats()', function() {
-    it('should dispatch a view event of type app stats fetch', function(done) {
-      const expectedAppGuid = 'asdflkjzzz1',
+  describe("fetchStats()", function() {
+    it("should dispatch a view event of type app stats fetch", function(done) {
+      const expectedAppGuid = "asdflkjzzz1",
         expectedParams = {
           appGuid: expectedAppGuid
         };
@@ -64,9 +64,9 @@ describe('appActions', function() {
     });
   });
 
-  describe('receivedApp()', function() {
-    it('should dispatch a server event of type app resv with app data', function() {
-      const expected = { guid: 'asdfa', service: [] },
+  describe("receivedApp()", function() {
+    it("should dispatch a server event of type app resv with app data", function() {
+      const expected = { guid: "asdfa", service: [] },
         expectedParams = {
           app: expected
         };
@@ -79,9 +79,9 @@ describe('appActions', function() {
     });
   });
 
-  describe('receivedAppStats()', function() {
-    it('should dispatch a server event of type app stat resv with app data', function() {
-      const expected = { guid: 'asdfazzzb', service: [] },
+  describe("receivedAppStats()", function() {
+    it("should dispatch a server event of type app stat resv with app data", function() {
+      const expected = { guid: "asdfazzzb", service: [] },
         expectedParams = {
           appGuid: expected.guid,
           app: expected
@@ -95,9 +95,9 @@ describe('appActions', function() {
     });
   });
 
-  describe('receivedAppAll()', function() {
-    it('should dispatch a server event of type app all received', function() {
-      const appGuid = 'testingAppGuid';
+  describe("receivedAppAll()", function() {
+    it("should dispatch a server event of type app all received", function() {
+      const appGuid = "testingAppGuid";
       const spy = setupServerSpy(sandbox);
 
       appActions.receivedAppAll(appGuid);
@@ -106,11 +106,11 @@ describe('appActions', function() {
     });
   });
 
-  describe('changeCurrentApp()', function() {
-    it('should dispatch a ui event of type app changed with guid', function(
+  describe("changeCurrentApp()", function() {
+    it("should dispatch a ui event of type app changed with guid", function(
       done
     ) {
-      const appGuid = 'testingAppGuid';
+      const appGuid = "testingAppGuid";
       const expectedParams = {
         appGuid
       };
@@ -122,20 +122,20 @@ describe('appActions', function() {
     });
   });
 
-  describe('updateApp()', function() {
+  describe("updateApp()", function() {
     let appGuid, appPartial, appUpdated, viewSpy;
 
     beforeEach(function(done) {
-      appGuid = 'zxc,vnadsfj';
+      appGuid = "zxc,vnadsfj";
       appPartial = { mem: 123 };
       appUpdated = { guid: appGuid, mem: 123, running_instances: 1 };
 
-      sandbox.spy(appActions, 'updatedApp');
+      sandbox.spy(appActions, "updatedApp");
       sandbox
-        .stub(cfApi, 'putApp')
+        .stub(cfApi, "putApp")
         .returns(Promise.resolve({ guid: appGuid, mem: 123 }));
       sandbox
-        .stub(cfApi, 'fetchAppStatus')
+        .stub(cfApi, "fetchAppStatus")
         .returns(Promise.resolve(appUpdated));
 
       viewSpy = setupViewSpy(sandbox);
@@ -143,7 +143,7 @@ describe('appActions', function() {
       appActions.updateApp(appGuid, appPartial).then(done, done.fail);
     });
 
-    it('should dispatch a view event of type app update with partial and guid', function() {
+    it("should dispatch a view event of type app update with partial and guid", function() {
       const expectedParams = {
         appGuid,
         appPartial
@@ -152,7 +152,7 @@ describe('appActions', function() {
       assertAction(viewSpy, appActionTypes.APP_UPDATE, expectedParams);
     });
 
-    it('should call cf api put app endpoint with guid and app partial', function() {
+    it("should call cf api put app endpoint with guid and app partial", function() {
       expect(cfApi.putApp).toHaveBeenCalledOnce();
 
       const [guid, partial] = cfApi.putApp.getCall(0).args;
@@ -161,7 +161,7 @@ describe('appActions', function() {
       expect(partial).toEqual(appPartial);
     });
 
-    it('should call updated app action with app on success', function() {
+    it("should call updated app action with app on success", function() {
       expect(appActions.updatedApp).toHaveBeenCalledOnce();
 
       const app = appActions.updatedApp.getCall(0).args[0];
@@ -170,11 +170,11 @@ describe('appActions', function() {
     });
   });
 
-  describe('start()', function() {
-    it('should dispatch a view event of type app start with guid', function() {
-      sandbox.stub(appActions, 'restarted').returns(Promise.resolve());
-      sandbox.stub(cfApi, 'putApp').returns(Promise.resolve());
-      const appGuid = 'zzcvxkadsf';
+  describe("start()", function() {
+    it("should dispatch a view event of type app start with guid", function() {
+      sandbox.stub(appActions, "restarted").returns(Promise.resolve());
+      sandbox.stub(cfApi, "putApp").returns(Promise.resolve());
+      const appGuid = "zzcvxkadsf";
       const expectedParams = {
         appGuid
       };
@@ -185,12 +185,12 @@ describe('appActions', function() {
       assertAction(spy, appActionTypes.APP_START, expectedParams);
     });
 
-    it('should call cf api put app with state started to restart the app', function(
+    it("should call cf api put app with state started to restart the app", function(
       done
     ) {
-      const spy = sandbox.stub(cfApi, 'putApp').returns(Promise.resolve());
-      sandbox.stub(appActions, 'restarted').returns(Promise.resolve());
-      const expectedGuid = 'asdfasd2vdamcdksa';
+      const spy = sandbox.stub(cfApi, "putApp").returns(Promise.resolve());
+      sandbox.stub(appActions, "restarted").returns(Promise.resolve());
+      const expectedGuid = "asdfasd2vdamcdksa";
 
       appActions
         .start(expectedGuid)
@@ -203,12 +203,12 @@ describe('appActions', function() {
         .then(done, done.fail);
     });
 
-    it('should call restarted with guid on success of request', function(done) {
+    it("should call restarted with guid on success of request", function(done) {
       const spy = sandbox
-        .stub(appActions, 'restarted')
+        .stub(appActions, "restarted")
         .returns(Promise.resolve());
-      sandbox.stub(cfApi, 'putApp').returns(Promise.resolve());
-      const expectedGuid = 'znxmcv23i4yzxvc';
+      sandbox.stub(cfApi, "putApp").returns(Promise.resolve());
+      const expectedGuid = "znxmcv23i4yzxvc";
 
       appActions
         .start(expectedGuid)
@@ -222,22 +222,22 @@ describe('appActions', function() {
     });
   });
 
-  describe('restart()', function() {
+  describe("restart()", function() {
     let appGuid, viewSpy;
 
     beforeEach(function(done) {
-      appGuid = 'zvmn3hkl';
+      appGuid = "zvmn3hkl";
       viewSpy = setupViewSpy(sandbox);
-      sandbox.stub(cfApi, 'postAppRestart').returns(Promise.resolve());
+      sandbox.stub(cfApi, "postAppRestart").returns(Promise.resolve());
       sandbox
-        .stub(cfApi, 'fetchAppStatus')
+        .stub(cfApi, "fetchAppStatus")
         .returns(Promise.resolve({ running_instances: 1 }));
-      sandbox.spy(appActions, 'restarted');
+      sandbox.spy(appActions, "restarted");
 
       appActions.restart(appGuid).then(done, done.fail);
     });
 
-    it('should dispatch a view event of type app restart with guid', function() {
+    it("should dispatch a view event of type app restart with guid", function() {
       const expectedParams = {
         appGuid
       };
@@ -250,7 +250,7 @@ describe('appActions', function() {
       );
     });
 
-    it('should call cf api post to restart the app', function() {
+    it("should call cf api post to restart the app", function() {
       expect(cfApi.postAppRestart).toHaveBeenCalledOnce();
 
       const guid = cfApi.postAppRestart.getCall(0).args[0];
@@ -258,18 +258,18 @@ describe('appActions', function() {
       expect(guid).toEqual(appGuid);
     });
 
-    it('should poll until running instances is greater then 0', function() {
+    it("should poll until running instances is greater then 0", function() {
       expect(cfApi.fetchAppStatus).toHaveBeenCalledOnce();
     });
 
-    it('calls restarted action', function() {
+    it("calls restarted action", function() {
       expect(appActions.restarted).toHaveBeenCalledOnce();
     });
   });
 
-  describe('restarted()', function() {
-    it('should dispatch a server event of type app restarted', function() {
-      const appGuid = '230894dgvk2r';
+  describe("restarted()", function() {
+    it("should dispatch a server event of type app restarted", function() {
+      const appGuid = "230894dgvk2r";
       const expectedParams = {
         appGuid
       };
@@ -281,9 +281,9 @@ describe('appActions', function() {
     });
   });
 
-  describe('error()', function() {
-    it('should dispatch server event of type app error', function() {
-      const appGuid = '230894dzcxv234';
+  describe("error()", function() {
+    it("should dispatch server event of type app error", function() {
+      const appGuid = "230894dzcxv234";
       const error = { status_code: 123 };
       const expectedParams = {
         appGuid,
@@ -297,9 +297,9 @@ describe('appActions', function() {
     });
   });
 
-  describe('fetchError()', function() {
-    it('should dispatch server event of type app fetch error with guid', function() {
-      const appGuid = '230894dzcxv234';
+  describe("fetchError()", function() {
+    it("should dispatch server event of type app fetch error with guid", function() {
+      const appGuid = "230894dzcxv234";
       const expectedParams = {
         appGuid
       };

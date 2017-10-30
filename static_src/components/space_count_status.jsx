@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import CountStatus from './count_status.jsx';
+import PropTypes from "prop-types";
+import React from "react";
+import CountStatus from "./count_status.jsx";
 
 const propTypes = {
   spaces: PropTypes.array

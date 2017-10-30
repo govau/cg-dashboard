@@ -1,18 +1,18 @@
-import AppDispatcher from '../../../dispatcher';
+import AppDispatcher from "../../../dispatcher";
 import {
   assertAction,
   setupViewSpy,
   setupServerSpy,
   setupUISpy
-} from '../helpers';
-import cfApi from '../../../util/cf_api';
-import errorActions from '../../../actions/error_actions';
-import serviceActions from '../../../actions/service_actions';
-import { serviceActionTypes } from '../../../constants';
-import ServiceInstanceStore from '../../../stores/service_instance_store';
-import { wrapInRes, unwrapOfRes } from '../helpers';
+} from "../helpers";
+import cfApi from "../../../util/cf_api";
+import errorActions from "../../../actions/error_actions";
+import serviceActions from "../../../actions/service_actions";
+import { serviceActionTypes } from "../../../constants";
+import ServiceInstanceStore from "../../../stores/service_instance_store";
+import { wrapInRes, unwrapOfRes } from "../helpers";
 
-describe('serviceActions', function() {
+describe("serviceActions", function() {
   let sandbox;
 
   beforeEach(() => {
@@ -23,18 +23,18 @@ describe('serviceActions', function() {
     sandbox.restore();
   });
 
-  describe('fetchAllServices()', function() {
+  describe("fetchAllServices()", function() {
     let viewSpy, guid, services, result;
 
     beforeEach(function(done) {
-      guid = 'asdfa';
-      services = [{ guid: '1234' }];
+      guid = "asdfa";
+      services = [{ guid: "1234" }];
       viewSpy = setupViewSpy(sandbox);
       sandbox
-        .stub(cfApi, 'fetchAllServices')
+        .stub(cfApi, "fetchAllServices")
         .returns(Promise.resolve(services));
-      sandbox.stub(serviceActions, 'fetchAllPlans').returns(Promise.resolve());
-      sandbox.spy(serviceActions, 'receivedServices');
+      sandbox.stub(serviceActions, "fetchAllPlans").returns(Promise.resolve());
+      sandbox.spy(serviceActions, "receivedServices");
 
       serviceActions
         .fetchAllServices(guid)
@@ -44,11 +44,11 @@ describe('serviceActions', function() {
         .then(done, done.fail);
     });
 
-    it('returns the services', function() {
+    it("returns the services", function() {
       expect(result).toBe(services);
     });
 
-    it('should dispatch a view event of type service fetch', function() {
+    it("should dispatch a view event of type service fetch", function() {
       const expectedParams = {
         orgGuid: guid
       };
@@ -56,18 +56,18 @@ describe('serviceActions', function() {
       assertAction(viewSpy, serviceActionTypes.SERVICES_FETCH, expectedParams);
     });
 
-    it('calls cf_api fetchAllServices', function() {
+    it("calls cf_api fetchAllServices", function() {
       expect(cfApi.fetchAllServices).toHaveBeenCalledOnce();
     });
 
-    it('calls receivedServices action', function() {
+    it("calls receivedServices action", function() {
       expect(serviceActions.receivedServices).toHaveBeenCalledWith(services);
     });
   });
 
-  describe('receivedServices()', function() {
-    it('should dispatch a view event of type service fetch', function() {
-      const expected = [{ guid: 'adfzxcvz' }];
+  describe("receivedServices()", function() {
+    it("should dispatch a view event of type service fetch", function() {
+      const expected = [{ guid: "adfzxcvz" }];
       const expectedParams = {
         services: wrapInRes(expected)
       };
@@ -79,38 +79,38 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('fetchPlan()', function() {
+  describe("fetchPlan()", function() {
     let planGuid;
     beforeEach(function(done) {
-      planGuid = 'abcd';
+      planGuid = "abcd";
 
       sandbox
-        .stub(cfApi, 'fetchServicePlan')
+        .stub(cfApi, "fetchServicePlan")
         .returns(Promise.resolve({ guid: planGuid }));
-      sandbox.spy(serviceActions, 'receivedPlan');
+      sandbox.spy(serviceActions, "receivedPlan");
 
       serviceActions.fetchPlan(planGuid).then(done, done.fail);
     });
 
-    it('calls api for fetch plan', function() {
+    it("calls api for fetch plan", function() {
       expect(cfApi.fetchServicePlan).toHaveBeenCalledOnce();
     });
 
-    it('calls receivedPlan action', function() {
+    it("calls receivedPlan action", function() {
       expect(serviceActions.receivedPlan).toHaveBeenCalledWith({
         guid: planGuid
       });
     });
   });
 
-  describe('receivedPlan()', function() {
-    it('should dispatch a server event with service plan', function() {
+  describe("receivedPlan()", function() {
+    it("should dispatch a server event with service plan", function() {
       const servicePlan = {
         metadata: {
-          guid: 'xzclvkba328'
+          guid: "xzclvkba328"
         },
         entity: {
-          name: 'azcvb'
+          name: "azcvb"
         }
       };
       const expectedParams = {
@@ -129,22 +129,22 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('fetchAllPlans()', function() {
+  describe("fetchAllPlans()", function() {
     let planGuid, serviceGuid, viewSpy;
 
     beforeEach(function(done) {
-      serviceGuid = 'asdf';
-      planGuid = 'admxzcg';
+      serviceGuid = "asdf";
+      planGuid = "admxzcg";
       viewSpy = setupViewSpy(sandbox);
       sandbox
-        .stub(cfApi, 'fetchAllServicePlans')
+        .stub(cfApi, "fetchAllServicePlans")
         .returns(Promise.resolve([{ guid: planGuid }]));
-      sandbox.spy(serviceActions, 'receivedPlans');
+      sandbox.spy(serviceActions, "receivedPlans");
 
       serviceActions.fetchAllPlans(serviceGuid).then(done, done.fail);
     });
 
-    it('should dispatch a view event with service guid', function() {
+    it("should dispatch a view event with service guid", function() {
       const expectedParams = {
         serviceGuid
       };
@@ -156,20 +156,20 @@ describe('serviceActions', function() {
       );
     });
 
-    it('calls api to fetch plans', function() {
+    it("calls api to fetch plans", function() {
       expect(cfApi.fetchAllServicePlans).toHaveBeenCalledOnce();
     });
 
-    it('calls receivedPlans action', function() {
+    it("calls receivedPlans action", function() {
       expect(serviceActions.receivedPlans).toHaveBeenCalledWith([
         { guid: planGuid }
       ]);
     });
   });
 
-  describe('receivedPlans()', function() {
-    it('should dispatch a server event for received service plans with the plans', function() {
-      let expectedServices = [{ guid: 'asdf', name: 'plan' }],
+  describe("receivedPlans()", function() {
+    it("should dispatch a server event for received service plans with the plans", function() {
+      let expectedServices = [{ guid: "asdf", name: "plan" }],
         expectedParams = {
           servicePlans: wrapInRes(expectedServices)
         };
@@ -186,20 +186,20 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('fetchAllInstances()', function() {
-    describe('on success', function() {
+  describe("fetchAllInstances()", function() {
+    describe("on success", function() {
       let spaceGuid, serviceInstances, result;
 
       beforeEach(function(done) {
         serviceInstances = [
-          { guid: '1234', service_plan_guid: 'plan-1234' },
-          { guid: 'abcd', service_plan_guid: 'plan-abcd' }
+          { guid: "1234", service_plan_guid: "plan-1234" },
+          { guid: "abcd", service_plan_guid: "plan-abcd" }
         ];
         sandbox
-          .stub(cfApi, 'fetchServiceInstances')
+          .stub(cfApi, "fetchServiceInstances")
           .returns(Promise.resolve(serviceInstances));
-        sandbox.stub(cfApi, 'fetchServicePlan').returns(Promise.resolve());
-        sandbox.spy(serviceActions, 'receivedInstances');
+        sandbox.stub(cfApi, "fetchServicePlan").returns(Promise.resolve());
+        sandbox.spy(serviceActions, "receivedInstances");
 
         serviceActions
           .fetchAllInstances(spaceGuid)
@@ -209,42 +209,42 @@ describe('serviceActions', function() {
           .then(done);
       });
 
-      it('resolves to serviceInstances', function() {
+      it("resolves to serviceInstances", function() {
         expect(result).toBe(serviceInstances);
       });
 
-      it('calls fetchServiceInstances from api', function() {
+      it("calls fetchServiceInstances from api", function() {
         expect(cfApi.fetchServiceInstances).toHaveBeenCalledOnce();
       });
 
-      it('fetches the service plans associated with these instances', function() {
+      it("fetches the service plans associated with these instances", function() {
         expect(cfApi.fetchServicePlan).toHaveBeenCalledTwice();
-        expect(cfApi.fetchServicePlan).toHaveBeenCalledWith('plan-1234');
-        expect(cfApi.fetchServicePlan).toHaveBeenCalledWith('plan-abcd');
+        expect(cfApi.fetchServicePlan).toHaveBeenCalledWith("plan-1234");
+        expect(cfApi.fetchServicePlan).toHaveBeenCalledWith("plan-abcd");
       });
 
-      it('calls receivedInstances action', function() {
+      it("calls receivedInstances action", function() {
         expect(serviceActions.receivedInstances).toHaveBeenCalledOnce();
       });
     });
 
-    describe('on request failures', function() {
+    describe("on request failures", function() {
       let spaceGuid,
         serviceInstances,
         result = 2;
 
       beforeEach(function(done) {
         serviceInstances = [
-          { guid: '1234', service_plan_guid: 'plan-1234' },
-          { guid: 'abcd', service_plan_guid: 'plan-abcd' }
+          { guid: "1234", service_plan_guid: "plan-1234" },
+          { guid: "abcd", service_plan_guid: "plan-abcd" }
         ];
         const err = { data: null, status: 500 };
         sandbox
-          .stub(cfApi, 'fetchServiceInstances')
+          .stub(cfApi, "fetchServiceInstances")
           .returns(Promise.resolve(serviceInstances));
-        sandbox.stub(cfApi, 'fetchServicePlan').returns(Promise.reject(err));
-        sandbox.spy(serviceActions, 'receivedInstances');
-        sandbox.spy(errorActions, 'importantDataFetchError');
+        sandbox.stub(cfApi, "fetchServicePlan").returns(Promise.reject(err));
+        sandbox.spy(serviceActions, "receivedInstances");
+        sandbox.spy(errorActions, "importantDataFetchError");
 
         serviceActions
           .fetchAllInstances(spaceGuid)
@@ -257,23 +257,23 @@ describe('serviceActions', function() {
           });
       });
 
-      it('should return completed service instances as result', function() {
+      it("should return completed service instances as result", function() {
         expect(result).toEqual(serviceInstances);
       });
 
-      it('should call important data fetch error action', function() {
+      it("should call important data fetch error action", function() {
         expect(errorActions.importantDataFetchError).toHaveBeenCalledOnce();
       });
 
-      it('should call received instances with completed instances', function() {
+      it("should call received instances with completed instances", function() {
         expect(serviceActions.receivedInstances).toHaveBeenCalledOnce();
       });
     });
   });
 
-  describe('fetchInstance()', function() {
-    it('should dispatch a view event of type service instance fetch', function() {
-      const expectedSpaceGuid = 'aksfdsaaa8899';
+  describe("fetchInstance()", function() {
+    it("should dispatch a view event of type service instance fetch", function() {
+      const expectedSpaceGuid = "aksfdsaaa8899";
 
       const expectedParams = {
         spaceGuid: expectedSpaceGuid
@@ -291,16 +291,16 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('createInstanceForm()', () => {
-    const expectedServiceGuid = 'wqphjhajkajkhadjhfd';
-    const expectedServicePlanGuid = 'fp2ajkdsfadgh32fasd';
+  describe("createInstanceForm()", () => {
+    const expectedServiceGuid = "wqphjhajkajkhadjhfd";
+    const expectedServicePlanGuid = "fp2ajkdsfadgh32fasd";
 
     const expectedParams = {
       servicePlanGuid: expectedServicePlanGuid,
       serviceGuid: expectedServiceGuid
     };
 
-    it('should dispatch a form cancel action', done => {
+    it("should dispatch a form cancel action", done => {
       const uiSpy = setupUISpy(sandbox);
 
       serviceActions
@@ -314,11 +314,11 @@ describe('serviceActions', function() {
         }, done.fail);
     });
 
-    it('should dispatch a form create action', done => {
+    it("should dispatch a form create action", done => {
       const viewSpy = setupViewSpy(sandbox);
 
       sandbox
-        .stub(serviceActions, 'createInstanceFormCancel')
+        .stub(serviceActions, "createInstanceFormCancel")
         .returns(Promise.resolve());
 
       serviceActions
@@ -334,8 +334,8 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('createInstanceFormCancel', function() {
-    it('should dispatch a ui event of type create service instance form cancel', function() {
+  describe("createInstanceFormCancel", function() {
+    it("should dispatch a ui event of type create service instance form cancel", function() {
       const spy = setupUISpy(sandbox);
 
       serviceActions.createInstanceFormCancel();
@@ -348,24 +348,24 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('createInstance()', function() {
+  describe("createInstance()", function() {
     let expectedSpaceGuid, expectedName, expectedServicePlanGuid, viewSpy;
 
     beforeEach(function(done) {
-      expectedSpaceGuid = 'alksjdfvcbxzzz';
-      expectedName = 'service';
-      expectedServicePlanGuid = '78900987adfasda';
-      const serviceInstance = { guid: 'abcd' };
+      expectedSpaceGuid = "alksjdfvcbxzzz";
+      expectedName = "service";
+      expectedServicePlanGuid = "78900987adfasda";
+      const serviceInstance = { guid: "abcd" };
 
       viewSpy = setupViewSpy(sandbox);
       sandbox
-        .stub(cfApi, 'createServiceInstance')
+        .stub(cfApi, "createServiceInstance")
         .returns(Promise.resolve(serviceInstance));
       sandbox
-        .stub(serviceActions, 'fetchInstance')
+        .stub(serviceActions, "fetchInstance")
         .returns(Promise.resolve(serviceInstance));
       sandbox
-        .stub(serviceActions, 'createdInstance')
+        .stub(serviceActions, "createdInstance")
         .returns(Promise.resolve());
 
       serviceActions
@@ -392,28 +392,28 @@ describe('serviceActions', function() {
       );
     });
 
-    it('calls the api for createServiceInstance', function() {
+    it("calls the api for createServiceInstance", function() {
       expect(cfApi.createServiceInstance).toHaveBeenCalledOnce();
     });
 
-    it('fetches the instance just created', function() {
+    it("fetches the instance just created", function() {
       expect(serviceActions.fetchInstance).toHaveBeenCalledOnce();
     });
 
-    it('should call service action for instance created on success', function() {
+    it("should call service action for instance created on success", function() {
       expect(serviceActions.createdInstance).toHaveBeenCalledOnce();
       expect(serviceActions.createdInstance).toHaveBeenCalledWith({
-        guid: 'abcd'
+        guid: "abcd"
       });
     });
 
-    describe('on error', function() {
+    describe("on error", function() {
       beforeEach(function(done) {
         cfApi.createServiceInstance.returns(
-          Promise.reject(new Error('a fake error'))
+          Promise.reject(new Error("a fake error"))
         );
         sandbox
-          .stub(serviceActions, 'errorCreateInstance')
+          .stub(serviceActions, "errorCreateInstance")
           .returns(Promise.resolve());
 
         serviceActions
@@ -425,7 +425,7 @@ describe('serviceActions', function() {
           .then(done, done);
       });
 
-      it('should call service error action on failure', function() {
+      it("should call service error action on failure", function() {
         expect(serviceActions.errorCreateInstance).toHaveBeenCalledOnce();
 
         const error = serviceActions.errorCreateInstance.getCall(0).args[0];
@@ -435,9 +435,9 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('createdInstance()', function() {
-    it('dispatchs a server event of type instance created with service', () => {
-      const expectedInstance = { guid: 'asdfas' };
+  describe("createdInstance()", function() {
+    it("dispatchs a server event of type instance created with service", () => {
+      const expectedInstance = { guid: "asdfas" };
 
       const expectedParams = {
         serviceInstance: expectedInstance
@@ -454,21 +454,21 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('errorCreateInstance()', () => {
+  describe("errorCreateInstance()", () => {
     const type = serviceActionTypes.SERVICE_INSTANCE_CREATE_ERROR;
     let spy;
 
     beforeEach(() => {
-      spy = sandbox.spy(AppDispatcher, 'handleServerAction');
+      spy = sandbox.spy(AppDispatcher, "handleServerAction");
     });
 
     afterEach(() => {
       spy.restore();
     });
 
-    describe('server fault', () => {
-      it('dispatches the correct error type and a code 500', () => {
-        const originalError = { message: 'Bad error', stack: [] };
+    describe("server fault", () => {
+      it("dispatches the correct error type and a code 500", () => {
+        const originalError = { message: "Bad error", stack: [] };
         const actual = { code: 500 };
 
         serviceActions.errorCreateInstance(originalError);
@@ -482,9 +482,9 @@ describe('serviceActions', function() {
       });
     });
 
-    describe('API error/malformed request', () => {
-      it('dispatches the correct error type and error data object', () => {
-        const originalError = { response: { data: { hey: 'there' } } };
+    describe("API error/malformed request", () => {
+      it("dispatches the correct error type and error data object", () => {
+        const originalError = { response: { data: { hey: "there" } } };
 
         serviceActions.errorCreateInstance(originalError);
 
@@ -498,14 +498,14 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('receivedInstance()', function() {
-    it('should dispatch a server event of type service instance resv with the service instance', function() {
+  describe("receivedInstance()", function() {
+    it("should dispatch a server event of type service instance resv with the service instance", function() {
       const expected = {
         metadata: {
-          guid: 'afds'
+          guid: "afds"
         },
         entity: {
-          type: 'someasdf'
+          type: "someasdf"
         }
       };
 
@@ -525,15 +525,15 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('receivedInstances()', function() {
-    it('should dispatch a server event of type service instance resv with the service instances', function() {
+  describe("receivedInstances()", function() {
+    it("should dispatch a server event of type service instance resv with the service instances", function() {
       const expected = [
         {
           metadata: {
-            guid: 'afds'
+            guid: "afds"
           },
           entity: {
-            type: 'someasdf'
+            type: "someasdf"
           }
         }
       ];
@@ -554,9 +554,9 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('deleteInstanceConfirm()', function() {
-    it('should dispatch a instance delete confirm ui event with instance guid', () => {
-      const expectedInstanceGuid = '09zxcn1dsf';
+  describe("deleteInstanceConfirm()", function() {
+    it("should dispatch a instance delete confirm ui event with instance guid", () => {
+      const expectedInstanceGuid = "09zxcn1dsf";
       const expectedParams = {
         serviceInstanceGuid: expectedInstanceGuid
       };
@@ -572,9 +572,9 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('deleteInstanceCancel()', function() {
-    it('should dispatch a instance delete cancel ui event with instance guid', () => {
-      const expectedInstanceGuid = '23098znxb';
+  describe("deleteInstanceCancel()", function() {
+    it("should dispatch a instance delete cancel ui event with instance guid", () => {
+      const expectedInstanceGuid = "23098znxb";
       const expectedParams = {
         serviceInstanceGuid: expectedInstanceGuid
       };
@@ -590,8 +590,8 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('deleteInstance()', function() {
-    const expectedInstanceGuid = 'asdfasdf';
+  describe("deleteInstance()", function() {
+    const expectedInstanceGuid = "asdfasdf";
     let expected, viewSpy;
 
     beforeEach(done => {
@@ -602,9 +602,9 @@ describe('serviceActions', function() {
 
       viewSpy = setupViewSpy(sandbox);
       sandbox
-        .stub(cfApi, 'deleteUnboundServiceInstance')
+        .stub(cfApi, "deleteUnboundServiceInstance")
         .returns(Promise.reject());
-      sandbox.spy(serviceActions, 'deletedInstance');
+      sandbox.spy(serviceActions, "deletedInstance");
 
       // TODO this should be a fresh instance of ServiceInstanceStore, but the
       // actions use the global singletons
@@ -614,8 +614,8 @@ describe('serviceActions', function() {
       serviceActions.deleteInstance(expectedInstanceGuid).then(done, done.fail);
     });
 
-    describe('successful call', () => {
-      it('should dispatch a instance delete view event with instance guid', () => {
+    describe("successful call", () => {
+      it("should dispatch a instance delete view event with instance guid", () => {
         const expectedParams = {
           serviceInstanceGuid: expectedInstanceGuid
         };
@@ -627,32 +627,32 @@ describe('serviceActions', function() {
         );
       });
 
-      it('should call api delete with the service', function() {
+      it("should call api delete with the service", function() {
         const arg = cfApi.deleteUnboundServiceInstance.getCall(0).args[0];
 
         expect(cfApi.deleteUnboundServiceInstance).toHaveBeenCalledOnce();
         expect(arg).toEqual(expected);
       });
 
-      it('should call service deleted action with guid', function() {
+      it("should call service deleted action with guid", function() {
         expect(serviceActions.deletedInstance).toHaveBeenCalledOnce();
         expect(serviceActions.deletedInstance).toHaveBeenCalledWith(
           expectedInstanceGuid
         );
       });
 
-      describe('for non existing instance', function() {
+      describe("for non existing instance", function() {
         it("should do nothing if the service isn't in data", function() {
           cfApi.deleteUnboundServiceInstance.reset();
-          serviceActions.deleteInstance('1234');
+          serviceActions.deleteInstance("1234");
 
           expect(cfApi.deleteUnboundServiceInstance).not.toHaveBeenCalled();
         });
       });
     });
 
-    describe('unsuccessful call', () => {
-      it('should still call the `deleteInstance` if the api call fails', () => {
+    describe("unsuccessful call", () => {
+      it("should still call the `deleteInstance` if the api call fails", () => {
         expect(serviceActions.deletedInstance).toHaveBeenCalledOnce();
         expect(serviceActions.deletedInstance).toHaveBeenCalledWith(
           expectedInstanceGuid
@@ -661,10 +661,10 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('deletedInstance()', function() {
+  describe("deletedInstance()", function() {
     // TODO create test case to simulate failed delete attempt.
-    it('should dispatch a instance deleted server event with guid', function() {
-      let expectedGuid = 'admxzcg',
+    it("should dispatch a instance deleted server event with guid", function() {
+      let expectedGuid = "admxzcg",
         expectedParams = {
           serviceInstanceGuid: expectedGuid
         };
@@ -681,9 +681,9 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('changeServiceInstanceCheck()', function() {
-    it('should dispatch a instance change check ui action with guid', function() {
-      const serviceInstanceGuid = 'aldkjsf39287';
+  describe("changeServiceInstanceCheck()", function() {
+    it("should dispatch a instance change check ui action with guid", function() {
+      const serviceInstanceGuid = "aldkjsf39287";
       const expectedParams = {
         serviceInstanceGuid
       };
@@ -700,9 +700,9 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('changeServiceInstanceCancel()', function() {
-    it('should dispatch a instance change cancel ui action with guid', function() {
-      const serviceInstanceGuid = 'aldkjsfxcvg4';
+  describe("changeServiceInstanceCancel()", function() {
+    it("should dispatch a instance change cancel ui action with guid", function() {
+      const serviceInstanceGuid = "aldkjsfxcvg4";
       const expectedParams = {
         serviceInstanceGuid
       };
@@ -719,20 +719,20 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('fetchServiceBindings()', function() {
+  describe("fetchServiceBindings()", function() {
     let appGuid, viewSpy;
 
     beforeEach(function(done) {
-      appGuid = 'aldkjfs';
+      appGuid = "aldkjfs";
       viewSpy = setupViewSpy(sandbox);
 
-      sandbox.stub(cfApi, 'fetchServiceBindings').returns(Promise.resolve([]));
-      sandbox.spy(serviceActions, 'receivedServiceBindings');
+      sandbox.stub(cfApi, "fetchServiceBindings").returns(Promise.resolve([]));
+      sandbox.spy(serviceActions, "receivedServiceBindings");
 
       serviceActions.fetchServiceBindings(appGuid).then(done, done.fail);
     });
 
-    it('should dispatch service bindings fetch view event with app guid', function() {
+    it("should dispatch service bindings fetch view event with app guid", function() {
       const expectedParams = {
         appGuid
       };
@@ -744,18 +744,18 @@ describe('serviceActions', function() {
       );
     });
 
-    it('should call fetchServiceBindings', function() {
+    it("should call fetchServiceBindings", function() {
       expect(cfApi.fetchServiceBindings).toHaveBeenCalledOnce();
     });
 
-    it('should call receivedServiceBindings action', function() {
+    it("should call receivedServiceBindings action", function() {
       expect(serviceActions.receivedServiceBindings).toHaveBeenCalledOnce();
     });
   });
 
-  describe('receivedServiceBindings()', function() {
-    it('should dispatch service bindings resv server event with binding', function() {
-      const bindings = [{ metadata: { guid: 'zcxbz' } }];
+  describe("receivedServiceBindings()", function() {
+    it("should dispatch service bindings resv server event with binding", function() {
+      const bindings = [{ metadata: { guid: "zcxbz" } }];
       const expectedParams = {
         serviceBindings: bindings
       };
@@ -771,26 +771,26 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('bindService()', function() {
+  describe("bindService()", function() {
     let appGuid, serviceInstance, serviceInstanceGuid, viewSpy;
 
     beforeEach(function(done) {
-      appGuid = 'asldfjzzcxv';
-      serviceInstanceGuid = 'zxclkjvzdfadfadsfasdfad';
+      appGuid = "asldfjzzcxv";
+      serviceInstanceGuid = "zxclkjvzdfadfadsfasdfad";
       viewSpy = setupViewSpy(sandbox);
       serviceInstance = { guid: serviceInstanceGuid };
 
       sandbox
-        .stub(cfApi, 'createServiceBinding')
+        .stub(cfApi, "createServiceBinding")
         .returns(Promise.resolve(serviceInstance));
-      sandbox.spy(serviceActions, 'boundService');
+      sandbox.spy(serviceActions, "boundService");
 
       serviceActions
         .bindService(appGuid, serviceInstanceGuid)
         .then(done, done.fail);
     });
 
-    it('should dispatch a service bind view event with app guid and instance guid', function() {
+    it("should dispatch a service bind view event with app guid and instance guid", function() {
       const expectedParams = {
         appGuid,
         serviceInstanceGuid
@@ -799,24 +799,24 @@ describe('serviceActions', function() {
       assertAction(viewSpy, serviceActionTypes.SERVICE_BIND, expectedParams);
     });
 
-    it('should call bound service with response if successful', function() {
+    it("should call bound service with response if successful", function() {
       expect(serviceActions.boundService).toHaveBeenCalledOnce();
       expect(serviceActions.boundService).toHaveBeenCalledWith(serviceInstance);
     });
 
-    describe('on error', function() {
+    describe("on error", function() {
       beforeEach(function(done) {
         cfApi.createServiceBinding.returns(
-          Promise.reject(new Error('a fake error'))
+          Promise.reject(new Error("a fake error"))
         );
-        sandbox.spy(serviceActions, 'instanceError');
+        sandbox.spy(serviceActions, "instanceError");
 
         serviceActions
           .bindService(appGuid, serviceInstanceGuid)
           .then(done, done.fail);
       });
 
-      it('should call instance error if request fails with err', function() {
+      it("should call instance error if request fails with err", function() {
         expect(serviceActions.instanceError).toHaveBeenCalledOnce();
         const [guid, err] = serviceActions.instanceError.getCall(0).args;
 
@@ -826,23 +826,23 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('unbindService()', function() {
+  describe("unbindService()", function() {
     let binding, viewSpy;
 
     beforeEach(function(done) {
       binding = {
-        service_instance_guid: 'asladsfdfjzzcxv',
-        app_guid: '12346vzdfadfadsfasdfad'
+        service_instance_guid: "asladsfdfjzzcxv",
+        app_guid: "12346vzdfadfadsfasdfad"
       };
 
       viewSpy = setupViewSpy(sandbox);
-      sandbox.stub(cfApi, 'deleteServiceBinding').returns(Promise.resolve());
-      sandbox.spy(serviceActions, 'unboundService');
+      sandbox.stub(cfApi, "deleteServiceBinding").returns(Promise.resolve());
+      sandbox.spy(serviceActions, "unboundService");
 
       serviceActions.unbindService(binding).then(done, done.fail);
     });
 
-    it('should dispatch a service unbind view event with binding', function() {
+    it("should dispatch a service unbind view event with binding", function() {
       const expectedParams = {
         serviceBinding: binding
       };
@@ -850,22 +850,22 @@ describe('serviceActions', function() {
       assertAction(viewSpy, serviceActionTypes.SERVICE_UNBIND, expectedParams);
     });
 
-    it('calls unboundService action', function() {
+    it("calls unboundService action", function() {
       expect(serviceActions.unboundService).toHaveBeenCalledOnce();
     });
 
-    describe('on error', function() {
+    describe("on error", function() {
       let error;
 
       beforeEach(function(done) {
-        error = new Error('a test error');
-        sandbox.spy(serviceActions, 'instanceError');
+        error = new Error("a test error");
+        sandbox.spy(serviceActions, "instanceError");
         cfApi.deleteServiceBinding.returns(Promise.reject(error));
 
         serviceActions.unbindService(binding).then(done, done);
       });
 
-      it('should call delete error if request fails', function() {
+      it("should call delete error if request fails", function() {
         expect(serviceActions.instanceError).toHaveBeenCalledOnce();
         expect(serviceActions.instanceError).toHaveBeenCalledWith(
           binding.service_instance_guid,
@@ -875,10 +875,10 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('boundService()', function() {
-    it('should dispatch a service bound server event with binding', function() {
-      const appGuid = '198fjzzcxv';
-      const instanceGuid = '47kjvzdfadfadsfasdfad';
+  describe("boundService()", function() {
+    it("should dispatch a service bound server event with binding", function() {
+      const appGuid = "198fjzzcxv";
+      const instanceGuid = "47kjvzdfadfadsfasdfad";
       const binding = {
         service_instance_guid: instanceGuid,
         app_guid: appGuid
@@ -895,10 +895,10 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('unboundService()', function() {
-    it('should dispatch a service unbound server event with binding', function() {
-      const appGuid = '198fjzzcxv';
-      const instanceGuid = '47kjvzdfadfadsfasdfad';
+  describe("unboundService()", function() {
+    it("should dispatch a service unbound server event with binding", function() {
+      const appGuid = "198fjzzcxv";
+      const instanceGuid = "47kjvzdfadfadsfasdfad";
       const binding = {
         service_instance_guid: instanceGuid,
         app_guid: appGuid
@@ -915,9 +915,9 @@ describe('serviceActions', function() {
     });
   });
 
-  describe('instanceError()', function() {
-    it('should dispatch a server event of service instance error', function() {
-      const instanceGuid = 'adfzcvb2cvb435n';
+  describe("instanceError()", function() {
+    it("should dispatch a server event of service instance error", function() {
+      const instanceGuid = "adfzcvb2cvb435n";
       const err = { code: 500 };
       const params = {
         serviceInstanceGuid: instanceGuid,
