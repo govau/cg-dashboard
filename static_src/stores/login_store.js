@@ -18,8 +18,7 @@ export function LoginError(err) {
       login again. Error: ${err.message}`;
   } else {
     this.description =
-      'An error occurred while trying to check your authorization. You may need ' +
-      'to login again.';
+      'An error occurred while trying to check your authorization. You may need to login again.';
   }
 }
 

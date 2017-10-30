@@ -13,11 +13,9 @@ describe('User roles', function() {
     urlOrgY = '/#/org/user_role-org_y-ffe7-4aa8-8e85-94768d6bd250',
     urlOrgX = '/#/org/user_role-org_x-ffe7-4aa8-8e85-94768d6bd250',
     urlOrgXSpaceXX =
-      '/#/org/user_role-org_x-ffe7-4aa8-8e85-94768d6bd250/spaces/' +
-      'user_role-org_x-space_xx-4064-82f2-d74df612b794',
+      '/#/org/user_role-org_x-ffe7-4aa8-8e85-94768d6bd250/spaces/user_role-org_x-space_xx-4064-82f2-d74df612b794',
     urlOrgXSpaceYY =
-      '/#/org/user_role-org_x-ffe7-4aa8-8e85-94768d6bd250/spaces/' +
-      'user_role-org_x-space_yy-4064-82f2-d74df612b794';
+      '/#/org/user_role-org_x-ffe7-4aa8-8e85-94768d6bd250/spaces/user_role-org_x-space_yy-4064-82f2-d74df612b794';
 
   describe('A user on page for an org', function() {
     describe('on page for org X should see only manager X has user permissions', function() {
@@ -340,15 +338,11 @@ describe('User roles', function() {
           browser.url(urlOrgXSpaceYY);
         });
 
-        it(
-          'verifies that the current user is a user with only' +
-            'permissions to org X space YY',
-          function() {
-            cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+        it('verifies that the current user is a user with onlypermissions to org X space YY', function() {
+          cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
 
-            expect(cookieResult).toBe(cookieManagerOrgXSpaceXX);
-          }
-        );
+          expect(cookieResult).toBe(cookieManagerOrgXSpaceXX);
+        });
 
         it('verify space manager org X space XX cannot modify space YY org X page', function() {
           browser.waitForExist('.test-user-role-control');
@@ -374,59 +368,51 @@ describe('User roles', function() {
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(true);
         });
 
-        it(
-          'should give all the space permissions for org X space XX to the user ' +
-            'of the other space (org X space YY)',
-          function() {
-            expect(
-              userRoleElement.toggleSpaceManagerAccess(
-                guidManagerOrgXSpaceYY,
-                true
-              )
-            ).toBe(true);
+        it('should give all the space permissions for org X space XX to the user of the other space (org X space YY)', function() {
+          expect(
+            userRoleElement.toggleSpaceManagerAccess(
+              guidManagerOrgXSpaceYY,
+              true
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceDeveloperAccess(
-                guidManagerOrgXSpaceYY,
-                true
-              )
-            ).toBe(true);
+          expect(
+            userRoleElement.toggleSpaceDeveloperAccess(
+              guidManagerOrgXSpaceYY,
+              true
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceAuditorAccess(
-                guidManagerOrgXSpaceYY,
-                true
-              )
-            ).toBe(true);
-          }
-        );
+          expect(
+            userRoleElement.toggleSpaceAuditorAccess(
+              guidManagerOrgXSpaceYY,
+              true
+            )
+          ).toBe(true);
+        });
 
-        it(
-          'should take all space permissions from the the user of the other space ' +
-            '(org X space YY)',
-          function() {
-            expect(
-              userRoleElement.toggleSpaceManagerAccess(
-                guidManagerOrgXSpaceYY,
-                false
-              )
-            ).toBe(true);
+        it('should take all space permissions from the the user of the other space (org X space YY)', function() {
+          expect(
+            userRoleElement.toggleSpaceManagerAccess(
+              guidManagerOrgXSpaceYY,
+              false
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceDeveloperAccess(
-                guidManagerOrgXSpaceYY,
-                false
-              )
-            ).toBe(true);
+          expect(
+            userRoleElement.toggleSpaceDeveloperAccess(
+              guidManagerOrgXSpaceYY,
+              false
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceAuditorAccess(
-                guidManagerOrgXSpaceYY,
-                false
-              )
-            ).toBe(true);
-          }
-        );
+          expect(
+            userRoleElement.toggleSpaceAuditorAccess(
+              guidManagerOrgXSpaceYY,
+              false
+            )
+          ).toBe(true);
+        });
       });
     });
 
@@ -459,15 +445,11 @@ describe('User roles', function() {
           browser.url(urlOrgXSpaceYY);
         });
 
-        it(
-          'verifies that the current user is a user with only permissions to' +
-            ' org X space YY',
-          function() {
-            cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
+        it('verifies that the current user is a user with only permissions to org X space YY', function() {
+          cookieResult = userRoleElement.setAndGetUserRole(cookieValue);
 
-            expect(cookieResult).toBe(cookieManagerOrgXSpaceYY);
-          }
-        );
+          expect(cookieResult).toBe(cookieManagerOrgXSpaceYY);
+        });
 
         it('verify space manager org X space YY can modify space YY org X page', function() {
           browser.waitForExist('.test-user-role-control');
@@ -475,59 +457,51 @@ describe('User roles', function() {
           expect(userRoleElement.isFirstUserRoleEnabled()).toBe(true);
         });
 
-        it(
-          'should give all the space permissions for org X space YY to the user ' +
-            'of the other space (org X space XX)',
-          function() {
-            expect(
-              userRoleElement.toggleSpaceManagerAccess(
-                guidManagerOrgXSpaceXX,
-                true
-              )
-            ).toBe(true);
+        it('should give all the space permissions for org X space YY to the user of the other space (org X space XX)', function() {
+          expect(
+            userRoleElement.toggleSpaceManagerAccess(
+              guidManagerOrgXSpaceXX,
+              true
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceDeveloperAccess(
-                guidManagerOrgXSpaceXX,
-                true
-              )
-            ).toBe(true);
+          expect(
+            userRoleElement.toggleSpaceDeveloperAccess(
+              guidManagerOrgXSpaceXX,
+              true
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceAuditorAccess(
-                guidManagerOrgXSpaceXX,
-                true
-              )
-            ).toBe(true);
-          }
-        );
+          expect(
+            userRoleElement.toggleSpaceAuditorAccess(
+              guidManagerOrgXSpaceXX,
+              true
+            )
+          ).toBe(true);
+        });
 
-        it(
-          'should take all space permissions from the the user of the other space ' +
-            '(org X space XX)',
-          function() {
-            expect(
-              userRoleElement.toggleSpaceManagerAccess(
-                guidManagerOrgXSpaceXX,
-                false
-              )
-            ).toBe(true);
+        it('should take all space permissions from the the user of the other space (org X space XX)', function() {
+          expect(
+            userRoleElement.toggleSpaceManagerAccess(
+              guidManagerOrgXSpaceXX,
+              false
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceDeveloperAccess(
-                guidManagerOrgXSpaceXX,
-                false
-              )
-            ).toBe(true);
+          expect(
+            userRoleElement.toggleSpaceDeveloperAccess(
+              guidManagerOrgXSpaceXX,
+              false
+            )
+          ).toBe(true);
 
-            expect(
-              userRoleElement.toggleSpaceAuditorAccess(
-                guidManagerOrgXSpaceXX,
-                false
-              )
-            ).toBe(true);
-          }
-        );
+          expect(
+            userRoleElement.toggleSpaceAuditorAccess(
+              guidManagerOrgXSpaceXX,
+              false
+            )
+          ).toBe(true);
+        });
       });
     });
 

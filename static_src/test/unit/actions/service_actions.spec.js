@@ -499,67 +499,59 @@ describe('serviceActions', function() {
   });
 
   describe('receivedInstance()', function() {
-    it(
-      'should dispatch a server event of type service instance resv with ' +
-        'the service instance',
-      function() {
-        const expected = {
+    it('should dispatch a server event of type service instance resv with the service instance', function() {
+      const expected = {
+        metadata: {
+          guid: 'afds'
+        },
+        entity: {
+          type: 'someasdf'
+        }
+      };
+
+      const expectedParams = {
+        serviceInstance: expected
+      };
+
+      const spy = setupServerSpy(sandbox);
+
+      serviceActions.receivedInstance(expected);
+
+      assertAction(
+        spy,
+        serviceActionTypes.SERVICE_INSTANCE_RECEIVED,
+        expectedParams
+      );
+    });
+  });
+
+  describe('receivedInstances()', function() {
+    it('should dispatch a server event of type service instance resv with the service instances', function() {
+      const expected = [
+        {
           metadata: {
             guid: 'afds'
           },
           entity: {
             type: 'someasdf'
           }
-        };
+        }
+      ];
 
-        const expectedParams = {
-          serviceInstance: expected
-        };
+      const expectedParams = {
+        serviceInstances: expected
+      };
 
-        const spy = setupServerSpy(sandbox);
+      const spy = setupServerSpy(sandbox);
 
-        serviceActions.receivedInstance(expected);
+      serviceActions.receivedInstances(expected);
 
-        assertAction(
-          spy,
-          serviceActionTypes.SERVICE_INSTANCE_RECEIVED,
-          expectedParams
-        );
-      }
-    );
-  });
-
-  describe('receivedInstances()', function() {
-    it(
-      'should dispatch a server event of type service instance resv with ' +
-        'the service instances',
-      function() {
-        const expected = [
-          {
-            metadata: {
-              guid: 'afds'
-            },
-            entity: {
-              type: 'someasdf'
-            }
-          }
-        ];
-
-        const expectedParams = {
-          serviceInstances: expected
-        };
-
-        const spy = setupServerSpy(sandbox);
-
-        serviceActions.receivedInstances(expected);
-
-        assertAction(
-          spy,
-          serviceActionTypes.SERVICE_INSTANCES_RECEIVED,
-          expectedParams
-        );
-      }
-    );
+      assertAction(
+        spy,
+        serviceActionTypes.SERVICE_INSTANCES_RECEIVED,
+        expectedParams
+      );
+    });
   });
 
   describe('deleteInstanceConfirm()', function() {

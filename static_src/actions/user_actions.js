@@ -284,14 +284,9 @@ const userActions = {
     const entity = viewTypeNouns[currentViewedType].singular;
 
     if (verified) {
-      description =
-        `The cloud.gov account for ${email} is now associated to this ` +
-        `${entity}. Control their ${entity} roles below.`;
+      description = `The cloud.gov account for ${email} is now associated to this ${entity}. Control their ${entity} roles below.`;
     } else {
-      description =
-        `An email invite was sent to ${email}. Their account ` +
-        `has been associated to this ${entity}, and their ${entity} roles can ` +
-        'be controlled below.';
+      description = `An email invite was sent to ${email}. Their account has been associated to this ${entity}, and their ${entity} roles can be controlled below.`;
     }
 
     userActions.createUserListNotification(noticeType, description);

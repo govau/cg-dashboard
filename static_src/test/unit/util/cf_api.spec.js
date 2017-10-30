@@ -996,26 +996,22 @@ describe('cfApi', function() {
   });
 
   describe('fetchSpaceUserRoles()', function() {
-    it(
-      'should call fetch with spaces user roles url with space guid and the' +
-        ' received space users action',
-      function() {
-        const expected = 'yyyybba1',
-          spy = sandbox.spy(cfApi, 'fetchAllPages');
+    it('should call fetch with spaces user roles url with space guid and the received space users action', function() {
+      const expected = 'yyyybba1',
+        spy = sandbox.spy(cfApi, 'fetchAllPages');
 
-        cfApi.fetchSpaceUserRoles(expected);
+      cfApi.fetchSpaceUserRoles(expected);
 
-        expect(spy).toHaveBeenCalledOnce();
-        let actual = spy.getCall(0).args[0];
+      expect(spy).toHaveBeenCalledOnce();
+      let actual = spy.getCall(0).args[0];
 
-        expect(actual).toMatch(new RegExp(expected));
-        expect(actual).toMatch(new RegExp('spaces'));
-        expect(actual).toMatch(new RegExp('user_roles'));
-        actual = spy.getCall(0).args[1];
+      expect(actual).toMatch(new RegExp(expected));
+      expect(actual).toMatch(new RegExp('spaces'));
+      expect(actual).toMatch(new RegExp('user_roles'));
+      actual = spy.getCall(0).args[1];
 
-        expect(actual).toEqual(jasmine.any(Function));
-      }
-    );
+      expect(actual).toEqual(jasmine.any(Function));
+    });
   });
 
   describe('fetchOrgUsers()', function() {
