@@ -1,8 +1,8 @@
 import React from "react";
 import { shallow } from "enzyme";
-import ServiceInstanceTableRow from "../../../components/service_instance_table_row.jsx";
-import Action from "../../../components/action.jsx";
-import ConfirmationBox from "../../../components/confirmation_box.jsx";
+import ServiceInstanceTableRow from "../../../components/service_instance_table_row";
+import Action from "../../../components/action";
+import ConfirmationBox from "../../../components/confirmation_box";
 
 describe("<ServiceInstanceTableRow/>", () => {
   const baseInstance = {

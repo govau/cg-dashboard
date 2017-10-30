@@ -2,9 +2,9 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import UPSIPanel from "../../../../components/upsi/upsi_panel";
-import Panel from "../../../../components/panel.jsx";
-import ComplexList from "../../../../components/complex_list.jsx";
-import ComplexListItem from "../../../../components/complex_list_item.jsx";
+import Panel from "../../../../components/panel";
+import ComplexList from "../../../../components/complex_list";
+import ComplexListItem from "../../../../components/complex_list_item";
 
 const defaultApp = {
   guid: "1234",

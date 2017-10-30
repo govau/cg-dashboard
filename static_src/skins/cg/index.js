@@ -7,7 +7,7 @@ import * as homePage from "./home_page";
 
 export { homePage };
 
-import InfoLogs from "dashboard/components/info_logs.jsx";
+import InfoLogs from "dashboard/components/info_logs";
 
 export const config = {
   footer: {

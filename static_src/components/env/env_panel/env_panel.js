@@ -7,12 +7,12 @@ import {
   updateErrorPropType
 } from "../../../stores/env_store";
 import envActions from "../../../actions/env_actions";
-import Action from "../../action.jsx";
-import Loading from "../../loading.jsx";
-import ErrorMessage from "../../error_message.jsx";
-import ComplexList from "../../complex_list.jsx";
-import Panel from "../../panel.jsx";
-import PanelActions from "../../panel_actions.jsx";
+import Action from "../../action";
+import Loading from "../../loading";
+import ErrorMessage from "../../error_message";
+import ComplexList from "../../complex_list";
+import Panel from "../../panel";
+import PanelActions from "../../panel_actions";
 import EnvVarListItem from "../env_var_list_item";
 import EnvVarForm from "../env_var_form";
 import Header from "./header";

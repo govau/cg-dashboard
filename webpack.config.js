@@ -26,7 +26,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js$/,
         loader: "babel-loader",
         options: {
           presets: ["env", "react"],

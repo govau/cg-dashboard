@@ -14,8 +14,8 @@ import { Router } from "director";
 import { trackPageView } from "./util/analytics";
 import routes, { checkAuth, clearErrors, notFound } from "./routes";
 
-import MainContainer from "./components/main_container.jsx";
-import RouteProvider from "./components/router/route_provider.jsx";
+import MainContainer from "./components/main_container";
+import RouteProvider from "./components/router/route_provider";
 
 const initCSRFHeader = metaTag => {
   if (metaTag) {

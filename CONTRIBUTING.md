@@ -111,7 +111,7 @@ In general, commit messages can be written in whatever way the author decides, b
 - [18F styleguide for CSS](https://pages.18f.gov/frontend/css-coding-styleguide/), through [stylelint](https://github.com/18F/stylelint-rules).
 
 #### Formatting
-[Prettier](https://github.com/prettier/prettier) is used to automatically format a range of files (particularly `.css`, `.js`, `.jsx`, `.json`). See prettier's docs for how to enable automatic formatting on save for your editor.
+[Prettier](https://github.com/prettier/prettier) is used to automatically format a range of files (particularly CSS, JS, JSX, JSON). See prettier's docs for how to enable automatic formatting on save for your editor.
 
 If it's necessary to manually format, you can use the package script:
 
@@ -348,7 +348,7 @@ Here are some basic rules to work with components successfully:
    Things.propTypes = propTypes;
    Things.defaultProps = defaultProps;
    ```
-- If UI displaying is dependent on a certain amount of time, this should be set in the component rather then the store, see [Loading component](https://github.com/18F/cg-dashboard/blob/master/static_src/components/loading.jsx#L44) as an example.
+- If UI displaying is dependent on a certain amount of time, this should be set in the component rather then the store, see [Loading component](https://github.com/18F/cg-dashboard/blob/master/static_src/components/loading.js#L44) as an example.
 - If a component's prop types is technically an enum, use `oneOf` rather then the underlying data structure.
   ```js
   // Good
