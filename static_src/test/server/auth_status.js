@@ -1,5 +1,5 @@
-module.exports = function authstatus(smocks) {
-  smocks.route({
+const register = mockServer => {
+  mockServer.route({
     id: "authstatus",
     label: "Auth status", // label is optional
     path: "/v2/authstatus",
@@ -11,3 +11,5 @@ module.exports = function authstatus(smocks) {
     }
   });
 };
+
+export default register;

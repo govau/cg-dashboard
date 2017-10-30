@@ -1,90 +1,63 @@
-// This testing server acts as a "sidecar" for a main process given as command
-// line arguments, or simply starts the testing server.
-//
-// Sidecar pattern comes from Netflix's Prana[1] but instead of providing
-// platform services, we just provide access to the testing server.
-//
-// [1] http://techblog.netflix.com/2014/11/prana-sidecar-for-your-netflix-paas.html
+import hapi from "hapi";
+import inert from "inert";
+import smocks from "smocks";
+import smocksHapi from "smocks/hapi";
 
-const childProcess = require("child_process");
+import pkg from "../../../package.json";
+import registerAuthStatusRoutes from "./auth_status";
+import registerAPIRoutes from "./api";
 
-require("babel-register");
+smocks.id("cg-dashboard-testing");
 
-const { start } = require("./index");
+registerAuthStatusRoutes(smocks);
+registerAPIRoutes(smocks);
 
-const port = process.env.PORT;
+// start starts the server.
+// If port is not provided, the system will choose one automatically.
+// A callback should be provided which is notified when the server starts.
+const start = ({ port, callback }) => {
+  const s = new hapi.Server();
 
-let server;
+  s.connection({ port });
 
-function stopServer(cb) {
-  if (!server) {
-    setImmediate(cb);
-    return;
-  }
+  // Configure smocks as a hapi plugin.
+  const smocksPlugin = smocksHapi.toPlugin();
+  smocksPlugin.attributes = { pkg };
 
-  server.stop(cb);
-}
+  s.register([inert, smocksPlugin]);
 
-function cleanup() {
-  stopServer(function(error) {
-    process.exit(!!error);
-  });
-}
-
-function spawnChildCb(command, args) {
-  function cb(err) {
-    if (err) {
-      throw err;
-    }
-
-    console.log(
-      `Started smocks server on ${server.info.port}. Visit ${server.info
-        .uri}/_admin to configure.`
-    );
-
-    if (!command) {
-      // No arguments passed, just leave the test server running for manual
-      // testing
-      process.on("SIGINT", cleanup);
-      process.on("SIGTERM", cleanup);
-      return;
-    }
-
-    // Kick off the main process
-    const main = childProcess.spawn(command, args, {
-      stdio: "inherit",
-      env: {
-        ...process.env,
-        PORT: server.info.port
+  // Serve static assets.
+  s.route({
+    method: "get",
+    path: "/assets/{p*}",
+    handler: {
+      directory: {
+        path: "static/assets"
       }
-    });
-
-    main.on("close", function(exitCode) {
-      stopServer(function(error) {
-        if (error) {
-          console.error(error);
-        }
-
-        // Make sure to exit with the main's code or error if main was OK
-        process.exit(exitCode || !!error);
-      });
-    });
-
-    function connectSignal(signal) {
-      process.on(signal, function() {
-        main.kill(signal);
-      });
     }
+  });
+  s.route({
+    method: "get",
+    path: "/skins/{p*}",
+    handler: {
+      directory: {
+        path: "static/skins"
+      }
+    }
+  });
+  s.route({
+    method: "get",
+    path: "/{p*}",
+    handler: {
+      directory: {
+        path: "templates/web"
+      }
+    }
+  });
 
-    // Forward signals to main
-    connectSignal("SIGINT");
-    connectSignal("SIGTERM");
-  }
+  s.start(callback);
 
-  return cb;
-}
+  return s;
+};
 
-const args = process.argv.slice(2); // Drop the first to arguments (node path and exec path)
-const command = args.shift();
-
-server = start(port, spawnChildCb(command, args));
+export default start;

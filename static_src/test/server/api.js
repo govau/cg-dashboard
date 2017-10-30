@@ -34,22 +34,18 @@ const ENV_NO_APPS = process.env.NO_APPS || false;
 const ENV_NO_ORG_USERS = process.env.NO_ORG_USERS || false;
 const ENV_NO_SPACE_USERS = process.env.NO_SPACE_USERS || false;
 
-function SingleResponse(response) {
-  return response;
-}
+const SingleResponse = response => response;
 
-function MultiResponse(responses) {
-  return {
-    total_results: responses.length,
-    total_pages: 1,
-    prev_url: null,
-    next_url: null,
-    resources: responses
-  };
-}
+const MultiResponse = responses => ({
+  total_results: responses.length,
+  total_pages: 1,
+  prev_url: null,
+  next_url: null,
+  resources: responses
+});
 
-module.exports = function api(smocks) {
-  smocks.route({
+const register = mockServer => {
+  mockServer.route({
     id: "uaa-uaainfo-no-uaa-permissions",
     label: "UAA user info fake-personb - no special UAA permissions",
     path: "/uaa/uaainfo",
@@ -68,7 +64,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "uaa-userinfo",
     label: "UAA user info",
     path: "/uaa/userinfo",
@@ -86,7 +82,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "uaa-user-invite",
     label: "UAA user invite create",
     method: "POST",
@@ -106,7 +102,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "app-routes",
     label: "App routes",
     path: `${BASE_URL}/apps/{guid}/routes`,
@@ -116,7 +112,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "app-summary",
     label: "App summary",
     path: `${BASE_URL}/apps/{guid}/summary`,
@@ -127,7 +123,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "app-stats",
     label: "App stats",
     path: `${BASE_URL}/apps/{guid}/stats`,
@@ -142,7 +138,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organizations",
     label: "Organizations",
     path: `${BASE_URL}/organizations`,
@@ -155,7 +151,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organization",
     label: "Organization",
     path: `${BASE_URL}/organizations/{guid}`,
@@ -168,7 +164,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organizations-services",
     label: "Organizations services",
     path: `${BASE_URL}/organizations/{guid}/services`,
@@ -177,7 +173,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organizations-summary",
     label: "Organization Summary",
     path: `${BASE_URL}/organizations/{guid}/summary`,
@@ -190,7 +186,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organization-memory-usage",
     label: "Organization memory usage",
     path: `${BASE_URL}/organizations/{guid}/memory_usage`,
@@ -199,7 +195,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organization-quota-definitions",
     label: "Organization quota definitions",
     path: `${BASE_URL}/quota_definitions/{guid}`,
@@ -212,7 +208,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organization-users",
     label: "Organization users",
     path: `${BASE_URL}/organizations/{guid}/users`,
@@ -225,7 +221,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user",
     label: "User",
     path: `${BASE_URL}/users/{guid}`,
@@ -259,7 +255,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user-organizations",
     label: "User organizations",
     path: `${BASE_URL}/users/{guid}/organizations`,
@@ -273,7 +269,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user-associate-to-organizations",
     label: "User associate to organization",
     method: "PUT",
@@ -290,7 +286,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user-spaces",
     label: "User spaces",
     path: `${BASE_URL}/users/{guid}/spaces`,
@@ -304,7 +300,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "organization-users-roles",
     label: "Organization user roles",
     path: `${BASE_URL}/organizations/{guid}/user_roles`,
@@ -320,7 +316,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user-roles-org-add-new-role",
     label: "User roles Org Add New role",
     method: "PUT",
@@ -342,7 +338,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user-roles-org-delete-role",
     label: "User roles Org Delete role",
     method: "DELETE",
@@ -362,7 +358,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "spaces",
     label: "Spaces",
     path: `${BASE_URL}/spaces`,
@@ -375,7 +371,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "space-events",
     label: "Space events",
     path: `${BASE_URL}/spaces/{guid}/events`,
@@ -388,7 +384,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "space-service-instances",
     label: "Space service instsances",
     path: `${BASE_URL}/spaces/{guid}/service_instances`,
@@ -401,7 +397,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "space-routes",
     label: "Space routes",
     path: `${BASE_URL}/spaces/{guid}/routes`,
@@ -414,7 +410,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "space-summary",
     label: "Space summary",
     path: `${BASE_URL}/spaces/{guid}/summary`,
@@ -430,7 +426,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "space-quota-definitions",
     label: "Space quota definitions",
     path: `${BASE_URL}/space_quota_definitions`,
@@ -439,7 +435,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "space-user-roles",
     label: "Space user roles",
     path: `${BASE_URL}/spaces/{guid}/user_roles`,
@@ -453,7 +449,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user-roles-space-add-new-role",
     label: "User roles Space Add New role",
     method: "PUT",
@@ -473,7 +469,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "user-roles-space-delete-role",
     label: "User roles Space Delete role",
     method: "DELETE",
@@ -493,7 +489,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "service-bindings",
     label: "Service bindings",
     path: `${BASE_URL}/service_bindings`,
@@ -502,7 +498,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "service-plans",
     label: "Service plans",
     path: `${BASE_URL}/service_plans/{guid}`,
@@ -515,7 +511,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "service-service-plans",
     label: "Service service plans",
     path: `${BASE_URL}/services/{guid}/service_plans`,
@@ -528,7 +524,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "quota-definitions",
     label: "Quota definitions",
     path: `${BASE_URL}/quota_definitions`,
@@ -538,7 +534,7 @@ module.exports = function api(smocks) {
     }
   });
 
-  smocks.route({
+  mockServer.route({
     id: "shared-domains",
     label: "Shared domains",
     path: `${BASE_URL}/shared_domains/{guid}`,
@@ -551,3 +547,5 @@ module.exports = function api(smocks) {
     }
   });
 };
+
+export default register;
