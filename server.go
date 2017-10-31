@@ -63,7 +63,7 @@ func startApp(port string, app *cfenv.App) {
 	switch {
 	// Look for UPS names in a delimited environment variable.
 	case upsNames != "":
-		opts := append(opts, env.WithOSLookup())
+		opts = append(opts, env.WithOSLookup())
 
 		// TODO(jonathaningram): we already have an app. Is this so we're making
 		// sure that we definitely have it?
