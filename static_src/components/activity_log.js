@@ -6,6 +6,7 @@ import AppActivity from "./app_activity/app_activity";
 import ActivityStore from "../stores/activity_store";
 import AppStore from "../stores/app_store";
 import DomainStore from "../stores/domain_store";
+import ErrorMessage from "./error_message";
 import PanelActions from "./panel_actions";
 import RouteStore from "../stores/route_store";
 import ServiceInstanceStore from "../stores/service_instance_store";
@@ -36,22 +37,21 @@ const mapStoreToState = () => {
   return {
     activity,
     empty: ActivityStore.fetched && activity.length === 0,
-    hasErrors: ActivityStore.hasErrors,
-    errors: ActivityStore.errors
+    hasFetchLogsError: ActivityStore.hasFetchLogsError
   };
 };
 
-const propTypes = { maxItems: PropTypes.number };
+const propTypes = { itemsPerPage: PropTypes.number };
 
-const defaultProps = { maxItems: 10 };
+const defaultProps = { itemsPerPage: 10 };
 
 export default class ActivityLog extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ...mapStoreToState(props),
-      maxItems: props.maxItems
+      ...mapStoreToState(),
+      maxItems: props.itemsPerPage
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -73,48 +73,43 @@ export default class ActivityLog extends React.Component {
   }
 
   handleChange() {
-    this.setState(mapStoreToState(this.props));
+    this.setState(() => mapStoreToState());
   }
 
   handleLoadMore(e) {
     e.preventDefault();
 
-    const currentState = mapStoreToState(this.props);
-    currentState.maxItems = this.state.maxItems + this.props.maxItems;
-    this.setState(currentState);
+    this.setState(({ maxItems }) => ({
+      ...mapStoreToState(),
+      maxItems: maxItems + this.props.itemsPerPage
+    }));
   }
 
-  showMoreActivity() {
+  showMoreButton() {
     const { activity, maxItems } = this.state;
-    return activity.length > this.props.maxItems && activity.length >= maxItems;
+
+    return activity.length >= maxItems;
   }
 
   render() {
-    const { empty, hasErrors } = this.state;
+    const { empty, hasFetchLogsError, maxItems, activity } = this.state;
 
-    if (hasErrors) {
-      return <h5>An error occurred fetching recent activity</h5>;
-    }
     if (empty) {
       return <h5>No recent activity</h5>;
     }
 
-    const showMore = this.showMoreActivity() && (
-      <PanelActions>
-        <Action
-          label="View more"
-          clickHandler={this.handleLoadMore}
-          type="outline"
-        >
-          Show more activity
-        </Action>
-      </PanelActions>
-    );
-
     return (
       <div>
+        {hasFetchLogsError && (
+          <ErrorMessage
+            error={{
+              message:
+                "Could not load recent logs. Recent events may still be shown below."
+            }}
+          />
+        )}
         <ul className="activity_log">
-          {this.state.activity.slice(0, this.state.maxItems).map(item => {
+          {activity.slice(0, maxItems).map(item => {
             let service;
             if (item.metadata.request && item.metadata.service_instance_guid) {
               service = ServiceInstanceStore.get(
@@ -138,7 +133,17 @@ export default class ActivityLog extends React.Component {
               />
             );
           })}
-          {showMore}
+          {this.showMoreButton() && (
+            <PanelActions>
+              <Action
+                label="View more"
+                clickHandler={this.handleLoadMore}
+                type="outline"
+              >
+                Show more activity
+              </Action>
+            </PanelActions>
+          )}
         </ul>
       </div>
     );

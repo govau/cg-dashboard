@@ -72,8 +72,8 @@ class ActivityStore extends BaseStore {
     return this._eventsFetching || this._logsFetching;
   }
 
-  get hasErrors() {
-    return this.errors.log || this.errors.event;
+  get hasFetchLogsError() {
+    return this.errors.log;
   }
 
   _registerToActions(action) {
