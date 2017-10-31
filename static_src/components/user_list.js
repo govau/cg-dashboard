@@ -1,13 +1,8 @@
-import PropTypes from "prop-types";
-/**
- * Renders a list of users.
- */
-
 import React from "react";
+import PropTypes from "prop-types";
 
 import Action from "./action";
 import ComplexList from "./complex_list";
-import ComplexListItem from "./complex_list_item";
 import ElasticLine from "./elastic_line";
 import ElasticLineItem from "./elastic_line_item";
 import EntityEmpty from "./entity_empty";
@@ -15,7 +10,6 @@ import Loading from "./loading";
 import PanelDocumentation from "./panel_documentation";
 import UserRoleListControl from "./user_role_list_control";
 import { config } from "skin";
-import formatDateTime from "../util/format_date";
 
 const propTypes = {
   users: PropTypes.array,
@@ -72,7 +66,9 @@ export default class UserList extends React.Component {
   }
 
   get inviteDocumentation() {
-    if (!config.docs.invite_user) return null;
+    if (!config.docs.invite_user) {
+      return null;
+    }
 
     return (
       <span>
