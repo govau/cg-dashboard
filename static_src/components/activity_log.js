@@ -110,22 +110,25 @@ export default class ActivityLog extends React.Component {
         )}
         <ul className="activity_log">
           {activity.slice(0, maxItems).map(item => {
+            const { guid, metadata } = item;
+
             let service;
-            if (item.metadata.request && item.metadata.service_instance_guid) {
+            if (metadata.request && metadata.service_instance_guid) {
               service = ServiceInstanceStore.get(
-                item.metadata.request.service_instance_guid
+                metadata.request.service_instance_guid
               );
             }
 
+            const route = RouteStore.get(metadata.route_guid);
+
             let domain;
-            const route = RouteStore.get(item.metadata.route_guid);
             if (route) {
               domain = DomainStore.get(route.domain_guid);
             }
 
             return (
               <AppActivity
-                key={item.guid}
+                key={guid}
                 item={item}
                 service={service}
                 route={route}
