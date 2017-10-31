@@ -5,7 +5,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const PRODUCTION = process.env.NODE_ENV === "prod";
 const TEST = process.env.NODE_ENV === "test";
-const CF_SKIN = process.env.CF_SKIN || "cg";
+
+process.env.SKIN_NAME = process.env.SKIN_NAME || "cg";
 
 const srcDir = "./static_src";
 const compiledDir = "./static/assets";
@@ -55,7 +56,7 @@ const config = {
   resolve: {
     alias: {
       dashboard: path.resolve(__dirname, "static_src"),
-      skin: path.resolve(__dirname, `static_src/skins/${CF_SKIN}`)
+      skin: path.resolve(__dirname, `static_src/skins/${process.env.SKIN_NAME}`)
     },
 
     modules: ["node_modules"],
@@ -91,14 +92,19 @@ if (TEST) {
   };
 }
 
+const processEnv = {
+  SKIN_NAME: JSON.stringify(process.env.SKIN_NAME),
+  SKIN_PROVIDES_TRANSLATIONS: process.env.SKIN_PROVIDES_TRANSLATIONS
+};
+
 if (PRODUCTION) {
-  config.plugins.push(
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify("production")
-      }
-    })
-  );
+  processEnv.NODE_ENV = JSON.stringify("production");
 }
+
+config.plugins.push(
+  new webpack.DefinePlugin({
+    "process.env": processEnv
+  })
+);
 
 module.exports = config;
