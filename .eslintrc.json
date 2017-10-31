@@ -10,10 +10,7 @@
   },
   "plugins": ["react"],
   "rules": {
-    "comma-dangle": [2, "never"],
     "import/prefer-default-export": 0,
-    "react/no-deprecated": 0,
-    "react/prefer-stateless-function": 0,
-    "space-before-function-paren": [1, "never"]
+    "react/jsx-filename-extension": 0
   }
 }
