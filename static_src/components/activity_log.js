@@ -1,5 +1,6 @@
-import PropTypes from "prop-types";
 import React from "react";
+import PropTypes from "prop-types";
+
 import Action from "./action";
 import AppActivity from "./app_activity/app_activity";
 import ActivityStore from "../stores/activity_store";
@@ -9,7 +10,7 @@ import PanelActions from "./panel_actions";
 import RouteStore from "../stores/route_store";
 import ServiceInstanceStore from "../stores/service_instance_store";
 
-function stateSetter() {
+const mapStoreToState = () => {
   const appGuid = AppStore.currentAppGuid;
   const activity = ActivityStore.getAll()
     .filter(item => {
@@ -38,122 +39,109 @@ function stateSetter() {
     hasErrors: ActivityStore.hasErrors,
     errors: ActivityStore.errors
   };
-}
-
-const propTypes = {
-  maxItems: PropTypes.number
 };
 
-const defaultProps = {
-  maxItems: 10
-};
+const propTypes = { maxItems: PropTypes.number };
+
+const defaultProps = { maxItems: 10 };
 
 export default class ActivityLog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = Object.assign({}, stateSetter(props), {
-      maxItems: props.maxItems
-    });
 
-    this._onChange = this._onChange.bind(this);
-    this.handleMore = this.handleMore.bind(this);
+    this.state = {
+      ...mapStoreToState(props),
+      maxItems: props.maxItems
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleLoadMore = this.handleLoadMore.bind(this);
   }
 
   componentDidMount() {
-    ActivityStore.addChangeListener(this._onChange);
-    DomainStore.addChangeListener(this._onChange);
-    RouteStore.addChangeListener(this._onChange);
-    ServiceInstanceStore.addChangeListener(this._onChange);
+    ActivityStore.addChangeListener(this.handleChange);
+    DomainStore.addChangeListener(this.handleChange);
+    RouteStore.addChangeListener(this.handleChange);
+    ServiceInstanceStore.addChangeListener(this.handleChange);
   }
 
   componentWillUnmount() {
-    ActivityStore.removeChangeListener(this._onChange);
-    DomainStore.removeChangeListener(this._onChange);
-    RouteStore.removeChangeListener(this._onChange);
-    ServiceInstanceStore.removeChangeListener(this._onChange);
+    ActivityStore.removeChangeListener(this.handleChange);
+    DomainStore.removeChangeListener(this.handleChange);
+    RouteStore.removeChangeListener(this.handleChange);
+    ServiceInstanceStore.removeChangeListener(this.handleChange);
   }
 
-  _onChange() {
-    this.setState(stateSetter(this.props));
+  handleChange() {
+    this.setState(mapStoreToState(this.props));
   }
 
-  handleMore(ev) {
-    ev.preventDefault();
-    const currentState = stateSetter(this.props);
+  handleLoadMore(e) {
+    e.preventDefault();
+
+    const currentState = mapStoreToState(this.props);
     currentState.maxItems = this.state.maxItems + this.props.maxItems;
     this.setState(currentState);
   }
 
   showMoreActivity() {
-    if (
-      this.state.activity.length > this.props.maxItems &&
-      this.state.activity.length >= this.state.maxItems
-    ) {
-      return true;
-    }
-    return false;
+    const { activity, maxItems } = this.state;
+    return activity.length > this.props.maxItems && activity.length >= maxItems;
   }
 
   render() {
-    let content = <div />;
+    const { empty, hasErrors } = this.state;
 
-    if (this.state.empty && this.state.hasErrors) {
-      content = (
-        <h5 className="test-none_message">
-          An error occurred fetching recent activity
-        </h5>
-      );
-    } else if (this.state.empty) {
-      content = <h5 className="test-none_message">No recent activity</h5>;
-    } else {
-      const showMore = this.showMoreActivity() && (
-        <PanelActions>
-          <Action
-            label="View more"
-            clickHandler={this.handleMore}
-            type="outline"
-          >
-            Show more activity
-          </Action>
-        </PanelActions>
-      );
-      content = (
-        <div>
-          <ul className="activity_log">
-            {this.state.activity.slice(0, this.state.maxItems).map(item => {
-              let service;
-              if (
-                item.metadata.request &&
-                item.metadata.service_instance_guid
-              ) {
-                service = ServiceInstanceStore.get(
-                  item.metadata.request.service_instance_guid
-                );
-              }
-
-              let domain;
-              const route = RouteStore.get(item.metadata.route_guid);
-              if (route) {
-                domain = DomainStore.get(route.domain_guid);
-              }
-
-              return (
-                <AppActivity
-                  key={item.guid}
-                  item={item}
-                  service={service}
-                  route={route}
-                  domain={domain}
-                />
-              );
-            })}
-            {showMore}
-          </ul>
-        </div>
-      );
+    if (hasErrors) {
+      return <h5>An error occurred fetching recent activity</h5>;
+    }
+    if (empty) {
+      return <h5>No recent activity</h5>;
     }
 
-    return <div className="activity_log-container">{content}</div>;
+    const showMore = this.showMoreActivity() && (
+      <PanelActions>
+        <Action
+          label="View more"
+          clickHandler={this.handleLoadMore}
+          type="outline"
+        >
+          Show more activity
+        </Action>
+      </PanelActions>
+    );
+
+    return (
+      <div>
+        <ul className="activity_log">
+          {this.state.activity.slice(0, this.state.maxItems).map(item => {
+            let service;
+            if (item.metadata.request && item.metadata.service_instance_guid) {
+              service = ServiceInstanceStore.get(
+                item.metadata.request.service_instance_guid
+              );
+            }
+
+            let domain;
+            const route = RouteStore.get(item.metadata.route_guid);
+            if (route) {
+              domain = DomainStore.get(route.domain_guid);
+            }
+
+            return (
+              <AppActivity
+                key={item.guid}
+                item={item}
+                service={service}
+                route={route}
+                domain={domain}
+              />
+            );
+          })}
+          {showMore}
+        </ul>
+      </div>
+    );
   }
 }
 
