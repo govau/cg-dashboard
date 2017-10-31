@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment-timezone";
 
-const propTypes = { timestamp: PropTypes.string };
+const propTypes = { timestamp: PropTypes.string.isRequired };
+
 const formatTimestamp = timestamp =>
   moment(timestamp)
     .tz(moment.tz.guess())
