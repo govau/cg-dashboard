@@ -8,7 +8,6 @@ import Header from "./header";
 import LoginStore from "../stores/login_store";
 import OrgStore from "../stores/org_store";
 import SpaceStore from "../stores/space_store";
-import { Nav } from "./navbar";
 
 const propTypes = {
   children: PropTypes.any
