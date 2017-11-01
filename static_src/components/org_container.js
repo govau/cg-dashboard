@@ -1,25 +1,25 @@
-import React from "react";
+import React, { Component } from "react";
 
 import { config } from "skin";
+import UserStore from "../stores/user_store";
+import OrgStore from "../stores/org_store";
+import SpaceStore from "../stores/space_store";
 import AppCountStatus from "./app_count_status";
 import Breadcrumbs from "./breadcrumbs";
 import EntityIcon from "./entity_icon";
 import EntityEmpty from "./entity_empty";
 import Loading from "./loading";
-import OrgStore from "../stores/org_store";
 import PageHeader from "./page_header";
 import Panel from "./panel";
 import ServiceCountStatus from "./service_count_status";
 import SpaceCountStatus from "./space_count_status";
-import SpaceStore from "../stores/space_store";
 import SpaceQuicklook from "./space_quicklook";
 import Users from "./users";
-import UserStore from "../stores/user_store";
 
-function stateSetter() {
-  const currentOrgGuid = OrgStore.currentOrgGuid;
-  const currentSpaceGuid = SpaceStore.currentSpaceGuid;
-  const currentUser = UserStore.currentUser;
+const mapStoreToState = () => {
+  const { currentOrgGuid } = OrgStore;
+  const { currentSpaceGuid } = SpaceStore;
+  const { currentUser } = UserStore;
   const currentUserGuid = currentUser && currentUser.guid;
   const currentUserCanViewSpace =
     UserStore.hasRole(currentUserGuid, currentOrgGuid, "org_manager") ||
@@ -31,7 +31,7 @@ function stateSetter() {
 
   const org = OrgStore.get(currentOrgGuid);
   const spaces = SpaceStore.getAll()
-    .filter(space => space.organization_guid === currentOrgGuid)
+    .filter(s => s.organization_guid === currentOrgGuid)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return {
@@ -43,67 +43,31 @@ function stateSetter() {
     org: org || {},
     spaces: spaces || []
   };
-}
+};
 
-export default class OrgContainer extends React.Component {
+export default class OrgContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = stateSetter();
-    this._onChange = this._onChange.bind(this);
+
+    this.state = mapStoreToState();
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    OrgStore.addChangeListener(this._onChange);
-    SpaceStore.addChangeListener(this._onChange);
-    UserStore.addChangeListener(this._onChange);
+    OrgStore.addChangeListener(this.handleChange);
+    SpaceStore.addChangeListener(this.handleChange);
+    UserStore.addChangeListener(this.handleChange);
   }
 
   componentWillUnmount() {
-    OrgStore.removeChangeListener(this._onChange);
-    SpaceStore.removeChangeListener(this._onChange);
-    UserStore.removeChangeListener(this._onChange);
+    OrgStore.removeChangeListener(this.handleChange);
+    SpaceStore.removeChangeListener(this.handleChange);
+    UserStore.removeChangeListener(this.handleChange);
   }
 
-  _onChange() {
-    this.setState(stateSetter());
-  }
-
-  get emptyState() {
-    let content;
-    let callout;
-
-    if (this.state.currentUserCanViewSpace) {
-      const spaceLink = config.docs.concepts_spaces ? (
-        <a href={config.docs.concepts_spaces}>Spaces</a>
-      ) : (
-        <span>Spaces</span>
-      );
-      const contactLink = config.docs.contact ? (
-        <a href={config.docs.contact}>contact us</a>
-      ) : (
-        <span>contact us</span>
-      );
-
-      callout = "You have no spaces in this organization";
-      content = (
-        <p>
-          {spaceLink} are environments for development, deployment, and
-          maintenance of apps and services. If you think you have spaces you
-          don’t see here, {contactLink}.
-        </p>
-      );
-    } else {
-      callout =
-        "You don’t have permission to see the spaces in this organization.";
-      content = (
-        <p>
-          Organization auditors and billing managers can’t view spaces. Ask your
-          organization’s administrator to give you these permissions..
-        </p>
-      );
-    }
-
-    return <EntityEmpty callout={callout}>{content}</EntityEmpty>;
+  handleChange() {
+    this.setState(mapStoreToState());
   }
 
   allServices() {
@@ -124,72 +88,118 @@ export default class OrgContainer extends React.Component {
     }, []);
   }
 
+  renderEmptyState() {
+    const { currentUserCanViewSpace } = this.state;
+
+    if (currentUserCanViewSpace) {
+      const spaceLink = config.docs.concepts_spaces ? (
+        <a href={config.docs.concepts_spaces}>Spaces</a>
+      ) : (
+        "Spaces"
+      );
+      const contactLink = config.docs.contact ? (
+        <a href={config.docs.contact}>contact us</a>
+      ) : (
+        "contact us"
+      );
+
+      return (
+        <EntityEmpty callout="You have no spaces in this organization.">
+          <p>
+            {spaceLink} are environments for development, deployment, and
+            maintenance of apps and services. If you think you have spaces you
+            don’t see here, {contactLink}.
+          </p>
+        </EntityEmpty>
+      );
+    }
+
+    return (
+      <EntityEmpty callout="You don’t have permission to see the spaces in this organization.">
+        <p>
+          Organization auditors and billing managers can’t view spaces. Ask your
+          organization’s administrator to give you these permissions.
+        </p>
+      </EntityEmpty>
+    );
+  }
+
   render() {
-    const { org } = this.state;
-    const state = this.state;
-    const loading = <Loading text="Loading organization" />;
-    let content = <div>{loading}</div>;
+    const {
+      currentUser,
+      currentOrgGuid,
+      org,
+      spaces,
+      empty,
+      loading
+    } = this.state;
+
+    if (loading) {
+      return (
+        <div>
+          <Loading text="Loading organization" />
+        </div>
+      );
+    }
+
+    if (empty) {
+      return <h4 className="test-none_message">No organizations</h4>;
+    }
+
+    if (!spaces.length) {
+      return this.renderEmptyState();
+    }
+
+    const allApps = this.allApps();
+    const allServices = this.allServices();
+
     const title = (
       <span>
         <EntityIcon entity="org" iconSize="large" /> {org.name}
       </span>
     );
-    const spaces = !state.spaces.length
-      ? this.emptyState
-      : state.spaces.map(space => (
-          <SpaceQuicklook
-            key={space.guid}
-            space={space}
-            orgGuid={state.currentOrgGuid}
-            user={state.currentUser}
-            showAppDetail
-          />
-        ));
 
-    if (state.empty) {
-      content = <h4 className="test-none_message">No organizations</h4>;
-    } else if (!state.loading && org) {
-      const allApps = this.allApps();
-      const allServices = this.allServices();
-
-      // TODO repeated pattern space_container, overview
-      content = (
+    return (
+      <div className="grid">
         <div className="grid">
-          <div className="grid">
-            <div className="grid-width-12">
-              <Breadcrumbs org={org} />
-              <PageHeader title={title} />
+          <div className="grid-width-12">
+            <Breadcrumbs org={org} />
+            <PageHeader title={title} />
+          </div>
+        </div>
+        <Panel title="">
+          <div className="grid panel-overview-header">
+            <div className="grid-width-6">
+              <h1 className="panel-title">Organization overview</h1>
+            </div>
+            <div className="grid-width-6">
+              <div className="count_status_container">
+                <SpaceCountStatus spaces={spaces} />
+                <AppCountStatus
+                  apps={allApps}
+                  appCount={allApps && allApps.length}
+                />
+                <ServiceCountStatus
+                  services={allServices}
+                  serviceCount={allServices && allServices.length}
+                />
+              </div>
             </div>
           </div>
-          <Panel title="">
-            <div className="grid panel-overview-header">
-              <div className="grid-width-6">
-                <h1 className="panel-title">Organization overview</h1>
-              </div>
-              <div className="grid-width-6">
-                <div className="count_status_container">
-                  <SpaceCountStatus spaces={state.spaces} />
-                  <AppCountStatus
-                    apps={allApps}
-                    appCount={allApps && allApps.length}
-                  />
-                  <ServiceCountStatus
-                    services={allServices}
-                    serviceCount={allServices && allServices.length}
-                  />
-                </div>
-              </div>
-            </div>
-            {spaces}
-          </Panel>
-
-          <Panel title="Organization users">
-            <Users />
-          </Panel>
-        </div>
-      );
-    }
-
-    return content;
+          {spaces.map(space => (
+            <SpaceQuicklook
+              key={space.guid}
+              space={space}
+              orgGuid={currentOrgGuid}
+              user={currentUser}
+              showAppDetail
+            />
+          ))}
+        </Panel>
+        <Panel title="Organization users">
+          <Users />
+        </Panel>
+      </div>
+    );
   }
 }
