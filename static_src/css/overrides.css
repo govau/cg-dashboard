@@ -159,3 +159,12 @@ img.right-arrow {
   width: 1.3rem;
   margin-left: 0;
 }
+
+/* TODO(jonathaningram): can remove these once these classes are not used. */
+.activity_log-item:first-child {
+  border-top: 0;
+}
+
+.activity_log-item {
+  border-bottom: 0;
+}

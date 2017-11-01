@@ -1,15 +1,33 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
+import moment from "moment-timezone";
+import styled from "styled-components";
 
 import Action from "./action";
-import AppActivity from "./app_activity/app_activity";
+
 import ActivityStore from "../stores/activity_store";
 import AppStore from "../stores/app_store";
 import DomainStore from "../stores/domain_store";
-import ErrorMessage from "./error_message";
-import PanelActions from "./panel_actions";
 import RouteStore from "../stores/route_store";
 import ServiceInstanceStore from "../stores/service_instance_store";
+import ErrorMessage from "./error_message";
+import PanelActions from "./panel_actions";
+import DailyBucket from "./app_activity/daily_bucket";
+
+const Buckets = styled.div`
+  margin-top: 1rem;
+`;
+
+const itemsToDailyBuckets = items => {
+  const buckets = {};
+  for (const item of items) {
+    const timestamp = moment(item.timestamp).tz(moment.tz.guess());
+    const date = timestamp.format("YYYY-MM-DD z");
+    buckets[date] = buckets[date] || { date, items: [] };
+    buckets[date].items.push(item);
+  }
+  return Object.keys(buckets).map(date => buckets[date]);
+};
 
 const mapStoreToState = () => {
   const appGuid = AppStore.currentAppGuid;
@@ -45,7 +63,7 @@ const propTypes = { itemsPerPage: PropTypes.number };
 
 const defaultProps = { itemsPerPage: 10 };
 
-export default class ActivityLog extends React.Component {
+export default class ActivityLog extends Component {
   constructor(props) {
     super(props);
 
@@ -108,46 +126,24 @@ export default class ActivityLog extends React.Component {
             }}
           />
         )}
-        <ul className="activity_log">
-          {activity.slice(0, maxItems).map(item => {
-            const { guid, metadata } = item;
-
-            let service;
-            if (metadata.request && metadata.service_instance_guid) {
-              service = ServiceInstanceStore.get(
-                metadata.request.service_instance_guid
-              );
-            }
-
-            const route = RouteStore.get(metadata.route_guid);
-
-            let domain;
-            if (route) {
-              domain = DomainStore.get(route.domain_guid);
-            }
-
-            return (
-              <AppActivity
-                key={guid}
-                item={item}
-                service={service}
-                route={route}
-                domain={domain}
-              />
-            );
-          })}
-          {this.showMoreButton() && (
-            <PanelActions>
-              <Action
-                label="View more"
-                clickHandler={this.handleLoadMore}
-                type="outline"
-              >
-                Show more activity
-              </Action>
-            </PanelActions>
-          )}
-        </ul>
+        <Buckets>
+          {itemsToDailyBuckets(
+            activity.slice(0, maxItems)
+          ).map(({ date, items }) => (
+            <DailyBucket key={date} date={date} items={items} />
+          ))}
+        </Buckets>
+        {this.showMoreButton() && (
+          <PanelActions>
+            <Action
+              label="View more"
+              clickHandler={this.handleLoadMore}
+              type="outline"
+            >
+              Show more activity
+            </Action>
+          </PanelActions>
+        )}
       </div>
     );
   }

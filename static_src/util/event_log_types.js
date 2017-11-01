@@ -5,5 +5,6 @@ export default {
   APP_UNMAP_ROUTE: "audit.app.unmap-route",
   APP_RESTAGE: "audit.app.restage",
   APP_UPDATE: "audit.app.update",
+  APP_PROCESS_CRASH: "audit.app.process.crash",
   APP_BIND_SERVICE: "audit.service_binding.create"
 };

@@ -1,18 +1,22 @@
-import PropTypes from "prop-types";
 import React from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
 
 const propTypes = {
-  children: PropTypes.array
-};
-const defaultProps = {
-  children: null
+  children: PropTypes.array,
+  className: PropTypes.string
 };
 
-export default class ElasticLine extends React.Component {
-  render() {
-    return <div className="elastic_line">{this.props.children}</div>;
-  }
-}
+const defaultProps = {
+  className: ""
+};
+
+const ElasticLine = ({ children, className }) => (
+  <div className={classNames("elastic_line", className)}>{children}</div>
+);
 
 ElasticLine.propTypes = propTypes;
+
 ElasticLine.defaultProps = defaultProps;
+
+export default ElasticLine;

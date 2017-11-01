@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const propTypes = {
-  statusCode: PropTypes.string,
-  requestedUrl: PropTypes.string
+  statusCode: PropTypes.string.isRequired,
+  requestedUrl: PropTypes.string.isRequired
 };
 
 const LogItem = ({ statusCode, requestedUrl }) => (

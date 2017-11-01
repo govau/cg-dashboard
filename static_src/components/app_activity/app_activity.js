@@ -1,12 +1,17 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import classnames from "classnames";
+import styled from "styled-components";
+import classNames from "classnames";
+
+import arrowRightSrc from "./angle-arrow-right.svg";
+import arrowDownSrc from "./angle-arrow-down.svg";
 import eventLogTypes from "../../util/event_log_types";
-import ElasticLine from "../elastic_line";
+import EL from "../elastic_line";
 import ElasticLineItem from "../elastic_line_item";
 import Timestamp from "./timestamp";
 import LogItem from "./log_item";
-import CrashEventItem from "./crash_event_item";
+import AppCrashEvent from "./app_crash_event";
+import AppProcessCrashEvent from "./app_process_crash_event";
 import RouteEventItem from "./route_event_item";
 import RawJSONDetail from "./raw_json_detail";
 
@@ -22,22 +27,124 @@ const activityTypes = {
   EVENT: "event"
 };
 
-export default class ActivityLogItem extends React.Component {
+const cssClassesForItem = item => {
+  const { type, activity_type: activityType } = item;
+
+  switch (activityType) {
+    case activityTypes.LOG:
+      return ["activity_log-item", "activity_log-item-console"];
+    case activityTypes.EVENT:
+      return [
+        "activity_log-item",
+        {
+          "activity_log-item-error":
+            type === eventLogTypes.APP_CRASH ||
+            type === eventLogTypes.APP_PROCESS_CRASH,
+          "activity_log-item-warning":
+            type === eventLogTypes.APP_UPDATE ||
+            type === eventLogTypes.APP_RESTAGE,
+          "activity_log-item-success": type === eventLogTypes.APP_CREATE
+        }
+      ];
+    default:
+      return ["activity_log-item"];
+  }
+};
+
+const routeEventItem = (actor, domain, route, unmapped) => {
+  const props = { actor, domain, route, unmapped };
+  return <RouteEventItem {...props} />;
+};
+
+const formatStorageUpdateMessage = (actor, metadata) => {
+  if ("memory" in metadata.request) {
+    // Updated one of memory, disk_quota, or instances
+    return `${actor} modified resource allocation of the app.`;
+  }
+
+  const appState = metadata.request.state
+    ? metadata.request.state.toLowerCase()
+    : "updated";
+
+  return `${actor} ${appState} the app.`;
+};
+
+const formatBoundServiceMessage = (actor, service) => {
+  const serviceText = service ? service.guid : "a service";
+  return `${actor} bound ${serviceText} to the app.`;
+};
+
+const Item = styled.div`
+  border-top: 1px solid #d3d3d3;
+`;
+
+const Line = styled.div`
+  font-size: 0.8125rem;
+  padding: 0 0 0 1rem;
+`;
+
+const ElasticLine = styled(EL)`
+  min-height: 2rem;
+`;
+
+const renderToggleIcon = ({ expanded }) => (
+  <img
+    className="right-arrow"
+    src={expanded ? arrowDownSrc : arrowRightSrc}
+    alt={expanded ? "Collapse" : "Expand"}
+  />
+);
+
+renderToggleIcon.propTypes = { expanded: PropTypes.bool.isRequired };
+renderToggleIcon.defaultProps = { expanded: false };
+
+export default class ActivityLogItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showRawJson: false
-    };
 
-    this.toggleRawJson = this.toggleRawJson.bind(this);
+    this.state = { expanded: false };
+
+    this.handleToggleExpanded = this.handleToggleExpanded.bind(this);
   }
 
-  toggleRawJson() {
-    const { showRawJson } = this.state;
-    this.setState({ showRawJson: !showRawJson });
+  handleToggleExpanded() {
+    this.setState(({ expanded }) => ({ expanded: !expanded }));
   }
 
-  get logItem() {
+  renderEventMessage() {
+    const { domain, item, route } = this.props;
+    const itemType = item.type;
+    const { metadata } = item;
+
+    switch (itemType) {
+      case eventLogTypes.APP_CRASH: {
+        const exitDescription = metadata.exit_description;
+        const exitStatus = metadata.exit_status;
+        return <AppCrashEvent {...{ exitDescription, exitStatus }} />;
+      }
+      case eventLogTypes.APP_PROCESS_CRASH: {
+        const exitDescription = metadata.exit_description;
+        return <AppProcessCrashEvent {...{ exitDescription }} />;
+      }
+      case eventLogTypes.APP_CREATE:
+        return `${item.actor_name} created the app with ${metadata.request
+          .memory} MBs of memory.`;
+      case eventLogTypes.APP_MAP_ROUTE:
+        return routeEventItem(item.actor_name, domain, route);
+      case eventLogTypes.APP_UNMAP_ROUTE:
+        return routeEventItem(item.actor_name, domain, route, "unmapped");
+      case eventLogTypes.APP_RESTAGE:
+        return `${item.actor_name} restaged the app.`;
+      case eventLogTypes.APP_UPDATE:
+        return formatStorageUpdateMessage(item.actor_name, metadata);
+      case eventLogTypes.APP_BIND_SERVICE:
+        return formatBoundServiceMessage(item.actor_name, this.props.service);
+      default:
+        return itemType;
+    }
+  }
+
+  renderItem() {
     const { item } = this.props;
 
     if (item.activity_type === activityTypes.LOG) {
@@ -49,108 +156,33 @@ export default class ActivityLogItem extends React.Component {
       );
     }
 
-    return <span className="activity_log-item_text">{this.eventContent}</span>;
-  }
-
-  get CrashEventItem() {
-    const { metadata } = this.props.item;
-    const exitDescription = metadata.exit_description;
-    const exitStatus = metadata.exit_status;
-    const props = { exitDescription, exitStatus };
-
-    return <CrashEventItem {...props} />;
-  }
-
-  routeEventItem(actor, domain, route, unmapped) {
-    const props = {
-      actor,
-      domain,
-      route,
-      unmapped
-    };
-    return <RouteEventItem {...props} />;
-  }
-
-  formatStorageUpdateMessage(actor, metadata) {
-    if ("memory" in metadata.request) {
-      // Updated one of memory, disk_quota, or instances
-      return `${actor} modified resource allocation of the app.`;
-    }
-
-    const appState = metadata.request.state
-      ? metadata.request.state.toLowerCase()
-      : "updated";
-
-    return `${actor} ${appState} the app.`;
-  }
-
-  formatBoundServiceMessage(actor, service) {
-    const serviceText = service ? service.guid : "a service";
-    return `${actor} bound ${serviceText} to the app.`;
-  }
-
-  get eventContent() {
-    const { domain, item, route } = this.props;
-    const itemType = item.type;
-    const metadata = item.metadata;
-
-    switch (itemType) {
-      case eventLogTypes.APP_CRASH:
-        return this.CrashEventItem;
-      case eventLogTypes.APP_CREATE:
-        return `${item.actor_name} created the app with ${metadata.request
-          .memory} MBs of memory.`;
-      case eventLogTypes.APP_MAP_ROUTE:
-        return this.routeEventItem(item.actor_name, domain, route);
-      case eventLogTypes.APP_UNMAP_ROUTE:
-        return this.routeEventItem(item.actor_name, domain, route, "unmapped");
-      case eventLogTypes.APP_RESTAGE:
-        return `${item.actor_name} restaged the app.`;
-      case eventLogTypes.APP_UPDATE:
-        return this.formatStorageUpdateMessage(item.actor_name, metadata);
-      case eventLogTypes.APP_BIND_SERVICE:
-        return this.formatBoundServiceMessage(
-          item.actor_name,
-          this.props.service
-        );
-      default:
-        return `${itemType} isn't handled`;
-    }
-  }
-
-  get cssClass() {
-    const { item } = this.props;
-
-    if (item.activity_type === activityTypes.LOG) {
-      return "activity_log-item-console";
-    }
-
-    return item.activity_type === activityTypes.EVENT
-      ? {
-          "activity_log-item-error": item.type === eventLogTypes.APP_CRASH,
-          "activity_log-item-warning":
-            item.type === eventLogTypes.APP_UPDATE ||
-            item.type === eventLogTypes.APP_RESTAGE,
-          "activity_log-item-success": item.type === eventLogTypes.APP_CREATE
-        }
-      : {};
+    return (
+      <span className="activity_log-item_text">
+        {this.renderEventMessage()}
+      </span>
+    );
   }
 
   render() {
     const { item } = this.props;
+    const { expanded } = this.state;
 
     return (
-      <li className={classnames("activity_log-item", this.cssClass)}>
-        <div className="activity_log-item_line" onClick={this.toggleRawJson}>
+      <Item
+        onClick={this.handleToggleExpanded}
+        className={classNames(...cssClassesForItem(item))}
+      >
+        <Line className="activity_log-item_line">
           <ElasticLine>
-            <ElasticLineItem>{this.logItem}</ElasticLineItem>
-            <ElasticLineItem align="end">
+            <ElasticLineItem>{renderToggleIcon({ expanded })}</ElasticLineItem>
+            <ElasticLineItem>
               <Timestamp timestamp={item.timestamp} />
             </ElasticLineItem>
+            <ElasticLineItem>{this.renderItem()}</ElasticLineItem>
           </ElasticLine>
-        </div>
-        <RawJSONDetail item={item} visible={this.state.showRawJson} />
-      </li>
+        </Line>
+        <RawJSONDetail item={item} visible={expanded} />
+      </Item>
     );
   }
 }

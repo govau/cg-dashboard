@@ -118,6 +118,7 @@
     "sinon": "^4.0.2",
     "smocks": "^6.0.0",
     "style-loader": "^0.19.0",
+    "styled-components": "^2.2.3",
     "url-loader": "^0.6.2",
     "watch": "^1.0.2",
     "wdio-jasmine-framework": "^0.3.2",

@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import formatRoute from "../../util/format_route";
 
 const urlPlaceholder = "url";
+
 const propTypes = {
   actor: PropTypes.string,
   domain: PropTypes.shape({ name: PropTypes.string }),
@@ -27,4 +29,5 @@ const RouteEventItem = ({ actor, domain, route, unmapped }) => (
 );
 
 RouteEventItem.propTypes = propTypes;
+
 export default RouteEventItem;

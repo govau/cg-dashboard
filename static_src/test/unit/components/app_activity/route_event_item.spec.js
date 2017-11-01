@@ -1,6 +1,7 @@
 import React from "react";
-import RouteEventItem from "../../../../components/app_activity/route_event_item";
 import { shallow } from "enzyme";
+
+import RouteEventItem from "../../../../components/app_activity/route_event_item";
 
 describe("<RouteEventItem />", () => {
   it("renders an <a> tag with a link derived from the domain and host", () => {

@@ -16,7 +16,6 @@
   "plugins": ["jasmine"],
   "rules": {
     "jasmine/no-spec-dupes": [2, "branch"],
-    "jasmine/no-suite-dupes": [2, "branch"],
-    "no-restricted-syntax": 0
+    "jasmine/no-suite-dupes": [2, "branch"]
   }
 }

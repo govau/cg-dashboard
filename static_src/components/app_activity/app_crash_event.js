@@ -1,7 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
 
-const crashReason = (status, description) => {
+const reason = (description, status) => {
   switch (description) {
     case "app instance exited":
       return `the app instance exited with ${status} status`;
@@ -20,11 +19,9 @@ const propTypes = {
   exitStatus: PropTypes.string
 };
 
-const CrashEventItem = ({ exitStatus, exitDescription }) => (
-  <span>
-    The app crashed because {crashReason(exitStatus, exitDescription)}.
-  </span>
-);
+const AppCrashEvent = ({ exitDescription, exitStatus }) =>
+  `The app crashed because ${reason(exitDescription, exitStatus)}.`;
 
-CrashEventItem.propTypes = propTypes;
-export default CrashEventItem;
+AppCrashEvent.propTypes = propTypes;
+
+export default AppCrashEvent;
