@@ -186,9 +186,11 @@ export default class Users extends React.Component {
   }
 
   get userInvite() {
+    console.log("here 0");
     // When on the org page, only the Org Manager should see the user invite
     // form. If not, display notification.
     if (this.isOrganization && !this.currentUserIsOrgManager) {
+      console.log("here 1");
       return (
         <I18n>
           {t => (

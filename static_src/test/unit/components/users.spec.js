@@ -1,7 +1,8 @@
 import React from "react";
 import Immutable from "immutable";
 import sinon from "sinon";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
+import { I18n } from "react-i18next";
 
 import Users from "../../../components/users";
 import PanelDocumentation from "../../../components/panel_documentation";
@@ -34,31 +35,46 @@ describe("<Users />", () => {
     });
 
     describe("when at org level", () => {
-      let wrapper;
-
-      beforeEach(() => {
-        wrapper = shallow(<Users />);
+      const makeWrapper = () => {
+        console.log("make");
+        const wrapper = mount(<Users />);
         wrapper.setState({ currentType: "org_users" });
-      });
+        return {
+          wrapper,
+          cleanup() {
+            wrapper.unmount();
+          }
+        };
+      };
 
       it("has an `entityType` of organization", () => {
+        const { wrapper, cleanup } = makeWrapper();
         const actual = wrapper.instance().entityType;
 
         expect(actual).toEqual("organization");
+
+        cleanup();
       });
 
       describe("when a user is an org manager", () => {
+        let wrapper;
+        let cleanup;
+
         beforeEach(() => {
           const stub = sinon.stub(UserStore, "hasRole");
           stub.withArgs(userGuid, sinon.match.any, "org_manager").returns(true);
           stub
             .withArgs(userGuid, sinon.match.any, "space_manager")
             .returns(false);
-          wrapper = shallow(<Users />);
-          wrapper.setState({ currentType: "org_users" });
+
+          const { wrapper: w, cleanup: c } = makeWrapper();
+          wrapper = w;
+          cleanup = c;
         });
 
         afterEach(() => {
+          cleanup();
+
           UserStore.hasRole.restore();
         });
 
@@ -84,22 +100,35 @@ describe("<Users />", () => {
           roles: buildRoles(spaceGuid, ["space_manager"])
         });
 
+        let wrapper;
+        let cleanup;
+
         beforeEach(() => {
           UserStore._data = Immutable.fromJS([spaceUser]);
-          wrapper = shallow(<Users />);
-          wrapper.setState({ currentType: "org_users" });
           const stub = sinon.stub(UserStore, "hasRole");
           stub
             .withArgs(userGuid, sinon.match.any, sinon.match.any)
             .returns(false);
+
+          const { wrapper: w, cleanup: c } = makeWrapper();
+          wrapper = w;
+          cleanup = c;
         });
 
         afterEach(() => {
+          cleanup();
+
           UserStore.hasRole.restore();
         });
 
-        it("renders message telling user to ask an org manager to add users", () => {
-          expect(wrapper.find(PanelDocumentation).length).toBe(1);
+        fit("renders message telling user to ask an org manager to add users", () => {
+          console.log("start test");
+          console.log("xxx.I18n.length", wrapper.find(I18n).length);
+          console.log("xxx.I18n", wrapper.find(I18n));
+          console.log("xxx.I18n.children", wrapper.find(I18n).prop("children"));
+          // console.log("xxx.Doc", wrapper.find(I18n).find(PanelDocumentation));
+          expect(wrapper.find(I18n).find(PanelDocumentation).length).toBe(1);
+          console.log("xxx", wrapper.find(PanelDocumentation).prop("children"));
           expect(wrapper.find(PanelDocumentation).prop("children")).toEqual(
             "Only an Org Manager can new invite users to this " +
               "organization via the dashboard. Speak to your Org Manager if " +
@@ -125,6 +154,10 @@ describe("<Users />", () => {
         wrapper.setState({ currentType: "space_users" });
       });
 
+      afterEach(() => {
+        wrapper.unmount();
+      });
+
       it("has an `entityType` of space", () => {
         const actual = wrapper.instance().entityType;
 
@@ -142,6 +175,8 @@ describe("<Users />", () => {
         });
 
         afterEach(() => {
+          wrapper.unmount();
+
           UserStore.hasRole.restore();
         });
 
@@ -177,6 +212,8 @@ describe("<Users />", () => {
 
         afterEach(() => {
           UserStore.hasRole.restore();
+
+          wrapper.unmount();
         });
 
         it("should not render a <UsersInvite /> component", () => {
@@ -212,6 +249,8 @@ describe("<Users />", () => {
 
         afterEach(() => {
           UserStore.hasRole.restore();
+
+          wrapper.unmount();
         });
 
         it("should not render a <UsersInvite /> component", () => {
