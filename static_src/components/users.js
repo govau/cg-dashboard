@@ -4,36 +4,27 @@
  */
 
 import React from "react";
+import { I18n } from "react-i18next";
 
 import userActions from "../actions/user_actions";
+import UserStore from "../stores/user_store";
 import OrgStore from "../stores/org_store";
 import SpaceStore from "../stores/space_store";
 import UserList from "./user_list";
 import UsersInvite from "./users_invite";
 import UsersSelector from "./users_selector";
 import Notification from "./notification";
-import UserStore from "../stores/user_store";
 import SystemErrorMessage from "./system_error_message";
 import PanelDocumentation from "./panel_documentation";
 
 const propTypes = {};
+
 const SPACE_NAME = SpaceStore.cfName;
 const ORG_NAME = OrgStore.cfName;
 const ORG_MANAGER = "org_manager";
 const SPACE_MANAGER = "space_manager";
 const ORG_ENTITY = "organization";
 const SPACE_ENTITY = "space";
-const ORG_INVITE_HELP =
-  "Only an Org Manager can new invite users to this " +
-  "organization via the dashboard. Speak to your Org Manager if you need to " +
-  "add a user to this organization";
-const SPACE_INVITE_SPACE_MANAGER_HELP =
-  "As an Space Manager, you can invite existing " +
-  "organization users into your space. If you wish to invite a person who is " +
-  "not in the organization into your space, please ask an Org Manager";
-const SPACE_INVITE_HELP =
-  "If you wish to invite users into this space, please " +
-  "ask an Org Manager or a Space Manager";
 
 function mapStoreToState() {
   const { currentOrgGuid } = OrgStore;
@@ -198,7 +189,17 @@ export default class Users extends React.Component {
     // When on the org page, only the Org Manager should see the user invite
     // form. If not, display notification.
     if (this.isOrganization && !this.currentUserIsOrgManager) {
-      return <PanelDocumentation>{ORG_INVITE_HELP}</PanelDocumentation>;
+      return (
+        <I18n>
+          {t => (
+            <PanelDocumentation>
+              {t(
+                "Only an Org Manager can new invite users to this organization via the dashboard. Speak to your Org Manager if you need to add a user to this organization."
+              )}
+            </PanelDocumentation>
+          )}
+        </I18n>
+      );
     }
     // When on the space page, likewise, an Org Manager should always see the
     // invite form. Else, let's dig into what to display.
@@ -206,17 +207,29 @@ export default class Users extends React.Component {
       // if the user is a Space Manager, let them know that they can invite
       // existing org users but not new ones.
       if (this.currentUserIsSpaceManager) {
+        console.log("here 2");
         return (
-          <PanelDocumentation>
-            {SPACE_INVITE_SPACE_MANAGER_HELP}
-          </PanelDocumentation>
+          <I18n>
+            {t => (
+              <PanelDocumentation>
+                {t(
+                  "As a Space Manager, you can invite existing organization users into your space. If you wish to invite a person who is not in the organization into your space, please ask an Org Manager."
+                )}
+              </PanelDocumentation>
+            )}
+          </I18n>
         );
       }
       // Else, just tell the user to invite a Space Manager or Org Manager.
       // Let's not confuse the regular user with the difference between
       // new and existing org users.
       // We can figure out wording later.
-      return <PanelDocumentation>{SPACE_INVITE_HELP}</PanelDocumentation>;
+      return (
+        <PanelDocumentation>
+          If you wish to invite users into this space, please ask an Org Manager
+          or a Space Manager.
+        </PanelDocumentation>
+      );
     }
 
     // Only the Org Manager will get this far.

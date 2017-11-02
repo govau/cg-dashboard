@@ -1,4 +1,5 @@
 import React from "react";
+import { I18n } from "react-i18next";
 
 import { config, homePage } from "skin";
 import EntityEmpty from "./entity_empty";
@@ -68,13 +69,18 @@ export default class OverviewContainer extends React.Component {
     );
 
     return (
-      <EntityEmpty callout="We can’t find any of your organizations.">
-        <p>
-          If you just joined, your organization may not yet be ready. Sometimes
-          organizations can take up to 5 minutes to appear on your first login.
-          {contactMsg}
-        </p>
-      </EntityEmpty>
+      <I18n>
+        {t => (
+          <EntityEmpty callout={t("We can’t find any of your organizations.")}>
+            <p>
+              {t(
+                "If you just joined, your organization may not yet be ready. Sometimes organizations can take up to 20 minutes to appear on your first login."
+              )}
+              {contactMsg}
+            </p>
+          </EntityEmpty>
+        )}
+      </I18n>
     );
   }
 
@@ -110,7 +116,9 @@ export default class OverviewContainer extends React.Component {
     return (
       <div className="grid">
         <PageHeader title={title} />
-        <Panel title="Your organizations">{content}</Panel>
+        <I18n>
+          {t => <Panel title={t("Your organizations")}>{content}</Panel>}
+        </I18n>
         {panels.map((render, i) => <div key={i}>{render()}</div>)}
       </div>
     );

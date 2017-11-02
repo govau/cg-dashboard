@@ -190,8 +190,7 @@ describe("<Users />", () => {
         it("should render a <PanelDocumentation />", () => {
           expect(wrapper.find(PanelDocumentation).length).toBe(1);
           expect(wrapper.find(PanelDocumentation).prop("children")).toEqual(
-            "If you wish to invite users into this space, please ask " +
-              "an Org Manager or a Space Manager"
+            "If you wish to invite users into this space, please ask an Org Manager or a Space Manager."
           );
         });
       });

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { I18n } from "react-i18next";
 
 import Action from "./action";
 import ComplexList from "./complex_list";
@@ -10,6 +11,11 @@ import Loading from "./loading";
 import PanelDocumentation from "./panel_documentation";
 import UserRoleListControl from "./user_role_list_control";
 import { config } from "skin";
+
+const userTypes = {
+  orgUsers: "org_users",
+  spaceUsers: "space_users"
+};
 
 const propTypes = {
   users: PropTypes.array,
@@ -28,7 +34,7 @@ const propTypes = {
 
 const defaultProps = {
   users: [],
-  userType: "space_users",
+  userType: userTypes.spaceUsers,
   currentUserAccess: false,
   saving: false,
   savingText: "",
@@ -61,52 +67,58 @@ export default class UserList extends React.Component {
     return columns;
   }
 
-  get userTypePretty() {
-    return this.props.userType === "org_users" ? "Organization" : "Space";
-  }
-
-  get inviteDocumentation() {
-    if (!config.docs.invite_user) {
-      return null;
-    }
-
-    return (
-      <span>
-        To invite a user and give them roles, see{" "}
-        <a href={config.docs.invite_user}>Managing Teammates</a>.&nbsp;
-        <b>
-          Removing all roles does not remove a user from an organization. Users
-          with no roles can view other users and their roles while being unable
-          to make any changes.
-        </b>
-      </span>
-    );
-  }
-
   get documentation() {
     return (
-      <PanelDocumentation description>
-        <p>
-          {this.userTypePretty} Managers can change these roles. For details
-          about these roles, see{" "}
-          <a href="https://docs.cloudfoundry.org/concepts/roles.html#roles">
-            Cloud Foundry roles and permissions
-          </a>.
-          {this.inviteDocumentation}
-        </p>
-      </PanelDocumentation>
+      <I18n>
+        {t => (
+          <PanelDocumentation description>
+            <p>
+              {this.props.userType === userTypes.orgUsers
+                ? t("Organization Managers can change these roles.")
+                : "Space Managers can change these roles."}{" "}
+              For details about these roles, see{" "}
+              <a href="https://docs.cloudfoundry.org/concepts/roles.html#roles">
+                Cloud Foundry roles and permissions
+              </a>.
+              {config.docs.invite_user ? (
+                <span>
+                  {" "}
+                  To invite a user and give them roles, see{" "}
+                  <a href={config.docs.invite_user}>Managing Teammates</a>.{" "}
+                  <b>
+                    {t(
+                      "Removing all roles does not remove a user from an organization. Users with no roles can view other users and their roles while being unable to make any changes."
+                    )}
+                  </b>
+                </span>
+              ) : null}
+            </p>
+          </PanelDocumentation>
+        )}
+      </I18n>
     );
   }
 
   get emptyState() {
-    const callout = `There are no users in this ${this.userTypePretty.toLowerCase()}`;
-    const content = config.docs.invite_user && (
-      <a href={config.docs.invite_user}>
-        Read more about adding users to this space.
-      </a>
+    return (
+      <I18n>
+        {t => (
+          <EntityEmpty
+            callout={
+              this.props.userType === userTypes.orgUsers
+                ? t("There are no users in this organization")
+                : "There are no users in this space"
+            }
+          >
+            {config.docs.invite_user && (
+              <a href={config.docs.invite_user}>
+                Read more about adding users to this space.
+              </a>
+            )}
+          </EntityEmpty>
+        )}
+      </I18n>
     );
-
-    return <EntityEmpty callout={callout}>{content}</EntityEmpty>;
   }
 
   render() {
@@ -135,9 +147,9 @@ export default class UserList extends React.Component {
               if (this.props.onRemove) {
                 let button = <span />;
                 if (this.props.currentUserAccess) {
-                  if (this.props.userType === "org_users") {
+                  if (this.props.userType === userTypes.orgUsers) {
                     buttonText = "Remove User From Org";
-                  } else if (this.props.userType === "space_users") {
+                  } else if (this.props.userType === userTypes.spaceUsers) {
                     buttonText = "Remove All Space Roles";
                   }
                   button = (

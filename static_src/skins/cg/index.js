@@ -9,6 +9,8 @@ export { homePage };
 
 import InfoLogs from "dashboard/components/info_logs";
 
+export const lang = "en-US";
+
 export const config = {
   footer: {
     author_note: <span>A United States government platform</span>,

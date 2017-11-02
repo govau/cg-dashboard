@@ -1,5 +1,7 @@
-import PropTypes from "prop-types";
 import React from "react";
+import PropTypes from "prop-types";
+import { I18n } from "react-i18next";
+
 import AppCountStatus from "./app_count_status";
 import ElasticLine from "./elastic_line";
 import ElasticLineItem from "./elastic_line_item";
@@ -24,18 +26,8 @@ export default class OrgQuicklook extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onRowClick = this.onRowClick.bind(this);
-    this.onOrgClick = this.onOrgClick.bind(this);
-  }
-
-  onRowClick(ev) {
-    ev.preventDefault();
-    orgActions.toggleQuicklook(this.props.org);
-  }
-
-  onOrgClick(ev) {
-    ev.preventDefault();
-    window.location.href = this.orgHref();
+    this.handleRowClick = this.handleRowClick.bind(this);
+    this.handleOrgClick = this.handleOrgClick.bind(this);
   }
 
   orgHref() {
@@ -65,7 +57,7 @@ export default class OrgQuicklook extends React.Component {
     }
 
     if (!this.props.spaces.length) {
-      return <h4>No spaces in this organization</h4>;
+      return <I18n>{t => <h4>{t("No spaces in this organization")}</h4>}</I18n>;
     }
 
     return this.props.spaces.map(space => (
@@ -77,13 +69,23 @@ export default class OrgQuicklook extends React.Component {
     ));
   }
 
+  handleRowClick(e) {
+    e.preventDefault();
+    orgActions.toggleQuicklook(this.props.org);
+  }
+
+  handleOrgClick(e) {
+    e.preventDefault();
+    window.location.href = this.orgHref();
+  }
+
   render() {
-    const props = this.props;
-    const expand = !!(props.org.quicklook && props.org.quicklook.open);
+    const { org } = this.props;
+    const expand = !!(org.quicklook && org.quicklook.open);
 
     return (
       <ExpandableBox
-        clickHandler={this.onRowClick}
+        clickHandler={this.handleRowClick}
         isExpanded={expand}
         classes={["test-org-quicklook"]}
         clickableContent={
@@ -92,18 +94,18 @@ export default class OrgQuicklook extends React.Component {
               <h2 className="card-title-primary">
                 <EntityIcon entity="org" iconSize="medium" />
                 <a
-                  onClick={this.onOrgClick}
+                  onClick={this.handleOrgClick}
                   className="test-org-quicklook-title"
                 >
-                  {props.org.name}
+                  {org.name}
                 </a>
               </h2>
             </ElasticLineItem>
             <ElasticLineItem align="end">
               <div className="count_status_container">
-                <SpaceCountStatus spaces={props.org.spaces} />
+                <SpaceCountStatus spaces={org.spaces} />
                 <AppCountStatus
-                  appCount={this.totalAppCount(props.org.spaces)}
+                  appCount={this.totalAppCount(org.spaces)}
                   apps={this.allApps()}
                 />
               </div>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { I18n } from "react-i18next";
 
 import { config } from "skin";
 import UserStore from "../stores/user_store";
@@ -104,23 +105,38 @@ export default class OrgContainer extends Component {
       );
 
       return (
-        <EntityEmpty callout="You have no spaces in this organization.">
-          <p>
-            {spaceLink} are environments for development, deployment, and
-            maintenance of apps and services. If you think you have spaces you
-            don’t see here, {contactLink}.
-          </p>
-        </EntityEmpty>
+        <I18n>
+          {t => (
+            <EntityEmpty
+              callout={t("You have no spaces in this organization.")}
+            >
+              <p>
+                {spaceLink} are environments for development, deployment, and
+                maintenance of apps and services. If you think you have spaces
+                you don’t see here, {contactLink}.
+              </p>
+            </EntityEmpty>
+          )}
+        </I18n>
       );
     }
 
     return (
-      <EntityEmpty callout="You don’t have permission to see the spaces in this organization.">
-        <p>
-          Organization auditors and billing managers can’t view spaces. Ask your
-          organization’s administrator to give you these permissions.
-        </p>
-      </EntityEmpty>
+      <I18n>
+        {t => (
+          <EntityEmpty
+            callout={t(
+              "You don’t have permission to see the spaces in this organization."
+            )}
+          >
+            <p>
+              {t(
+                "Organization auditors and billing managers can’t view spaces. Ask your organization’s administrator to give you these permissions."
+              )}
+            </p>
+          </EntityEmpty>
+        )}
+      </I18n>
     );
   }
 
@@ -135,15 +151,15 @@ export default class OrgContainer extends Component {
     } = this.state;
 
     if (loading) {
-      return (
-        <div>
-          <Loading text="Loading organization" />
-        </div>
-      );
+      return <I18n>{t => <Loading text={t("Loading organizations")} />}</I18n>;
     }
 
     if (empty) {
-      return <h4 className="test-none_message">No organizations</h4>;
+      return (
+        <I18n>
+          {t => <h4 className="test-none_message">{t("No organizations")}</h4>}
+        </I18n>
+      );
     }
 
     if (!spaces.length) {
@@ -160,46 +176,50 @@ export default class OrgContainer extends Component {
     );
 
     return (
-      <div className="grid">
-        <div className="grid">
-          <div className="grid-width-12">
-            <Breadcrumbs org={org} />
-            <PageHeader title={title} />
-          </div>
-        </div>
-        <Panel title="">
-          <div className="grid panel-overview-header">
-            <div className="grid-width-6">
-              <h1 className="panel-title">Organization overview</h1>
-            </div>
-            <div className="grid-width-6">
-              <div className="count_status_container">
-                <SpaceCountStatus spaces={spaces} />
-                <AppCountStatus
-                  apps={allApps}
-                  appCount={allApps && allApps.length}
-                />
-                <ServiceCountStatus
-                  services={allServices}
-                  serviceCount={allServices && allServices.length}
-                />
+      <I18n>
+        {t => (
+          <div className="grid">
+            <div className="grid">
+              <div className="grid-width-12">
+                <Breadcrumbs org={org} />
+                <PageHeader title={title} />
               </div>
             </div>
+            <Panel title="">
+              <div className="grid panel-overview-header">
+                <div className="grid-width-6">
+                  <h1 className="panel-title">{t("Organization overview")}</h1>
+                </div>
+                <div className="grid-width-6">
+                  <div className="count_status_container">
+                    <SpaceCountStatus spaces={spaces} />
+                    <AppCountStatus
+                      apps={allApps}
+                      appCount={allApps && allApps.length}
+                    />
+                    <ServiceCountStatus
+                      services={allServices}
+                      serviceCount={allServices && allServices.length}
+                    />
+                  </div>
+                </div>
+              </div>
+              {spaces.map(space => (
+                <SpaceQuicklook
+                  key={space.guid}
+                  space={space}
+                  orgGuid={currentOrgGuid}
+                  user={currentUser}
+                  showAppDetail
+                />
+              ))}
+            </Panel>
+            <Panel title={t("Organization users")}>
+              <Users />
+            </Panel>
           </div>
-          {spaces.map(space => (
-            <SpaceQuicklook
-              key={space.guid}
-              space={space}
-              orgGuid={currentOrgGuid}
-              user={currentUser}
-              showAppDetail
-            />
-          ))}
-        </Panel>
-        <Panel title="Organization users">
-          <Users />
-        </Panel>
-      </div>
+        )}
+      </I18n>
     );
   }
 }

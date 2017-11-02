@@ -1,48 +1,52 @@
-import PropTypes from "prop-types";
 import React from "react";
+import PropTypes from "prop-types";
+import { translate } from "react-i18next";
 
 import Notification from "./notification";
 import { config } from "skin";
 import errorActions from "../actions/error_actions";
 
 const propTypes = {
+  t: PropTypes.func.isRequired,
   err: PropTypes.object
 };
 
 const defaultProps = {};
 
-export default class GlobalError extends React.Component {
+class GlobalError extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onNotificationDismiss = this.onNotificationDismiss.bind(this);
-    this.onNotificationRefresh = this.onNotificationRefresh.bind(this);
+    this.handleNotificationDismiss = this.handleNotificationDismiss.bind(this);
+    this.handleNotificationRefresh = this.handleNotificationRefresh.bind(this);
   }
 
-  onNotificationDismiss(ev) {
-    ev.preventDefault();
+  handleNotificationDismiss(e) {
+    e.preventDefault();
+
     errorActions.dismissError(this.props.err);
   }
 
-  onNotificationRefresh(ev) {
-    ev.preventDefault();
+  handleNotificationRefresh(e) {
+    e.preventDefault();
+
     window.location.reload();
   }
 
   render() {
-    const err = this.props.err;
+    const { t, err } = this.props;
     const link = config.docs.status && (
       <span>
         {" "}
         check{" "}
         <a target="_blank" href={config.docs.status}>
-          {config.platform.name}'s status
+          {config.platform.name}’s status
         </a>{" "}
         or
       </span>
     );
 
-    const description = err.description || "An unknown error occurred";
+    const description = t(err.description || "An unknown error occurred");
     const wrappedDescription = (
       <span>
         {description}. {description.length > 80 && <br />}
@@ -54,9 +58,9 @@ export default class GlobalError extends React.Component {
       <Notification
         message={wrappedDescription}
         actions={[
-          { text: "Refresh", clickHandler: this.onNotificationRefresh }
+          { text: "Refresh", clickHandler: this.handleNotificationRefresh }
         ]}
-        onDismiss={this.onNotificationDismiss}
+        onDismiss={this.handleNotificationDismiss}
       />
     );
   }
@@ -64,3 +68,5 @@ export default class GlobalError extends React.Component {
 
 GlobalError.propTypes = propTypes;
 GlobalError.defaultProps = defaultProps;
+
+export default translate()(GlobalError);
