@@ -121,7 +121,8 @@ describe("<Users />", () => {
           UserStore.hasRole.restore();
         });
 
-        fit("renders message telling user to ask an org manager to add users", () => {
+        it("renders message telling user to ask an org manager to add users", () => {
+          // TODO(jonathaningram)
           console.log("start test");
           console.log("xxx.I18n.length", wrapper.find(I18n).length);
           console.log("xxx.I18n", wrapper.find(I18n));

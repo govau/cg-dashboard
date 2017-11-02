@@ -4,7 +4,7 @@ import { Form, FormSelect } from "../../../components/form";
 import UsersSelector from "../../../components/users_selector";
 import PanelDocumentation from "../../../components/panel_documentation";
 
-describe("<UsersSelector />", function() {
+describe("<UsersSelector />", () => {
   const parentEntityType = "organization";
   const entityType = "space";
   const props = {

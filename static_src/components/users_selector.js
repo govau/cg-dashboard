@@ -3,8 +3,10 @@
  * to cloud.gov
  */
 
-import PropTypes from "prop-types";
 import React from "react";
+import PropTypes from "prop-types";
+import { translate } from "react-i18next";
+
 import Action from "./action";
 import FormStore from "../stores/form_store";
 import { Form, FormSelect } from "./form";
@@ -17,6 +19,7 @@ const SPACE_AUDITOR_NAME = "space_auditor";
 const USERS_SELECTOR_GUID = "users-selector";
 
 const propTypes = {
+  t: PropTypes.func.isRequired,
   usersSelectorDisabled: PropTypes.bool,
   currentUserAccess: PropTypes.bool,
   parentEntityUsers: PropTypes.array,
@@ -31,19 +34,20 @@ const defaultProps = {
   error: {}
 };
 
-export default class UsersSelector extends React.Component {
+class UsersSelector extends React.Component {
   constructor(props) {
     super(props);
 
     this.validateString = validateString().bind(this);
-    this._onSubmitForm = this._onSubmitForm.bind(this);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     FormStore.create(USERS_SELECTOR_GUID);
   }
 
-  _onSubmitForm(errs, values) {
+  handleSubmit(errs, values) {
     const { currentEntity } = this.props;
     const { currentEntityGuid } = this.props;
     const userRole = AUDITOR_NAME;
@@ -58,13 +62,6 @@ export default class UsersSelector extends React.Component {
         currentEntity
       );
     }
-  }
-
-  get invitationMessage() {
-    const { parentEntity } = this.props;
-    const { currentEntity } = this.props;
-
-    return `Invite an existing ${parentEntity} user to this ${currentEntity}.`;
   }
 
   get userSelector() {
@@ -90,6 +87,16 @@ export default class UsersSelector extends React.Component {
     );
   }
 
+  renderInvitationMessage() {
+    const { t, parentEntity, currentEntity } = this.props;
+
+    // TODO(jonathaningram): at the time of writing, both of these variables are
+    // always the same.
+    return t(
+      `Invite an existing ${parentEntity} user to this ${currentEntity}.`
+    );
+  }
+
   render() {
     const { usersSelectorDisabled } = this.props;
     const { currentEntity } = this.props;
@@ -101,13 +108,13 @@ export default class UsersSelector extends React.Component {
     return (
       <div className="test-users-selector">
         <PanelDocumentation description>
-          <p>{this.invitationMessage}</p>
+          <p>{this.renderInvitationMessage()}</p>
         </PanelDocumentation>
         <Form
           guid={USERS_SELECTOR_GUID}
           classes={["users_selector"]}
           ref="form"
-          onSubmit={this._onSubmitForm}
+          onSubmit={this.handleSubmit}
         >
           {this.userSelector}
           <Action label="submit" type="submit" disabled={usersSelectorDisabled}>
@@ -122,3 +129,5 @@ export default class UsersSelector extends React.Component {
 UsersSelector.propTypes = propTypes;
 
 UsersSelector.defaultProps = defaultProps;
+
+export default translate()(UsersSelector);
