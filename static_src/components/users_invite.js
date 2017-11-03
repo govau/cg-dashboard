@@ -9,22 +9,22 @@ import { translate } from "react-i18next";
 
 import { generateId } from "../util/element_id";
 import { validateEmail } from "../util/validators";
-import Action from "./action";
 import FormStore from "../stores/form_store";
-import { Form, FormText } from "./form";
-import PanelDocumentation from "./panel_documentation";
 import userActions from "../actions/user_actions";
+import { Form, FormText } from "./form";
+import Action from "./action";
+import PanelDocumentation from "./panel_documentation";
 
 const propTypes = {
   t: PropTypes.func.isRequired,
-  inviteDisabled: PropTypes.bool,
+  disabled: PropTypes.bool,
   entityType: PropTypes.oneOf(["organization", "space"]).isRequired,
   currentUserAccess: PropTypes.bool,
   error: PropTypes.object
 };
 
 const defaultProps = {
-  inviteDisabled: false,
+  disabled: false,
   currentUserAccess: false,
   error: {}
 };
@@ -41,24 +41,22 @@ export class UsersInvite extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(errs, values) {
-    let email = "";
+  handleSubmit(errs, { email }) {
+    const { value = "" } = email;
 
-    if (values.email) {
-      email = values.email.value;
-    }
-
-    const isEmailValid = this.validateEmail(email, "email") === null;
+    const isEmailValid = this.validateEmail(value, "email") === null;
 
     if (isEmailValid) {
-      userActions.createUserInvite(email);
+      userActions.createUserInvite(value);
     }
   }
 
   renderErrorMessage() {
     const { error } = this.props;
 
-    if (!error) return "";
+    if (!error) {
+      return "";
+    }
 
     const message = error.contextualMessage;
 
@@ -70,7 +68,7 @@ export class UsersInvite extends React.Component {
   }
 
   render() {
-    const { t, entityType, inviteDisabled, currentUserAccess } = this.props;
+    const { t, entityType, disabled, currentUserAccess } = this.props;
 
     if (!currentUserAccess) {
       return null;
@@ -95,7 +93,7 @@ export class UsersInvite extends React.Component {
             name="email"
             validator={this.validateEmail}
           />
-          <Action label="submit" type="submit" disabled={inviteDisabled}>
+          <Action label="submit" type="submit" disabled={disabled}>
             {t(`Add user to this ${this.props.entityType}`)}
           </Action>
         </Form>

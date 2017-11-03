@@ -36,7 +36,7 @@ function mapStoreToState() {
   let parentEntityUsers;
   let currentUserAccess = false;
   let entityGuid;
-  const inviteDisabled = UserStore.inviteDisabled();
+  const inviteDisabled = UserStore.isInviteDisabled();
   const usersSelectorDisabled = UserStore.usersSelectorDisabled();
   const isOrgUserManager = UserStore.hasRole(
     currentUser.guid,
@@ -239,7 +239,7 @@ export default class Users extends React.Component {
     return (
       <UsersInvite
         entityType={this.entityType}
-        inviteDisabled={this.state.inviteDisabled}
+        disabled={this.state.inviteDisabled}
         currentUserAccess={this.currentUserIsOrgManager}
         error={this.state.userListNoticeError}
       />

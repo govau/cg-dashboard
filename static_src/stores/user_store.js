@@ -18,7 +18,7 @@ export class UserStore extends BaseStore {
     this._currentUserIsAdmin = false;
     this._error = null;
     this._saving = false;
-    this._inviteDisabled = false;
+    this.inviteDisabled = false;
     this._usersSelectorDisabled = false;
     this._userListNotification = {};
     this._loading = {};
@@ -74,7 +74,7 @@ export class UserStore extends BaseStore {
       }
 
       case userActionTypes.USER_INVITE_TRIGGER: {
-        this._inviteDisabled = true;
+        this.inviteDisabled = true;
         this._userListNotificationError = null;
         this.emitChange();
         break;
@@ -221,6 +221,7 @@ export class UserStore extends BaseStore {
           ...action.err,
           contextualMessage: action.contextualMessage
         };
+        this.inviteDisabled = false;
         this._usersSelectorDisabled = false;
         this.emitChange();
         break;
@@ -238,7 +239,7 @@ export class UserStore extends BaseStore {
       }
 
       case userActionTypes.USER_LIST_NOTICE_CREATED: {
-        this._inviteDisabled = false;
+        this.inviteDisabled = false;
         const noticeType = action.noticeType;
         const description = action.description;
         const notice = {
@@ -474,8 +475,8 @@ export class UserStore extends BaseStore {
     return this._usersSelectorDisabled;
   }
 
-  inviteDisabled() {
-    return this._inviteDisabled;
+  isInviteDisabled() {
+    return this.inviteDisabled;
   }
 
   isAdmin() {
