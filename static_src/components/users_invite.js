@@ -29,6 +29,8 @@ const defaultProps = {
   error: {}
 };
 
+const validator = validateEmail();
+
 export class UsersInvite extends React.Component {
   constructor(props) {
     super(props);
@@ -37,14 +39,13 @@ export class UsersInvite extends React.Component {
 
     FormStore.create(this.formId);
 
-    this.validateEmail = validateEmail().bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(errs, { email }) {
     const { value = "" } = email;
 
-    const isEmailValid = this.validateEmail(value, "email") === null;
+    const isEmailValid = validator(value) === null;
 
     if (isEmailValid) {
       userActions.createUserInvite(value);
@@ -91,7 +92,7 @@ export class UsersInvite extends React.Component {
             classes={["test-users_invite_name"]}
             label="User’s email"
             name="email"
-            validator={this.validateEmail}
+            validator={validator}
           />
           <Action label="submit" type="submit" disabled={disabled}>
             {t(`Add user to this ${this.props.entityType}`)}
