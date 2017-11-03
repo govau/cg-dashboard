@@ -1,13 +1,17 @@
 import React from "react";
 import { shallow } from "enzyme";
+
 import { Form, FormSelect } from "../../../components/form";
-import UsersSelector from "../../../components/users_selector";
+import { UsersSelector } from "../../../components/users_selector";
 import PanelDocumentation from "../../../components/panel_documentation";
 
 describe("<UsersSelector />", () => {
   const parentEntityType = "organization";
   const entityType = "space";
   const props = {
+    t(k) {
+      return k;
+    },
     currentUserAccess: true,
     usersSelectorDisabled: false,
     parentEntityUsers: [],
@@ -41,7 +45,10 @@ describe("<UsersSelector />", () => {
       const guid = "a-guid";
       const user = { guid, username };
       const parentEntityUsers = [user, user, user];
-      const usersProps = Object.assign({}, props, { parentEntityUsers });
+      const usersProps = {
+        ...props,
+        parentEntityUsers
+      };
       wrapper = shallow(<UsersSelector {...usersProps} />);
       const formSelect = wrapper.find(Form).find(FormSelect);
 
@@ -50,7 +57,10 @@ describe("<UsersSelector />", () => {
     });
 
     it("renders without users", () => {
-      const usersProps = Object.assign({}, props, { parentEntityUsers: [] });
+      const usersProps = {
+        ...props,
+        parentEntityUsers: []
+      };
       wrapper = shallow(<UsersSelector {...usersProps} />);
       const formSelect = wrapper.find(Form).find(FormSelect);
 
@@ -61,9 +71,10 @@ describe("<UsersSelector />", () => {
 
   describe("when user does not have ability to invite other users", () => {
     it("does not render <Form /> component", () => {
-      const noAccessProps = Object.assign({}, props, {
+      const noAccessProps = {
+        ...props,
         currentUserAccess: false
-      });
+      };
       wrapper = shallow(<UsersSelector {...noAccessProps} />);
 
       expect(wrapper.find(Form).length).toEqual(0);

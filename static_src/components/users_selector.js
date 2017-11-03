@@ -34,7 +34,7 @@ const defaultProps = {
   error: {}
 };
 
-class UsersSelector extends React.Component {
+export class UsersSelector extends React.Component {
   constructor(props) {
     super(props);
 
@@ -64,7 +64,7 @@ class UsersSelector extends React.Component {
     }
   }
 
-  get userSelector() {
+  renderUserSelector() {
     const { parentEntityUsers } = this.props;
     const orgUsers = parentEntityUsers.map(user => ({
       value: user.guid,
@@ -98,10 +98,13 @@ class UsersSelector extends React.Component {
   }
 
   render() {
-    const { usersSelectorDisabled } = this.props;
-    const { currentEntity } = this.props;
+    const {
+      usersSelectorDisabled,
+      currentUserAccess,
+      currentEntity
+    } = this.props;
 
-    if (!this.props.currentUserAccess) {
+    if (!currentUserAccess) {
       return null;
     }
 
@@ -116,7 +119,7 @@ class UsersSelector extends React.Component {
           ref="form"
           onSubmit={this.handleSubmit}
         >
-          {this.userSelector}
+          {this.renderUserSelector()}
           <Action label="submit" type="submit" disabled={usersSelectorDisabled}>
             Add user to this {currentEntity}
           </Action>
