@@ -4,6 +4,7 @@ import classNames from "classnames";
 import formActions from "../../actions/form_actions";
 
 const propTypes = {
+  onChange: PropTypes.func,
   classes: PropTypes.array,
   className: PropTypes.string,
   formGuid: PropTypes.string.isRequired,
@@ -16,6 +17,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  onChange() {},
   classes: [],
   label: "",
   onValidate: () => {},
@@ -54,8 +56,12 @@ export default class FormElement extends React.Component {
   }
 
   onChange(e) {
-    const value = e.target.value;
-    const err = this.props.validator(value, this.props.name);
+    const { validator, onChange } = this.props;
+
+    const { value } = e.target;
+
+    const err = validator(value, this.props.name);
+
     this.setState({ err, value }, () => {
       formActions
         .changeField(this.props.formGuid, this.props.name, value)
@@ -76,6 +82,11 @@ export default class FormElement extends React.Component {
           }
 
           return promise;
+        })
+        .then(() => {
+          if (onChange) {
+            onChange(value);
+          }
         });
     });
   }
