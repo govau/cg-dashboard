@@ -238,7 +238,7 @@ export default class Users extends React.Component {
     // We should only display the form then.
     return (
       <UsersInvite
-        inviteEntityType={this.entityType}
+        entityType={this.entityType}
         inviteDisabled={this.state.inviteDisabled}
         currentUserAccess={this.currentUserIsOrgManager}
         error={this.state.userListNoticeError}

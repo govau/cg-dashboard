@@ -3,47 +3,45 @@
  * to cloud.gov
  */
 
-import PropTypes from "prop-types";
 import React from "react";
+import PropTypes from "prop-types";
+import { translate } from "react-i18next";
+
+import { generateId } from "../util/element_id";
+import { validateEmail } from "../util/validators";
 import Action from "./action";
 import FormStore from "../stores/form_store";
 import { Form, FormText } from "./form";
 import PanelDocumentation from "./panel_documentation";
 import userActions from "../actions/user_actions";
-import { validateEmail } from "../util/validators";
-
-const USERS_INVITE_FORM_GUID = "users-invite-form";
 
 const propTypes = {
+  t: PropTypes.func.isRequired,
   inviteDisabled: PropTypes.bool,
-  inviteEntityType: PropTypes.string.isRequired,
+  entityType: PropTypes.oneOf(["organization", "space"]).isRequired,
   currentUserAccess: PropTypes.bool,
   error: PropTypes.object
 };
+
 const defaultProps = {
   inviteDisabled: false,
   currentUserAccess: false,
   error: {}
 };
 
-function stateSetter(props) {
-  return {
-    error: props.error
-  };
-}
-
-export default class UsersInvite extends React.Component {
+export class UsersInvite extends React.Component {
   constructor(props) {
     super(props);
-    FormStore.create(USERS_INVITE_FORM_GUID);
 
-    this.state = stateSetter(props);
+    this.formId = generateId("users_invite_form_");
+
+    FormStore.create(this.formId);
 
     this.validateEmail = validateEmail().bind(this);
-    this._onValidForm = this._onValidForm.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  _onValidForm(errs, values) {
+  handleSubmit(errs, values) {
     let email = "";
 
     if (values.email) {
@@ -57,7 +55,7 @@ export default class UsersInvite extends React.Component {
     }
   }
 
-  get errorMessage() {
+  renderErrorMessage() {
     const { error } = this.props;
 
     if (!error) return "";
@@ -71,43 +69,34 @@ export default class UsersInvite extends React.Component {
     return message;
   }
 
-  get invitationMessage() {
-    const entity = this.props.inviteEntityType;
-
-    return (
-      `Invite a new user to cloud.gov and this ${entity}` +
-      ` or add an existing user to this ${entity}.`
-    );
-  }
-
   render() {
-    const { inviteDisabled } = this.props;
+    const { t, entityType, inviteDisabled, currentUserAccess } = this.props;
 
-    if (!this.props.currentUserAccess) {
+    if (!currentUserAccess) {
       return null;
     }
 
     return (
       <div className="test-users-invite">
         <PanelDocumentation description>
-          <p>{this.invitationMessage}</p>
+          <p>{t(`Invite a new or existing user to this ${entityType}.`)}</p>
         </PanelDocumentation>
         <Form
-          guid={USERS_INVITE_FORM_GUID}
+          guid={this.formId}
           classes={["users_invite_form"]}
           ref="form"
-          onSubmit={this._onValidForm}
-          errorOverride={this.errorMessage}
+          onSubmit={this.handleSubmit}
+          errorOverride={this.renderErrorMessage()}
         >
           <FormText
-            formGuid={USERS_INVITE_FORM_GUID}
+            formGuid={this.formId}
             classes={["test-users_invite_name"]}
-            label="User's email"
+            label="User’s email"
             name="email"
             validator={this.validateEmail}
           />
           <Action label="submit" type="submit" disabled={inviteDisabled}>
-            Add user to this {this.props.inviteEntityType}
+            {t(`Add user to this ${this.props.entityType}`)}
           </Action>
         </Form>
       </div>
@@ -118,3 +107,5 @@ export default class UsersInvite extends React.Component {
 UsersInvite.propTypes = propTypes;
 
 UsersInvite.defaultProps = defaultProps;
+
+export default translate()(UsersInvite);
