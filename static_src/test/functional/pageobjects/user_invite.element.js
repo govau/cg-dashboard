@@ -40,8 +40,9 @@ export default class UserInviteElement extends BaseElement {
 
   // TODO move this to user list element.
   countNumberOfUsers() {
-    browser.waitForExist(".test-users .complex_list-item");
-    return browser.elements(".test-users .complex_list-item").value.length;
+    browser.waitForExist(`[data-test="users"] .complex_list-item`);
+    return browser.elements(`[data-test="users"] .complex_list-item`).value
+      .length;
   }
 
   // TODO move this to user list element.
@@ -52,7 +53,7 @@ export default class UserInviteElement extends BaseElement {
 
   // TODO move this to user list element.
   getUserByIndex(idx) {
-    const sel = `.test-users .complex_list-item:nth-child(${idx})`;
+    const sel = `[data-test="users"] .complex_list-item:nth-child(${idx})`;
     browser.waitForExist(sel);
     return browser.elements(sel).value[0];
   }

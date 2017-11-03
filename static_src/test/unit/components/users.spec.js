@@ -2,9 +2,8 @@ import React from "react";
 import Immutable from "immutable";
 import sinon from "sinon";
 import { shallow, mount } from "enzyme";
-import { I18n } from "react-i18next";
 
-import Users from "../../../components/users";
+import { Users } from "../../../components/users";
 import PanelDocumentation from "../../../components/panel_documentation";
 import UsersSelector from "../../../components/users_selector";
 import UsersInvite from "../../../components/users_invite";
@@ -25,6 +24,12 @@ const user = {
   roles: buildRoles(spaceGuid, ["org_manager"])
 };
 
+const defaultProps = {
+  t(k) {
+    return k;
+  }
+};
+
 describe("<Users />", () => {
   SpaceStore._currentSpaceGuid = spaceGuid;
   UserStore._currentUserGuid = userGuid;
@@ -37,7 +42,7 @@ describe("<Users />", () => {
     describe("when at org level", () => {
       const makeWrapper = () => {
         console.log("make");
-        const wrapper = mount(<Users />);
+        const wrapper = mount(<Users {...defaultProps} />);
         wrapper.setState({ currentType: "org_users" });
         return {
           wrapper,
@@ -122,18 +127,10 @@ describe("<Users />", () => {
         });
 
         it("renders message telling user to ask an org manager to add users", () => {
-          // TODO(jonathaningram)
-          console.log("start test");
-          console.log("xxx.I18n.length", wrapper.find(I18n).length);
-          console.log("xxx.I18n", wrapper.find(I18n));
-          console.log("xxx.I18n.children", wrapper.find(I18n).prop("children"));
-          // console.log("xxx.Doc", wrapper.find(I18n).find(PanelDocumentation));
-          expect(wrapper.find(I18n).find(PanelDocumentation).length).toBe(1);
-          console.log("xxx", wrapper.find(PanelDocumentation).prop("children"));
+          expect(wrapper.find(PanelDocumentation).length).toBe(1);
+
           expect(wrapper.find(PanelDocumentation).prop("children")).toEqual(
-            "Only an Org Manager can new invite users to this " +
-              "organization via the dashboard. Speak to your Org Manager if " +
-              "you need to add a user to this organization"
+            "Only an Org Manager can invite new users to this organization via the dashboard. Speak to your Org Manager if you need to add a user to this organization."
           );
         });
 
@@ -151,7 +148,7 @@ describe("<Users />", () => {
       let wrapper;
 
       beforeEach(() => {
-        wrapper = shallow(<Users />);
+        wrapper = shallow(<Users {...defaultProps} />);
         wrapper.setState({ currentType: "space_users" });
       });
 
@@ -172,7 +169,7 @@ describe("<Users />", () => {
           stub
             .withArgs(userGuid, sinon.match.any, "space_manager")
             .returns(false);
-          wrapper = shallow(<Users />);
+          wrapper = shallow(<Users {...defaultProps} />);
         });
 
         afterEach(() => {
@@ -201,7 +198,7 @@ describe("<Users />", () => {
 
         beforeEach(() => {
           UserStore._data = Immutable.fromJS([spaceUser]);
-          wrapper = shallow(<Users />);
+          wrapper = shallow(<Users {...defaultProps} />);
           const stub = sinon.stub(UserStore, "hasRole");
           stub
             .withArgs(userGuid, sinon.match.any, "org_manager")
@@ -240,7 +237,7 @@ describe("<Users />", () => {
 
         beforeEach(() => {
           UserStore._data = Immutable.fromJS([spaceUser]);
-          wrapper = shallow(<Users />);
+          wrapper = shallow(<Users {...defaultProps} />);
           const stub = sinon.stub(UserStore, "hasRole");
           stub.withArgs(userGuid, sinon.match.any, "org_manager").returns(true);
           stub
@@ -265,7 +262,7 @@ describe("<Users />", () => {
         it("should show a <PanelDocumentation />", () => {
           expect(wrapper.find(PanelDocumentation).length).toBe(1);
           expect(wrapper.find(PanelDocumentation).prop("children")).toEqual(
-            "As an Space Manager, you can invite existing organization users into your space. If you wish to invite a person who is not in the organization into your space, please ask an Org Manager"
+            "As a Space Manager, you can invite existing organization users into your space. If you wish to invite a person who is not in the organization into your space, please ask an Org Manager."
           );
         });
       });

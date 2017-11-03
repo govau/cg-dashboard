@@ -4,7 +4,8 @@
  */
 
 import React from "react";
-import { I18n } from "react-i18next";
+import PropTypes from "prop-types";
+import { translate } from "react-i18next";
 
 import userActions from "../actions/user_actions";
 import UserStore from "../stores/user_store";
@@ -17,7 +18,9 @@ import Notification from "./notification";
 import SystemErrorMessage from "./system_error_message";
 import PanelDocumentation from "./panel_documentation";
 
-const propTypes = {};
+const propTypes = {
+  t: PropTypes.func.isRequired
+};
 
 const SPACE_NAME = SpaceStore.cfName;
 const ORG_NAME = OrgStore.cfName;
@@ -26,7 +29,7 @@ const SPACE_MANAGER = "space_manager";
 const ORG_ENTITY = "organization";
 const SPACE_ENTITY = "space";
 
-function mapStoreToState() {
+const mapStoreToState = () => {
   const { currentOrgGuid } = OrgStore;
   const { currentSpaceGuid } = SpaceStore;
   const currentType = UserStore.currentlyViewedType;
@@ -80,30 +83,31 @@ function mapStoreToState() {
     userListNotices: UserStore._userListNotification,
     userListNoticeError: UserStore.getUserListNotificationError()
   };
-}
+};
 
-export default class Users extends React.Component {
+export class Users extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = mapStoreToState();
 
-    this._onChange = this._onChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleRemoveUser = this.handleRemoveUser.bind(this);
     this.handleAddPermissions = this.handleAddPermissions.bind(this);
     this.handleRemovePermissions = this.handleRemovePermissions.bind(this);
   }
 
   componentDidMount() {
-    UserStore.addChangeListener(this._onChange);
+    UserStore.addChangeListener(this.handleChange);
   }
 
   componentWillUnmount() {
-    UserStore.removeChangeListener(this._onChange);
+    UserStore.removeChangeListener(this.handleChange);
   }
 
-  onNotificationDismiss(ev) {
-    ev.preventDefault();
+  onNotificationDismiss(e) {
+    e.preventDefault();
+
     userActions.clearUserListNotifications();
   }
 
@@ -186,21 +190,17 @@ export default class Users extends React.Component {
   }
 
   get userInvite() {
-    console.log("here 0");
+    const { t } = this.props;
+
     // When on the org page, only the Org Manager should see the user invite
     // form. If not, display notification.
     if (this.isOrganization && !this.currentUserIsOrgManager) {
-      console.log("here 1");
       return (
-        <I18n>
-          {t => (
-            <PanelDocumentation>
-              {t(
-                "Only an Org Manager can new invite users to this organization via the dashboard. Speak to your Org Manager if you need to add a user to this organization."
-              )}
-            </PanelDocumentation>
+        <PanelDocumentation>
+          {t(
+            "Only an Org Manager can invite new users to this organization via the dashboard. Speak to your Org Manager if you need to add a user to this organization."
           )}
-        </I18n>
+        </PanelDocumentation>
       );
     }
     // When on the space page, likewise, an Org Manager should always see the
@@ -209,17 +209,12 @@ export default class Users extends React.Component {
       // if the user is a Space Manager, let them know that they can invite
       // existing org users but not new ones.
       if (this.currentUserIsSpaceManager) {
-        console.log("here 2");
         return (
-          <I18n>
-            {t => (
-              <PanelDocumentation>
-                {t(
-                  "As a Space Manager, you can invite existing organization users into your space. If you wish to invite a person who is not in the organization into your space, please ask an Org Manager."
-                )}
-              </PanelDocumentation>
+          <PanelDocumentation>
+            {t(
+              "As a Space Manager, you can invite existing organization users into your space. If you wish to invite a person who is not in the organization into your space, please ask an Org Manager."
             )}
-          </I18n>
+          </PanelDocumentation>
         );
       }
       // Else, just tell the user to invite a Space Manager or Org Manager.
@@ -270,7 +265,7 @@ export default class Users extends React.Component {
     );
   }
 
-  _onChange() {
+  handleChange() {
     this.setState(() => mapStoreToState());
   }
 
@@ -284,7 +279,7 @@ export default class Users extends React.Component {
     }
 
     return (
-      <div className="test-users">
+      <div data-test="users">
         <SystemErrorMessage error={this.state.error} />
         {this.userInvite}
         {this.userParentEntityUserSelector}
@@ -307,3 +302,5 @@ export default class Users extends React.Component {
 }
 
 Users.propTypes = propTypes;
+
+export default translate()(Users);

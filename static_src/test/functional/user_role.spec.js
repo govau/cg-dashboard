@@ -25,10 +25,10 @@ describe("User roles", () => {
       it("should navigates to org X", () => {
         browser.url(urlOrgX);
 
-        browser.waitForExist(".test-users");
+        browser.waitForExist(`[data-test="users"]`);
         userRoleElement = new UserRoleElement(
           browser,
-          browser.element(".test-users")
+          browser.element(`[data-test="users"]`)
         );
 
         expect(userRoleElement.isVisible()).toBe(true);
@@ -47,10 +47,10 @@ describe("User roles", () => {
       it("should navigates to org Y", () => {
         browser.url(urlOrgY);
 
-        browser.waitForExist(".test-users");
+        browser.waitForExist(`[data-test="users"]`);
         userRoleElement = new UserRoleElement(
           browser,
-          browser.element(".test-users")
+          browser.element(`[data-test="users"]`)
         );
 
         expect(userRoleElement.isVisible()).toBe(true);
@@ -69,10 +69,10 @@ describe("User roles", () => {
   describe("Testing org user roles", () => {
     it("Setup userRoleElement", () => {
       browser.url(urlOrgX);
-      browser.waitForExist(".test-users");
+      browser.waitForExist(`[data-test="users"]`);
       userRoleElement = new UserRoleElement(
         browser,
-        browser.element(".test-users")
+        browser.element(`[data-test="users"]`)
       );
     });
 
@@ -246,10 +246,10 @@ describe("User roles", () => {
       it("should navigates to org X space XX", () => {
         browser.url(urlOrgXSpaceXX);
 
-        browser.waitForExist(".test-users");
+        browser.waitForExist(`[data-test="users"]`);
         userRoleElement = new UserRoleElement(
           browser,
-          browser.element(".test-users")
+          browser.element(`[data-test="users"]`)
         );
 
         expect(userRoleElement.isVisible()).toBe(true);
@@ -272,10 +272,10 @@ describe("User roles", () => {
       it("should navigates to org X space YY", () => {
         browser.url(urlOrgXSpaceYY);
 
-        browser.waitForExist(".test-users");
+        browser.waitForExist(`[data-test="users"]`);
         userRoleElement = new UserRoleElement(
           browser,
-          browser.element(".test-users")
+          browser.element(`[data-test="users"]`)
         );
 
         expect(userRoleElement.isVisible()).toBe(true);
@@ -323,10 +323,10 @@ describe("User roles", () => {
   describe("Testing space user roles", () => {
     it("Setup userRoleElement", () => {
       browser.url(urlOrgXSpaceXX);
-      browser.waitForExist(".test-users");
+      browser.waitForExist(`[data-test="users"]`);
       userRoleElement = new UserRoleElement(
         browser,
-        browser.element(".test-users")
+        browser.element(`[data-test="users"]`)
       );
     });
 

@@ -14,7 +14,7 @@ describe("User roles", () => {
   describe("A user on page for an org", () => {
     it("should navigates to org X", () => {
       browser.url(urlOrgX);
-      browser.waitForExist(".test-users");
+      browser.waitForExist(`[data-test="users"]`);
     });
 
     it("should have the user invite panel", () => {
@@ -67,10 +67,10 @@ describe("User roles", () => {
     it("should navigates to org X space XX", () => {
       userRoleElement = new UserRoleElement(
         browser,
-        browser.element(".test-users")
+        browser.element(`[data-test="users"]`)
       );
       browser.url(urlOrgXSpaceXX);
-      browser.waitForExist(".test-users");
+      browser.waitForExist(`[data-test="users"]`);
     });
 
     it("should have the user selector panel", () => {
