@@ -42,7 +42,7 @@ export class UsersInvite extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(errs, { email }) {
+  handleSubmit(errs, { email } = {}) {
     const { value = "" } = email;
 
     const isEmailValid = validator(value) === null;
