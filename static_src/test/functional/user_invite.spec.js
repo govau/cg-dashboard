@@ -20,7 +20,7 @@ describe("User roles", () => {
     it("should have the user invite panel", () => {
       browser.url(urlOrgX);
 
-      browser.waitForExist(".test-users-invite");
+      browser.waitForExist(`[data-test="users-invite"]`);
       userInviteElement = new UserInviteElement(
         browser,
         browser.element(UserInviteElement.primarySelector)

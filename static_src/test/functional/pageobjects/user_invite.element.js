@@ -5,11 +5,11 @@ import BaseElement from "./base.element";
 // Represents a UserInviteElement for making assertions against. This makes it
 // easier to abstract some of the webdriver details from the UI component.
 
-const userInvite = ".test-users-invite";
+const userInvite = `[data-test="users-invite"]`;
 
 const selectors = {
   primary: userInvite,
-  name: ".test-users_invite_name",
+  name: `[data-test="users-invite"] [data-test="name-input"]`,
   submit: '[type="submit"]',
   error: ".error_message",
   validator: ".error span.error_message"

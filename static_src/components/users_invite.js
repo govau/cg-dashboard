@@ -76,7 +76,7 @@ export class UsersInvite extends React.Component {
     }
 
     return (
-      <div className="test-users-invite">
+      <div data-test="users-invite">
         <PanelDocumentation description>
           <p>{t(`Invite a new or existing user to this ${entityType}.`)}</p>
         </PanelDocumentation>
@@ -89,13 +89,13 @@ export class UsersInvite extends React.Component {
         >
           <FormText
             formGuid={this.formId}
-            classes={["test-users_invite_name"]}
             label="User’s email"
             name="email"
             validator={validator}
+            data-test="name-input"
           />
           <Action label="submit" type="submit" disabled={disabled}>
-            {t(`Add user to this ${this.props.entityType}`)}
+            {t(`Add user to this ${entityType}`)}
           </Action>
         </Form>
       </div>

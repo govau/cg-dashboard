@@ -13,7 +13,8 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   onValidate: PropTypes.func,
   validator: PropTypes.func,
-  value: PropTypes.any
+  value: PropTypes.any,
+  "data-test": PropTypes.string
 };
 
 const defaultProps = {
@@ -21,7 +22,8 @@ const defaultProps = {
   classes: [],
   label: "",
   onValidate: () => {},
-  validator: () => {}
+  validator: () => {},
+  "data-test": undefined
 };
 
 let currid = 0;

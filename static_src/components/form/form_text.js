@@ -1,11 +1,12 @@
-import PropTypes from "prop-types";
 import React from "react";
-import FormElement from "./form_element";
-import FormError from "./form_error";
+import PropTypes from "prop-types";
 import classNames from "classnames";
 
+import FormElement from "./form_element";
+import FormError from "./form_error";
+
 export default class FormText extends FormElement {
-  get error() {
+  renderError() {
     if (!this.state.err) {
       return null;
     }
@@ -13,37 +14,47 @@ export default class FormText extends FormElement {
     return <FormError message={this.state.err.message} />;
   }
 
-  render() {
-    const classes = classNames({
-      "form_text-inline": this.props.inline,
-      error: !!this.error
-    });
+  renderLabel() {
+    const { label } = this.props;
 
     // Spaces in label give a healthy space for inline forms
-    const label = <label htmlFor={this.key}> {this.props.label} </label>;
+    return <label htmlFor={this.key}> {label} </label>;
+  }
+
+  render() {
+    const { inline, labelAfter, "data-test": dataTest } = this.props;
+
     return (
-      <div className={classes}>
-        {!this.props.labelAfter && label}
+      <div
+        className={classNames({
+          "form_text-inline": inline,
+          error: !!this.state.err
+        })}
+      >
+        {!labelAfter && this.renderLabel()}
         <input
           type="text"
           id={this.key}
           value={this.state.value}
           onChange={this.onChange}
           className={this.classes}
+          data-test={dataTest}
         />
-        {this.props.labelAfter && label}
-        {this.error}
+        {labelAfter && this.renderLabel()}
+        {this.renderError()}
       </div>
     );
   }
 }
 
-FormText.propTypes = Object.assign({}, FormElement.propTypes, {
+FormText.propTypes = {
+  ...FormElement.propTypes,
   inline: PropTypes.bool,
   labelAfter: PropTypes.bool
-});
+};
 
-FormText.defaultProps = Object.assign({}, FormElement.defaultProps, {
+FormText.defaultProps = {
+  ...FormElement.defaultProps,
   inline: false,
   labelAfter: false
-});
+};
