@@ -1,60 +1,65 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+import ErrorStore from "../stores/error_store";
+import LoginStore from "../stores/login_store";
+import OrgStore from "../stores/org_store";
 import userProvider from "./user_provider";
 import Disclaimer from "./header/disclaimer";
 import Footer from "./footer";
 import GlobalErrorContainer from "./global_error_container";
 import Header from "./header";
-import LoginStore from "../stores/login_store";
-import OrgStore from "../stores/org_store";
 import SpaceStore from "../stores/space_store";
 
-const propTypes = {
-  children: PropTypes.any
-};
+const propTypes = { children: PropTypes.any };
 
-function stateSetter() {
-  return {
-    currentOrgGuid: OrgStore.currentOrgGuid,
-    currentSpaceGuid: SpaceStore.currentSpaceGuid,
-    isLoggedIn: LoginStore.isLoggedIn()
-  };
-}
+const mapStoreToState = () => ({
+  errors: ErrorStore.getAll() || [],
+  currentOrgGuid: OrgStore.currentOrgGuid,
+  currentSpaceGuid: SpaceStore.currentSpaceGuid,
+  isLoggedIn: LoginStore.isLoggedIn()
+});
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = stateSetter();
-    this._onChange = this._onChange.bind(this);
+    this.state = mapStoreToState();
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    LoginStore.addChangeListener(this._onChange);
+    ErrorStore.addChangeListener(this.handleChange);
+    LoginStore.addChangeListener(this.handleChange);
   }
 
   componentWillUnmount() {
-    LoginStore.removeChangeListener(this._onChange);
+    ErrorStore.removeChangeListener(this.handleChange);
+    LoginStore.removeChangeListener(this.handleChange);
   }
 
-  _onChange() {
-    this.setState(stateSetter());
+  handleChange() {
+    this.setState(mapStoreToState());
   }
 
   render() {
-    return (
-      <div>
-        <Disclaimer />
-        <Header />
-        <div className="main_content content-no_sidebar">
-          <GlobalErrorContainer />
+    const { children } = this.props;
+    const { errors } = this.state;
+
+    return [
+      <Disclaimer key="disclaimer" />,
+      <Header key="header" />,
+      <div key="main" className="main_content content-no_sidebar">
+        {errors.length > 0 ? (
+          <GlobalErrorContainer errors={errors} />
+        ) : (
           <main className="usa-content">
-            <div className="content grid">{this.props.children}</div>
+            <div className="content grid">{children}</div>
           </main>
-        </div>
-        <Footer />
-      </div>
-    );
+        )}
+      </div>,
+      <Footer key="footer" />
+    ];
   }
 }
 

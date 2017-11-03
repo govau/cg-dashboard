@@ -10,42 +10,42 @@ const brokenDataAppUrl =
 function getErrorsComponent() {
   return new GlobalErrorsElement(
     browser,
-    browser.element(".test-global-errors")
+    browser.element(`[data-test="global-errors"]`)
   );
 }
 
-describe("Global error", function() {
+describe("Global error", () => {
   let globalErrorsElement;
 
-  it("navigates to specific app page with broken data", function() {
+  it("navigates to specific app page with broken data", () => {
     browser.url(brokenDataAppUrl);
   });
 
-  describe("global errors", function() {
-    beforeEach(function() {
+  describe("global errors", () => {
+    beforeEach(() => {
       globalErrorsElement = getErrorsComponent();
     });
 
-    it("exists", function() {
+    it("exists", () => {
       expect(globalErrorsElement.exists()).toBe(true);
     });
 
-    describe("notification", function() {
+    describe("notification", () => {
       let notificationAmount = 0;
       let notificationElement;
 
-      it("has at least one that exists", function() {
+      it("has at least one that exists", () => {
         notificationElement = globalErrorsElement.firstNotification();
 
         expect(notificationElement.exists()).toBe(true);
         notificationAmount = globalErrorsElement.notifications().length;
       });
 
-      it("has error message about app stats data missing", function() {
+      it("has error message about app stats data missing", () => {
         expect(notificationElement.message()).toMatch("app usage");
       });
 
-      it("has refresh action which refreshes the page", function() {
+      it("has refresh action which refreshes the page", () => {
         const refreshAction = notificationElement.refreshAction();
 
         expect(refreshAction.isVisible()).toBe(true);
@@ -53,7 +53,7 @@ describe("Global error", function() {
         // TODO test refresh
       });
 
-      it("has dismiss action that removes it from the page", function() {
+      it("has dismiss action that removes it from the page", () => {
         const dismissAction = notificationElement.dismissAction();
 
         expect(dismissAction.isVisible()).toBe(true);
@@ -65,8 +65,8 @@ describe("Global error", function() {
       });
     });
 
-    describe("on navigation", function() {
-      beforeEach(function() {
+    describe("on navigation", () => {
+      beforeEach(() => {
         browser.refresh();
         globalErrorsElement = getErrorsComponent();
 
@@ -78,18 +78,18 @@ describe("Global error", function() {
         breadcrumbsElement.goToSpace();
       });
 
-      it("dismisses the error when navigating to any other route", function() {
+      it("dismisses the error when navigating to any other route", () => {
         expect(globalErrorsElement.notifications().length).toEqual(0);
       });
     });
 
-    describe("on crashed app page", function() {
-      beforeEach(function() {
+    describe("on crashed app page", () => {
+      beforeEach(() => {
         browser.url(crashedAppUrl);
         globalErrorsElement = getErrorsComponent();
       });
 
-      it("should not show fetch errors because no stats were fetched", function() {
+      it("should not show fetch errors because no stats were fetched", () => {
         expect(globalErrorsElement.notifications().length).toEqual(0);
       });
     });

@@ -18,7 +18,7 @@ export default class PageHeader extends React.Component {
   render() {
     return (
       <div className="page-header">
-        <h1 className="page-header-title test-page-header-title">
+        <h1 className="page-header-title" data-test="page-header-title">
           {this.props.title}
         </h1>
         {this.actions}
