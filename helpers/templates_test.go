@@ -38,7 +38,7 @@ func TestGetInviteEmail(t *testing.T) {
 		return
 	}
 	if string(inviteTpl) != string(body.Bytes()) {
-		t.Error("Expected invite e-mail template does not match generated invite e-mail template.")
+		t.Error("Expected invite email template does not match generated invite email template.")
 		// Helpful for generating the new invite data.
 		ioutil.WriteFile(filepath.Join("testdata", "templates", "mail", "invite.html.returned"), body.Bytes(), 0444)
 		t.Logf("writing expected file to %s", filepath.Join("testdata", "templates", "mail", "invite.html.returned"))

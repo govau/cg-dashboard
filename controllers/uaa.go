@@ -131,7 +131,7 @@ type NewInvite struct {
 	InviteLink string `json:"inviteLink"`
 }
 
-// InviteUAAuser tries to invite the user e-mail which will create the user in
+// InviteUAAuser tries to invite the user email which will create the user in
 // the UAA database.
 func (c *UAAContext) InviteUAAuser(
 	inviteUserToOrgRequest InviteUserToOrgRequest) (
@@ -212,7 +212,7 @@ func (c *UAAContext) ParseInviteUserToOrgReq(req *http.Request) (
 	return
 }
 
-// InviteUserToOrg will invite user in both UAA and CF, send an e-mail.
+// InviteUserToOrg will invite user in both UAA and CF, send an email.
 func (c *UAAContext) InviteUserToOrg(rw web.ResponseWriter, req *web.Request) {
 	// parse the request
 	inviteUserToOrgRequest, err := c.ParseInviteUserToOrgReq(req.Request)
@@ -249,7 +249,7 @@ func (c *UAAContext) InviteUserToOrg(rw web.ResponseWriter, req *web.Request) {
 			return
 		}
 
-		// Trigger the e-mail invite.
+		// Trigger the email invite.
 		err = c.TriggerInvite(inviteEmailRequest{
 			Email:     userInvite.Email,
 			InviteURL: userInvite.InviteLink,
@@ -280,7 +280,7 @@ type ListUAAUserResponse struct {
 	Resources []GetUAAUserResponse `json:"resources"`
 }
 
-// GetUAAUserByEmail will query UAA for user(s) by e-mail.
+// GetUAAUserByEmail will query UAA for user(s) by email.
 // Only return one user result.
 // Special cases:
 // If multiple are found, an empty response is returned.

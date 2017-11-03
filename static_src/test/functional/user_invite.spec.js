@@ -1,7 +1,7 @@
 import UserRoleElement from "./pageobjects/user_role.element";
 import UserInviteElement from "./pageobjects/user_invite.element";
 
-describe("User roles", function() {
+describe("User roles", () => {
   let userInviteElement;
   let userRoleElement;
 
@@ -11,13 +11,13 @@ describe("User roles", function() {
   const urlOrgXSpaceXX =
     "/#/org/user_role-org_x-ffe7-4aa8-8e85-94768d6bd250/spaces/user_role-org_x-space_xx-4064-82f2-d74df612b794";
 
-  describe("A user on page for an org", function() {
-    it("should navigates to org X", function() {
+  describe("A user on page for an org", () => {
+    it("should navigates to org X", () => {
       browser.url(urlOrgX);
       browser.waitForExist(".test-users");
     });
 
-    it("should have the user invite panel", function() {
+    it("should have the user invite panel", () => {
       browser.url(urlOrgX);
 
       browser.waitForExist(".test-users-invite");
@@ -29,13 +29,13 @@ describe("User roles", function() {
       expect(userInviteElement.isVisible()).toBe(true);
     });
 
-    it("should be able to input content into invite form", function() {
+    it("should be able to input content into invite form", () => {
       userInviteElement.inputToInviteForm(email);
 
       expect(email).toBe(userInviteElement.getInviteFormValue());
     });
 
-    it("should be able to submit an email address and see on user list", function() {
+    it("should be able to submit an email address and see on user list", () => {
       const existingUserCount = userInviteElement.countNumberOfUsers();
       let user = userInviteElement.getUserByIndex(existingUserCount - 1);
 
@@ -50,21 +50,21 @@ describe("User roles", function() {
       // expect(user.getText()).toMatch(/fake-new-user@domain.com/);
     });
 
-    it("should display an error message if the email address is invalid", function() {
+    it("should display an error message if the email address is invalid", () => {
       const invalidEmail = "123";
       userInviteElement.inputToInviteForm(invalidEmail);
       userInviteElement.submitInviteForm();
       const topError = "There were errors submitting the form.";
       const bottomError =
-        "The value entered in email is not a valid e-mail address";
+        "The value entered in email is not a valid email address";
 
       expect(userInviteElement.getErrorMessage()).toMatch(topError);
       expect(userInviteElement.getValidatorMessage()).toMatch(bottomError);
     });
   });
 
-  describe("A user on page for an space", function() {
-    it("should navigates to org X space XX", function() {
+  describe("A user on page for an space", () => {
+    it("should navigates to org X space XX", () => {
       userRoleElement = new UserRoleElement(
         browser,
         browser.element(".test-users")
@@ -73,7 +73,7 @@ describe("User roles", function() {
       browser.waitForExist(".test-users");
     });
 
-    it("should have the user selector panel", function() {
+    it("should have the user selector panel", () => {
       userRoleElement.setAndGetUserRole(cookieManagerOrgXSpaceXX);
       browser.url(urlOrgXSpaceXX);
 

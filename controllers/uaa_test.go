@@ -72,7 +72,7 @@ var inviteUsersTest = []BasicProxyTest{
 	{
 		BasicSecureTest: BasicSecureTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
-				TestName:    "UAA Invite User with e-mail in body but missing invite url",
+				TestName:    "UAA Invite User with email in body but missing invite url",
 				SessionData: ValidTokenData,
 				EnvVars:     GetMockCompleteEnvVars(),
 			},
@@ -105,7 +105,7 @@ var inviteUsersTest = []BasicProxyTest{
 	{
 		BasicSecureTest: BasicSecureTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
-				TestName:    "UAA Invite User with e-mail in body but missing e-mail",
+				TestName:    "UAA Invite User with email in body but missing email",
 				SessionData: ValidTokenData,
 				EnvVars:     GetMockCompleteEnvVars(),
 			},
@@ -138,7 +138,7 @@ var inviteUsersTest = []BasicProxyTest{
 	{
 		BasicSecureTest: BasicSecureTest{
 			BasicConsoleUnitTest: BasicConsoleUnitTest{
-				TestName:    "UAA Invite User with e-mail in body (new user)",
+				TestName:    "UAA Invite User with email in body (new user)",
 				SessionData: ValidTokenData,
 				EnvVars:     GetMockCompleteEnvVars(),
 			},

@@ -46,7 +46,7 @@ export function validateEmail() {
     if (!EMAIL_REGEX.test(value)) {
       const nameString = name ? `in ${name} ` : "";
       return {
-        message: `The value entered ${nameString}is not a valid e-mail address`
+        message: `The value entered ${nameString}is not a valid email address`
       };
     }
 
