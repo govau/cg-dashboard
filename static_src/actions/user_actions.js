@@ -227,8 +227,7 @@ const userActions = {
       .catch(err =>
         userActions.userInviteCreateError(
           err,
-          `There was a problem
-        inviting ${email}`
+          `There was a problem inviting ${email}`
         )
       );
   },
@@ -249,8 +248,7 @@ const userActions = {
       .catch(err =>
         userActions.userInviteCreateError(
           err,
-          `There was a problem
-        inviting ${email}`
+          `There was a problem inviting ${email}`
         )
       );
   },
