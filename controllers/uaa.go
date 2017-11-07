@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"runtime/debug"
 
 	"github.com/gocraft/web"
 	uuid "github.com/satori/go.uuid"
@@ -97,6 +99,8 @@ func newUaaErrorWithProxyData(statusCode int, data, proxyData string) *UaaError 
 }
 
 func (e *UaaError) writeTo(rw http.ResponseWriter) {
+	log.Println(debug.Stack())
+
 	rw.WriteHeader(e.statusCode)
 	rw.Write(e.err)
 }
