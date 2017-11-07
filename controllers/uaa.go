@@ -99,7 +99,7 @@ func newUaaErrorWithProxyData(statusCode int, data, proxyData string) *UaaError 
 }
 
 func (e *UaaError) writeTo(rw http.ResponseWriter) {
-	log.Println(debug.Stack())
+	log.Printf("%s", debug.Stack())
 
 	rw.WriteHeader(e.statusCode)
 	rw.Write(e.err)
