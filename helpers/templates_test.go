@@ -22,29 +22,6 @@ func TestInitTemplates(t *testing.T) {
 	}
 }
 
-func TestGetInviteEmail(t *testing.T) {
-	templates, err := helpers.InitTemplates(filepath.Join("testdata", "templates"))
-	if err != nil {
-		t.Errorf("Expected to find the templates. %s", err.Error())
-	}
-	body := new(bytes.Buffer)
-	err = templates.GetInviteEmail(body, "http://test-url.com")
-	if err != nil {
-		t.Errorf("Expected no error getting the invite email. %s", err.Error())
-	}
-	inviteTpl, err := ioutil.ReadFile(filepath.Join("testdata", "templates", "mail", "invite.html"))
-	if err != nil {
-		t.Errorf("Expected no error reading the invite email. %s", err.Error())
-		return
-	}
-	if string(inviteTpl) != string(body.Bytes()) {
-		t.Error("Expected invite email template does not match generated invite email template.")
-		// Helpful for generating the new invite data.
-		ioutil.WriteFile(filepath.Join("testdata", "templates", "mail", "invite.html.returned"), body.Bytes(), 0444)
-		t.Logf("writing expected file to %s", filepath.Join("testdata", "templates", "mail", "invite.html.returned"))
-	}
-}
-
 func TestGetIndex(t *testing.T) {
 	templates, err := helpers.InitTemplates(filepath.Join("testdata", "templates"))
 	if err != nil {

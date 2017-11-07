@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"path/filepath"
+
 	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/gocraft/web"
 	"github.com/govau/cf-common/env"
+	"github.com/govau/emailtemplate"
 
 	"github.com/18F/cg-dashboard/helpers"
 	"github.com/18F/cg-dashboard/mailer"
@@ -11,7 +14,7 @@ import (
 
 // InitRouter sets up the router (and subrouters).
 // It also includes the closure middleware where we load the global Settings reference into each request.
-func InitRouter(settings *helpers.Settings, templates *helpers.Templates, mailer mailer.Mailer) *web.Router {
+func InitRouter(settings *helpers.Settings, templates *helpers.Templates, emailTemplates *emailtemplate.Getter, mailer mailer.Mailer) *web.Router {
 	if settings == nil {
 		return nil
 	}
@@ -21,6 +24,7 @@ func InitRouter(settings *helpers.Settings, templates *helpers.Templates, mailer
 	router.Middleware(func(c *Context, resp web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
 		c.Settings = settings
 		c.templates = templates
+		c.emailTemplates = emailTemplates
 		c.mailer = mailer
 		next(resp, req)
 	})
@@ -88,8 +92,13 @@ func InitApp(envVars *env.VarSet, app *cfenv.App) (*web.Router, *helpers.Setting
 		return nil, nil, err
 	}
 
+	etg, err := emailtemplate.Load(emailtemplate.WithRootPath(filepath.Join(settings.TemplatesPath, "mail")))
+	if err != nil {
+		return nil, nil, err
+	}
+
 	// Initialize the router
-	router := InitRouter(&settings, templates, mailer)
+	router := InitRouter(&settings, templates, etg, mailer)
 
 	return router, &settings, nil
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/govau/cf-common/env"
+	"github.com/govau/emailtemplate"
 
 	"github.com/18F/cg-dashboard/controllers"
 	"github.com/18F/cg-dashboard/helpers"
@@ -75,7 +76,7 @@ var initRouterTests = []initRouterTest{
 
 func TestInitRouter(t *testing.T) {
 	for _, test := range initRouterTests {
-		router := controllers.InitRouter(test.settings, &helpers.Templates{}, &mocks.Mailer{})
+		router := controllers.InitRouter(test.settings, &helpers.Templates{}, &emailtemplate.Getter{}, &mocks.Mailer{})
 		if (router == nil) != test.returnValueNil {
 			t.Errorf("Test %s did not return correct router value. Expected %t, Actual %t\n", test.testName, test.returnValueNil, (router == nil))
 		}

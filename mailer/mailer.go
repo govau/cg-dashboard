@@ -9,7 +9,7 @@ import (
 
 // Mailer is a interface that any mailer should implement.
 type Mailer interface {
-	SendEmail(emailAddress string, subject string, body []byte) error
+	SendEmail(emailAddress string, subject string, html, text []byte) error
 }
 
 // InitSMTPMailer creates a new SMTP Mailer
@@ -31,11 +31,13 @@ type smtpMailer struct {
 	smtpFrom string
 }
 
-func (s *smtpMailer) SendEmail(emailAddress, subject string, body []byte) error {
+// SendEmail implements Mailer.
+func (s *smtpMailer) SendEmail(emailAddress, subject string, html, text []byte) error {
 	e := email.NewEmail()
 	e.From = s.smtpFrom
 	e.To = []string{" <" + emailAddress + ">"}
-	e.HTML = body
+	e.HTML = html
+	e.Text = text
 	e.Subject = subject
 	return e.Send(s.smtpHost+":"+s.smtpPort, smtp.PlainAuth("", s.smtpUser, s.smtpPass, s.smtpHost))
 }

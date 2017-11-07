@@ -18,8 +18,6 @@ import:
   - clientcredentials
 - package: github.com/yvasiyarov/gorelic
 - package: github.com/cloudfoundry-community/go-cfenv
-- package: github.com/gorilla/csrf
-  version: ~1.4.0
 - package: github.com/boj/redistore
   version: ~1.2.0
 - package: github.com/ory/dockertest
@@ -33,3 +31,7 @@ import:
   version: 0.0.2
   subpackages:
   - env
+- package: github.com/gorilla/csrf
+  version: v1.5
+- package: github.com/govau/emailtemplate
+  version: v0.0.3

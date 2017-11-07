@@ -11,6 +11,7 @@ import (
 	. "github.com/18F/cg-dashboard/helpers/testhelpers"
 	"github.com/18F/cg-dashboard/helpers/testhelpers/mocks"
 	"github.com/gocraft/web"
+	"github.com/govau/emailtemplate"
 	"golang.org/x/oauth2"
 )
 
@@ -58,7 +59,7 @@ func TestOAuth(t *testing.T) {
 
 		// Setup a test route on the API router (which is guarded by OAuth)
 		response, request := NewTestRequest("GET", "/v2/test", nil)
-		router := controllers.InitRouter(&mockSettings, &helpers.Templates{}, &mocks.Mailer{})
+		router := controllers.InitRouter(&mockSettings, &helpers.Templates{}, &emailtemplate.Getter{}, &mocks.Mailer{})
 		secureRouter := router.Subrouter(controllers.SecureContext{}, "/")
 		apiRouter := secureRouter.Subrouter(controllers.APIContext{}, "/v2")
 		apiRouter.Middleware((*controllers.APIContext).OAuth)

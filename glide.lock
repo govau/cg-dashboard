@@ -1,5 +1,5 @@
-hash: 9ff0a3ed7332056ccb82fbf276024e6e871968405c0bd57b471f4fd2ac80b06f
-updated: 2017-10-24T20:35:00.140809273+11:00
+hash: ef870b82b50fe58002360261da544beb94b6b4934c4b6611ce7c0ece2e6869ce
+updated: 2017-11-07T15:11:57.619536602+11:00
 imports:
 - name: github.com/Azure/go-ansiterm
   version: fa152c58bc15761d0200cb75fe958b89a9d4888e
@@ -74,7 +74,7 @@ imports:
 - name: github.com/gorilla/context
   version: a8d44e7d8e4d532b6a27a02dd82abb31cc1b01bd
 - name: github.com/gorilla/csrf
-  version: 50eb875b7d37289a5819742f0d60fa5c890fced9
+  version: 69581736821c33d85bbf378f42f6ad864dbd85de
 - name: github.com/gorilla/securecookie
   version: 667fe4e3466a040b780561fe9b51a83a3753eefc
 - name: github.com/gorilla/sessions
@@ -83,6 +83,8 @@ imports:
   version: 5c1de868d3662201c4f8ff529479e6153624fbf8
   subpackages:
   - env
+- name: github.com/govau/emailtemplate
+  version: 249c35a39d08324f533590921207087c552f8f49
 - name: github.com/hashicorp/go-cleanhttp
   version: 3573b8b52aa7b37b9358d966a898feb387f62437
 - name: github.com/jordan-wright/email
@@ -101,7 +103,7 @@ imports:
 - name: github.com/ory/dockertest
   version: 9d0647ae761f96a6738c5afb49688d22979b21ff
 - name: github.com/pkg/errors
-  version: 248dadf4e9068a0b3e79f02ed0a610d935de5302
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/pmezard/go-difflib
   version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
   subpackages:

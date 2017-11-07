@@ -8,8 +8,6 @@ import (
 )
 
 const (
-	// InviteEmailTemplate is the template key for the invite email.
-	InviteEmailTemplate = "INVITE_EMAIL_TEMPLATE"
 	// IndexTemplate is the template key for the index.html.
 	IndexTemplate = "INDEX_HTML_TEMPLATE"
 )
@@ -18,8 +16,7 @@ const (
 // given the basePath of where to look.
 func findTemplates(basePath string) map[string][]string {
 	return map[string][]string{
-		IndexTemplate:       {filepath.Join(basePath, "web", "index.html")},
-		InviteEmailTemplate: {filepath.Join(basePath, "mail", "invite.html")},
+		IndexTemplate: {filepath.Join(basePath, "web", "index.html")},
 	}
 }
 
@@ -50,20 +47,6 @@ func (t *Templates) getTemplate(templateKey string) (*template.Template, error) 
 		return template, nil
 	}
 	return nil, fmt.Errorf("unable to find template with key %s", templateKey)
-}
-
-// inviteEmail provides struct for the templates/mail/invite.tmpl
-type inviteEmail struct {
-	URL string
-}
-
-// GetInviteEmail gets the filled in invite email template.
-func (t *Templates) GetInviteEmail(rw io.Writer, url string) error {
-	tpl, err := t.getTemplate(InviteEmailTemplate)
-	if err != nil {
-		return err
-	}
-	return tpl.Execute(rw, inviteEmail{url})
 }
 
 // GetIndex gets the filled in index.html

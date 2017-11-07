@@ -8,18 +8,22 @@ import (
 	"os"
 	"time"
 
-	"github.com/18F/cg-dashboard/helpers"
-	"github.com/18F/cg-dashboard/mailer"
+	"golang.org/x/oauth2"
+
 	"github.com/gocraft/web"
 	"github.com/gorilla/csrf"
-	"golang.org/x/oauth2"
+	"github.com/govau/emailtemplate"
+
+	"github.com/18F/cg-dashboard/helpers"
+	"github.com/18F/cg-dashboard/mailer"
 )
 
 // Context represents the context for all requests that do not need authentication.
 type Context struct {
-	Settings  *helpers.Settings
-	templates *helpers.Templates
-	mailer    mailer.Mailer
+	Settings       *helpers.Settings
+	templates      *helpers.Templates
+	emailTemplates *emailtemplate.Getter
+	mailer         mailer.Mailer
 }
 
 // StaticMiddleware provides simple caching middleware for static assets.

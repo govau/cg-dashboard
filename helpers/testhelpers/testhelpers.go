@@ -18,6 +18,7 @@ import (
 	"github.com/gocraft/web"
 	"github.com/gorilla/sessions"
 	"github.com/govau/cf-common/env"
+	"github.com/govau/emailtemplate"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"golang.org/x/oauth2"
@@ -129,13 +130,18 @@ func CreateRouterWithMockSession(sessionData map[string]interface{}, envVars map
 		log.Fatalf("failed to init templates: %v", err)
 	}
 
+	etg, err := emailtemplate.Load(emailtemplate.WithRootPath(filepath.Join(settings.TemplatesPath, "mail")))
+	if err != nil {
+		log.Fatalf("could not load email templates: %v", err)
+	}
+
 	// Create the router.
 	mockMailer := new(mocks.Mailer)
 	// mockery converts []byte to []uint8 thus having to check for that in the
 	// argument.
 	mockMailer.On("SendEmail", mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"), mock.AnythingOfType("[]uint8")).Return(nil)
-	router := controllers.InitRouter(&settings, templates, mockMailer)
+		mock.AnythingOfType("string"), mock.AnythingOfType("[]uint8"), mock.AnythingOfType("[]uint8")).Return(nil)
+	router := controllers.InitRouter(&settings, templates, etg, mockMailer)
 
 	return router, &store
 }

@@ -2,18 +2,15 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
-
-	"encoding/json"
-
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 
 	"github.com/gocraft/web"
-
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -326,19 +323,29 @@ type inviteEmailRequest struct {
 	InviteURL string `json:"inviteUrl"`
 }
 
-// TriggerInvite trigger the email.
-func (c *UAAContext) TriggerInvite(inviteReq inviteEmailRequest) *UaaError {
-	if inviteReq.Email == "" || inviteReq.InviteURL == "" {
+// TriggerInvite triggers the invitation email.
+func (c *UAAContext) TriggerInvite(req inviteEmailRequest) *UaaError {
+	if req.Email == "" || req.InviteURL == "" {
 		return newUaaError(http.StatusBadRequest, "Missing correct params.")
 	}
-	emailHTML := new(bytes.Buffer)
-	tplErr := c.templates.GetInviteEmail(emailHTML, inviteReq.InviteURL)
-	if tplErr != nil {
-		return newUaaError(http.StatusInternalServerError, tplErr.Error())
+	t, ok := c.emailTemplates.Get(emailTemplateUserInvited)
+	if !ok {
+		return newUaaError(http.StatusInternalServerError, "Could not find email template.")
 	}
-	emailErr := c.mailer.SendEmail(inviteReq.Email, "Invitation to join cloud.gov", emailHTML.Bytes())
-	if emailErr != nil {
-		return newUaaError(http.StatusInternalServerError, emailErr.Error())
+	subject, html, text, err := t.Execute(EmailTemplateUserInvitedData{
+		Email: req.Email,
+		URL:   req.InviteURL,
+	})
+	if err != nil {
+		return newUaaError(http.StatusInternalServerError, err.Error())
+	}
+	if err := c.mailer.SendEmail(
+		req.Email,
+		subject.String(),
+		html.Bytes(),
+		text.Bytes(),
+	); err != nil {
+		return newUaaError(http.StatusInternalServerError, err.Error())
 	}
 	return nil
 }

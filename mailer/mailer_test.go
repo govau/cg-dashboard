@@ -24,8 +24,8 @@ func TestSendEmail(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected nil error, found %s", err.Error())
 	}
-	body := bytes.NewBufferString("test html here")
-	err = mailer.SendEmail("test@receiver.com", "sample subject", body.Bytes())
+	html := bytes.NewBufferString("test html here")
+	err = mailer.SendEmail("test@receiver.com", "sample subject", html.Bytes(), nil)
 	if err != nil {
 		t.Errorf("Expected nil error, found %s", err.Error())
 	}
@@ -48,7 +48,7 @@ func TestSendEmail(t *testing.T) {
 	cleanup() // Destroy the mail server.
 
 	// Try sending mail to bad server.
-	err = mailer.SendEmail("test@receiver.com", "sample subject", body.Bytes())
+	err = mailer.SendEmail("test@receiver.com", "sample subject", html.Bytes(), nil)
 	if err == nil {
 		t.Error("Expected non nil error")
 	}

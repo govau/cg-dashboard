@@ -40,7 +40,6 @@ func (c *SecureContext) OAuth(rw web.ResponseWriter, req *web.Request, next web.
 
 // LoginRequired is a middleware that requires a valid token or returns Unauthorized
 func (c *SecureContext) LoginRequired(rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
-
 	// If there is no request just continue
 	if r == nil {
 		next(rw, r)
