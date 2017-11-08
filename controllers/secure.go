@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net"
@@ -8,15 +11,77 @@ import (
 	"strings"
 	"time"
 
-	"github.com/18F/cg-dashboard/helpers"
+	"github.com/cloudfoundry-community/go-cfclient"
 	"github.com/gocraft/web"
 	"golang.org/x/oauth2"
+
+	"github.com/18F/cg-dashboard/helpers"
 )
 
 // SecureContext stores the session info and access token per user.
 type SecureContext struct {
 	*Context // Required.
 	Token    oauth2.Token
+}
+
+func getEmailFromJWT(token string) (string, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return "", errors.New("bad token 1")
+	}
+
+	dc, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return "", err
+	}
+
+	var claims struct {
+		Sub   string `json:"sub"`
+		Email string `json:"email"`
+	}
+	if err := json.Unmarshal(dc, &claims); err != nil {
+		return "", err
+	}
+
+	return claims.Email, nil
+}
+
+func (c *SecureContext) CurrentUserEmail() (string, error) {
+	return getEmailFromJWT(c.Token.AccessToken)
+}
+
+func (c *SecureContext) CFClient() (*cfclient.Client, error) {
+	return c.cfClient(false)
+}
+
+func (c *SecureContext) PrivilegedCFClient() (*cfclient.Client, error) {
+	return c.cfClient(true)
+}
+
+func (c *SecureContext) cfClient(privileged bool) (*cfclient.Client, error) {
+	id := c.Settings.OAuthConfig.ClientID
+	secret := c.Settings.OAuthConfig.ClientSecret
+	httpClient := c.Settings.OAuthConfig.Client(c.Settings.CreateContext(), &c.Token)
+	var skip bool
+
+	if privileged {
+		id = c.Settings.HighPrivilegedOauthConfig.ClientID
+		secret = c.Settings.HighPrivilegedOauthConfig.ClientSecret
+		httpClient = c.Settings.HighPrivilegedOauthConfig.Client(c.Settings.CreateContext())
+	}
+
+	if c.Settings.LocalCF {
+		skip = true
+	}
+
+	return cfclient.NewClient(&cfclient.Config{
+		ApiAddress:        c.Settings.ConsoleAPI,
+		ClientID:          id,
+		ClientSecret:      secret,
+		HttpClient:        httpClient,
+		SkipSslValidation: skip,
+		Token:             c.Token.AccessToken,
+	})
 }
 
 // ResponseHandler is a type declaration for the function that will handle the response for the given request.

@@ -42,11 +42,23 @@ func InitRouter(settings *helpers.Settings, templates *helpers.Templates, emailT
 	secureRouter := router.Subrouter(SecureContext{}, "/")
 
 	// Setup the /api subrouter.
-	apiRouter := secureRouter.Subrouter(APIContext{}, "/v2")
+	apiRouter := secureRouter.Subrouter(APIContext{
+		ErrorWriter: ErrorWriter{},
+	}, "/v2")
 	apiRouter.Middleware((*APIContext).OAuth)
-	// All routes accepted
+
 	apiRouter.Get("/authstatus", (*APIContext).AuthStatus)
 	apiRouter.Get("/profile", (*APIContext).UserProfile)
+
+	// Setup the /organizations subrouter.
+	organizationRouter := apiRouter.Subrouter(OrganizationContext{}, "/organizations")
+	organizationRouter.Put("/:id/users/:userId", (*OrganizationContext).PutUser)
+
+	// Setup the /spaces subrouter.
+	spaceRouter := apiRouter.Subrouter(SpaceContext{}, "/spaces")
+	spaceRouter.Put("/:id/auditors/:userId", (*SpaceContext).PutAuditor)
+
+	// All routes accepted
 	apiRouter.Get("/:*", (*APIContext).APIProxy)
 	apiRouter.Put("/:*", (*APIContext).APIProxy)
 	apiRouter.Post("/:*", (*APIContext).APIProxy)

@@ -338,7 +338,7 @@ func (c *UAAContext) TriggerInvite(req inviteEmailRequest) *UaaError {
 	}
 	subject, html, text, err := t.Execute(EmailTemplateUserInvitedData{
 		Email: req.Email,
-		URL:   req.InviteURL,
+		Link:  req.InviteURL,
 	})
 	if err != nil {
 		return newUaaError(http.StatusInternalServerError, err.Error())

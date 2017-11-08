@@ -2,14 +2,16 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/gocraft/web"
 	"net/http"
+
+	"github.com/gocraft/web"
 )
 
 // APIContext stores the session info and access token per user.
 // All routes within APIContext represent the API routes
 type APIContext struct {
 	*SecureContext // Required.
+	ErrorWriter
 }
 
 // APIProxy is a handler that serves as a proxy for all the CF API. Any route that comes in the /v2/* route
