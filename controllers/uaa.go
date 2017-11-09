@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -11,6 +13,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"runtime/debug"
+	"strings"
 
 	"github.com/gocraft/web"
 	uuid "github.com/satori/go.uuid"
@@ -373,4 +376,35 @@ func (c *UAAContext) UaaInfo(rw web.ResponseWriter, req *web.Request) {
 	// This is safe, as this produces the canonical form
 	reqURL := fmt.Sprintf("/Users/%s", guid.String())
 	c.uaaProxy(rw, req.Request, reqURL, false)
+}
+
+func getUnvalidatedEmailAddressFromJWT(token string) (string, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return "", errors.New("bad token 1")
+	}
+
+	dc, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return "", err
+	}
+
+	var claims struct {
+		Email string `json:"email"`
+	}
+	err = json.Unmarshal(dc, &claims)
+	if err != nil {
+		return "", err
+	}
+
+	return claims.Email, nil
+}
+
+func (c *UAAContext) GetMyEmailAddress(rw web.ResponseWriter, req *web.Request) {
+	email, err := getUnvalidatedEmailAddressFromJWT(c.Token.AccessToken)
+	if err != nil {
+		re.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	rw.Write([]byte(email))
 }
