@@ -8,10 +8,12 @@ import (
 	"github.com/gocraft/web"
 )
 
+// SpaceContext allows for extra logic around the CF API calls.
 type SpaceContext struct {
 	*APIContext // Required.
 }
 
+// PutAuditor is a CF API call.
 func (c *SpaceContext) PutAuditor(rw web.ResponseWriter, r *web.Request) {
 	spaceID := r.PathParams["id"]
 	userID := r.PathParams["userId"]

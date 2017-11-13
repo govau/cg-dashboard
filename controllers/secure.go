@@ -46,14 +46,17 @@ func getEmailFromJWT(token string) (string, error) {
 	return claims.Email, nil
 }
 
+// CurrentUserEmail gets the email for the current user.
 func (c *SecureContext) CurrentUserEmail() (string, error) {
 	return getEmailFromJWT(c.Token.AccessToken)
 }
 
+// CFClient gets an unprivileged CF client.
 func (c *SecureContext) CFClient() (*cfclient.Client, error) {
 	return c.cfClient(false)
 }
 
+// PrivilegedCFClient gets a privileged CF client.
 func (c *SecureContext) PrivilegedCFClient() (*cfclient.Client, error) {
 	return c.cfClient(true)
 }

@@ -8,10 +8,12 @@ import (
 	"github.com/gocraft/web"
 )
 
+// OrganizationContext allows for extra logic around the CF API calls.
 type OrganizationContext struct {
 	*APIContext // Required.
 }
 
+// PutUser is a CF API call.
 func (c *OrganizationContext) PutUser(rw web.ResponseWriter, r *web.Request) {
 	orgID := r.PathParams["id"]
 	userID := r.PathParams["userId"]
