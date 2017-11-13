@@ -2,16 +2,40 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gocraft/web"
+
+	"github.com/18F/cg-dashboard/jsonerror"
 )
+
+func newStdLogger() *stdLogger {
+	return &stdLogger{
+		logger: log.New(os.Stderr, "", log.LstdFlags),
+	}
+}
+
+type stdLogger struct {
+	logger *log.Logger
+}
+
+// Log implements jsonerror.Logger.
+func (s *stdLogger) Log(args ...interface{}) {
+	s.logger.Print(args...)
+}
+
+// Logf implements jsonerror.Logger.
+func (s *stdLogger) Logf(format string, args ...interface{}) {
+	s.logger.Printf(format, args...)
+}
 
 // APIContext stores the session info and access token per user.
 // All routes within APIContext represent the API routes
 type APIContext struct {
 	*SecureContext // Required.
-	ErrorWriter
+	errorWriter    *jsonerror.Writer
 }
 
 // APIProxy is a handler that serves as a proxy for all the CF API. Any route that comes in the /v2/* route

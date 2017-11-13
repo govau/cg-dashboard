@@ -24,7 +24,7 @@ func (c *OrganizationContext) PutUser(rw web.ResponseWriter, r *web.Request) {
 
 func (c *OrganizationContext) putUserSuccess(w http.ResponseWriter, r *http.Request, apiResp *http.Response, orgID, userID string) {
 	if err := c.notifyOfUserAssociation(orgID, userID); err != nil {
-		c.ErrorWriter.HandleErr(w, r, err)
+		c.errorWriter.HandleErr(w, r, err)
 		return
 	}
 

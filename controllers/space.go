@@ -24,7 +24,7 @@ func (c *SpaceContext) PutAuditor(rw web.ResponseWriter, r *web.Request) {
 
 func (c *SpaceContext) putAuditorSuccess(w http.ResponseWriter, r *http.Request, apiResp *http.Response, spaceID, userID string) {
 	if err := c.notifyOfAuditorAssociation(spaceID, userID); err != nil {
-		c.ErrorWriter.HandleErr(w, r, err)
+		c.errorWriter.HandleErr(w, r, err)
 		return
 	}
 

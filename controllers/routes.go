@@ -9,6 +9,7 @@ import (
 	"github.com/govau/emailtemplate"
 
 	"github.com/18F/cg-dashboard/helpers"
+	"github.com/18F/cg-dashboard/jsonerror"
 	"github.com/18F/cg-dashboard/mailer"
 )
 
@@ -41,10 +42,14 @@ func InitRouter(settings *helpers.Settings, templates *helpers.Templates, emailT
 	// Secure all the other routes
 	secureRouter := router.Subrouter(SecureContext{}, "/")
 
+	errorWriter := jsonerror.NewLogWriter(newStdLogger())
+
 	// Setup the /api subrouter.
-	apiRouter := secureRouter.Subrouter(APIContext{
-		ErrorWriter: ErrorWriter{},
-	}, "/v2")
+	apiRouter := secureRouter.Subrouter(APIContext{}, "/v2")
+	apiRouter.Middleware(func(c *APIContext, rw web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
+		c.errorWriter = errorWriter
+		next(rw, r)
+	})
 	apiRouter.Middleware((*APIContext).OAuth)
 
 	apiRouter.Get("/authstatus", (*APIContext).AuthStatus)
