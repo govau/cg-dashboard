@@ -16,12 +16,11 @@ type Mailer interface {
 // NewSMTPMailer creates a new SMTP Mailer
 func NewSMTPMailer(settings helpers.Settings) (Mailer, error) {
 	return &smtpMailer{
-		smtpHost:        settings.SMTPHost,
-		smtpPort:        settings.SMTPPort,
-		smtpUser:        settings.SMTPUser,
-		smtpPass:        settings.SMTPPass,
-		smtpFrom:        settings.SMTPFrom,
-		deliveryAddress: settings.DeliveryAddress,
+		smtpHost: settings.SMTPHost,
+		smtpPort: settings.SMTPPort,
+		smtpUser: settings.SMTPUser,
+		smtpPass: settings.SMTPPass,
+		smtpFrom: settings.SMTPFrom,
 	}, nil
 }
 
@@ -31,26 +30,13 @@ type smtpMailer struct {
 	smtpUser string
 	smtpPass string
 	smtpFrom string
-	// deliveryAddress is the address to use when sending mail.
-	// If provided, mail will always be sent to this address.
-	// Use this field to restrict development mail from being sent to real life
-	// recipients.
-	deliveryAddress string
 }
 
 // SendEmail implements Mailer.
 func (s *smtpMailer) SendEmail(emailAddress, subject string, html, text []byte) error {
 	e := email.NewEmail()
 	e.From = s.smtpFrom
-
-	to := fmt.Sprintf("<%s>", emailAddress)
-	if s.deliveryAddress == "" {
-		e.To = []string{to}
-	} else {
-		e.To = []string{s.deliveryAddress}
-		e.Headers.Add("Would-Send-To", to)
-	}
-
+	e.To = []string{fmt.Sprintf("<%s>", emailAddress)}
 	e.HTML = html
 	e.Text = text
 	e.Subject = subject

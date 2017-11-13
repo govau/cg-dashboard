@@ -49,35 +49,6 @@ func TestSendEmail(t *testing.T) {
 	}
 }
 
-func TestSendEmailUsesDeliveryAddress(t *testing.T) {
-	hostname, smtpPort, apiPort, cleanup := CreateTestMailCatcher(t)
-	defer cleanup()
-	settings := helpers.Settings{
-		SMTPHost:        hostname,
-		SMTPPort:        smtpPort,
-		SMTPFrom:        "test@dashboard.com",
-		DeliveryAddress: "override@example.com",
-	}
-	mailer, err := NewSMTPMailer(settings)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := mailer.SendEmail("recipient@example.com", "subject", []byte("<strong>html</strong>"), []byte("text")); err != nil {
-		t.Errorf("SendEmail() err = %v, want none", err)
-	}
-	b, err := GetLatestMailMessageData(hostname, apiPort)
-	if err != nil {
-		t.Fatal(err)
-	}
-	message := string(b)
-	if want := "override@example.com"; !strings.Contains(message, fmt.Sprintf(`"recipients":["<%s>"]`, want)) {
-		t.Errorf("recipient was wrong, want %q", want)
-	}
-	if want := "recipient@example.com"; !strings.Contains(message, fmt.Sprintf(`Would-Send-To: <%s>`, want)) {
-		t.Errorf("Would-Send-To header was wrong, want %q", want)
-	}
-}
-
 func TestNewSMTPMailer(t *testing.T) {
 	settings := helpers.Settings{}
 	mailer, err := NewSMTPMailer(settings)

@@ -71,8 +71,6 @@ type Settings struct {
 	SMTPPass string
 	// SMTP from address for UAA invites
 	SMTPFrom string
-	// DeliveryAddress allows overriding the address to which mail is sent.
-	DeliveryAddress string
 	// Shared secret with CF API proxy
 	TICSecret string
 	// CSRFKey used for gorilla CSRF validation
@@ -299,7 +297,6 @@ func (s *Settings) InitSettings(envVars *env.VarSet, app *cfenv.App) (retErr err
 	s.SMTPPass = envVars.String(SMTPPassEnvVar, "")
 	s.SMTPPort = envVars.String(SMTPPortEnvVar, "")
 	s.SMTPUser = envVars.String(SMTPUserEnvVar, "")
-	s.DeliveryAddress = envVars.String(DeliveryAddressEnvVar, "")
 	s.TICSecret = envVars.String(TICSecretEnvVar, "")
 	return nil
 }
