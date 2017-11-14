@@ -1,5 +1,5 @@
-hash: e208501fb79e9ffbda78f25cf4a8043a77b146be8daf445ca10e2b08e865d8a0
-updated: 2017-11-13T16:51:21.306085365+11:00
+hash: 27e66b97638e228c2b84a874421f89ecb18f91417e89ff08f12b197074135a82
+updated: 2017-11-14T13:26:23.400223691+11:00
 imports:
 - name: github.com/Azure/go-ansiterm
   version: fa152c58bc15761d0200cb75fe958b89a9d4888e
@@ -10,8 +10,7 @@ imports:
 - name: github.com/cenk/backoff
   version: 32cd0c5b3aef12c76ed64aaf678f6c79736be7dc
 - name: github.com/cloudfoundry-community/go-cfclient
-  version: 127a033e26b7d8aedd7063954e9f8b83e1d8d7c7
-  repo: https://github.com/jonathaningram/go-cfclient.git
+  version: ffcad5eeee1aaaec9665377f4b7fafa6613353d1
 - name: github.com/cloudfoundry-community/go-cfenv
   version: 96ad7376813bfd13c95af69ca5b4ef5725f6b335
 - name: github.com/cloudfoundry/loggregatorlib

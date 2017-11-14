@@ -36,5 +36,3 @@ import:
 - package: github.com/govau/emailtemplate
   version: v0.0.3
 - package: github.com/cloudfoundry-community/go-cfclient
-  repo: https://github.com/jonathaningram/go-cfclient.git
-  version: add-list-space-managers
