@@ -1,0 +1,5 @@
+# Ignore all skins except the `cg` skin.
+# This is required if other skins are symlinked into the skins directory but
+# should not be linted.
+static_src/skins/*
+!static_src/skins/cg
