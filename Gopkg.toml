@@ -26,6 +26,9 @@
   version = "~1.2.0"
 
 [[constraint]]
+  name = "github.com/cloudfoundry-community/go-cfclient"
+
+[[constraint]]
   name = "github.com/cloudfoundry-community/go-cfenv"
 
 [[constraint]]
@@ -48,7 +51,7 @@
 
 [[constraint]]
   name = "github.com/gorilla/csrf"
-  version = "~1.4.0"
+  version = "1.5.0"
 
 [[constraint]]
   name = "github.com/gorilla/sessions"
@@ -56,6 +59,10 @@
 [[constraint]]
   name = "github.com/govau/cf-common"
   version = "0.0.2"
+
+[[constraint]]
+  name = "github.com/govau/emailtemplate"
+  version = "0.0.3"
 
 [[constraint]]
   name = "github.com/jordan-wright/email"
