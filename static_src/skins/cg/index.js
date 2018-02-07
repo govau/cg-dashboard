@@ -64,6 +64,10 @@ export const config = {
     logs: {
       name: "logs.fr.cloud.gov",
       url: "https://logs.fr.cloud.gov"
+    },
+    grafana: {
+      name: "",
+      url: ""
     }
   }
 };
