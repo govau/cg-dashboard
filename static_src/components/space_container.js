@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 
+import { config } from 'skin';
+
 import AppCountStatus from "./app_count_status";
 import AppList from "../components/app_list";
 import Breadcrumbs from "./breadcrumbs";
@@ -96,6 +98,7 @@ export default class SpaceContainer extends React.Component {
             <div className="grid panel-overview-header">
               <div className="grid-width-8">
                 <h1 className="panel-title">Space overview</h1>
+                <a href={ config.platform.grafana.url + '/space/' + this.state.space.guid + '/dashboard/file/cf_apps_system.json' }>{ config.platform.grafana.name }</a>
               </div>
               <div className="grid-width-4">
                 <div className="count_status_container">
