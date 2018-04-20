@@ -101,7 +101,7 @@ export default class SpaceContainer extends React.Component {
                 <a
                   href={`${config.platform.grafana.url}/space/${
                     space.guid
-                  }/dashboard/file/cf_apps_system.json`}
+                  }/d/cf_apps_system/apps-system`}
                 >
                   {config.platform.grafana.name}
                 </a>
