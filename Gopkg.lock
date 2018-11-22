@@ -322,10 +322,9 @@
   version = "v0.0.6"
 
 [[projects]]
-  branch = "master"
   name = "github.com/yvasiyarov/newrelic_platform_go"
   packages = ["."]
-  revision = "9c099fbc30e90de5bb5c5f94aa5fd08f2daeaacd"
+  revision = "cef0ebd22fb48453114ba645d0fb80fea6e670de"
 
 [[projects]]
   branch = "master"
@@ -384,6 +383,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1db7c51eb8bfb3bdb0f4eff6bebfc58036b1353ccf01d068453edd186bd8fd0d"
+  inputs-digest = "7aeec072446f55d5d3d3215f69a8f0954c3da5e8b686bca57816bea81f1f6adc"
   solver-name = "gps-cdcl"
   solver-version = 1

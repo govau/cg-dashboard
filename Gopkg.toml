@@ -105,6 +105,11 @@
   branch = "master"
   name = "golang.org/x/oauth2"
 
+# newer commits aren't compatible with other libraries
+[[override]]
+  name = "github.com/yvasiyarov/newrelic_platform_go"
+  revision = "cef0ebd22fb48453114ba645d0fb80fea6e670de"
+
 [prune]
   go-tests = true
   unused-packages = true
